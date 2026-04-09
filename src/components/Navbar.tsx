@@ -60,6 +60,8 @@ export default function Navbar({ onOpenModal, editMode, setEditMode, siteSetting
     { label: 'Faculty', path: '/faculty', key: 'showFaculty' },
     { label: 'About', path: '/about', key: 'showAbout' },
     { label: 'Admissions', path: '/admissions', key: 'showAdmissions' },
+    { label: 'News', path: '/news', key: 'showNews' },
+    { label: 'Events', path: '/events', key: 'showEvents' },
     { label: 'Contact', path: '/contact', key: 'showContact' },
   ].filter(item => !siteSettings || siteSettings[item.key] !== false);
 

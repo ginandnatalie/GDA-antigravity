@@ -156,8 +156,8 @@ export function Footer({ onOpenModal, editMode }: { onOpenModal: (id: string) =>
         <div>
           <div className="font-dm-mono text-[9px] tracking-[0.2em] uppercase text-text-dim mb-4">Academy</div>
           <ul className="list-none flex flex-col gap-2.25">
-            {['Faculty', 'Learning Pathways', 'Intake Calendar', 'Graduate Outcomes', 'Partner Ecosystem'].map((l) => (
-              <li key={l}><a href={`#${l.toLowerCase().replace(' ', '')}`} className="text-[12px] text-text-muted no-underline transition-colors hover:text-text-custom tracking-[0.01em]">{l}</a></li>
+            {['Faculty', 'Learning Pathways', 'News', 'Events', 'Intake Calendar', 'Graduate Outcomes'].map((l) => (
+              <li key={l}><a href={l === 'News' ? '/news' : l === 'Events' ? '/events' : `#${l.toLowerCase().replace(' ', '')}`} className="text-[12px] text-text-muted no-underline transition-colors hover:text-text-custom tracking-[0.01em]">{l}</a></li>
             ))}
             <li><a href="#" onClick={() => onOpenModal('student')} className="text-[12px] text-text-muted no-underline transition-colors hover:text-text-custom tracking-[0.01em]">Student Portal</a></li>
           </ul>

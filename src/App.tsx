@@ -17,6 +17,9 @@ import FacultyPage from './pages/FacultyPage';
 import AboutPage from './pages/AboutPage';
 import AdmissionsPage from './pages/AdmissionsPage';
 import ContactPage from './pages/ContactPage';
+import NewsPage from './pages/NewsPage';
+import NewsDetailPage from './pages/NewsDetailPage';
+import EventsPage from './pages/EventsPage';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -189,6 +192,9 @@ function AppContent() {
             <Route path="/admissions" element={<AdmissionsPage onOpenModal={openModal} editMode={editMode} />} />
           )}
           <Route path="/contact" element={<ContactPage onOpenModal={openModal} editMode={editMode} />} />
+          <Route path="/news" element={<NewsPage />} />
+          <Route path="/news/:slug" element={<NewsDetailPage />} />
+          <Route path="/events" element={<EventsPage />} />
           
           <Route 
             path="/admin" 
