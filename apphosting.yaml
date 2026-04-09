@@ -1,0 +1,38 @@
+# apphosting.yaml
+# Firebase App Hosting configuration
+# Documentation: https://firebase.google.com/docs/app-hosting/configure
+
+# The build settings for the application
+buildSettings:
+  # The command to build the application
+  buildCommand: npm run build
+  # The directory where the built application is located
+  outputDirectory: dist
+
+# The runtime settings for the application
+runConfig:
+  # The command to start the application
+  runCommand: npm start
+  # The port the application listens on
+  # Cloud Run (via App Hosting) will route traffic to this port
+  port: 3000
+
+# Environment variables for the application
+# These should be set in the Firebase Console for production
+env:
+  - variable: NODE_ENV
+    value: production
+  - variable: VITE_SUPABASE_URL
+    availability:
+      - BUILD
+      - RUNTIME
+  - variable: VITE_SUPABASE_ANON_KEY
+    availability:
+      - BUILD
+      - RUNTIME
+  - variable: RESEND_API_KEY
+    availability:
+      - RUNTIME
+  - variable: PAYSTACK_SECRET_KEY
+    availability:
+      - RUNTIME
