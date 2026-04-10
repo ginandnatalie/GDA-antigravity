@@ -97,7 +97,7 @@ export async function onRequestPost(context) {
       </div>
     `;
 
-    const fromEmail = env.RESEND_FROM_EMAIL || "Ginashe Digital Academy <noreply@academy.ginashe.co.za>";
+    const fromEmail = env.RESEND_FROM_EMAIL || "Ginashe Digital Academy <noreply@send.academy.ginashe.co.za>";
 
     const receiptResponse = await fetch("https://api.resend.com/emails", {
       method: "POST",
