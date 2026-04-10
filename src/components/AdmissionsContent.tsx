@@ -58,7 +58,6 @@ export function Requirements() {
                 </div>
               ))}
             </div>
-          </div>
           <div className="relative">
             <div className="aspect-square rounded-3xl overflow-hidden border border-border-custom bg-navy relative">
               <img 
