@@ -31,8 +31,6 @@ function exportToJSON(data: any[], filename: string) {
   URL.revokeObjectURL(url);
 }
 
-}
-
 // ─── ADMIN: Overview Stats ──────────────────────
 function OverviewStats({ applications, courses }: { applications: any[], courses: any[] }) {
   const stats = [
