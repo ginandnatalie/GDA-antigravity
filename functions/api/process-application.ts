@@ -36,25 +36,23 @@ export async function onRequestPost(context) {
         const existingUser = users.find(u => u.email?.toLowerCase() === email.toLowerCase());
 
         if (existingUser) {
-          console.log(`[Auth] User ${email} already exists. Providing direct login link.`);
-          invitationLink = `${origin}/verify`;
-        } else {
-          // Generate a secure invitation link (does NOT send an email automatically)
-          const { data: linkData, error: linkError } = await supabase.auth.admin.generateLink({
-            type: 'invite',
-            email: email.trim().toLowerCase(),
-            options: {
-              data: { full_name: name },
-              redirectTo: `${origin}/verify`
-            }
-          });
+          console.log(`[Auth] User ${email} already exists. Triggering OTP for verification.`);
+        }
 
-          if (linkError) {
-            console.warn("Supabase Generate Link Error:", linkError.message);
-          } else if (linkData?.properties?.action_link) {
-            invitationLink = linkData.properties.action_link;
-            console.log(`[Auth] Invitation link generated for ${email}`);
+        // Trigger Supabase OTP (6-digit code)
+        // This will create the user if they don't exist and send the code
+        const { error: otpError } = await supabase.auth.signInWithOtp({
+          email: email.trim().toLowerCase(),
+          options: {
+            shouldCreateUser: true,
+            emailRedirectTo: `${origin}/verify`
           }
+        });
+
+        if (otpError) {
+          console.warn("[Auth] OTP Send Error:", otpError.message);
+        } else {
+          console.log(`[Auth] OTP sent successfully to ${email}`);
         }
       } catch (authErr: any) {
         console.error("Auth pre-processing error:", authErr.message);
@@ -206,7 +204,7 @@ export async function onRequestPost(context) {
     return new Response(JSON.stringify({ 
       success: true, 
       msg: "Emails processed successfully",
-      invitation_link: invitationLink ? "Generated" : "N/A"
+      invitation_link: "N/A"
     }), {
       headers: { "Content-Type": "application/json" },
     });

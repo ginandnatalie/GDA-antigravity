@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { supabase, uploadFile } from '../lib/supabase';
 import { 
   PROGRAMMES, 
@@ -22,6 +23,7 @@ interface SharedAdmissionFormProps {
 }
 
 export default function SharedAdmissionForm({ onOpenModal, onSuccess, initialProgram = '', isModal = false }: SharedAdmissionFormProps) {
+  const navigate = useNavigate();
   // ─── STEP STATE ──────────────────
   const [step, setStep] = useState<'check' | 'form' | 'existing'>('check');
   const [hasAccount, setHasAccount] = useState<string>('');
@@ -185,10 +187,10 @@ export default function SharedAdmissionForm({ onOpenModal, onSuccess, initialPro
         console.error('Email process error:', processErr);
       }
 
-      alert(`Application submitted, ${form.first}! 🎉\n\nPlease check your email for your portal activation link.`);
       if (onSuccess) onSuccess();
-      setStep('check');
-      setHasAccount('');
+      
+      // Navigate to verify page with email
+      navigate(`/verify?email=${encodeURIComponent(form.email)}`, { replace: true });
     } catch (error: any) {
       alert(`Submission Error: ${error.message || 'Error occurred. Please try again.'}`);
     } finally {
