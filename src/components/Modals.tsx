@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { supabase, uploadFile } from '../lib/supabase';
 import { useAuth } from '../lib/auth';
+import SharedAdmissionForm from './SharedAdmissionForm';
 
 interface ModalsProps {
   activeModal: string | null;
@@ -16,15 +17,8 @@ export function Modals({ activeModal, onClose, onSwitchModal, onLoginSuccess }: 
   const [applyTab, setApplyTab] = useState('ind');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const [indForm, setIndForm] = useState({ 
-    title: '', first: '', last: '', email: '', phone: '', prog: '', qual: '', msg: '', dob: '', idNumber: '', gender: '', nationality: 'South Africa',
-    address_line1: '', city: '', province: '', postal_code: '',
-    previous_qualifications: [] as { name: string, institution: string, year: string }[]
-  });
-  const [duplicateWarning, setDuplicateWarning] = useState('');
   const [orgForm, setOrgForm] = useState({ org: '', contact: '', email: '', phone: '', size: '', msg: '' });
   const [partnerForm, setPartnerForm] = useState({ name: '', type: '', email: '', phone: '', msg: '' });
-  const [cvFile, setCvFile] = useState<File | null>(null);
 
   const [loginForm, setLoginForm] = useState({ email: '', password: '' });
   const [resetForm, setResetForm] = useState({ password: '', confirm: '' });
@@ -87,121 +81,6 @@ export function Modals({ activeModal, onClose, onSwitchModal, onLoginSuccess }: 
       onClose();
     } catch (err: any) {
       alert('Error: ' + err.message);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const handleIndSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!indForm.first || !indForm.email) return;
-
-    // 0. DOB Validation (No future dates)
-    const dobDate = new Date(indForm.dob);
-    const today = new Date();
-    if (dobDate > today) {
-      alert('Error: Date of Birth cannot be in the future.');
-      return;
-    }
-
-    setIsSubmitting(true);
-    setDuplicateWarning('');
-    try {
-      // 1. Check if they already have a student profile (most severe duplicate)
-      const { data: profileMatch } = await supabase
-        .from('profiles')
-        .select('id')
-        .eq('email', indForm.email.trim().toLowerCase())
-        .maybeSingle();
-
-      if (profileMatch) {
-        setDuplicateWarning(`You already have a student account! Please sign in to your portal.`);
-        setIsSubmitting(false);
-        return;
-      }
-
-      // 2. Check for existing pending/approved applications
-      const { data: existingApp } = await supabase
-        .from('applications')
-        .select('id, first_name, status, program')
-        .eq('email', indForm.email.trim().toLowerCase())
-        .limit(1)
-        .maybeSingle();
-
-      if (existingApp) {
-        setDuplicateWarning(`You've already applied for ${existingApp.program || 'a programme'} (Status: ${existingApp.status}). Please sign in to your Student Portal to check your status.`);
-        setIsSubmitting(false);
-        return;
-      }
-
-      let cvUrl = '';
-      if (cvFile) {
-        cvUrl = await uploadFile(cvFile);
-      }
-
-      const { error } = await supabase.from('applications').insert([{
-        title: indForm.title || null,
-        first_name: indForm.first,
-        last_name: indForm.last,
-        email: indForm.email.trim().toLowerCase(),
-        phone: indForm.phone,
-        date_of_birth: indForm.dob || null,
-        id_number: indForm.idNumber || null,
-        gender: indForm.gender || null,
-        nationality: indForm.nationality || 'South Africa',
-        address_line1: indForm.address_line1 || null,
-        city: indForm.city || null,
-        province: indForm.province || null,
-        postal_code: indForm.postal_code || null,
-        previous_qualifications: indForm.previous_qualifications.length > 0 ? indForm.previous_qualifications : null,
-        program: indForm.prog,
-        qualification: indForm.qual,
-        message: indForm.msg,
-        cv_url: cvUrl,
-        type: 'individual',
-        ai_match_score: Math.floor(Math.random() * 30) + 70,
-        history: JSON.stringify([{
-          event: 'Application Submitted',
-          timestamp: new Date().toISOString(),
-          details: 'Submitted via multi-step admission form.'
-        }])
-      }]);
-
-      if (error) throw error;
-
-      // Process emails via backend
-      try {
-        await fetch('/api/process-application', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            email: indForm.email,
-            name: `${indForm.first} ${indForm.last}`,
-            program: indForm.prog,
-            details: indForm
-          })
-        });
-      } catch (processErr) {
-        console.error('Error processing application emails:', processErr);
-      }
-
-      alert(`Application submitted, ${indForm.first}! 🎉\nWe'll contact you within 2 business days.\nPlease check your email for confirmation.`);
-      setIndForm({ 
-        title: '', first: '', last: '', email: '', phone: '', prog: '', qual: '', msg: '', dob: '', idNumber: '', gender: '', nationality: 'South Africa',
-        address_line1: '', city: '', province: '', postal_code: '',
-        previous_qualifications: []
-      });
-      setCvFile(null);
-      onClose();
-    } catch (err: any) {
-      console.error('Individual submission error:', err);
-      let errorMsg = 'Unknown error occurred';
-      if (err && typeof err === 'object') {
-        errorMsg = err.message || err.details || JSON.stringify(err);
-      } else if (typeof err === 'string') {
-        errorMsg = err;
-      }
-      alert('Submission Error: ' + errorMsg);
     } finally {
       setIsSubmitting(false);
     }
@@ -575,224 +454,13 @@ export function Modals({ activeModal, onClose, onSwitchModal, onLoginSuccess }: 
             </div>
             <div className="p-6 md:p-8">
               {applyTab === 'ind' && (
-                <form className="flex flex-col gap-6" onSubmit={handleIndSubmit}>
-                  {duplicateWarning && (
-                    <div className="bg-gold/5 border border-gold/20 rounded-lg p-4 flex flex-col gap-3">
-                      <p className="text-[12px] text-gold leading-relaxed">{duplicateWarning}</p>
-                      <button type="button" onClick={() => { onClose(); setTimeout(() => onLoginSuccess?.('student'), 100); }} className="btn btn-gold btn-sm w-full justify-center text-[11px]">Sign In to My Portal →</button>
-                    </div>
-                  )}
-
-                  {/* ─── SECTION: Biographical ─── */}
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-2 border-b border-border-custom pb-2">
-                      <div className="w-1.5 h-1.5 rounded-full bg-gold"></div>
-                      <span className="font-syne font-bold text-[11px] uppercase tracking-wider text-text-dim">Biographical Data</span>
-                    </div>
-                    
-                    <div className="grid grid-cols-[100px_1fr] gap-3">
-                      <div className="form-group">
-                        <label className="block font-dm-mono text-[9px] tracking-[0.15em] uppercase text-text-muted mb-1.75">Title <span className="text-coral">*</span></label>
-                        <select className="w-full bg-surface border border-border-custom rounded-sm p-2.75 px-3.5 font-dm-sans text-[13px] text-text-custom outline-none focus:border-gold/40 transition-all appearance-none bg-[url('data:image/svg+xml,%3Csvg_xmlns=%22http://www.w3.org/2000/svg%22_width=%2212%22_height=%2212%22_viewBox=%220_0_12_12%22%3E%3Cpath_fill=%22%235a607c%22_d=%22M6_8L1_3h10z%22/%3E%3C/svg%3E')] bg-no-repeat bg-[position:right_8px_center] pr-6" value={indForm.title} onChange={e => setIndForm({...indForm, title: e.target.value})} required>
-                          <option value="">Select…</option>
-                          <option>Mr</option>
-                          <option>Ms</option>
-                          <option>Mrs</option>
-                          <option>Dr</option>
-                          <option>Prof</option>
-                        </select>
-                      </div>
-                      <div className="form-group">
-                        <label className="block font-dm-mono text-[9px] tracking-[0.15em] uppercase text-text-muted mb-1.75">First Name <span className="text-coral">*</span></label>
-                        <input type="text" className="w-full bg-surface border border-border-custom rounded-sm p-2.75 px-3.5 font-dm-sans text-[13px] text-text-custom outline-none focus:border-gold/40 transition-all" placeholder="Amara" value={indForm.first} onChange={e => setIndForm({...indForm, first: e.target.value})} required />
-                      </div>
-                    </div>
-
-                    <div className="form-group">
-                      <label className="block font-dm-mono text-[9px] tracking-[0.15em] uppercase text-text-muted mb-1.75">Last Name <span className="text-coral">*</span></label>
-                      <input type="text" className="w-full bg-surface border border-border-custom rounded-sm p-2.75 px-3.5 font-dm-sans text-[13px] text-text-custom outline-none focus:border-gold/40 transition-all" placeholder="Dlamini" value={indForm.last} onChange={e => setIndForm({...indForm, last: e.target.value})} required />
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-3">
-                      <div className="form-group">
-                        <label className="block font-dm-mono text-[9px] tracking-[0.15em] uppercase text-text-muted mb-1.75">Date of Birth <span className="text-coral">*</span></label>
-                        <input 
-                          type="date" 
-                          className="w-full bg-surface border border-border-custom rounded-sm p-2.75 px-3.5 font-dm-sans text-[13px] text-text-custom outline-none focus:border-gold/40 transition-all" 
-                          value={indForm.dob} 
-                          onChange={e => setIndForm({...indForm, dob: e.target.value})} 
-                          max={new Date().toISOString().split('T')[0]}
-                          required 
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label className="block font-dm-mono text-[9px] tracking-[0.15em] uppercase text-text-muted mb-1.75">Gender <span className="text-coral">*</span></label>
-                        <select className="w-full bg-surface border border-border-custom rounded-sm p-2.75 px-3.5 font-dm-sans text-[13px] text-text-custom outline-none focus:border-gold/40 transition-all appearance-none bg-[url('data:image/svg+xml,%3Csvg_xmlns=%22http://www.w3.org/2000/svg%22_width=%2212%22_height=%2212%22_viewBox=%220_0_12_12%22%3E%3Cpath_fill=%22%235a607c%22_d=%22M6_8L1_3h10z%22/%3E%3C/svg%3E')] bg-no-repeat bg-[position:right_10px_center] pr-9" value={indForm.gender} onChange={e => setIndForm({...indForm, gender: e.target.value})} required>
-                          <option value="">Select…</option>
-                          <option>Male</option>
-                          <option>Female</option>
-                        </select>
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-3">
-                      <div className="form-group">
-                        <label className="block font-dm-mono text-[9px] tracking-[0.15em] uppercase text-text-muted mb-1.75">SA ID / Passport <span className="text-coral">*</span></label>
-                        <input type="text" className="w-full bg-surface border border-border-custom rounded-sm p-2.75 px-3.5 font-dm-sans text-[13px] text-text-custom outline-none focus:border-gold/40 transition-all" placeholder="ID Number" value={indForm.idNumber} onChange={e => setIndForm({...indForm, idNumber: e.target.value})} required />
-                      </div>
-                      <div className="form-group">
-                        <label className="block font-dm-mono text-[9px] tracking-[0.15em] uppercase text-text-muted mb-1.75">Nationality <span className="text-coral">*</span></label>
-                        <input type="text" className="w-full bg-surface border border-border-custom rounded-sm p-2.75 px-3.5 font-dm-sans text-[13px] text-text-custom outline-none focus:border-gold/40 transition-all" value={indForm.nationality} onChange={e => setIndForm({...indForm, nationality: e.target.value})} required />
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* ─── SECTION: Address ─── */}
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-2 border-b border-border-custom pb-2">
-                      <div className="w-1.5 h-1.5 rounded-full bg-sky"></div>
-                      <span className="font-syne font-bold text-[11px] uppercase tracking-wider text-text-dim">Residential Address</span>
-                    </div>
-
-                    <div className="form-group">
-                      <label className="block font-dm-mono text-[9px] tracking-[0.15em] uppercase text-text-muted mb-1.75">Street Address <span className="text-coral">*</span></label>
-                      <input type="text" className="w-full bg-surface border border-border-custom rounded-sm p-2.75 px-3.5 font-dm-sans text-[13px] text-text-custom outline-none focus:border-gold/40 transition-all" placeholder="123 Digital Square" value={indForm.address_line1} onChange={e => setIndForm({...indForm, address_line1: e.target.value})} required />
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-3">
-                      <div className="form-group">
-                        <label className="block font-dm-mono text-[9px] tracking-[0.15em] uppercase text-text-muted mb-1.75">City <span className="text-coral">*</span></label>
-                        <input type="text" className="w-full bg-surface border border-border-custom rounded-sm p-2.75 px-3.5 font-dm-sans text-[13px] text-text-custom outline-none focus:border-gold/40 transition-all" placeholder="Johannesburg" value={indForm.city} onChange={e => setIndForm({...indForm, city: e.target.value})} required />
-                      </div>
-                      <div className="form-group">
-                        <label className="block font-dm-mono text-[9px] tracking-[0.15em] uppercase text-text-muted mb-1.75">Postal Code {indForm.nationality === 'South Africa' ? <span className="text-coral">*</span> : '(Optional)'}</label>
-                        <input type="text" className="w-full bg-surface border border-border-custom rounded-sm p-2.75 px-3.5 font-dm-sans text-[13px] text-text-custom outline-none focus:border-gold/40 transition-all" placeholder="2001" value={indForm.postal_code} onChange={e => setIndForm({...indForm, postal_code: e.target.value})} required={indForm.nationality === 'South Africa'} />
-                      </div>
-                    </div>
-
-                    <div className="form-group">
-                      <label className="block font-dm-mono text-[9px] tracking-[0.15em] uppercase text-text-muted mb-1.75">Province/State <span className="text-coral">*</span></label>
-                      {indForm.nationality === 'South Africa' ? (
-                        <select className="w-full bg-surface border border-border-custom rounded-sm p-2.75 px-3.5 font-dm-sans text-[13px] text-text-custom outline-none focus:border-gold/40 transition-all appearance-none bg-[url('data:image/svg+xml,%3Csvg_xmlns=%22http://www.w3.org/2000/svg%22_width=%2212%22_height=%2212%22_viewBox=%220_0_12_12%22%3E%3Cpath_fill=%22%235a607c%22_d=%22M6_8L1_3h10z%22/%3E%3C/svg%3E')] bg-no-repeat bg-[position:right_10px_center] pr-9" value={indForm.province} onChange={e => setIndForm({...indForm, province: e.target.value})} required>
-                          <option value="">Select Province…</option>
-                          <option>Gauteng</option>
-                          <option>Western Cape</option>
-                          <option>KwaZulu-Natal</option>
-                          <option>Eastern Cape</option>
-                          <option>Free State</option>
-                          <option>Limpopo</option>
-                          <option>Mpumalanga</option>
-                          <option>North West</option>
-                          <option>Northern Cape</option>
-                        </select>
-                      ) : (
-                        <input type="text" className="w-full bg-surface border border-border-custom rounded-sm p-2.75 px-3.5 font-dm-sans text-[13px] text-text-custom outline-none focus:border-gold/40 transition-all" placeholder="Province / State Name" value={indForm.province} onChange={e => setIndForm({...indForm, province: e.target.value})} required />
-                      )}
-                    </div>
-                  </div>
-
-                  {/* ─── SECTION: Academics ─── */}
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-2 border-b border-border-custom pb-2">
-                      <div className="w-1.5 h-1.5 rounded-full bg-emerald"></div>
-                      <span className="font-syne font-bold text-[11px] uppercase tracking-wider text-text-dim">Academic Background</span>
-                    </div>
-
-                    <div className="form-group">
-                      <label className="block font-dm-mono text-[9px] tracking-[0.15em] uppercase text-text-muted mb-1.75">Programme of Interest <span className="text-coral">*</span></label>
-                      <select className="w-full bg-surface border border-border-custom rounded-sm p-2.75 px-3.5 font-dm-sans text-[13px] text-text-custom outline-none focus:border-gold/40 transition-all appearance-none bg-[url('data:image/svg+xml,%3Csvg_xmlns=%22http://www.w3.org/2000/svg%22_width=%2212%22_height=%2212%22_viewBox=%220_0_12_12%22%3E%3Cpath_fill=%22%235a607c%22_d=%22M6_8L1_3h10z%22/%3E%3C/svg%3E')] bg-no-repeat bg-[position:right_12px_center] pr-9" value={indForm.prog} onChange={e => setIndForm({...indForm, prog: e.target.value})} required>
-                        <option value="">Select a programme…</option>
-                        <option>Cloud Launchpad (Foundation / SETA)</option>
-                        <option>Cloud Architecture Residency</option>
-                        <option>AI & Machine Learning Engineering</option>
-                        <option>Data Engineering & Analytics</option>
-                        <option>AI for Business Leaders</option>
-                        <option>DevSecOps</option>
-                        <option>I want guidance — not sure yet</option>
-                      </select>
-                    </div>
-
-                    <div className="form-group">
-                      <label className="block font-dm-mono text-[9px] tracking-[0.15em] uppercase text-text-muted mb-1.75">Highest Qualification <span className="text-coral">*</span></label>
-                      <select className="w-full bg-surface border border-border-custom rounded-sm p-2.75 px-3.5 font-dm-sans text-[13px] text-text-custom outline-none focus:border-gold/40 transition-all appearance-none" value={indForm.qual} onChange={e => setIndForm({...indForm, qual: e.target.value})} required>
-                        <option value="">Select…</option>
-                        <option>Matric / NSC</option>
-                        <option>Diploma</option>
-                        <option>Bachelor's Degree</option>
-                        <option>Postgraduate Degree</option>
-                        <option>Professional Certification</option>
-                      </select>
-                    </div>
-
-                    <div className="space-y-3">
-                      <label className="block font-dm-mono text-[9px] tracking-[0.15em] uppercase text-text-muted">Previous Qualifications (Optional)</label>
-                      {indForm.previous_qualifications.map((q, i) => (
-                        <div key={i} className="p-4 rounded-lg bg-surface border border-border-custom relative group animate-fadeUp">
-                          <button type="button" onClick={() => {
-                            const updated = [...indForm.previous_qualifications];
-                            updated.splice(i, 1);
-                            setIndForm({...indForm, previous_qualifications: updated});
-                          }} className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-coral/20 text-coral flex items-center justify-center text-[10px] opacity-0 group-hover:opacity-100 transition-opacity border border-coral/20">✕</button>
-                          <div className="grid grid-cols-2 gap-3 mb-3">
-                            <input type="text" placeholder="Qualification Name" className="bg-transparent border-b border-border-custom text-sm py-1 outline-none focus:border-gold" value={q.name} onChange={e => {
-                              const updated = [...indForm.previous_qualifications];
-                              updated[i].name = e.target.value;
-                              setIndForm({...indForm, previous_qualifications: updated});
-                            }} />
-                            <input type="text" placeholder="Year Obtained" className="bg-transparent border-b border-border-custom text-sm py-1 outline-none focus:border-gold" value={q.year} onChange={e => {
-                              const updated = [...indForm.previous_qualifications];
-                              updated[i].year = e.target.value;
-                              setIndForm({...indForm, previous_qualifications: updated});
-                            }} />
-                          </div>
-                          <input type="text" placeholder="Institution Name" className="w-full bg-transparent border-b border-border-custom text-sm py-1 outline-none focus:border-gold" value={q.institution} onChange={e => {
-                            const updated = [...indForm.previous_qualifications];
-                            updated[i].institution = e.target.value;
-                            setIndForm({...indForm, previous_qualifications: updated});
-                          }} />
-                        </div>
-                      ))}
-                      <button type="button" onClick={() => setIndForm({...indForm, previous_qualifications: [...indForm.previous_qualifications, { name: '', institution: '', year: '' }]})} className="w-full py-3 border border-dashed border-border-custom rounded-lg text-[10px] font-dm-mono uppercase tracking-widest text-text-dim hover:border-gold/40 hover:text-gold transition-all text-center">
-                        + Add Qualification
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* ─── SECTION: Communication & CV ─── */}
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-2 border-b border-border-custom pb-2">
-                      <div className="w-1.5 h-1.5 rounded-full bg-gold"></div>
-                      <span className="font-syne font-bold text-[11px] uppercase tracking-wider text-text-dim">Contact & Documents</span>
-                    </div>
-
-                    <div className="form-group">
-                      <label className="block font-dm-mono text-[9px] tracking-[0.15em] uppercase text-text-muted mb-1.75">Email Address <span className="text-coral">*</span></label>
-                      <input type="email" className="w-full bg-surface border border-border-custom rounded-sm p-2.75 px-3.5 font-dm-sans text-[13px] text-text-custom outline-none focus:border-gold/40 transition-all" placeholder="amara@email.com" value={indForm.email} onChange={e => { setIndForm({...indForm, email: e.target.value}); setDuplicateWarning(''); }} required />
-                    </div>
-
-                    <div className="form-group">
-                      <label className="block font-dm-mono text-[9px] tracking-[0.15em] uppercase text-text-muted mb-1.75">Mobile Number <span className="text-coral">*</span></label>
-                      <input type="tel" className="w-full bg-surface border border-border-custom rounded-sm p-2.75 px-3.5 font-dm-sans text-[13px] text-text-custom outline-none focus:border-gold/40 transition-all" placeholder="+27 XX XXX XXXX" value={indForm.phone} onChange={e => setIndForm({...indForm, phone: e.target.value})} required />
-                    </div>
-
-                    <div className="form-group">
-                      <label className="block font-dm-mono text-[9px] tracking-[0.15em] uppercase text-text-muted mb-1.75">Upload CV / ID (PDF) (Optional)</label>
-                      <div className="relative">
-                        <input 
-                          type="file" 
-                          accept=".pdf"
-                          className="w-full bg-surface border border-border-custom rounded-sm p-2.75 px-3.5 font-dm-sans text-[13px] text-text-soft outline-none focus:border-gold/40 transition-all file:mr-4 file:py-1 file:px-3 file:rounded-md file:border-0 file:bg-white/5 file:text-gold file:text-[10px] file:font-dm-mono file:uppercase" 
-                          onChange={e => setCvFile(e.target.files?.[0] || null)}
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  <button type="submit" disabled={isSubmitting} className={`btn btn-gold w-full py-4 justify-center mt-4 font-syne font-extrabold text-[15px] shadow-[0_20px_40px_rgba(244,162,26,0.15)] ${isSubmitting ? 'opacity-50' : ''}`}>
-                    {isSubmitting ? 'Processing Application...' : 'Submit Application →'}
-                  </button>
-                  <p className="text-center text-[10px] text-text-dim mt-2 italic">By submitting, you agree to our terms of service and POPIA compliance policy.</p>
-                </form>
+                <div className="animate-fadeUp">
+                  <SharedAdmissionForm 
+                    isModal={true} 
+                    onOpenModal={onSwitchModal || (() => {})} 
+                    onSuccess={onClose}
+                  />
+                </div>
               )}
               {applyTab === 'org' && (
                 <form className="flex flex-col gap-4" onSubmit={handleOrgSubmit}>
