@@ -1,0 +1,175 @@
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { supabase } from '../lib/supabase';
+import { Eye, EyeOff, ShieldCheck, ArrowRight, CheckCircle2 } from 'lucide-react';
+
+export default function VerifyPage() {
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
+  const [tokenFound, setTokenFound] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    // Check if we have a recovery or invite token in the hash/search
+    const hashParams = new URLSearchParams(window.location.hash.replace('#', '?'));
+    const searchParams = new URLSearchParams(window.location.search);
+    
+    if (hashParams.get('type') === 'recovery' || hashParams.get('type') === 'invite' || 
+        searchParams.get('type') === 'recovery' || searchParams.get('type') === 'invite' ||
+        hashParams.has('access_token')) {
+      setTokenFound(true);
+    } else {
+      // If no token, and not in success state, redirect home after a few seconds
+      const timer = setTimeout(() => {
+        if (!success) navigate('/');
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [navigate, success]);
+
+  const handleSetPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters");
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const { error } = await supabase.auth.updateUser({ password });
+      if (error) throw error;
+
+      // SUCCESS! 
+      // As requested: Sign out immediately so they have to login manually
+      await supabase.auth.signOut();
+      setSuccess(true);
+    } catch (err: any) {
+      setError(err.message || "Failed to update password");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (success) {
+    return (
+      <div className="min-h-screen bg-bg flex flex-col items-center justify-center p-6 text-center">
+        <div className="w-20 h-20 bg-emerald/10 rounded-full flex items-center justify-center mb-8 animate-fadeUp">
+          <CheckCircle2 className="text-emerald" size={40} />
+        </div>
+        <h1 className="font-syne font-extrabold text-[28px] text-text-custom mb-3 animate-fadeUp delay-100">Account Secured</h1>
+        <p className="text-text-soft text-[14px] max-w-[320px] mb-10 animate-fadeUp delay-200 leading-relaxed">
+          Your new password has been set successfully. For security, please log in manually with your new credentials.
+        </p>
+        <button 
+          onClick={() => navigate('/')}
+          className="btn btn-gold w-full max-w-[280px] animate-fadeUp delay-300"
+        >
+          Return to Login <ArrowRight size={16} className="ml-2" />
+        </button>
+      </div>
+    );
+  }
+
+  if (!tokenFound) {
+    return (
+      <div className="min-h-screen bg-bg flex flex-col items-center justify-center p-6 text-center">
+        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-gold mb-6"></div>
+        <h1 className="font-syne font-bold text-[18px] text-text-custom mb-2">Verifying Activation...</h1>
+        <p className="text-text-dim text-[12px]">If you aren't redirected automatically, please check your link or contact support.</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-bg flex flex-col items-center justify-center p-6">
+      <div className="w-full max-w-[420px] bg-card border border-border-custom rounded-3xl p-8 md:p-10 relative overflow-hidden shadow-[0_32px_80px_rgba(0,0,0,0.5)]">
+        {/* Background Accent */}
+        <div className="absolute -top-24 -right-24 w-48 h-48 bg-gold/5 blur-[80px] rounded-full pointer-events-none"></div>
+        
+        <div className="relative">
+          <div className="w-14 h-14 bg-gold/10 rounded-2xl flex items-center justify-center mb-8">
+            <ShieldCheck className="text-gold" size={28} />
+          </div>
+
+          <h1 className="font-syne font-extrabold text-[24px] text-text-custom mb-2">Secure Your Account</h1>
+          <p className="text-text-soft text-[13px] mb-8 leading-relaxed">
+            Choose a strong password to activate your Ginashe Digital Academy student portal access.
+          </p>
+
+          <form onSubmit={handleSetPassword} className="space-y-5">
+            <div>
+              <label className="block font-dm-mono text-[10px] tracking-widest uppercase text-text-muted mb-2 ml-1">New Password</label>
+              <div className="relative group">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full bg-surface border border-border-custom rounded-xl px-5 py-4 text-[14px] text-text-custom focus:border-gold/50 outline-none transition-all pr-12 group-hover:border-border-custom/80"
+                  placeholder="At least 6 characters"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-text-dim hover:text-gold transition-colors"
+                >
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
+            </div>
+
+            <div>
+              <label className="block font-dm-mono text-[10px] tracking-widest uppercase text-text-muted mb-2 ml-1">Confirm Password</label>
+              <input
+                type={showPassword ? "text" : "password"}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className="w-full bg-surface border border-border-custom rounded-xl px-5 py-4 text-[14px] text-text-custom focus:border-gold/50 outline-none transition-all group-hover:border-border-custom/80 overflow-hidden"
+                placeholder="Repeat password"
+                required
+              />
+            </div>
+
+            {error && (
+              <div className="p-4 bg-red-500/10 border border-red-500/20 text-red-500 text-[12px] rounded-xl animate-fadeUp">
+                {error}
+              </div>
+            )}
+
+            <button
+              type="submit"
+              className="btn btn-gold w-full py-4 mt-2"
+              disabled={loading}
+            >
+              {loading ? (
+                <span className="flex items-center gap-2">
+                  <span className="w-4 h-4 border-2 border-[#080b12]/30 border-t-[#080b12] rounded-full animate-spin"></span>
+                  Securing Account...
+                </span>
+              ) : (
+                "Set Password & Activate →"
+              )}
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <div className="mt-8 flex items-center gap-4 animate-fadeUp delay-500">
+        <p className="text-text-dim text-[11px] font-dm-mono uppercase tracking-[0.1em]">Student Support</p>
+        <div className="w-1 h-1 rounded-full bg-border-custom"></div>
+        <a href="mailto:support@ginashe.co.za" className="text-gold text-[11px] font-dm-mono uppercase tracking-[0.1em] hover:underline">support@ginashe.co.za</a>
+      </div>
+    </div>
+  );
+}

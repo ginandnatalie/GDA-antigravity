@@ -37,7 +37,7 @@ export async function onRequestPost(context) {
 
         if (existingUser) {
           console.log(`[Auth] User ${email} already exists. Providing direct login link.`);
-          invitationLink = `${origin}/`;
+          invitationLink = `${origin}/verify`;
         } else {
           // Generate a secure invitation link (does NOT send an email automatically)
           const { data: linkData, error: linkError } = await supabase.auth.admin.generateLink({
@@ -45,7 +45,7 @@ export async function onRequestPost(context) {
             email: email.trim().toLowerCase(),
             options: {
               data: { full_name: name },
-              redirectTo: `${origin}/`
+              redirectTo: `${origin}/verify`
             }
           });
 

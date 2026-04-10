@@ -20,6 +20,7 @@ import ContactPage from './pages/ContactPage';
 import NewsPage from './pages/NewsPage';
 import NewsDetailPage from './pages/NewsDetailPage';
 import EventsPage from './pages/EventsPage';
+import VerifyPage from './pages/VerifyPage';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -61,11 +62,6 @@ function AppContent() {
 
   const isAdmin = profile?.role === 'admin' || profile?.role === 'super_admin' || user?.email?.includes('ginashe.co.za');
 
-  // 1. Detect if we are in a Supabase auth flow (recovery, invite, token)
-  const hash = window.location.hash;
-  const search = window.location.search;
-  const combinedParams = new URLSearchParams(hash.replace('#', '?') + '&' + search.replace('?', ''));
-  const isAuthFlow = combinedParams.get('type') === 'recovery' || combinedParams.get('type') === 'invite';
 
   useEffect(() => {
     // 1. Listen for Supabase events
@@ -75,11 +71,6 @@ function AppContent() {
       }
     });
 
-    // 2. Proactive Hash Check
-    if (isAuthFlow) {
-      console.log('App: Activation token detected, opening modal...');
-      setActiveModal('reset-password');
-    }
 
     return () => subscription.unsubscribe();
   }, []);
@@ -144,9 +135,7 @@ function AppContent() {
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gold mb-4"></div>
           <p className="text-gold font-dm-mono text-[10px] tracking-widest uppercase animate-pulse">Initializing Academy...</p>
           <div className="mt-8">
-             {activeModal === 'reset-password' && (
-               <p className="text-gold text-[11px] animate-pulse">Finalizing account activation...</p>
-             )}
+             {/* Academy Initialization */}
           </div>
         </div>
       ) : (
@@ -194,6 +183,7 @@ function AppContent() {
               <Route path="/news" element={<NewsPage />} />
               <Route path="/news/:slug" element={<NewsDetailPage />} />
               <Route path="/events" element={<EventsPage />} />
+              <Route path="/verify" element={<VerifyPage />} />
               
               <Route 
                 path="/admin" 
