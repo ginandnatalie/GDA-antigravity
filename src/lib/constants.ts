@@ -18,7 +18,7 @@ export const QUALIFICATIONS = [
   'Other',
 ];
 
-export const GENDERS = ['Male', 'Female', 'Non-binary', 'Prefer not to say'];
+export const GENDERS = ['Male', 'Female'];
 
 export const PROVINCES_SA = [
   'Gauteng',
