@@ -22,6 +22,7 @@ export async function onRequestPost(context) {
     adminKey || ""
   );
 
+  try {
     const isIndividual = type === 'individual';
     const origin = new URL(request.url).origin;
     let invitationLink = "";
