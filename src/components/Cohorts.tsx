@@ -288,7 +288,7 @@ export function Cohorts({ onOpenModal, editMode }: { onOpenModal: (id: string) =
                         <input
                           type="text"
                           className={INPUT_CLASS}
-                          placeholder="GDA-2025-XXXX or your@email.com"
+                          placeholder="GDA-2026-XXXX or your@email.com"
                           value={studentNumberInput}
                           onChange={e => setStudentNumberInput(e.target.value)}
                         />

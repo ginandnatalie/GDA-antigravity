@@ -4,7 +4,7 @@ import { supabase } from '../lib/supabase';
 export function CTA({ onOpenModal, editMode }: { onOpenModal: (id: string) => void, editMode?: boolean }) {
   const [content, setContent] = useState({
     title: 'Your cloud career starts today.',
-    subtitle: 'Applications for the April 2025 cohort close soon. Seats are limited to 25 per cohort — secure yours now.'
+    subtitle: 'Applications for the April 2026 cohort close soon. Seats are limited to 25 per cohort — secure yours now.'
   });
 
   useEffect(() => {

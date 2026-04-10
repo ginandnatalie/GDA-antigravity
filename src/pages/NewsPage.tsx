@@ -12,7 +12,7 @@ const MOCK_POSTS = [
     excerpt: 'We are proud to announce the opening of our world-class campus in the heart of Sandton, designed for the next generation of cloud engineers.',
     category: 'Academy Updates',
     image_url: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=1200',
-    published_at: '2025-04-01T10:00:00Z',
+    published_at: '2026-04-01T10:00:00Z',
     slug: 'new-sandton-innovation-hub'
   },
   {
@@ -21,7 +21,7 @@ const MOCK_POSTS = [
     excerpt: 'A deep dive into how artificial intelligence is reshaping the financial landscape across the continent and the skills required to lead.',
     category: 'Tech Trends',
     image_url: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=1200',
-    published_at: '2025-04-05T14:30:00Z',
+    published_at: '2026-04-05T14:30:00Z',
     slug: 'future-of-ai-african-fintech'
   },
   {
@@ -30,7 +30,7 @@ const MOCK_POSTS = [
     excerpt: 'Our career experts share the essential roadmap for developers looking to specialize in AWS and Azure environments.',
     category: 'Career Advice',
     image_url: 'https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format&fit=crop&q=80&w=1200',
-    published_at: '2025-03-28T09:15:00Z',
+    published_at: '2026-03-28T09:15:00Z',
     slug: 'it-to-cloud-engineering-roadmap'
   }
 ];

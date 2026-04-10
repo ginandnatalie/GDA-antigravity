@@ -15,7 +15,7 @@ export default function AdmissionsPage({ onOpenModal, editMode }: AdmissionsPage
       <PageHero
         label="Admissions"
         title={<>Join the Next Cohort of<br />African Tech Leaders.</>}
-        subtitle="Applications are open for our 2025 programmes. Explore funding options, upcoming start dates, and apply below."
+        subtitle="Applications are open for our 2026 programmes. Explore funding options, upcoming start dates, and apply below."
         image="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=2070"
         imageAlt="Graduates celebrating achievement"
       />

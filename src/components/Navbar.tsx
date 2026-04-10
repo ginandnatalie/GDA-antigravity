@@ -182,7 +182,7 @@ export default function Navbar({ onOpenModal, editMode, setEditMode, siteSetting
                       <div className="bg-white/5 p-4 px-6 flex items-center justify-between">
                         <div className="flex items-center gap-2">
                           <div className="w-2 h-2 rounded-full bg-emerald shadow-[0_0_10px_rgba(34,197,94,0.5)] animate-pulse" />
-                          <span className="text-[10px] font-jetbrains uppercase tracking-widest text-text-muted">Next Intake: April 2025</span>
+                          <span className="text-[10px] font-jetbrains uppercase tracking-widest text-text-muted">Next Intake: April 2026</span>
                         </div>
                         <Link to="/contact" className="text-[11px] font-bold text-gold hover:underline flex items-center gap-1">
                           Speak to GDA Experts <ArrowRight className="w-3 h-3" />
@@ -267,7 +267,7 @@ export default function Navbar({ onOpenModal, editMode, setEditMode, siteSetting
               <div className="absolute inset-0 bg-navy translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300" />
               <div className="relative flex items-center gap-2.5 text-navy group-hover/btn:text-gold transition-colors">
                 <Rocket className="w-3.5 h-3.5" />
-                <span className="font-outfit font-black text-[12px] uppercase tracking-tighter">Apply For 2025</span>
+                <span className="font-outfit font-black text-[12px] uppercase tracking-tighter">Apply For 2026</span>
               </div>
             </button>
           </motion.div>

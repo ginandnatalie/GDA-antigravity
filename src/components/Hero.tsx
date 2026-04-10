@@ -182,7 +182,7 @@ export default function Hero({ onOpenModal, editMode }: HeroProps) {
           <div className="inline-flex items-center gap-2.5 font-dm-mono text-[10px] tracking-[0.25em] uppercase text-gold mb-5 animate-fadeUp">
             <div className={`flex items-center gap-1.5 border px-3 py-1.25 rounded-full ${heroContent.intakeStatus === 'OPEN' ? 'bg-gold-dim border-gold/25' : 'bg-coral-dim border-coral/25 text-coral'}`}>
               <span className="pulse"></span>
-              2025 Cohorts — {heroContent.intakeStatus === 'OPEN' ? 'Applications Open' : heroContent.intakeStatus === 'CLOSED' ? 'Applications Closed' : 'Waitlist Only'}
+              2026 Cohorts — {heroContent.intakeStatus === 'OPEN' ? 'Applications Open' : heroContent.intakeStatus === 'CLOSED' ? 'Applications Closed' : 'Waitlist Only'}
             </div>
           </div>
 

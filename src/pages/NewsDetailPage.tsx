@@ -31,7 +31,7 @@ const MOCK_POSTS = [
     `,
     category: 'Academy Updates',
     image_url: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=1200',
-    published_at: '2025-04-01T10:00:00Z',
+    published_at: '2026-04-01T10:00:00Z',
     slug: 'new-sandton-innovation-hub',
     author: 'Dr. Girashe, Head of Academy'
   }

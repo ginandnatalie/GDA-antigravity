@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS public.profiles (
     id_number TEXT,               -- SA ID or Passport number
     gender TEXT,                   -- Male, Female, Non-binary, Prefer not to say
     nationality TEXT DEFAULT 'South Africa',
-    student_number TEXT UNIQUE,    -- GDA-2025-XXXX format
+    student_number TEXT UNIQUE,    -- GDA-2026-XXXX format
     role TEXT DEFAULT 'student',
     avatar_url TEXT,
     bio TEXT,
@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS public.site_settings (
     programsTitle TEXT DEFAULT 'Rigorous pathways. Real-world outcomes.',
     programsSubtitle TEXT DEFAULT 'Every programme is co-designed with industry, built on cloud-vendor curricula, and delivered by practitioners who have solved the problems you''ll face.',
     ctaTitle TEXT DEFAULT 'Your cloud career starts today.',
-    ctaSubtitle TEXT DEFAULT 'Applications for the April 2025 cohort close soon. Seats are limited to 25 per cohort — secure yours now.',
+    ctaSubtitle TEXT DEFAULT 'Applications for the April 2026 cohort close soon. Seats are limited to 25 per cohort — secure yours now.',
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
 );
 

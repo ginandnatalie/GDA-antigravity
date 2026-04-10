@@ -670,7 +670,7 @@ function SiteSettings() {
     programsTitle: 'Rigorous pathways.\nReal-world outcomes.',
     programsSubtitle: 'Every programme is co-designed with industry, built on cloud-vendor curricula, and delivered by practitioners who have solved the problems you\'ll face.',
     ctaTitle: 'Your cloud career starts today.',
-    ctaSubtitle: 'Applications for the April 2025 cohort close soon. Seats are limited to 25 per cohort — secure yours now.'
+    ctaSubtitle: 'Applications for the April 2026 cohort close soon. Seats are limited to 25 per cohort — secure yours now.'
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
