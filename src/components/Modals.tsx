@@ -36,14 +36,35 @@ export function Modals({ activeModal, onClose, onLoginSuccess }: ModalsProps) {
     if (!forgotEmail) return;
     setIsSubmitting(true);
     try {
-      const { error } = await supabase.auth.resetPasswordForEmail(forgotEmail, {
+      // 1. Check if user exists in profiles or applications
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('id')
+        .eq('email', forgotEmail.trim().toLowerCase())
+        .maybeSingle();
+
+      if (!profile) {
+        // Fallback check in applications just in case profile isn't created yet
+        const { data: app } = await supabase
+          .from('applications')
+          .select('id')
+          .eq('email', forgotEmail.trim().toLowerCase())
+          .limit(1)
+          .maybeSingle();
+        
+        if (!app) {
+          throw new Error('No account found for this email address. Please apply first.');
+        }
+      }
+
+      const { error } = await supabase.auth.resetPasswordForEmail(forgotEmail.trim().toLowerCase(), {
         redirectTo: window.location.origin,
       });
       if (error) throw error;
-      alert('Password reset link sent to your email!');
+      alert('A branded password reset link has been sent to your email!');
       setStudentTab('login');
     } catch (err: any) {
-      alert('Error: ' + err.message);
+      alert(err.message);
     } finally {
       setIsSubmitting(false);
     }
@@ -76,7 +97,20 @@ export function Modals({ activeModal, onClose, onLoginSuccess }: ModalsProps) {
     setIsSubmitting(true);
     setDuplicateWarning('');
     try {
-      // Pre-submit duplicate check
+      // 1. Check if they already have a student profile (most severe duplicate)
+      const { data: profileMatch } = await supabase
+        .from('profiles')
+        .select('id')
+        .eq('email', indForm.email.trim().toLowerCase())
+        .maybeSingle();
+
+      if (profileMatch) {
+        setDuplicateWarning(`You already have a student account! Please sign in to your portal.`);
+        setIsSubmitting(false);
+        return;
+      }
+
+      // 2. Check for existing pending/approved applications
       const { data: existingApp } = await supabase
         .from('applications')
         .select('id, first_name, status, program')

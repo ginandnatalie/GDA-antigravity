@@ -93,21 +93,36 @@ export function Cohorts({ onOpenModal, editMode }: { onOpenModal: (id: string) =
   // ─── PRE-SUBMIT DUPLICATE CHECK ──
   const checkForDuplicates = async (): Promise<boolean> => {
     try {
-      // Check by email
-      const { data: emailMatch } = await supabase
-        .from('applications')
-        .select('id, first_name, status, program')
-        .eq('email', form.email.trim().toLowerCase())
-        .limit(1)
+      const emailClean = form.email.trim().toLowerCase();
+
+      // 1. Check if they already have a student profile
+      const { data: profileMatch } = await supabase
+        .from('profiles')
+        .select('id')
+        .eq('email', emailClean)
         .maybeSingle();
 
-      if (emailMatch) {
-        setDuplicateMessage(`It looks like you've already applied (${emailMatch.program || 'programme'}, status: ${emailMatch.status}). Please sign in to your Student Portal to check your application status.`);
+      if (profileMatch) {
+        setDuplicateMessage(`You already have a student account! Please sign in to your student portal to access your courses.`);
         setStep('existing');
         return true;
       }
 
-      // Check by ID number if provided
+      // 2. Check by email in applications
+      const { data: emailMatch } = await supabase
+        .from('applications')
+        .select('id, first_name, status, program')
+        .eq('email', emailClean)
+        .limit(1)
+        .maybeSingle();
+
+      if (emailMatch) {
+        setDuplicateMessage(`It looks like you've already applied for ${emailMatch.program || 'a programme'} (Current Status: ${emailMatch.status}). Please sign in to your Student Portal to check your status.`);
+        setStep('existing');
+        return true;
+      }
+
+      // 3. Check by ID number if provided
       if (form.idNumber.trim()) {
         const { data: idMatch } = await supabase
           .from('applications')

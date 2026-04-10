@@ -129,12 +129,23 @@ export async function onRequestPost(context) {
     let authData = null;
     if (isIndividual) {
       const origin = new URL(request.url).origin;
-      const { data, error } = await supabase.auth.admin.inviteUserByEmail(email, {
-        data: { full_name: name },
-        redirectTo: `${origin}/student-portal`
-      });
-      authData = data;
-      if (error) console.warn("Supabase Auth Invitation Error:", error.message);
+      
+      // Check if user already exists in auth
+      const { data: userSearch } = await supabase.auth.admin.listUsers();
+      const existingUser = userSearch?.users?.find(u => u.email?.toLowerCase() === email.toLowerCase());
+
+      if (existingUser) {
+        console.log(`[Auth] User ${email} already exists. Skipping invitation.`);
+        authData = { existing: true, user: existingUser };
+      } else {
+        const { data, error } = await supabase.auth.admin.inviteUserByEmail(email, {
+          data: { full_name: name },
+          redirectTo: `${origin}/student-portal`
+        });
+        authData = data;
+        if (error) console.warn("Supabase Auth Invitation Error:", error.message);
+        else console.log(`[Auth] Invitation sent to ${email}`);
+      }
     }
 
     // 3. Send Admin Notification Email
@@ -148,7 +159,7 @@ export async function onRequestPost(context) {
         from: fromEmail,
         to: ["academy@ginashe.co.za"],
         reply_to: "academy@ginashe.co.za",
-        subject: `NEW ${type.toUpperCase()} ${isIndividual ? 'APPLICATION' : 'ENQUIRY'}: ${name}`,
+        subject: `NEW ${type.toUpperCase()}: ${name}`,
         html: `
           <div style="font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px; background-color: #080b12; color: #f0f0f0; border-radius: 16px;">
             <div style="text-align: center; margin-bottom: 32px;">
