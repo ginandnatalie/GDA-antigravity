@@ -65,11 +65,19 @@ function AppContent() {
   const isAdmin = profile?.role === 'admin' || profile?.role === 'super_admin' || user?.email?.includes('ginashe.co.za');
 
   useEffect(() => {
+    // 1. Listen for Supabase events
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === 'PASSWORD_RECOVERY') {
         setActiveModal('reset-password');
       }
     });
+
+    // 2. Proactive Hash Check (Handle cases where event might be slightly delayed)
+    const hash = window.location.hash;
+    const params = new URLSearchParams(hash.replace('#', '?'));
+    if (params.get('type') === 'recovery' || params.get('type') === 'invite') {
+      setActiveModal('reset-password');
+    }
 
     return () => subscription.unsubscribe();
   }, []);
@@ -199,6 +207,10 @@ function AppContent() {
           <Route 
             path="/admin" 
             element={isAdmin ? <div className={isPortal ? "pt-8" : "pt-24"}><AdminDashboard /></div> : <Navigate to="/" />} 
+          />
+          <Route 
+            path="/student-portal" 
+            element={<Navigate to="/portal" replace />} 
           />
           <Route 
             path="/portal" 

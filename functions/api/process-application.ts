@@ -36,7 +36,7 @@ export async function onRequestPost(context) {
 
         if (existingUser) {
           console.log(`[Auth] User ${email} already exists. Providing direct login link.`);
-          invitationLink = `${origin}/student-portal`;
+          invitationLink = `${origin}/portal`;
         } else {
           // Generate a secure invitation link (does NOT send an email automatically)
           const { data: linkData, error: linkError } = await supabase.auth.admin.generateLink({
@@ -90,7 +90,7 @@ export async function onRequestPost(context) {
           <div style="background-color: #1a1a1c; padding: 24px; border-radius: 8px; border-left: 4px solid #D4AF37; margin: 32px 0;">
             <p style="margin: 0; font-weight: 800; color: #D4AF37; text-transform: uppercase; font-size: 12px; letter-spacing: 1px;">Portal Access:</p>
             <p style="margin: 12px 0 0 0; line-height: 1.6; font-size: 14px; color: #f0f0f0;">
-              You already have an active account. Please <a href="${origin}/student-portal" style="color: #D4AF37; text-decoration: underline;">sign in here</a> to view your application status.
+              You already have an active account. Please <a href="${origin}/portal" style="color: #D4AF37; text-decoration: underline;">sign in here</a> to view your application status.
             </p>
           </div>
           `}
@@ -106,10 +106,7 @@ export async function onRequestPost(context) {
         </div>
         
         <div style="text-align: center; padding-top: 24px; border-top: 1px solid #1e2330;">
-          <p style="font-size: 11px; color: #4b5563; margin-bottom: 8px;">
-            Ginashe Digital Academy. Level 4 B-BBEE Accredited Institution.<br>
-            &copy; 2026. All rights reserved.
-          </p>
+            Ginashe Digital Academy &copy; 2026. All rights reserved.
         </div>
       </div>
     ` : `

@@ -42,7 +42,7 @@ export function Funding({ onOpenModal, editMode }: { onOpenModal: (id: string) =
             <div className="font-syne font-extrabold text-[18px] mb-2.5">MICT SETA Skills Levy Funding</div>
             <div className="text-[13px] text-text-soft leading-[1.65] mb-5 flex-1">Companies with annual payroll over R500,000 pay a 1% Skills Development Levy. GDA is an accredited MICT SETA provider — your employer can claim this back to fund your training at zero net cost to the business.</div>
             <ul className="list-none flex flex-col gap-2.25 mb-5.5">
-              {['Available to learners employed at levy-paying companies', 'Covers up to 100% of programme fees for qualifying learners', 'GDA handles all WSP/ATR reporting and SETA paperwork', 'B-BBEE Skills Development Element points included', 'Available for youth (18–35) AND working professionals'].map((li, i) => (
+              {['Available to learners employed at levy-paying companies', 'Covers up to 100% of programme fees for qualifying learners', 'GDA handles all WSP/ATR reporting and SETA paperwork', 'Available for youth (18–35) AND working professionals'].map((li, i) => (
                 <li key={i} className="flex gap-2 text-[12px] items-start">
                   <span className="w-1.25 h-1.25 rounded-full bg-emerald shrink-0 mt-1.25"></span>
                   <span>{li}</span>

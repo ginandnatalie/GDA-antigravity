@@ -113,7 +113,6 @@ export function WhyGDA({ editMode }: { editMode?: boolean }) {
               <span className="chip chip-gold">MICT SETA Accredited</span>
               <span className="chip chip-sky">DHET Aligned</span>
               <span className="chip chip-em">NQF Levels 4–7</span>
-              <span className="chip">B-BBEE Compliant</span>
               <span className="chip chip-vio">IASA Partner</span>
               <span className="chip">POPIA Certified</span>
             </div>

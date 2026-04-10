@@ -127,7 +127,6 @@ export function Ecosystem({ onOpenModal, editMode }: { onOpenModal: (id: string)
               {[
                 'Access pre-vetted, job-ready cloud and AI talent before they hit the open market',
                 'Co-brand and co-deliver content aligned to your technology stack',
-                'Leverage SETA accreditation for B-BBEE skills development spend',
                 'Sponsor cohort seats and build your employer brand with Gen-Z Africa',
                 'Participate in our annual GDA Tech Showcase and hiring events'
               ].map((b, i) => (

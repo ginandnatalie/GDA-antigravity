@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
 import { supabase, uploadFile } from '../lib/supabase';
 import { useAuth } from '../lib/auth';
 import SharedAdmissionForm from './SharedAdmissionForm';
+import { Eye, EyeOff } from 'lucide-react';
 
 interface ModalsProps {
   activeModal: string | null;
@@ -23,6 +23,9 @@ export function Modals({ activeModal, onClose, onSwitchModal, onLoginSuccess }: 
   const [loginForm, setLoginForm] = useState({ email: '', password: '' });
   const [resetForm, setResetForm] = useState({ password: '', confirm: '' });
   const [forgotEmail, setForgotEmail] = useState('');
+  
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   if (!activeModal) return null;
 
@@ -77,8 +80,15 @@ export function Modals({ activeModal, onClose, onSwitchModal, onLoginSuccess }: 
         password: resetForm.password
       });
       if (error) throw error;
-      alert('Password updated successfully! You can now sign in.');
+      alert('Password updated successfully!');
       onClose();
+      // Ensure they enter the portal if they are on a recovery link
+      if (window.location.pathname === '/' || window.location.pathname === '/portal') {
+        const { data: { user: updatedUser } } = await supabase.auth.getUser();
+        if (updatedUser) {
+           onLoginSuccess?.(updatedUser.email?.includes('ginashe.co.za') ? 'admin' : 'student');
+        }
+      }
     } catch (err: any) {
       alert('Error: ' + err.message);
     } finally {
@@ -264,14 +274,23 @@ export function Modals({ activeModal, onClose, onSwitchModal, onLoginSuccess }: 
                   </div>
                   <div className="form-group">
                     <label className="block font-dm-mono text-[9px] tracking-[0.15em] uppercase text-text-muted mb-1.75">Password</label>
-                    <input 
-                      type="password" 
-                      className="w-full bg-surface border border-border-custom rounded-sm p-2.75 px-3.5 font-dm-sans text-[13px] text-text-custom outline-none focus:border-gold/40 transition-all" 
-                      placeholder="Enter your password" 
-                      value={loginForm.password}
-                      onChange={e => setLoginForm({...loginForm, password: e.target.value})}
-                      required
-                    />
+                    <div className="relative">
+                      <input 
+                        type={showPassword ? "text" : "password"} 
+                        className="w-full bg-surface border border-border-custom rounded-sm p-2.75 px-3.5 pr-10 font-dm-sans text-[13px] text-text-custom outline-none focus:border-gold/40 transition-all" 
+                        placeholder="Enter your password" 
+                        value={loginForm.password}
+                        onChange={e => setLoginForm({...loginForm, password: e.target.value})}
+                        required
+                      />
+                      <button 
+                        type="button"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-gold transition-colors"
+                        onClick={() => setShowPassword(!showPassword)}
+                      >
+                        {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                      </button>
+                    </div>
                   </div>
                   <button type="submit" disabled={isSubmitting} className="btn btn-sky w-full py-3.5 justify-center mt-2">
                     {isSubmitting ? 'Signing In...' : 'Access My Portal →'}
@@ -403,28 +422,46 @@ export function Modals({ activeModal, onClose, onSwitchModal, onLoginSuccess }: 
               <form className="flex flex-col gap-4" onSubmit={handleResetPassword}>
                 <div className="form-group">
                   <label className="block font-dm-mono text-[9px] tracking-[0.15em] uppercase text-text-muted mb-1.75">New Password</label>
-                  <input 
-                    type="password" 
-                    className="w-full bg-surface border border-border-custom rounded-sm p-2.75 px-3.5 font-dm-sans text-[13px] text-text-custom outline-none focus:border-gold/40 transition-all" 
-                    placeholder="Min 6 characters" 
-                    value={resetForm.password}
-                    onChange={e => setResetForm({...resetForm, password: e.target.value})}
-                    required
-                  />
+                  <div className="relative">
+                    <input 
+                      type={showPassword ? "text" : "password"} 
+                      className="w-full bg-surface border border-border-custom rounded-sm p-2.75 px-3.5 pr-10 font-dm-sans text-[13px] text-text-custom outline-none focus:border-gold/40 transition-all" 
+                      placeholder="Min 6 characters" 
+                      value={resetForm.password}
+                      onChange={e => setResetForm({...resetForm, password: e.target.value})}
+                      required
+                    />
+                    <button 
+                      type="button"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-gold transition-colors"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                    </button>
+                  </div>
                 </div>
                 <div className="form-group">
                   <label className="block font-dm-mono text-[9px] tracking-[0.15em] uppercase text-text-muted mb-1.75">Confirm Password</label>
-                  <input 
-                    type="password" 
-                    className="w-full bg-surface border border-border-custom rounded-sm p-2.75 px-3.5 font-dm-sans text-[13px] text-text-custom outline-none focus:border-gold/40 transition-all" 
-                    placeholder="Repeat new password" 
-                    value={resetForm.confirm}
-                    onChange={e => setResetForm({...resetForm, confirm: e.target.value})}
-                    required
-                  />
+                  <div className="relative">
+                    <input 
+                      type={showConfirm ? "text" : "password"} 
+                      className="w-full bg-surface border border-border-custom rounded-sm p-2.75 px-3.5 pr-10 font-dm-sans text-[13px] text-text-custom outline-none focus:border-gold/40 transition-all" 
+                      placeholder="Repeat new password" 
+                      value={resetForm.confirm}
+                      onChange={e => setResetForm({...resetForm, confirm: e.target.value})}
+                      required
+                    />
+                    <button 
+                      type="button"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-gold transition-colors"
+                      onClick={() => setShowConfirm(!showConfirm)}
+                    >
+                      {showConfirm ? <EyeOff size={16} /> : <Eye size={16} />}
+                    </button>
+                  </div>
                 </div>
                 <button type="submit" disabled={isSubmitting} className="btn btn-gold w-full py-3.5 justify-center mt-2">
-                  {isSubmitting ? 'Updating...' : 'Update Password →'}
+                  {isSubmitting ? 'Updating...' : 'Set Password & Enter Portal →'}
                 </button>
               </form>
             </div>
