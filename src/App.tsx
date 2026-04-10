@@ -64,6 +64,16 @@ function AppContent() {
 
   const isAdmin = profile?.role === 'admin' || profile?.role === 'super_admin' || user?.email?.includes('ginashe.co.za');
 
+  // 1. Detect if we are in a Supabase auth flow (recovery, invite, or returning with token)
+  const hash = window.location.hash;
+  const searchParams = new URLSearchParams(window.location.search);
+  const hashParams = new URLSearchParams(hash.replace('#', '?'));
+  const isAuthFlow = hashParams.has('access_token') || 
+                     hashParams.get('type') === 'recovery' || 
+                     hashParams.get('type') === 'invite' ||
+                     searchParams.get('type') === 'recovery' ||
+                     searchParams.get('type') === 'invite';
+
   useEffect(() => {
     // 1. Listen for Supabase events
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
@@ -146,7 +156,7 @@ function AppContent() {
   const { pathname } = useLocation();
   const isPortal = pathname.startsWith('/portal') || pathname.startsWith('/admin') || pathname.startsWith('/course');
 
-  if (loading) {
+  if (loading && !isAuthFlow) {
     return (
       <div className="min-h-screen bg-bg flex flex-col items-center justify-center transition-colors duration-300">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gold mb-4"></div>
@@ -206,7 +216,7 @@ function AppContent() {
           
           <Route 
             path="/admin" 
-            element={isAdmin ? <div className={isPortal ? "pt-8" : "pt-24"}><AdminDashboard /></div> : <Navigate to="/" />} 
+            element={user ? (isAdmin ? <div className={isPortal ? "pt-8" : "pt-24"}><AdminDashboard /></div> : <Navigate to="/portal" />) : (isAuthFlow ? <div className="min-h-screen" /> : <Navigate to="/" />)} 
           />
           <Route 
             path="/student-portal" 
@@ -214,11 +224,11 @@ function AppContent() {
           />
           <Route 
             path="/portal" 
-            element={user ? <div className={isPortal ? "pt-8" : "pt-24"}><StudentPortal onStartCourse={(id) => navigate(`/course/${id}`)} /></div> : <Navigate to="/" />} 
+            element={user ? <div className={isPortal ? "pt-8" : "pt-24"}><StudentPortal onStartCourse={(id) => navigate(`/course/${id}`)} /></div> : (isAuthFlow ? <div className="min-h-screen" /> : <Navigate to="/" />)} 
           />
           <Route 
             path="/course/:courseId" 
-            element={user ? <CourseViewerWrapper /> : <Navigate to="/" />} 
+            element={user ? <CourseViewerWrapper /> : (isAuthFlow ? <div className="min-h-screen" /> : <Navigate to="/" />)} 
           />
         </Routes>
       </main>
