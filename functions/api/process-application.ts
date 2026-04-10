@@ -33,9 +33,7 @@ export async function onRequestPost(context) {
     const messageHtml = isIndividual ? `
       <div style="font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px; background-color: #080b12; color: #f0f0f0; border-radius: 16px;">
         <div style="text-align: center; margin-bottom: 32px;">
-          <div style="display: inline-block; padding: 12px; background: #1a1a1c; border: 1px solid #D4AF37; border-radius: 8px;">
-            <span style="color: #D4AF37; font-weight: 900; font-size: 20px; letter-spacing: 1px;">GINASHE</span>
-          </div>
+          <img src="https://academy.ginashe.co.za/logo.png" alt="Ginashe Digital Academy" style="width: 180px; height: auto;" />
         </div>
         
         <div style="background-color: #11141d; border: 1px solid #1e2330; border-radius: 12px; padding: 32px; margin-bottom: 24px;">
@@ -71,9 +69,7 @@ export async function onRequestPost(context) {
     ` : `
       <div style="font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px; background-color: #080b12; color: #f0f0f0; border-radius: 16px;">
         <div style="text-align: center; margin-bottom: 32px;">
-          <div style="display: inline-block; padding: 12px; background: #1a1a1c; border: 1px solid #D4AF37; border-radius: 8px;">
-            <span style="color: #D4AF37; font-weight: 900; font-size: 20px; letter-spacing: 1px;">GINASHE</span>
-          </div>
+          <img src="https://academy.ginashe.co.za/logo.png" alt="Ginashe Digital Academy" style="width: 180px; height: auto;" />
         </div>
         
         <div style="background-color: #11141d; border: 1px solid #1e2330; border-radius: 12px; padding: 32px; margin-bottom: 24px;">
@@ -163,9 +159,7 @@ export async function onRequestPost(context) {
         html: `
           <div style="font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px; background-color: #080b12; color: #f0f0f0; border-radius: 16px;">
             <div style="text-align: center; margin-bottom: 32px;">
-              <div style="display: inline-block; padding: 12px; background: #1a1a1c; border: 1px solid #D4AF37; border-radius: 8px;">
-                <span style="color: #D4AF37; font-weight: 900; font-size: 20px; letter-spacing: 1px;">GINASHE</span>
-              </div>
+              <img src="https://academy.ginashe.co.za/logo.png" alt="Ginashe Digital Academy" style="width: 150px; height: auto;" />
             </div>
             
             <div style="background-color: #11141d; border: 1px solid #1e2330; border-radius: 12px; padding: 32px; margin-bottom: 24px;">
