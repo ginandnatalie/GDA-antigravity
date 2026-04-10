@@ -117,7 +117,7 @@ function AppContent() {
     return () => clearTimeout(timer);
   }, [pathname]);
 
-  const isPortal = pathname.startsWith('/portal') || pathname.startsWith('/admin') || pathname.startsWith('/course');
+  const isPortal = pathname.startsWith('/portal') || pathname.startsWith('/admin') || pathname.startsWith('/course') || pathname.startsWith('/verify');
 
   return (
     <div className="min-h-screen bg-bg text-text-custom selection:bg-gold-dim selection:text-gold transition-colors duration-300 flex flex-col">
