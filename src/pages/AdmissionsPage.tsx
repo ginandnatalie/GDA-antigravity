@@ -2,6 +2,7 @@ import React from 'react';
 import PageHero from '../components/PageHero';
 import { Cohorts } from '../components/Cohorts';
 import { Funding, FAQ } from '../components/Funding';
+import { Requirements, TuitionFees } from '../components/AdmissionsContent';
 
 interface AdmissionsPageProps {
   onOpenModal: (id: string) => void;
@@ -18,7 +19,11 @@ export default function AdmissionsPage({ onOpenModal, editMode }: AdmissionsPage
         image="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=2070"
         imageAlt="Graduates celebrating achievement"
       />
-      <Cohorts onOpenModal={onOpenModal} editMode={editMode} />
+      <div id="apply">
+        <Cohorts onOpenModal={onOpenModal} editMode={editMode} />
+      </div>
+      <Requirements />
+      <TuitionFees />
       <Funding onOpenModal={onOpenModal} editMode={editMode} />
       <FAQ editMode={editMode} />
     </>

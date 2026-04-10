@@ -2,6 +2,8 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../lib/auth';
 import AcademyDashboard from './AcademyDashboard';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 // ─── UTILITY: CSV Export ─────────────────────
 function exportToCSV(data: any[], filename: string) {
@@ -51,7 +53,7 @@ export function AdminDashboard() {
   const [applications, setApplications] = useState<any[]>([]);
   const [courses, setCourses] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'overview' | 'applications' | 'courses' | 'progress' | 'staff' | 'settings' | 'communications'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'applications' | 'courses' | 'news' | 'events' | 'finances' | 'progress' | 'staff' | 'settings' | 'communications'>('overview');
   const [filter, setFilter] = useState('all');
   const [statusFilter, setStatusFilter] = useState('all');
   const [updatingId, setUpdatingId] = useState<string | null>(null);
@@ -320,16 +322,16 @@ export function AdminDashboard() {
               </div>
               <div className="flex gap-4 mt-4 border-b border-border-custom overflow-x-auto">
                 {[
-                  { id: 'overview', label: 'Overview' },
-                  { id: 'applications', label: 'Applications' },
-                  { id: 'courses', label: 'Course Manager' },
-                  { id: 'progress', label: 'Student Progress' },
-                  ...(isSuperAdmin ? [
-                    { id: 'staff', label: 'Staff Management' },
-                    { id: 'settings', label: 'Site Settings' },
-                  ] : []),
-                  { id: 'communications', label: 'Comms Log' },
-                ].map(tab => (
+                  { id: 'overview', label: 'Stats' },
+                  { id: 'applications', label: 'Admissions' },
+                  { id: 'courses', label: 'Courses' },
+                  { id: 'news', label: 'News' },
+                  { id: 'events', label: 'Events' },
+                  { id: 'finances', label: 'Finance' },
+                  { id: 'staff', label: 'Staff' },
+                  { id: 'settings', label: 'Site Settings' },
+                  { id: 'communications', label: 'Comms' },
+                ].filter(t => (t.id === 'staff' || t.id === 'settings') ? isSuperAdmin : true).map(tab => (
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id as any)}
@@ -347,186 +349,9 @@ export function AdminDashboard() {
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gold"></div>
             </div>
           ) : activeTab === 'overview' ? (
-            <div className="space-y-8">
-              {/* ─── ADMISSIONS FUNNEL ─── */}
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
-                {[
-                  { label: 'Total', value: stats.total, color: 'text-text-custom' },
-                  { label: 'Pending', value: stats.pending, color: 'text-gold' },
-                  { label: 'Under Review', value: applications.filter(a => a.status === 'under_review').length, color: 'text-sky' },
-                  { label: 'Approved', value: stats.approved, color: 'text-emerald' },
-                  { label: 'Rejected', value: stats.rejected, color: 'text-coral' },
-                  { label: 'Enrolled', value: stats.enrolled, color: 'text-[#a78bfa]' },
-                ].map((s, i) => (
-                  <div key={i} className="bg-card border border-border-custom rounded-xl p-4 text-center">
-                    <div className={`font-syne font-extrabold text-[28px] ${s.color}`}>{s.value}</div>
-                    <div className="font-dm-mono text-[8px] tracking-[0.15em] uppercase text-text-dim mt-1">{s.label}</div>
-                  </div>
-                ))}
-              </div>
-              <div className="max-w-2xl">
-                <AcademyDashboard />
-              </div>
-            </div>
+            <OverviewStats applications={applications} courses={courses} />
           ) : activeTab === 'applications' ? (
-            <div className="space-y-4">
-              {/* ─── FILTER BAR ─── */}
-              <div className="flex flex-wrap gap-3 items-center justify-between bg-surface/50 p-3 rounded-xl border border-border-custom">
-                <div className="flex gap-2 items-center flex-wrap">
-                  {/* Type Filter */}
-                  <div className="flex gap-1 bg-bg p-0.5 rounded-md border border-border-custom">
-                    {['all', 'individual', 'organisation', 'partner'].map(t => (
-                      <button
-                        key={t}
-                        onClick={() => setFilter(t)}
-                        className={`px-3 py-1 rounded-sm font-dm-mono text-[9px] uppercase tracking-wider transition-all ${filter === t ? 'bg-gold text-bg' : 'text-text-muted hover:text-text-custom'}`}
-                      >
-                        {t}
-                      </button>
-                    ))}
-                  </div>
-                  {/* Status Filter */}
-                  <select
-                    className="bg-bg border border-border-custom rounded-md px-3 py-1.5 font-dm-mono text-[10px] text-text-custom"
-                    value={statusFilter}
-                    onChange={e => setStatusFilter(e.target.value)}
-                  >
-                    <option value="all">All Statuses</option>
-                    <option value="pending">Pending</option>
-                    <option value="under_review">Under Review</option>
-                    <option value="approved">Approved</option>
-                    <option value="rejected">Rejected</option>
-                    <option value="enrolled">Enrolled</option>
-                    <option value="waitlisted">Waitlisted</option>
-                  </select>
-                  {/* Search */}
-                  <input
-                    type="text"
-                    placeholder="Search by name, email, student #..."
-                    className="bg-bg border border-border-custom rounded-md px-3 py-1.5 font-dm-sans text-[12px] text-text-custom w-64 outline-none focus:border-gold/40"
-                    value={searchQuery}
-                    onChange={e => setSearchQuery(e.target.value)}
-                  />
-                </div>
-                <div className="flex gap-2 items-center">
-                  {/* Bulk Actions */}
-                  {selectedIds.size > 0 && (
-                    <div className="flex gap-2 items-center bg-gold/5 border border-gold/20 rounded-lg px-3 py-1.5">
-                      <span className="font-dm-mono text-[9px] text-gold">{selectedIds.size} selected</span>
-                      <button onClick={() => bulkUpdateStatus('approved')} className="px-2 py-0.5 bg-emerald/10 text-emerald rounded text-[9px] font-bold hover:bg-emerald/20">✓ Approve</button>
-                      <button onClick={() => bulkUpdateStatus('rejected')} className="px-2 py-0.5 bg-coral/10 text-coral rounded text-[9px] font-bold hover:bg-coral/20">✕ Reject</button>
-                      <button onClick={() => setSelectedIds(new Set())} className="text-text-muted text-[9px] hover:text-text-custom">Clear</button>
-                    </div>
-                  )}
-                  {/* Export */}
-                  <div className="flex gap-1">
-                    <button onClick={() => exportToCSV(filteredApps, 'gda-applications')} className="px-2.5 py-1.5 bg-surface border border-border-custom rounded-md font-dm-mono text-[9px] text-text-muted hover:text-gold hover:border-gold/30 transition-all">📤 CSV</button>
-                    <button onClick={() => exportToJSON(filteredApps, 'gda-applications')} className="px-2.5 py-1.5 bg-surface border border-border-custom rounded-md font-dm-mono text-[9px] text-text-muted hover:text-gold hover:border-gold/30 transition-all">📋 JSON</button>
-                  </div>
-                </div>
-              </div>
-
-              <div className="text-[10px] text-text-dim font-dm-mono px-1">
-                Showing {filteredApps.length} of {applications.length} applications
-              </div>
-
-              {/* ─── DATA TABLE ─── */}
-              <div className="bg-card border border-border-custom rounded-xl overflow-hidden overflow-x-auto">
-                <table className="w-full text-left border-collapse min-w-[900px]">
-                  <thead>
-                    <tr className="bg-surface border-b border-border-custom">
-                      <th className="p-3 w-10">
-                        <input type="checkbox" checked={selectedIds.size === filteredApps.length && filteredApps.length > 0} onChange={toggleSelectAll} className="accent-gold" />
-                      </th>
-                      <th className="p-3 font-dm-mono text-[10px] uppercase tracking-widest text-text-muted cursor-pointer hover:text-gold" onClick={() => toggleSort('created_at')}>
-                        Date {sortField === 'created_at' && (sortDir === 'asc' ? '↑' : '↓')}
-                      </th>
-                      <th className="p-3 font-dm-mono text-[10px] uppercase tracking-widest text-text-muted cursor-pointer hover:text-gold" onClick={() => toggleSort('first_name')}>
-                        Name {sortField === 'first_name' && (sortDir === 'asc' ? '↑' : '↓')}
-                      </th>
-                      <th className="p-3 font-dm-mono text-[10px] uppercase tracking-widest text-text-muted cursor-pointer hover:text-gold" onClick={() => toggleSort('program')}>
-                        Program {sortField === 'program' && (sortDir === 'asc' ? '↑' : '↓')}
-                      </th>
-                      <th className="p-3 font-dm-mono text-[10px] uppercase tracking-widest text-text-muted">AI Score</th>
-                      <th className="p-3 font-dm-mono text-[10px] uppercase tracking-widest text-text-muted">Student #</th>
-                      <th className="p-3 font-dm-mono text-[10px] uppercase tracking-widest text-text-muted">Docs</th>
-                      <th className="p-3 font-dm-mono text-[10px] uppercase tracking-widest text-text-muted cursor-pointer hover:text-gold" onClick={() => toggleSort('status')}>
-                        Status {sortField === 'status' && (sortDir === 'asc' ? '↑' : '↓')}
-                      </th>
-                      <th className="p-3 font-dm-mono text-[10px] uppercase tracking-widest text-text-muted">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {filteredApps.map((app) => (
-                      <tr key={app.id} className={`border-b border-border-custom hover:bg-white/2 transition-colors ${selectedIds.has(app.id) ? 'bg-gold/3' : ''}`}>
-                        <td className="p-3">
-                          <input type="checkbox" checked={selectedIds.has(app.id)} onChange={() => toggleSelect(app.id)} className="accent-gold" />
-                        </td>
-                        <td className="p-3">
-                          <div className="text-[11px] text-text-soft">{new Date(app.created_at).toLocaleDateString()}</div>
-                          <div className="text-[9px] text-text-muted">{new Date(app.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
-                        </td>
-                        <td className="p-3">
-                          <div className="font-semibold text-[13px]">{app.type === 'individual' ? `${app.first_name} ${app.last_name}` : app.organization_name}</div>
-                          <div className="text-[10px] text-text-muted">{app.email}</div>
-                          {app.id_number && <div className="text-[9px] text-text-dim font-dm-mono mt-0.5">ID: {app.id_number}</div>}
-                        </td>
-                        <td className="p-3 text-[12px] text-text-soft">
-                          <div className="max-w-[140px] truncate" title={app.program}>{app.program || 'N/A'}</div>
-                          {app.qualification && <div className="text-[9px] text-text-dim mt-0.5">{app.qualification}</div>}
-                        </td>
-                        <td className="p-3"><AIMatchBadge score={app.ai_match_score} /></td>
-                        <td className="p-3">
-                          {app.student_number ? (
-                            <span className="font-dm-mono text-[10px] text-gold bg-gold/5 px-2 py-0.5 rounded">{app.student_number}</span>
-                          ) : (
-                            <span className="text-text-dim text-[9px]">—</span>
-                          )}
-                        </td>
-                        <td className="p-3">
-                          <div className="flex flex-col gap-1">
-                            {app.cv_url && <a href={app.cv_url} target="_blank" rel="noreferrer" className="text-gold hover:underline text-[10px]">📄 CV</a>}
-                            <button onClick={() => setSelectedApp(app)} className="text-sky hover:underline text-[10px] text-left">👁️ Details</button>
-                          </div>
-                        </td>
-                        <td className="p-3">
-                          <span className={`px-2 py-0.5 rounded-full text-[9px] font-dm-mono uppercase border ${
-                            app.status === 'approved' ? 'border-emerald/20 text-emerald bg-emerald-dim' :
-                            app.status === 'rejected' ? 'border-coral/20 text-coral bg-coral-dim' :
-                            app.status === 'enrolled' ? 'border-[#a78bfa]/20 text-[#a78bfa] bg-[#a78bfa]/5' :
-                            app.status === 'under_review' ? 'border-sky/20 text-sky bg-sky-dim' :
-                            app.status === 'waitlisted' ? 'border-gold/20 text-gold bg-gold-dim' :
-                            'border-gold/20 text-gold bg-gold-dim'
-                          }`}>
-                            {app.status || 'pending'}
-                          </span>
-                        </td>
-                        <td className="p-3">
-                          <div className="flex gap-1.5">
-                            <a href={`mailto:${app.email}?subject=Regarding your application to GDA`} className="p-1.5 rounded bg-white/5 text-text-muted hover:text-gold transition-all text-[11px]" title="Email">✉️</a>
-                            <button
-                              disabled={updatingId === app.id || app.status === 'approved'}
-                              onClick={() => updateStatus(app.id, 'approved')}
-                              className="p-1.5 rounded bg-emerald/10 text-emerald hover:bg-emerald/20 disabled:opacity-30 transition-all text-[11px]"
-                              title="Approve"
-                            >✓</button>
-                            <button
-                              disabled={updatingId === app.id || app.status === 'rejected'}
-                              onClick={() => updateStatus(app.id, 'rejected')}
-                              className="p-1.5 rounded bg-coral/10 text-coral hover:bg-coral/20 disabled:opacity-30 transition-all text-[11px]"
-                              title="Reject"
-                            >✕</button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-                {filteredApps.length === 0 && (
-                  <div className="p-12 text-center text-text-muted">No applications found matching your criteria.</div>
-                )}
-              </div>
-            </div>
+            <ApplicationTable apps={applications} onUpdate={fetchApplications} onSelect={setSelectedApp} isLoading={loading} filters={{status: statusFilter, search: searchQuery}} />
           ) : activeTab === 'courses' ? (
             <CourseManager courses={courses} onRefresh={fetchCourses} onEditContent={setEditingCourse} />
           ) : activeTab === 'progress' ? (
@@ -1234,6 +1059,373 @@ function CourseContentEditor({ course, onBack }: { course: any, onBack: () => vo
   );
 }
 
+// ─── NEWS MANAGER (CMS) ─────────────────────
+function NewsManager() {
+  const [posts, setPosts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [isEditing, setIsEditing] = useState(false);
+  const [currentPost, setCurrentPost] = useState<any>({ title: '', slug: '', excerpt: '', content: '', image_url: '', category: 'General' });
+
+  useEffect(() => { fetchPosts(); }, []);
+
+  async function fetchPosts() {
+    setLoading(true);
+    const { data } = await supabase.from('posts').select('*').order('created_at', { ascending: false });
+    setPosts(data || []);
+    setLoading(false);
+  }
+
+  async function handleSavePost() {
+    try {
+      if (!currentPost.slug) currentPost.slug = currentPost.title.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
+      const { error } = await supabase.from('posts').upsert(currentPost);
+      if (error) throw error;
+      alert('Post saved!');
+      setIsEditing(false);
+      fetchPosts();
+    } catch (err: any) { alert(err.message); }
+  }
+
+  if (loading && !isEditing) return <div className="py-20 text-center">Loading posts...</div>;
+
+  return (
+    <div className="space-y-6">
+      <div className="flex justify-between items-center">
+        <h2 className="font-syne font-bold text-xl">News & Insights CMS</h2>
+        <button onClick={() => { setCurrentPost({ title: '', slug: '', excerpt: '', content: '', image_url: '', category: 'General' }); setIsEditing(true); }} className="btn btn-gold btn-sm">+ New Article</button>
+      </div>
+
+      {isEditing ? (
+        <div className="bg-card border border-border-custom rounded-xl p-6 space-y-4">
+          <div className="grid grid-cols-2 gap-4">
+            <input placeholder="Title" className="bg-surface border border-border-custom p-2 rounded text-sm" value={currentPost.title} onChange={e => setCurrentPost({...currentPost, title: e.target.value})} />
+            <input placeholder="Slug (optional)" className="bg-surface border border-border-custom p-2 rounded text-sm" value={currentPost.slug} onChange={e => setCurrentPost({...currentPost, slug: e.target.value})} />
+            <input placeholder="Image URL" className="bg-surface border border-border-custom p-2 rounded text-sm" value={currentPost.image_url} onChange={e => setCurrentPost({...currentPost, image_url: e.target.value})} />
+            <select className="bg-surface border border-border-custom p-2 rounded text-sm" value={currentPost.category} onChange={e => setCurrentPost({...currentPost, category: e.target.value})}>
+              <option>General</option>
+              <option>Technology</option>
+              <option>Career</option>
+              <option>Academy Update</option>
+            </select>
+          </div>
+          <textarea placeholder="Excerpt" className="w-full bg-surface border border-border-custom p-2 rounded text-sm h-20" value={currentPost.excerpt} onChange={e => setCurrentPost({...currentPost, excerpt: e.target.value})} />
+          <div className="bg-white text-black rounded-lg overflow-hidden">
+            <ReactQuill theme="snow" value={currentPost.content} onChange={val => setCurrentPost({...currentPost, content: val})} style={{ height: '300px', marginBottom: '40px' }} />
+          </div>
+          <div className="flex justify-end gap-2 pt-4">
+            <button onClick={() => setIsEditing(false)} className="btn btn-outline btn-sm">Cancel</button>
+            <button onClick={handleSavePost} className="btn btn-gold btn-sm">Save Article</button>
+          </div>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {posts.map(post => (
+            <div key={post.id} className="bg-card border border-border-custom p-4 rounded-xl flex gap-4">
+              <div className="w-20 h-20 bg-surface rounded-lg overflow-hidden shrink-0">
+                <img src={post.image_url || 'https://via.placeholder.com/150'} className="w-full h-full object-cover" />
+              </div>
+              <div className="flex-1">
+                <h3 className="font-bold text-sm">{post.title}</h3>
+                <p className="text-[10px] text-text-muted line-clamp-2">{post.excerpt}</p>
+                <div className="flex justify-between items-center mt-2">
+                  <span className="text-[9px] font-dm-mono uppercase text-gold">{post.category}</span>
+                  <button onClick={() => { setCurrentPost(post); setIsEditing(true); }} className="text-gold text-[10px] font-bold">Edit</button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── EVENTS MANAGER ─────────────────────────
+function EventsManager() {
+  const [events, setEvents] = useState<any[]>([]);
+  const [regs, setRegs] = useState<any[]>([]);
+  const [selectedEvent, setSelectedEvent] = useState<any>(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [currentEvent, setCurrentEvent] = useState<any>({ title: '', description: '', event_date: '', event_time: '', location: '', type: 'Webinar' });
+
+  useEffect(() => { fetchEvents(); }, []);
+
+  async function fetchEvents() {
+    const { data } = await supabase.from('events').select('*').order('event_date', { ascending: true });
+    setEvents(data || []);
+  }
+
+  async function fetchRegistrations(id: string) {
+    const { data } = await supabase.from('event_registrations').select('*').eq('event_id', id).order('created_at', { ascending: false });
+    setRegs(data || []);
+  }
+
+  async function handleSaveEvent() {
+    try {
+      const { error } = await supabase.from('events').upsert(currentEvent);
+      if (error) throw error;
+      setIsEditing(false);
+      fetchEvents();
+    } catch (err: any) { alert(err.message); }
+  }
+
+  return (
+    <div className="space-y-6">
+      <div className="flex justify-between items-center">
+        <h2 className="font-syne font-bold text-xl">Events & Webinars</h2>
+        <button onClick={() => { setCurrentEvent({ title: '', description: '', event_date: '', event_time: '', location: '', type: 'Webinar' }); setIsEditing(true); setSelectedEvent(null); }} className="btn btn-gold btn-sm">+ New Event</button>
+      </div>
+
+      {isEditing ? (
+        <div className="bg-card border border-border-custom rounded-xl p-6 space-y-4">
+          <input placeholder="Title" className="w-full bg-surface border border-border-custom p-2 rounded text-sm font-bold" value={currentEvent.title} onChange={e => setCurrentEvent({...currentEvent, title: e.target.value})} />
+          <div className="grid grid-cols-2 gap-4">
+            <input type="date" className="bg-surface border border-border-custom p-2 rounded text-sm" value={currentEvent.event_date} onChange={e => setCurrentEvent({...currentEvent, event_date: e.target.value})} />
+            <input type="time" className="bg-surface border border-border-custom p-2 rounded text-sm" value={currentEvent.event_time} onChange={e => setCurrentEvent({...currentEvent, event_time: e.target.value})} />
+          </div>
+          <input placeholder="Location (or Link)" className="w-full bg-surface border border-border-custom p-2 rounded text-sm" value={currentEvent.location} onChange={e => setCurrentEvent({...currentEvent, location: e.target.value})} />
+          <textarea placeholder="Description" className="w-full bg-surface border border-border-custom p-2 rounded text-sm h-32" value={currentEvent.description} onChange={e => setCurrentEvent({...currentEvent, description: e.target.value})} />
+          <div className="flex justify-end gap-2">
+            <button onClick={() => setIsEditing(false)} className="btn btn-outline btn-sm">Cancel</button>
+            <button onClick={handleSaveEvent} className="btn btn-gold btn-sm">Save Event</button>
+          </div>
+        </div>
+      ) : selectedEvent ? (
+        <div className="bg-card border border-border-custom rounded-xl p-6 space-y-6">
+          <div className="flex justify-between items-start">
+            <div>
+              <button onClick={() => setSelectedEvent(null)} className="text-gold text-[10px] uppercase font-bold mb-2">← Back to List</button>
+              <h3 className="font-syne font-bold text-2xl">{selectedEvent.title}</h3>
+              <p className="text-text-muted text-sm">{selectedEvent.event_date} at {selectedEvent.event_time}</p>
+            </div>
+            <button onClick={() => exportToCSV(regs, `registrations-${selectedEvent.id}`)} className="btn btn-gold btn-sm">📥 Export CSV</button>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr className="border-b border-border-custom text-left">
+                  <th className="p-3 text-[10px] uppercase tracking-widest text-text-dim">Name</th>
+                  <th className="p-3 text-[10px] uppercase tracking-widest text-text-dim">Email</th>
+                  <th className="p-3 text-[10px] uppercase tracking-widest text-text-dim">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {regs.map(r => (
+                  <tr key={r.id} className="border-b border-border-custom">
+                    <td className="p-3 text-sm">{r.name}</td>
+                    <td className="p-3 text-sm text-text-soft">{r.email}</td>
+                    <td className="p-3">
+                      <span className="px-2 py-0.5 rounded-full bg-gold-dim text-gold text-[9px] border border-gold/20 uppercase font-dm-mono">{r.status}</span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {events.map(ev => (
+            <div key={ev.id} className="bg-card border border-border-custom rounded-xl p-5 hover:border-gold/30 transition-all">
+              <span className="text-[9px] font-dm-mono uppercase text-gold bg-gold-dim px-2 py-0.5 rounded border border-gold/10 inline-block mb-3">{ev.type}</span>
+              <h3 className="font-bold mb-1">{ev.title}</h3>
+              <p className="text-[11px] text-text-muted line-clamp-2 mb-4">{ev.description}</p>
+              <div className="flex justify-between items-center pt-4 border-t border-border-custom">
+                <button onClick={() => { setSelectedEvent(ev); fetchRegistrations(ev.id); }} className="text-[10px] font-bold text-sky">View Regs ({ev.reg_count || 0})</button>
+                <button onClick={() => { setCurrentEvent(ev); setIsEditing(true); }} className="text-gold text-[10px] font-bold">Edit</button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── FINANCE MANAGER (ADMIN) ────────────────
+function FinanceManager() {
+  const [invoices, setInvoices] = useState<any[]>([]);
+  const [txs, setTxs] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => { fetchFinances(); }, []);
+
+  async function fetchFinances() {
+    setLoading(true);
+    const { data: inv } = await supabase.from('invoices').select('*, profiles(first_name, last_name)').order('created_at', { ascending: false });
+    const { data: pay } = await supabase.from('transactions').select('*').order('created_at', { ascending: false });
+    setInvoices(inv || []);
+    setTxs(pay || []);
+    setLoading(false);
+  }
+
+  async function markAsPaid(id: string) {
+    await supabase.from('invoices').update({ status: 'paid' }).eq('id', id);
+    fetchFinances();
+  }
+
+  return (
+    <div className="space-y-8">
+      <div className="flex justify-between items-center">
+        <h2 className="font-syne font-bold text-xl">Finance & Invoicing</h2>
+        <div className="flex gap-2">
+          <button onClick={() => exportToCSV(invoices, 'all-invoices')} className="btn btn-outline btn-sm">Export Invoices</button>
+          <button onClick={() => exportToCSV(txs, 'all-transactions')} className="btn btn-outline btn-sm">Export Payments</button>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-3 gap-4">
+        <div className="bg-card border border-border-custom p-4 rounded-xl">
+          <div className="text-[10px] uppercase text-text-muted font-dm-mono mb-1">Total Revenue</div>
+          <div className="text-2xl font-syne font-bold text-emerald">R {invoices.filter(i => i.status === 'paid').reduce((acc, i) => acc + i.amount, 0).toLocaleString()}</div>
+        </div>
+        <div className="bg-card border border-border-custom p-4 rounded-xl">
+          <div className="text-[10px] uppercase text-text-muted font-dm-mono mb-1">Pending</div>
+          <div className="text-2xl font-syne font-bold text-gold">R {invoices.filter(i => i.status === 'pending').reduce((acc, i) => acc + i.amount, 0).toLocaleString()}</div>
+        </div>
+        <div className="bg-card border border-border-custom p-4 rounded-xl">
+          <div className="text-[10px] uppercase text-text-muted font-dm-mono mb-1">Total Outstanding</div>
+          <div className="text-2xl font-syne font-bold text-coral">R {invoices.filter(i => i.status === 'overdue').reduce((acc, i) => acc + i.amount, 0).toLocaleString()}</div>
+        </div>
+      </div>
+
+      <div className="bg-card border border-border-custom rounded-xl overflow-hidden">
+        <div className="bg-surface p-4 border-b border-border-custom font-bold text-sm">Recent Invoices</div>
+        <table className="w-full">
+          <thead>
+            <tr className="border-b border-border-custom bg-surface/50 text-left">
+              <th className="p-3 text-[10px] uppercase tracking-widest text-text-dim">Invoice #</th>
+              <th className="p-3 text-[10px] uppercase tracking-widest text-text-dim">Student</th>
+              <th className="p-3 text-[10px] uppercase tracking-widest text-text-dim">Amount</th>
+              <th className="p-3 text-[10px] uppercase tracking-widest text-text-dim">Status</th>
+              <th className="p-3 text-[10px] uppercase tracking-widest text-text-dim">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {invoices.map(inv => (
+              <tr key={inv.id} className="border-b border-border-custom">
+                <td className="p-3 text-sm font-dm-mono">{inv.invoice_number}</td>
+                <td className="p-3 text-sm">
+                  {inv.profiles?.first_name} {inv.profiles?.last_name}
+                  <div className="text-[9px] text-text-dim">{inv.student_number}</div>
+                </td>
+                <td className="p-3 text-sm font-bold">R {inv.amount.toLocaleString()}</td>
+                <td className="p-3">
+                  <span className={`px-2 py-0.5 rounded-full text-[9px] uppercase font-dm-mono border ${inv.status === 'paid' ? 'bg-emerald-dim text-emerald border-emerald/20' : 'bg-gold-dim text-gold border-gold/20'}`}>
+                    {inv.status}
+                  </span>
+                </td>
+                <td className="p-3">
+                  {inv.status !== 'paid' && (
+                    <button onClick={() => markAsPaid(inv.id)} className="text-emerald text-[10px] font-bold hover:underline">Mark Paid</button>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+// ─── MY FINANCE (STUDENT) ────────────────────
+function MyFinance() {
+  const { user } = useAuth();
+  const [invoices, setInvoices] = useState<any[]>([]);
+  const [txs, setTxs] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (user) fetchMyFinances();
+  }, [user]);
+
+  async function fetchMyFinances() {
+    setLoading(true);
+    const { data: inv } = await supabase.from('invoices').select('*').eq('user_id', user?.id).order('created_at', { ascending: false });
+    const { data: pay } = await supabase.from('transactions').select('*').eq('user_id', user?.id).order('created_at', { ascending: false });
+    setInvoices(inv || []);
+    setTxs(pay || []);
+    setLoading(false);
+  }
+
+  return (
+    <div className="space-y-8">
+      <div className="bg-navy border border-gold/20 rounded-2xl p-8 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-32 h-32 bg-gold/5 rounded-full -mr-16 -mt-16 blur-3xl" />
+        <h2 className="font-syne font-bold text-xl mb-6 flex items-center gap-2">
+          <CreditCard className="w-5 h-5 text-gold" />
+          Financial Statement
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div>
+            <div className="text-[10px] uppercase tracking-widest text-text-dim font-dm-mono mb-1">Total Balance Due</div>
+            <div className="text-4xl font-syne font-extrabold text-white">
+              R {invoices.filter(i => i.status !== 'paid').reduce((acc, i) => acc + Number(i.amount), 0).toLocaleString()}
+            </div>
+            <div className="mt-4 flex gap-2">
+              <button className="btn btn-gold btn-sm">Pay Outstanding</button>
+              <button onClick={() => exportToCSV(invoices, 'my-statement')} className="btn btn-outline btn-sm">Download Statement</button>
+            </div>
+          </div>
+          <div className="space-y-3">
+            <div className="flex justify-between items-center p-3 bg-white/5 rounded-xl border border-white/5">
+              <span className="text-[12px] text-text-soft">Last Payment</span>
+              <span className="text-sm font-bold">{txs[0] ? `R ${txs[0].amount}` : 'N/A'}</span>
+            </div>
+            <div className="flex justify-between items-center p-3 bg-white/5 rounded-xl border border-white/5">
+              <span className="text-[12px] text-text-soft">Next Due Date</span>
+              <span className="text-sm font-bold text-gold">{invoices.find(i => i.status !== 'paid')?.due_date || 'None'}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="space-y-4">
+          <h3 className="font-syne font-bold text-lg">Invoices</h3>
+          <div className="space-y-3">
+            {invoices.map(inv => (
+              <div key={inv.id} className="bg-card border border-border-custom rounded-xl p-4 flex justify-between items-center">
+                <div>
+                  <div className="font-dm-mono text-[11px] text-gold">{inv.invoice_number}</div>
+                  <div className="text-sm font-bold mt-1">GDA Program Fees</div>
+                  <div className="text-[10px] text-text-muted mt-1">Due {inv.due_date}</div>
+                </div>
+                <div className="text-right">
+                  <div className="font-bold text-sm">R {inv.amount.toLocaleString()}</div>
+                  <span className={`text-[9px] uppercase font-dm-mono ${inv.status === 'paid' ? 'text-emerald' : 'text-gold'}`}>{inv.status}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="space-y-4">
+          <h3 className="font-syne font-bold text-lg">Payment History</h3>
+          <div className="space-y-3">
+            {txs.map(tx => (
+              <div key={tx.id} className="flex items-center gap-4 p-4 border-b border-border-custom">
+                <div className="w-10 h-10 rounded-full bg-surface border border-border-custom flex items-center justify-center">
+                  <ArrowRight className="w-4 h-4 text-emerald" />
+                </div>
+                <div className="flex-1">
+                  <div className="text-sm font-bold">R {tx.amount.toLocaleString()}</div>
+                  <div className="text-[10px] text-text-muted uppercase tracking-widest">{tx.payment_method} • {tx.reference}</div>
+                </div>
+                <div className="text-[10px] text-text-dim text-right">
+                  {new Date(tx.created_at).toLocaleDateString()}
+                </div>
+              </div>
+            ))}
+            {txs.length === 0 && <div className="text-center py-10 text-text-dim text-sm italic">No transactions found.</div>}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ─── STUDENT PORTAL ──────────────────────────
 export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: string) => void }) {
   const { user, signOut } = useAuth();
@@ -1243,7 +1435,7 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState<Record<string, number>>({});
   const [showCertificate, setShowCertificate] = useState<any>(null);
-  const [activeSection, setActiveSection] = useState<'dashboard' | 'courses' | 'applications' | 'profile' | 'settings'>('dashboard');
+  const [activeSection, setActiveSection] = useState<'dashboard' | 'courses' | 'finances' | 'applications' | 'profile' | 'settings'>('dashboard');
   const [editingProfile, setEditingProfile] = useState(false);
   const [profileForm, setProfileForm] = useState<any>({});
 
@@ -1355,6 +1547,7 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
         {[
           { id: 'dashboard', label: '📊 Dashboard', icon: '' },
           { id: 'courses', label: '📚 My Courses', icon: '' },
+          { id: 'finances', label: '💰 Finances', icon: '' },
           { id: 'applications', label: '📝 Applications', icon: '' },
           { id: 'profile', label: '👤 Profile', icon: '' },
           { id: 'settings', label: '⚙️ Settings', icon: '' },
@@ -1547,6 +1740,9 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
           </div>
         </div>
       )}
+
+      {/* ─── FINANCES ─── */}
+      {activeSection === 'finances' && <MyFinance />}
 
       {/* ─── SETTINGS ─── */}
       {activeSection === 'settings' && (

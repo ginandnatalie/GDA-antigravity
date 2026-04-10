@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../lib/auth';
 import { useTheme } from '../lib/theme';
-import { Sun, Moon, X, Menu, GraduationCap, ArrowRight, Instagram, Twitter, Linkedin } from 'lucide-react';
+import { Sun, Moon, X, Menu, GraduationCap, ArrowRight, Instagram, Twitter, Linkedin, ChevronDown, BookOpen, Briefcase, HelpCircle, CreditCard, Users, FileText, Landmark, Calendar, Newspaper, Zap, Globe, Languages, CheckCircle, MessageSquare, Wallet, ExternalLink, ChevronRight, Layout } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
 interface NavbarProps {
@@ -23,6 +23,7 @@ export default function Navbar({ onOpenModal, editMode, setEditMode, siteSetting
   const isAdmin = profile?.role === 'admin' || profile?.role === 'super_admin' || user?.email?.includes('ginashe.co.za');
   const isSuperAdmin = profile?.role === 'super_admin' || user?.email === 'ginandNatalie@gmail.com' || user?.email === 'academy@ginashe.co.za';
 
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
 
   const handleSaveAll = async () => {
@@ -90,14 +91,82 @@ export default function Navbar({ onOpenModal, editMode, setEditMode, siteSetting
         </Link>
 
         <ul className={`hidden lg:flex items-center list-none mx-auto gap-1 transition-opacity duration-300 ${isMobileMenuOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
-          {navItems.map((item) => (
-            <li key={item.path}>
+            <li key={item.path} className="relative group" 
+                onMouseEnter={() => (item.label === 'Curriculum' || item.label === 'Admissions') && setActiveDropdown(item.label)}
+                onMouseLeave={() => setActiveDropdown(null)}
+            >
               <Link 
                 to={item.path}
-                className={`inline-flex items-center gap-1.5 font-syne font-semibold text-[13px] tracking-[0.02em] no-underline px-4 py-2 rounded-md transition-all hover:text-gold hover:bg-gold-dim/50 ${pathname === item.path ? 'text-gold bg-gold-dim font-bold' : 'text-text-soft'}`}
+                className={`inline-flex items-center gap-1 font-syne font-semibold text-[13px] tracking-[0.02em] no-underline px-4 py-2 rounded-md transition-all hover:text-gold hover:bg-gold-dim/50 ${pathname === item.path ? 'text-gold bg-gold-dim font-bold' : 'text-text-soft'}`}
               >
                 {item.label}
+                {(item.label === 'Curriculum' || item.label === 'Admissions') && (
+                  <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-300 ${activeDropdown === item.label ? 'rotate-180 text-gold' : 'text-text-dim group-hover:text-gold'}`} />
+                )}
               </Link>
+
+              {/* Mega Menu Dropdowns */}
+              <AnimatePresence>
+                {activeDropdown === item.label && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10, scale: 0.98 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 5, scale: 0.98 }}
+                    transition={{ duration: 0.2, ease: "easeOut" }}
+                    className="absolute top-full left-1/2 -translate-x-1/2 w-[480px] pt-2 pointer-events-auto z-[2100]"
+                  >
+                    <div className="bg-bg/95 backdrop-blur-2xl border border-border-custom rounded-2xl shadow-[0_20px_40px_rgba(0,0,0,0.4)] overflow-hidden">
+                      {item.label === 'Curriculum' ? (
+                        <div className="p-5 grid grid-cols-2 gap-4">
+                          {[
+                            { title: 'Cloud Engineering', desc: 'Azure, AWS & Google Cloud Specialisations', icon: <Landmark className="w-5 h-5" />, color: 'text-sky' },
+                            { title: 'AI & Data Science', desc: 'Machine Learning & Predictive Analytics', icon: <BookOpen className="w-5 h-5" />, color: 'text-emerald' },
+                            { title: 'Executive Digital', desc: 'Leadership for Digital Transformation', icon: <Briefcase className="w-5 h-5" />, color: 'text-gold' },
+                            { title: 'Full-Stack Dev', desc: 'Modern web & mobile development', icon: <FileText className="w-5 h-5" />, color: 'text-coral' }
+                          ].map((cat, i) => (
+                            <Link key={i} to="/curriculum" className="flex items-start gap-3 p-3 rounded-xl hover:bg-white/5 transition-colors group/item">
+                              <div className={`mt-1 p-2 rounded-lg bg-surface border border-border-custom group-hover/item:border-gold/30 transition-colors ${cat.color}`}>{cat.icon}</div>
+                              <div>
+                                <div className="font-syne font-bold text-[13px] text-text-custom mb-0.5">{cat.title}</div>
+                                <div className="text-[11px] text-text-muted leading-snug">{cat.desc}</div>
+                              </div>
+                            </Link>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="p-4 space-y-1">
+                          {[
+                            { title: 'How to Apply', desc: 'Step-by-step application guide', icon: <ArrowRight className="w-4 h-4" />, path: '/admissions#apply' },
+                            { title: 'Scholarships', desc: 'Merit-based funding opportunities', icon: <CreditCard className="w-4 h-4" />, path: '/admissions#funding' },
+                            { title: 'Tuition & Fees', desc: 'Investment overview and payment plans', icon: <Landmark className="w-4 h-4" />, path: '/admissions#tuition' },
+                            { title: 'Entry Requirements', desc: 'Academic and professional criteria', icon: <FileText className="w-4 h-4" />, path: '/admissions#entry' },
+                            { title: 'FAQs', desc: 'Commonly asked questions', icon: <HelpCircle className="w-4 h-4" />, path: '/contact' }
+                          ].map((link, i) => (
+                            <Link key={i} to={link.path} className="flex items-center justify-between p-3 rounded-xl hover:bg-gold-dim/50 transition-all group/item">
+                              <div className="flex items-center gap-3">
+                                <div className="p-1.5 rounded-lg bg-surface border border-border-custom group-hover/item:text-gold transition-colors">{link.icon}</div>
+                                <div>
+                                  <div className="font-syne font-bold text-[12px] text-text-custom">{link.title}</div>
+                                  <div className="text-[10px] text-text-dim">{link.desc}</div>
+                                </div>
+                              </div>
+                              <ArrowRight className="w-3.5 h-3.5 text-text-dim opacity-0 -translate-x-2 group-hover/item:opacity-100 group-hover/item:translate-x-0 transition-all text-gold" />
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+                      
+                      <div className="bg-gold/5 p-4 border-t border-border-custom flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <div className="w-2 h-2 rounded-full bg-emerald animate-pulse" />
+                          <span className="font-dm-mono text-[9px] uppercase tracking-widest text-text-muted">Next Intake: April 2025</span>
+                        </div>
+                        <Link to="/contact" className="text-[10px] font-bold text-gold hover:underline">Speak to an advisor →</Link>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </li>
           ))}
         </ul>
@@ -138,6 +207,31 @@ export default function Navbar({ onOpenModal, editMode, setEditMode, siteSetting
                     )}
                   </div>
                 )}
+
+        {/* --- ACCESS BAR (Protruding Menu) --- */}
+        <div className="hidden md:block absolute top-full right-14 z-[1001]">
+          <motion.div 
+            initial={{ y: -20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            className="flex items-center border border-t-0 border-border-custom bg-gold rounded-b-xl shadow-[0_10px_30px_rgba(212,175,55,0.15)] overflow-hidden"
+          >
+            {[
+              { label: 'Student Portal', path: '/portal', icon: <GraduationCap className="w-3 h-3" /> },
+              { label: 'Alumni', path: '/alumni', icon: <Users className="w-3 h-3" /> },
+              { label: 'Staff Hub', path: '/portal', icon: <Landmark className="w-3 h-3" /> }
+            ].map((link, i) => (
+              <Link 
+                key={i} 
+                to={link.path} 
+                className={`flex items-center gap-2 px-4 py-1.5 text-navy font-syne font-bold text-[10px] uppercase tracking-wider hover:bg-white/10 transition-colors ${i !== 2 ? 'border-r border-navy/10' : ''}`}
+              >
+                {link.icon}
+                {link.label}
+              </Link>
+            ))}
+          </motion.div>
+        </div>
+      </div>
                 <Link 
                   to={isAdmin ? '/admin' : '/portal'}
                   className={`hidden sm:inline-flex items-center gap-1.5 font-syne font-bold text-[11px] tracking-[0.04em] uppercase px-4 py-2 rounded-md cursor-pointer border transition-all no-underline ${pathname !== '/' ? 'bg-gold text-bg border-gold' : 'border-sky/20 bg-sky-dim text-sky hover:bg-sky/20'}`}
