@@ -91,6 +91,7 @@ export default function Navbar({ onOpenModal, editMode, setEditMode, siteSetting
         </Link>
 
         <ul className={`hidden lg:flex items-center list-none mx-auto gap-1 transition-opacity duration-300 ${isMobileMenuOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+          {navItems.map((item) => (
             <li key={item.path} className="relative group" 
                 onMouseEnter={() => (item.label === 'Curriculum' || item.label === 'Admissions') && setActiveDropdown(item.label)}
                 onMouseLeave={() => setActiveDropdown(null)}
@@ -208,30 +209,30 @@ export default function Navbar({ onOpenModal, editMode, setEditMode, siteSetting
                   </div>
                 )}
 
-        {/* --- ACCESS BAR (Protruding Menu) --- */}
-        <div className="hidden md:block absolute top-full right-14 z-[1001]">
-          <motion.div 
-            initial={{ y: -20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            className="flex items-center border border-t-0 border-border-custom bg-gold rounded-b-xl shadow-[0_10px_30px_rgba(212,175,55,0.15)] overflow-hidden"
-          >
-            {[
-              { label: 'Student Portal', path: '/portal', icon: <GraduationCap className="w-3 h-3" /> },
-              { label: 'Alumni', path: '/alumni', icon: <Users className="w-3 h-3" /> },
-              { label: 'Staff Hub', path: '/portal', icon: <Landmark className="w-3 h-3" /> }
-            ].map((link, i) => (
-              <Link 
-                key={i} 
-                to={link.path} 
-                className={`flex items-center gap-2 px-4 py-1.5 text-navy font-syne font-bold text-[10px] uppercase tracking-wider hover:bg-white/10 transition-colors ${i !== 2 ? 'border-r border-navy/10' : ''}`}
-              >
-                {link.icon}
-                {link.label}
-              </Link>
-            ))}
-          </motion.div>
-        </div>
-      </div>
+                {/* --- ACCESS BAR (Protruding Menu) --- */}
+                <div className="hidden md:block absolute top-full right-14 z-[1001]">
+                  <motion.div 
+                    initial={{ y: -20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    className="flex items-center border border-t-0 border-border-custom bg-gold rounded-b-xl shadow-[0_10px_30px_rgba(212,175,55,0.15)] overflow-hidden"
+                  >
+                    {[
+                      { label: 'Student Portal', path: '/portal', icon: <GraduationCap className="w-3 h-3" /> },
+                      { label: 'Alumni', path: '/alumni', icon: <Users className="w-3 h-3" /> },
+                      { label: 'Staff Hub', path: '/portal', icon: <Landmark className="w-3 h-3" /> }
+                    ].map((link, i) => (
+                      <Link 
+                        key={i} 
+                        to={link.path} 
+                        className={`flex items-center gap-2 px-4 py-1.5 text-navy font-syne font-bold text-[10px] uppercase tracking-wider hover:bg-white/10 transition-colors ${i !== 2 ? 'border-r border-navy/10' : ''}`}
+                      >
+                        {link.icon}
+                        {link.label}
+                      </Link>
+                    ))}
+                  </motion.div>
+                </div>
+
                 <Link 
                   to={isAdmin ? '/admin' : '/portal'}
                   className={`hidden sm:inline-flex items-center gap-1.5 font-syne font-bold text-[11px] tracking-[0.04em] uppercase px-4 py-2 rounded-md cursor-pointer border transition-all no-underline ${pathname !== '/' ? 'bg-gold text-bg border-gold' : 'border-sky/20 bg-sky-dim text-sky hover:bg-sky/20'}`}
