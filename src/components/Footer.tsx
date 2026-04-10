@@ -130,7 +130,7 @@ export function Footer({ onOpenModal, editMode }: { onOpenModal: (id: string) =>
         <div className="col-span-2 lg:col-span-1">
           <a className="flex items-center gap-3 no-underline shrink-0 mb-4" href="#">
             <div className="w-9 h-9 bg-gold rounded-md flex items-center justify-center relative overflow-hidden shrink-0">
-              <img src="https://firebasestorage.googleapis.com/v0/b/ginashe-digital.firebasestorage.app/o/Ginashe%20Logo.svg?alt=media&token=041611c8-fc50-4b78-ab91-29ecf2dbe517" alt="GDA" className="w-6 h-6 object-contain brightness-0 invert-0 mix-blend-multiply" />
+              <img src="/logo.svg" alt="GDA" className="w-5.5 h-5.5 object-contain brightness-0 invert-0 mix-blend-multiply" />
             </div>
             <div className="flex flex-col gap-px">
               <span className="font-syne font-extrabold text-[14px] tracking-[0.04em] leading-none text-text-custom">Ginashe <span className="text-gold">Digital</span> Academy</span>

@@ -72,9 +72,9 @@ export default function Navbar({ onOpenModal, editMode, setEditMode, siteSetting
         <Link to="/" className="flex items-center gap-3 no-underline shrink-0 group">
           <div className="w-11 h-11 bg-gold rounded-xl flex items-center justify-center relative overflow-hidden shrink-0 group-hover:rotate-6 transition-transform duration-500">
             <img 
-              src="https://firebasestorage.googleapis.com/v0/b/ginashe-digital.firebasestorage.app/o/Ginashe%20Logo.svg?alt=media&token=041611c8-fc50-4b78-ab91-29ecf2dbe517" 
+              src="/logo.svg" 
               alt="GDA"
-              className="w-6 h-6 object-contain"
+              className="w-7 h-7 object-contain"
             />
             <div className="absolute inset-0 bg-gradient-to-tr from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
           </div>
