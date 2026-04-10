@@ -88,6 +88,8 @@ export function Modals({ activeModal, onClose, onSwitchModal, onLoginSuccess }: 
         const { data: { user: updatedUser } } = await supabase.auth.getUser();
         if (updatedUser) {
            onLoginSuccess?.(updatedUser.email?.includes('ginashe.co.za') ? 'admin' : 'student');
+        } else {
+           window.location.href = '/portal';
         }
       }
     } catch (err: any) {

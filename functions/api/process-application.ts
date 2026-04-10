@@ -32,11 +32,12 @@ export async function onRequestPost(context) {
       try {
         // Check if user already exists in auth
         const { data: userSearch } = await supabase.auth.admin.listUsers();
-        const existingUser = userSearch?.users?.find(u => u.email?.toLowerCase() === email.toLowerCase());
+        const users = (userSearch?.users || []) as any[];
+        const existingUser = users.find(u => u.email?.toLowerCase() === email.toLowerCase());
 
         if (existingUser) {
           console.log(`[Auth] User ${email} already exists. Providing direct login link.`);
-          invitationLink = `${origin}/portal`;
+          invitationLink = `${origin}/`;
         } else {
           // Generate a secure invitation link (does NOT send an email automatically)
           const { data: linkData, error: linkError } = await supabase.auth.admin.generateLink({
@@ -44,7 +45,7 @@ export async function onRequestPost(context) {
             email: email.trim().toLowerCase(),
             options: {
               data: { full_name: name },
-              redirectTo: `${origin}/portal`
+              redirectTo: `${origin}/`
             }
           });
 

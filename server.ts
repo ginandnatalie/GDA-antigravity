@@ -234,7 +234,7 @@ async function startServer() {
               
               ${status === 'approved' ? `
                 <div style="margin-top: 32px; text-align: center;">
-                  <a href="${req.headers.origin || ''}/portal" style="display: inline-block; padding: 14px 28px; background-color: #D4AF37; color: #080b12; text-decoration: none; border-radius: 6px; font-weight: 800; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">Access Student Portal</a>
+                  <a href="${req.headers.origin || ''}/" style="display: inline-block; padding: 14px 28px; background-color: #D4AF37; color: #080b12; text-decoration: none; border-radius: 6px; font-weight: 800; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">Access Student Portal</a>
                 </div>
               ` : ''}
             </div>
@@ -394,7 +394,7 @@ async function startServer() {
         console.log(`[Auth] Sending invitation with origin: ${origin}`);
         const { data, error } = await adminSupabase.auth.admin.inviteUserByEmail(email, {
           data: { full_name: name },
-          redirectTo: `${origin}/portal`
+          redirectTo: `${origin}/`
         });
         authData = data;
         if (error) console.warn("[Supabase Error] Auth Invitation:", error.message);

@@ -35,6 +35,7 @@ function AppContent() {
   const [editMode, setEditMode] = useState(false);
   const [siteSettings, setSiteSettings] = useState<any>(null);
   const navigate = useNavigate();
+  const { pathname } = useLocation();
 
   useEffect(() => {
     fetchSiteSettings();
@@ -49,11 +50,7 @@ function AppContent() {
         .single();
       
       if (error) {
-        if (error.code === 'PGRST116') return; // No rows found is fine
-        if (error.message?.includes('Could not find the table')) {
-          console.warn('Supabase Table "site_settings" is missing. Please run the provided SQL schema in your Supabase SQL Editor.');
-          return;
-        }
+        if (error.code === 'PGRST116') return;
         throw error;
       }
       if (data) setSiteSettings(data);
@@ -64,15 +61,11 @@ function AppContent() {
 
   const isAdmin = profile?.role === 'admin' || profile?.role === 'super_admin' || user?.email?.includes('ginashe.co.za');
 
-  // 1. Detect if we are in a Supabase auth flow (recovery, invite, or returning with token)
+  // 1. Detect if we are in a Supabase auth flow (recovery, invite, token)
   const hash = window.location.hash;
-  const searchParams = new URLSearchParams(window.location.search);
-  const hashParams = new URLSearchParams(hash.replace('#', '?'));
-  const isAuthFlow = hashParams.has('access_token') || 
-                     hashParams.get('type') === 'recovery' || 
-                     hashParams.get('type') === 'invite' ||
-                     searchParams.get('type') === 'recovery' ||
-                     searchParams.get('type') === 'invite';
+  const search = window.location.search;
+  const combinedParams = new URLSearchParams(hash.replace('#', '?') + '&' + search.replace('?', ''));
+  const isAuthFlow = combinedParams.get('type') === 'recovery' || combinedParams.get('type') === 'invite';
 
   useEffect(() => {
     // 1. Listen for Supabase events
@@ -82,10 +75,9 @@ function AppContent() {
       }
     });
 
-    // 2. Proactive Hash Check (Handle cases where event might be slightly delayed)
-    const hash = window.location.hash;
-    const params = new URLSearchParams(hash.replace('#', '?'));
-    if (params.get('type') === 'recovery' || params.get('type') === 'invite') {
+    // 2. Proactive Hash Check
+    if (isAuthFlow) {
+      console.log('App: Activation token detected, opening modal...');
       setActiveModal('reset-password');
     }
 
@@ -108,27 +100,10 @@ function AppContent() {
   async function handleSuccessfulPayment(courseId: string) {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
-
     try {
-      const { data: existing } = await supabase
-        .from('enrollments')
-        .select('*')
-        .eq('user_id', user.id)
-        .eq('course_id', courseId)
-        .single();
-
-      if (!existing) {
-        const { error } = await supabase
-          .from('enrollments')
-          .insert({
-            user_id: user.id,
-            course_id: courseId
-          });
-
-        if (error) throw error;
-        alert('Payment successful! You are now enrolled in the course.');
-      }
-      
+      const { error } = await supabase.from('enrollments').insert({ user_id: user.id, course_id: courseId });
+      if (error) throw error;
+      alert('Payment successful! You are now enrolled in the course.');
       window.history.replaceState({}, document.title, window.location.pathname);
       navigate('/portal');
     } catch (err: any) {
@@ -145,96 +120,16 @@ function AppContent() {
           }
         });
       }, { threshold: 0.1 });
-
       document.querySelectorAll('.animate-fadeUp').forEach(el => observer.observe(el));
       return () => observer.disconnect();
     }, 100);
-
     return () => clearTimeout(timer);
-  }, [window.location.pathname]);
+  }, [pathname]);
 
-  const { pathname } = useLocation();
   const isPortal = pathname.startsWith('/portal') || pathname.startsWith('/admin') || pathname.startsWith('/course');
-
-  if (loading && !isAuthFlow) {
-    return (
-      <div className="min-h-screen bg-bg flex flex-col items-center justify-center transition-colors duration-300">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gold mb-4"></div>
-        <p className="text-gold font-dm-mono text-[10px] tracking-widest uppercase animate-pulse">Initializing Academy...</p>
-        <p className="text-text-dim font-dm-mono text-[8px] mt-8 max-w-[200px] text-center leading-relaxed">
-          If this takes more than 10 seconds, please check your connection or refresh the page.
-        </p>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-bg text-text-custom selection:bg-gold-dim selection:text-gold transition-colors duration-300 flex flex-col">
-      {!isPortal && <Navbar onOpenModal={openModal} editMode={editMode} setEditMode={setEditMode} siteSettings={siteSettings} />}
-      
-      {isPortal && (
-        <div className="bg-surface/50 border-b border-border-custom py-3 px-6 md:px-14 flex items-center justify-between sticky top-0 z-[1001] backdrop-blur-md">
-          <div className="flex items-center gap-4">
-            <div className="w-8 h-8 bg-gold rounded flex items-center justify-center">
-              <img 
-                src="https://firebasestorage.googleapis.com/v0/b/ginashe-digital.firebasestorage.app/o/Ginashe%20Logo.svg?alt=media&token=041611c8-fc50-4b78-ab91-29ecf2dbe517" 
-                alt="GDA"
-                className="w-5 h-5 brightness-0 invert-0 mix-blend-multiply"
-              />
-            </div>
-            <span className="font-syne font-bold text-sm tracking-tight hidden sm:inline">Portal Access</span>
-          </div>
-          <Link 
-            to="/" 
-            className="flex items-center gap-2 font-dm-mono text-[10px] tracking-[0.15em] uppercase text-gold hover:text-text-custom transition-colors group"
-          >
-            <ArrowRight className="rotate-180 transition-transform group-hover:-translate-x-1" size={14} />
-            Back to main site
-          </Link>
-        </div>
-      )}
-
-      <main className="flex-1">
-        <Routes>
-          <Route path="/" element={<Home onOpenModal={openModal} editMode={editMode} siteSettings={siteSettings} />} />
-          {(!siteSettings || siteSettings.showCurriculum !== false) && (
-            <Route path="/curriculum" element={<CurriculumPage editMode={editMode} />} />
-          )}
-          {(!siteSettings || siteSettings.showFaculty !== false) && (
-            <Route path="/faculty" element={<FacultyPage editMode={editMode} />} />
-          )}
-          {(!siteSettings || siteSettings.showAbout !== false) && (
-            <Route path="/about" element={<AboutPage onOpenModal={openModal} editMode={editMode} />} />
-          )}
-          {(!siteSettings || siteSettings.showAdmissions !== false) && (
-            <Route path="/admissions" element={<AdmissionsPage onOpenModal={openModal} editMode={editMode} />} />
-          )}
-          <Route path="/contact" element={<ContactPage onOpenModal={openModal} editMode={editMode} />} />
-          <Route path="/news" element={<NewsPage />} />
-          <Route path="/news/:slug" element={<NewsDetailPage />} />
-          <Route path="/events" element={<EventsPage />} />
-          
-          <Route 
-            path="/admin" 
-            element={user ? (isAdmin ? <div className={isPortal ? "pt-8" : "pt-24"}><AdminDashboard /></div> : <Navigate to="/portal" />) : (isAuthFlow ? <div className="min-h-screen" /> : <Navigate to="/" />)} 
-          />
-          <Route 
-            path="/student-portal" 
-            element={<Navigate to="/portal" replace />} 
-          />
-          <Route 
-            path="/portal" 
-            element={user ? <div className={isPortal ? "pt-8" : "pt-24"}><StudentPortal onStartCourse={(id) => navigate(`/course/${id}`)} /></div> : (isAuthFlow ? <div className="min-h-screen" /> : <Navigate to="/" />)} 
-          />
-          <Route 
-            path="/course/:courseId" 
-            element={user ? <CourseViewerWrapper /> : (isAuthFlow ? <div className="min-h-screen" /> : <Navigate to="/" />)} 
-          />
-        </Routes>
-      </main>
-
-      {!isPortal && <Footer onOpenModal={openModal} editMode={editMode} />}
-      
       <Modals 
         activeModal={activeModal} 
         onClose={closeModal} 
@@ -243,6 +138,85 @@ function AppContent() {
           navigate(role === 'admin' ? '/admin' : '/portal');
         }} 
       />
+
+      {loading ? (
+        <div className="min-h-screen bg-bg flex flex-col items-center justify-center transition-colors duration-300">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gold mb-4"></div>
+          <p className="text-gold font-dm-mono text-[10px] tracking-widest uppercase animate-pulse">Initializing Academy...</p>
+          <div className="mt-8">
+             {activeModal === 'reset-password' && (
+               <p className="text-gold text-[11px] animate-pulse">Finalizing account activation...</p>
+             )}
+          </div>
+        </div>
+      ) : (
+        <>
+          {!isPortal && <Navbar onOpenModal={openModal} editMode={editMode} setEditMode={setEditMode} siteSettings={siteSettings} />}
+          
+          {isPortal && (
+            <div className="bg-surface/50 border-b border-border-custom py-3 px-6 md:px-14 flex items-center justify-between sticky top-0 z-[1001] backdrop-blur-md">
+              <div className="flex items-center gap-4">
+                <div className="w-8 h-8 bg-gold rounded flex items-center justify-center">
+                  <img 
+                    src="https://firebasestorage.googleapis.com/v0/b/ginashe-digital.firebasestorage.app/o/Ginashe%20Logo.svg?alt=media&token=041611c8-fc50-4b78-ab91-29ecf2dbe517" 
+                    alt="GDA"
+                    className="w-5 h-5 brightness-0 invert-0 mix-blend-multiply"
+                  />
+                </div>
+                <span className="font-syne font-bold text-sm tracking-tight hidden sm:inline">Portal Access</span>
+              </div>
+              <Link 
+                to="/" 
+                className="flex items-center gap-2 font-dm-mono text-[10px] tracking-[0.15em] uppercase text-gold hover:text-text-custom transition-colors group"
+              >
+                <ArrowRight className="rotate-180 transition-transform group-hover:-translate-x-1" size={14} />
+                Back to main site
+              </Link>
+            </div>
+          )}
+
+          <main className="flex-1">
+            <Routes>
+              <Route path="/" element={<Home onOpenModal={openModal} editMode={editMode} siteSettings={siteSettings} />} />
+              {(!siteSettings || siteSettings.showCurriculum !== false) && (
+                <Route path="/curriculum" element={<CurriculumPage editMode={editMode} />} />
+              )}
+              {(!siteSettings || siteSettings.showFaculty !== false) && (
+                <Route path="/faculty" element={<FacultyPage editMode={editMode} />} />
+              )}
+              {(!siteSettings || siteSettings.showAbout !== false) && (
+                <Route path="/about" element={<AboutPage onOpenModal={openModal} editMode={editMode} />} />
+              )}
+              {(!siteSettings || siteSettings.showAdmissions !== false) && (
+                <Route path="/admissions" element={<AdmissionsPage onOpenModal={openModal} editMode={editMode} />} />
+              )}
+              <Route path="/contact" element={<ContactPage onOpenModal={openModal} editMode={editMode} />} />
+              <Route path="/news" element={<NewsPage />} />
+              <Route path="/news/:slug" element={<NewsDetailPage />} />
+              <Route path="/events" element={<EventsPage />} />
+              
+              <Route 
+                path="/admin" 
+                element={isAdmin ? <div className={isPortal ? "pt-8" : "pt-24"}><AdminDashboard /></div> : <Navigate to="/" />} 
+              />
+              <Route 
+                path="/student-portal" 
+                element={<Navigate to="/portal" replace />} 
+              />
+              <Route 
+                path="/portal" 
+                element={user ? <div className={isPortal ? "pt-8" : "pt-24"}><StudentPortal onStartCourse={(id) => navigate(`/course/${id}`)} /></div> : <Navigate to="/" />} 
+              />
+              <Route 
+                path="/course/:courseId" 
+                element={user ? <CourseViewerWrapper /> : <Navigate to="/" />} 
+              />
+            </Routes>
+          </main>
+
+          {!isPortal && <Footer onOpenModal={openModal} editMode={editMode} />}
+        </>
+      )}
     </div>
   );
 }
