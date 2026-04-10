@@ -2,7 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../lib/auth';
 import { useTheme } from '../lib/theme';
-import { Sun, Moon, X, Menu, GraduationCap, ArrowRight, Instagram, Twitter, Linkedin, ChevronDown, BookOpen, Briefcase, HelpCircle, CreditCard, Users, FileText, Landmark, Calendar, Newspaper, Zap, Globe, Languages, CheckCircle, MessageSquare, Wallet, ExternalLink, ChevronRight, Layout } from 'lucide-react';
+import { 
+  Sun, Moon, X, Menu, GraduationCap, ArrowRight, Instagram, Twitter, Linkedin, 
+  ChevronDown, BookOpen, Briefcase, HelpCircle, CreditCard, Users, FileText, 
+  Landmark, Calendar, Newspaper, Zap, Globe, Languages, CheckCircle, 
+  MessageSquare, Wallet, ExternalLink, ChevronRight, Layout, Info, Phone
+} from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
 interface NavbarProps {
@@ -19,150 +24,148 @@ export default function Navbar({ onOpenModal, editMode, setEditMode, siteSetting
   const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
 
   const isAdmin = profile?.role === 'admin' || profile?.role === 'super_admin' || user?.email?.includes('ginashe.co.za');
   const isSuperAdmin = profile?.role === 'super_admin' || user?.email === 'ginandNatalie@gmail.com' || user?.email === 'academy@ginashe.co.za';
 
-  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
-  const [isSaving, setIsSaving] = useState(false);
-
-  const handleSaveAll = async () => {
-    setIsSaving(true);
-    // Dispatch a custom event that components can listen to
-    window.dispatchEvent(new CustomEvent('save-site-content'));
-    
-    // Give some visual feedback
-    setTimeout(() => {
-      setIsSaving(false);
-    }, 1500);
-  };
-
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 30);
-    };
+    const handleScroll = () => setIsScrolled(window.scrollY > 30);
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  useEffect(() => {
-    if (isMobileMenuOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
-  }, [isMobileMenuOpen]);
+  const handleSaveAll = () => {
+    setIsSaving(true);
+    window.dispatchEvent(new CustomEvent('save-site-content'));
+    setTimeout(() => setIsSaving(false), 1500);
+  };
 
+  // Primary Navigation Items
   const navItems = [
-    { label: 'Curriculum', path: '/curriculum', key: 'showCurriculum' },
-    { label: 'Faculty', path: '/faculty', key: 'showFaculty' },
-    { label: 'About', path: '/about', key: 'showAbout' },
-    { label: 'Admissions', path: '/admissions', key: 'showAdmissions' },
-    { label: 'News', path: '/news', key: 'showNews' },
-    { label: 'Events', path: '/events', key: 'showEvents' },
-    { label: 'Contact', path: '/contact', key: 'showContact' },
-  ].filter(item => !siteSettings || siteSettings[item.key] !== false);
+    { label: 'Curriculum', path: '/curriculum', hasMega: true },
+    { label: 'Admissions', path: '/admissions', hasMega: true },
+    { label: 'Faculty', path: '/faculty', hasMega: false },
+    { label: 'Discover', path: '#', hasMega: true },
+  ];
+
+  // Discover Items (Nested)
+  const discoverItems = [
+    { label: 'About Us', path: '/about', icon: <Info className="w-4 h-4" />, desc: 'Our mission & vision' },
+    { label: 'News & Insights', path: '/news', icon: <Newspaper className="w-4 h-4" />, desc: 'Tech trends & updates' },
+    { label: 'Events', path: '/events', icon: <Calendar className="w-4 h-4" />, desc: 'Webinars & masterclasses' },
+    { label: 'Contact', path: '/contact', icon: <Phone className="w-4 h-4" />, desc: 'Get in touch' },
+  ];
 
   return (
-    <nav 
-      id="nav" 
-      className="fixed top-0 left-0 right-0 z-[1000]"
-    >
-      <div className={`relative z-[2001] h-[72px] flex items-center px-5 sm:px-6 md:px-14 transition-all duration-300 ${isMobileMenuOpen ? 'bg-transparent border-transparent' : `bg-bg/92 backdrop-blur-3xl saturate-[1.4] border-b border-border-custom ${isScrolled ? 'bg-bg/98 border-border2' : ''}`}`}>
-        <Link to="/" className={`flex items-center gap-3 no-underline shrink-0 cursor-pointer transition-opacity duration-300 ${isMobileMenuOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
-          <div className="w-10 h-10 bg-gold rounded-md flex items-center justify-center relative overflow-hidden shrink-0">
+    <nav id="nav" className="fixed top-0 left-0 right-0 z-[1000] px-4 sm:px-8 mt-4">
+      <div className={`mx-auto max-w-7xl relative z-[2001] h-[72px] flex items-center px-6 rounded-2xl transition-all duration-500 border ${
+        isScrolled 
+          ? 'bg-bg/95 backdrop-blur-2xl border-border2 shadow-[0_8px_32px_rgba(0,0,0,0.12)]' 
+          : 'bg-bg/40 backdrop-blur-md border-white/5'
+      }`}>
+        
+        {/* --- LOGO --- */}
+        <Link to="/" className="flex items-center gap-3 no-underline shrink-0 group">
+          <div className="w-10 h-10 bg-gold rounded-xl flex items-center justify-center relative overflow-hidden shrink-0 group-hover:scale-105 transition-transform duration-300">
             <img 
               src="https://firebasestorage.googleapis.com/v0/b/ginashe-digital.firebasestorage.app/o/Ginashe%20Logo.svg?alt=media&token=041611c8-fc50-4b78-ab91-29ecf2dbe517" 
               alt="GDA"
-              className="w-6 h-6 object-contain brightness-0 invert-0 mix-blend-multiply"
+              className="w-6 h-6 object-contain mix-blend-multiply"
             />
           </div>
           <div className="flex flex-col gap-px">
-            <span className="font-syne font-extrabold text-[15px] sm:text-[16px] tracking-[0.02em] leading-none text-text-custom">
+            <span className="font-syne font-extrabold text-[16px] tracking-[0.02em] leading-none text-white whitespace-nowrap">
               Ginashe <span className="text-gold">Digital</span> Academy
             </span>
-            <span className="font-dm-mono text-[8px] sm:text-[9px] tracking-[0.18em] uppercase text-text-soft">
-              academy.ginashe.co.za
+            <span className="font-dm-mono text-[9px] tracking-[0.18em] uppercase text-text-dim">
+              Global Excellence
             </span>
           </div>
         </Link>
 
-        <ul className={`hidden lg:flex items-center list-none mx-auto gap-1 transition-opacity duration-300 ${isMobileMenuOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+        {/* --- MAIN NAV --- */}
+        <ul className="hidden lg:flex items-center list-none mx-auto gap-2">
           {navItems.map((item) => (
-            <li key={item.path} className="relative group" 
-                onMouseEnter={() => (item.label === 'Curriculum' || item.label === 'Admissions') && setActiveDropdown(item.label)}
-                onMouseLeave={() => setActiveDropdown(null)}
+            <li 
+              key={item.label} 
+              className="relative"
+              onMouseEnter={() => item.hasMega && setActiveDropdown(item.label)}
+              onMouseLeave={() => setActiveDropdown(null)}
             >
               <Link 
                 to={item.path}
-                className={`inline-flex items-center gap-1 font-syne font-semibold text-[13px] tracking-[0.02em] no-underline px-4 py-2 rounded-md transition-all hover:text-gold hover:bg-gold-dim/50 ${pathname === item.path ? 'text-gold bg-gold-dim font-bold' : 'text-text-soft'}`}
+                className={`inline-flex items-center gap-1.5 font-syne font-semibold text-[13px] tracking-[0.03em] no-underline px-4 py-2 rounded-lg transition-all ${
+                  pathname === item.path ? 'text-gold bg-gold/5' : 'text-text-soft hover:text-gold hover:bg-white/5'
+                }`}
               >
                 {item.label}
-                {(item.label === 'Curriculum' || item.label === 'Admissions') && (
-                  <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-300 ${activeDropdown === item.label ? 'rotate-180 text-gold' : 'text-text-dim group-hover:text-gold'}`} />
-                )}
+                {item.hasMega && <ChevronDown className={`w-3 h-3 transition-transform duration-300 ${activeDropdown === item.label ? 'rotate-180' : ''}`} />}
               </Link>
 
-              {/* Mega Menu Dropdowns */}
+              {/* DROPDOWNS */}
               <AnimatePresence>
                 {activeDropdown === item.label && (
                   <motion.div
-                    initial={{ opacity: 0, y: 10, scale: 0.98 }}
+                    initial={{ opacity: 0, y: 15, scale: 0.98 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: 5, scale: 0.98 }}
-                    transition={{ duration: 0.2, ease: "easeOut" }}
-                    className="absolute top-full left-1/2 -translate-x-1/2 w-[480px] pt-2 pointer-events-auto z-[2100]"
+                    exit={{ opacity: 0, y: 10, scale: 0.98 }}
+                    className="absolute top-full left-1/2 -translate-x-1/2 pt-3 w-[420px] z-[2100]"
                   >
-                    <div className="bg-bg/95 backdrop-blur-2xl border border-border-custom rounded-2xl shadow-[0_20px_40px_rgba(0,0,0,0.4)] overflow-hidden">
-                      {item.label === 'Curriculum' ? (
-                        <div className="p-5 grid grid-cols-2 gap-4">
+                    <div className="bg-navy/95 backdrop-blur-3xl border border-white/10 rounded-2xl shadow-[0_30px_60px_rgba(0,0,0,0.5)] overflow-hidden">
+                      {item.label === 'Curriculum' && (
+                        <div className="p-4 grid grid-cols-2 gap-3">
                           {[
-                            { title: 'Cloud Engineering', desc: 'Azure, AWS & Google Cloud Specialisations', icon: <Landmark className="w-5 h-5" />, color: 'text-sky' },
-                            { title: 'AI & Data Science', desc: 'Machine Learning & Predictive Analytics', icon: <BookOpen className="w-5 h-5" />, color: 'text-emerald' },
-                            { title: 'Executive Digital', desc: 'Leadership for Digital Transformation', icon: <Briefcase className="w-5 h-5" />, color: 'text-gold' },
-                            { title: 'Full-Stack Dev', desc: 'Modern web & mobile development', icon: <FileText className="w-5 h-5" />, color: 'text-coral' }
-                          ].map((cat, i) => (
-                            <Link key={i} to="/curriculum" className="flex items-start gap-3 p-3 rounded-xl hover:bg-white/5 transition-colors group/item">
-                              <div className={`mt-1 p-2 rounded-lg bg-surface border border-border-custom group-hover/item:border-gold/30 transition-colors ${cat.color}`}>{cat.icon}</div>
-                              <div>
-                                <div className="font-syne font-bold text-[13px] text-text-custom mb-0.5">{cat.title}</div>
-                                <div className="text-[11px] text-text-muted leading-snug">{cat.desc}</div>
-                              </div>
-                            </Link>
-                          ))}
-                        </div>
-                      ) : (
-                        <div className="p-4 space-y-1">
-                          {[
-                            { title: 'How to Apply', desc: 'Step-by-step application guide', icon: <ArrowRight className="w-4 h-4" />, path: '/admissions#apply' },
-                            { title: 'Scholarships', desc: 'Merit-based funding opportunities', icon: <CreditCard className="w-4 h-4" />, path: '/admissions#funding' },
-                            { title: 'Tuition & Fees', desc: 'Investment overview and payment plans', icon: <Landmark className="w-4 h-4" />, path: '/admissions#tuition' },
-                            { title: 'Entry Requirements', desc: 'Academic and professional criteria', icon: <FileText className="w-4 h-4" />, path: '/admissions#entry' },
-                            { title: 'FAQs', desc: 'Commonly asked questions', icon: <HelpCircle className="w-4 h-4" />, path: '/contact' }
-                          ].map((link, i) => (
-                            <Link key={i} to={link.path} className="flex items-center justify-between p-3 rounded-xl hover:bg-gold-dim/50 transition-all group/item">
-                              <div className="flex items-center gap-3">
-                                <div className="p-1.5 rounded-lg bg-surface border border-border-custom group-hover/item:text-gold transition-colors">{link.icon}</div>
-                                <div>
-                                  <div className="font-syne font-bold text-[12px] text-text-custom">{link.title}</div>
-                                  <div className="text-[10px] text-text-dim">{link.desc}</div>
-                                </div>
-                              </div>
-                              <ArrowRight className="w-3.5 h-3.5 text-text-dim opacity-0 -translate-x-2 group-hover/item:opacity-100 group-hover/item:translate-x-0 transition-all text-gold" />
+                            { title: 'Cloud Engineering', icon: <Landmark className="w-4 h-4" />, color: 'text-sky' },
+                            { title: 'AI & Data Science', icon: <Zap className="w-4 h-4" />, color: 'text-emerald' },
+                            { title: 'Digital Leadership', icon: <Briefcase className="w-4 h-4" />, color: 'text-gold' },
+                            { title: 'Full-Stack Web', icon: <Layout className="w-4 h-4" />, color: 'text-coral' }
+                          ].map((c, i) => (
+                            <Link key={i} to="/curriculum" className="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-all group/item">
+                              <div className={`p-2 rounded-lg bg-white/5 border border-white/5 group-hover/item:border-gold/30 ${c.color}`}>{c.icon}</div>
+                              <div className="font-syne font-bold text-[12px] text-white">{c.title}</div>
                             </Link>
                           ))}
                         </div>
                       )}
                       
-                      <div className="bg-gold/5 p-4 border-t border-border-custom flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <div className="w-2 h-2 rounded-full bg-emerald animate-pulse" />
-                          <span className="font-dm-mono text-[9px] uppercase tracking-widest text-text-muted">Next Intake: April 2025</span>
+                      {item.label === 'Admissions' && (
+                        <div className="p-3 space-y-1">
+                          {[
+                            { title: 'Apply Now', icon: <ArrowRight className="w-4 h-4" />, path: '/admissions#apply' },
+                            { title: 'Scholarships', icon: <CreditCard className="w-4 h-4" />, path: '/admissions#funding' },
+                            { title: 'Financial Aid', icon: <Landmark className="w-4 h-4" />, path: '/admissions#tuition' },
+                            { title: 'Entry Criteria', icon: <CheckCircle className="w-4 h-4" />, path: '/admissions#entry' }
+                          ].map((l, i) => (
+                            <Link key={i} to={l.path} className="flex items-center justify-between p-3 rounded-xl hover:bg-gold/10 group/item transition-all">
+                              <div className="flex items-center gap-3">
+                                <div className="text-gold opacity-60 group-hover/item:opacity-100">{l.icon}</div>
+                                <div className="font-syne font-bold text-[13px] text-white">{l.title}</div>
+                              </div>
+                              <ChevronRight className="w-3 h-3 text-text-dim opacity-0 group-hover/item:opacity-100 transition-all" />
+                            </Link>
+                          ))}
                         </div>
-                        <Link to="/contact" className="text-[10px] font-bold text-gold hover:underline">Speak to an advisor →</Link>
+                      )}
+
+                      {item.label === 'Discover' && (
+                        <div className="p-3 grid grid-cols-2 gap-2">
+                          {discoverItems.map((d, i) => (
+                            <Link key={i} to={d.path} className="p-3 rounded-xl hover:bg-white/5 transition-all group/item">
+                              <div className="flex items-center gap-2 mb-1">
+                                <span className="text-gold">{d.icon}</span>
+                                <span className="font-syne font-bold text-[12px] text-white">{d.label}</span>
+                              </div>
+                              <div className="text-[10px] text-text-dim">{d.desc}</div>
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+
+                      <div className="bg-gold/5 p-3 px-4 border-t border-white/5 flex items-center justify-between">
+                        <span className="text-[9px] font-dm-mono uppercase tracking-widest text-text-muted">Intake: April 2025</span>
+                        <Link to="/contact" className="text-[10px] font-bold text-gold hover:underline">Get Help →</Link>
                       </div>
                     </div>
                   </motion.div>
@@ -172,192 +175,109 @@ export default function Navbar({ onOpenModal, editMode, setEditMode, siteSetting
           ))}
         </ul>
 
-        <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
-          <div className={`flex items-center gap-1.5 sm:gap-2.5 transition-opacity duration-300 ${isMobileMenuOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
-            <button 
-              onClick={toggleTheme}
-              className="p-2 rounded-full hover:bg-white/5 transition-colors text-text-muted hover:text-gold flex items-center justify-center"
-              title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
-            >
+        {/* --- RIGHT ACTIONS --- */}
+        <div className="flex items-center gap-4">
+          {/* Theme & Edit Mode */}
+          <div className="hidden sm:flex items-center gap-2 pr-4 border-r border-white/10 text-text-muted">
+            <button onClick={toggleTheme} className="p-2 hover:text-gold transition-colors">
               {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
             </button>
-
-            <div className="hidden xl:flex items-center gap-1.5 font-syne font-semibold text-[11px] tracking-[0.05em] text-[#22c55e] pr-4 border-r border-border-custom mr-1">
-              <span className="pulse"></span>
-              INTAKE OPEN
-            </div>
-            
-            {user ? (
-              <div className="flex items-center gap-2 sm:gap-3">
-                {isSuperAdmin && pathname === '/' && (
-                  <div className="flex items-center gap-2">
-                    <button 
-                      onClick={() => setEditMode(!editMode)}
-                      className={`hidden lg:flex items-center gap-1.5 font-dm-mono text-[9px] tracking-[0.1em] px-3 py-1.5 rounded-sm border transition-all ${editMode ? 'bg-coral text-white border-coral' : 'border-border-custom text-text-muted hover:text-coral'}`}
-                    >
-                      {editMode ? 'Disable Edit Mode' : 'Enable Edit Mode'}
-                    </button>
-                    {editMode && (
-                      <button 
-                        onClick={handleSaveAll}
-                        disabled={isSaving}
-                        className="hidden lg:flex items-center gap-1.5 font-dm-mono text-[9px] tracking-[0.1em] px-3 py-1.5 rounded-sm bg-emerald text-white border border-emerald hover:bg-emerald/90 transition-all disabled:opacity-50"
-                      >
-                        {isSaving ? 'Saving...' : 'Save All Changes'}
-                      </button>
-                    )}
-                  </div>
-                )}
-
-                {/* --- ACCESS BAR (Protruding Menu) --- */}
-                <div className="hidden md:block absolute top-full right-14 z-[1001]">
-                  <motion.div 
-                    initial={{ y: -20, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    className="flex items-center border border-t-0 border-border-custom bg-gold rounded-b-xl shadow-[0_10px_30px_rgba(212,175,55,0.15)] overflow-hidden"
-                  >
-                    {[
-                      { label: 'Student Portal', path: '/portal', icon: <GraduationCap className="w-3 h-3" /> },
-                      { label: 'Alumni', path: '/alumni', icon: <Users className="w-3 h-3" /> },
-                      { label: 'Staff Hub', path: '/portal', icon: <Landmark className="w-3 h-3" /> }
-                    ].map((link, i) => (
-                      <Link 
-                        key={i} 
-                        to={link.path} 
-                        className={`flex items-center gap-2 px-4 py-1.5 text-navy font-syne font-bold text-[10px] uppercase tracking-wider hover:bg-white/10 transition-colors ${i !== 2 ? 'border-r border-navy/10' : ''}`}
-                      >
-                        {link.icon}
-                        {link.label}
-                      </Link>
-                    ))}
-                  </motion.div>
-                </div>
-
-                <Link 
-                  to={isAdmin ? '/admin' : '/portal'}
-                  className={`hidden sm:inline-flex items-center gap-1.5 font-syne font-bold text-[11px] tracking-[0.04em] uppercase px-4 py-2 rounded-md cursor-pointer border transition-all no-underline ${pathname !== '/' ? 'bg-gold text-bg border-gold' : 'border-sky/20 bg-sky-dim text-sky hover:bg-sky/20'}`}
-                >
-                  ⬡ {isAdmin ? 'Admin Panel' : 'My Dashboard'}
-                </Link>
-                <button 
-                  className="hidden sm:block font-syne text-[11px] font-semibold text-text-muted hover:text-gold transition-colors uppercase tracking-wider"
-                  onClick={() => { signOut(); navigate('/'); }}
-                >
-                  Logout
-                </button>
-              </div>
-            ) : (
-              <div className="flex items-center gap-2">
-                <button 
-                  className="hidden sm:inline-flex items-center gap-1.5 font-syne font-bold text-[11px] tracking-[0.04em] uppercase px-4 py-2 rounded-md cursor-pointer border border-sky/20 bg-sky-dim text-sky hover:bg-sky/20 transition-all no-underline"
-                  onClick={() => onOpenModal('student')}
-                >
-                  ⬡ Student Portal
-                </button>
-                <button 
-                  className="hidden xs:flex btn btn-gold btn-sm"
-                  onClick={() => onOpenModal('apply')}
-                >
-                  Apply Now
-                </button>
-              </div>
+            {isSuperAdmin && (
+              <button 
+                onClick={editMode ? handleSaveAll : () => setEditMode(true)}
+                className={`p-2 rounded-full transition-all ${editMode ? 'text-emerald animate-pulse' : 'hover:text-gold'}`}
+              >
+                <Zap size={18} />
+              </button>
             )}
           </div>
 
-          <button 
-            className="lg:hidden bg-none border-none text-text-soft cursor-pointer p-2 hover:text-gold transition-colors relative z-[2002]"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            aria-label="Toggle menu"
-          >
-            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
+          <div className="flex items-center gap-2">
+            <span className="hidden xl:flex items-center gap-1.5 font-dm-mono text-[9px] tracking-widest text-[#22c55e]">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#22c55e] animate-pulse" />
+              SYSTEMS ONLINE
+            </span>
+            
+            {/* User Dropdown/Mobile Toggle */}
+            <button 
+              className="lg:hidden p-2 text-white"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            >
+              {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
+        </div>
+
+        {/* --- THE ACCESS POD (Protruding Experimental Menu) --- */}
+        <div className="hidden lg:block absolute bottom-[-32px] right-6 z-[1001]">
+          <div className="flex items-stretch bg-navy/90 backdrop-blur-xl border border-white/10 rounded-b-2xl shadow-[0_15px_35px_rgba(0,0,0,0.3)] overflow-hidden">
+            <div className="flex items-center border-r border-white/10">
+              <Link 
+                to={user ? (isAdmin ? '/admin' : '/portal') : '/portal'}
+                onClick={!user ? (e) => { e.preventDefault(); onOpenModal('student'); } : undefined}
+                className="flex items-center gap-2 px-5 py-2 hover:bg-white/5 transition-all group"
+              >
+                <div className="w-6 h-6 rounded-lg bg-gold/10 flex items-center justify-center group-hover:bg-gold/20 transition-colors">
+                  <GraduationCap className="w-3.5 h-3.5 text-gold" />
+                </div>
+                <div className="flex flex-col">
+                  <span className="font-syne font-black text-[9px] text-white uppercase tracking-tighter leading-none">
+                    {user ? (isAdmin ? 'Admin Panel' : 'My Dashboard') : 'Student Portal'}
+                  </span>
+                  <span className="text-[7px] font-dm-mono text-gold/60 uppercase">Login/Access</span>
+                </div>
+              </Link>
+            </div>
+            
+            <div className="hidden xl:flex items-center border-r border-white/10">
+              <Link to="/portal" className="px-4 py-2 hover:bg-white/5 transition-all flex flex-col items-center">
+                <Users className="w-3.5 h-3.5 text-white/40" />
+                <span className="text-[8px] font-bold text-white/60 uppercase mt-0.5">Alumni</span>
+              </Link>
+            </div>
+
+            <button 
+              onClick={() => onOpenModal('apply')}
+              className="px-6 py-2 bg-gradient-to-r from-gold to-[#c67d10] text-navy font-syne font-black text-[11px] uppercase tracking-tighter hover:brightness-110 transition-all flex items-center gap-2"
+            >
+              <Zap className="w-3 h-3 fill-navy" />
+              Apply For 2025
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* Mobile Menu Overlay */}
+      {/* Mobile Menu */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div 
             initial={{ opacity: 0, x: '100%' }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: '100%' }}
-            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="fixed inset-0 z-[2000] bg-bg/98 backdrop-blur-2xl lg:hidden overflow-y-auto"
+            className="fixed inset-0 z-[2000] bg-navy/98 backdrop-blur-3xl lg:hidden p-8 pt-24"
           >
-            <div className="flex flex-col min-h-screen p-6 pt-24 gap-12">
-              <div className="flex flex-col gap-8">
-                <div className="font-dm-mono text-[10px] tracking-[0.2em] uppercase text-text-dim mb-2">Navigation</div>
-                <ul className="flex flex-col list-none gap-6">
-                  {navItems.map((item, i) => (
-                    <motion.li 
-                      key={item.path}
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: i * 0.1 }}
-                    >
-                      <Link 
-                        to={item.path}
-                        onClick={() => setIsMobileMenuOpen(false)}
-                        className={`group flex items-center justify-between font-syne font-bold text-3xl no-underline transition-all ${pathname === item.path ? 'text-gold' : 'text-text-custom hover:text-gold'}`}
-                      >
-                        <span>{item.label}</span>
-                        <ArrowRight className={`transition-transform group-hover:translate-x-2 ${pathname === item.path ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`} size={24} />
-                      </Link>
-                    </motion.li>
-                  ))}
-                </ul>
-              </div>
-              
-              <div className="flex flex-col gap-6">
-                <div className="font-dm-mono text-[10px] tracking-[0.2em] uppercase text-text-dim mb-2">Account</div>
-                {!user ? (
-                  <div className="grid grid-cols-1 gap-4">
-                    <button 
-                      className="w-full py-5 rounded-xl border border-sky/20 bg-sky-dim text-sky font-syne font-bold uppercase tracking-widest text-xs flex items-center justify-center gap-2"
-                      onClick={() => { onOpenModal('student'); setIsMobileMenuOpen(false); }}
-                    >
-                      <GraduationCap size={18} />
-                      Student Portal
-                    </button>
-                    <button 
-                      className="btn btn-gold w-full py-5 rounded-xl text-sm"
-                      onClick={() => { onOpenModal('apply'); setIsMobileMenuOpen(false); }}
-                    >
-                      Apply Now — April Cohort
-                    </button>
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-1 gap-4">
-                    <Link 
-                      to={isAdmin ? '/admin' : '/portal'}
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className="w-full py-5 rounded-xl bg-gold text-bg font-syne font-bold uppercase tracking-widest text-xs text-center no-underline flex items-center justify-center gap-2"
-                    >
-                      <GraduationCap size={18} />
-                      {isAdmin ? 'Admin Panel' : 'My Dashboard'}
+            <div className="flex flex-col gap-8">
+              <div className="text-gold font-dm-mono text-[10px] tracking-widest uppercase">Main Menu</div>
+              <ul className="flex flex-col gap-6 list-none">
+                {navItems.map(item => (
+                  <li key={item.label}>
+                    <Link to={item.path} className="text-4xl font-syne font-black text-white no-underline" onClick={() => setIsMobileMenuOpen(false)}>
+                      {item.label}
                     </Link>
-                    <button 
-                      className="w-full py-5 rounded-xl border border-border-custom text-text-muted font-syne font-bold uppercase tracking-widest text-xs"
-                      onClick={() => { signOut(); navigate('/'); setIsMobileMenuOpen(false); }}
-                    >
-                      Logout
-                    </button>
-                  </div>
-                )}
-              </div>
-
-              <div className="mt-auto pt-12 border-t border-border-custom flex flex-col gap-8">
-                <div className="flex justify-between items-center">
-                  <div className="flex gap-6">
-                    <a href="#" className="text-text-muted hover:text-gold transition-colors"><Instagram size={20} /></a>
-                    <a href="#" className="text-text-muted hover:text-gold transition-colors"><Twitter size={20} /></a>
-                    <a href="#" className="text-text-muted hover:text-gold transition-colors"><Linkedin size={20} /></a>
-                  </div>
-                  <div className="font-dm-mono text-[9px] text-text-dim uppercase tracking-widest">RSA · 2025</div>
-                </div>
-                <div className="text-[11px] text-text-dim leading-relaxed">
-                  Ginashe Digital Academy is Africa's premier institution for cloud computing and AI transformation.
-                </div>
+                  </li>
+                ))}
+                {discoverItems.map(item => (
+                  <li key={item.label}>
+                    <Link to={item.path} className="text-2xl font-syne font-bold text-text-dim no-underline" onClick={() => setIsMobileMenuOpen(false)}>
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+              
+              <div className="mt-auto border-t border-white/10 pt-8 flex flex-col gap-4">
+                <button onClick={() => { setIsMobileMenuOpen(false); onOpenModal('student'); }} className="btn btn-outline w-full py-4 text-xl">Student Portal</button>
+                <button onClick={() => { setIsMobileMenuOpen(false); onOpenModal('apply'); }} className="btn btn-gold w-full py-4 text-xl">Apply Now</button>
               </div>
             </div>
           </motion.div>
