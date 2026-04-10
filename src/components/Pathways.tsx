@@ -113,10 +113,33 @@ export function Faculty({ editMode }: { editMode?: boolean }) {
   return (
     <section id="faculty" className="bg-bg">
       <div className="section-inner">
-        <div className="max-w-[540px] mb-14">
-          <div className="section-label">Faculty & Instructors</div>
-          <h2 className="section-title animate-fadeUp">Taught by practitioners,<br />not professors.</h2>
-          <p className="section-sub animate-fadeUp delay-100">Every GDA instructor is an active industry professional with hands-on cloud, AI, or engineering experience — bringing real problems into the classroom.</p>
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-10 lg:gap-16 mb-14 items-center">
+          <div className="max-w-[540px]">
+            <div className="section-label">Faculty & Instructors</div>
+            <h2 className="section-title animate-fadeUp">Taught by practitioners,<br />not professors.</h2>
+            <p className="section-sub animate-fadeUp delay-100">Every GDA instructor is an active industry professional with hands-on cloud, AI, or engineering experience — bringing real problems into the classroom.</p>
+          </div>
+          <div className="bg-card border border-border-custom rounded-2xl p-6 animate-fadeUp delay-200">
+            <div className="font-syne font-bold text-[11px] uppercase tracking-widest text-sky mb-4 flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-sky"></span>
+              Faculty Engagement
+            </div>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <span className="text-[12px] text-text-muted">Avg. Experience</span>
+                <span className="font-dm-mono text-[13px] text-sky">12+ Years</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-[12px] text-text-muted">Student-Teacher Ratio</span>
+                <span className="font-dm-mono text-[13px] text-sky">15:1</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-[12px] text-text-muted">Industry Partners</span>
+                <span className="font-dm-mono text-[13px] text-sky">40+ Corps</span>
+              </div>
+              <button className="btn btn-sm bg-sky-dim text-sky border border-sky/20 w-full mt-2">View Faculty Handbook →</button>
+            </div>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">

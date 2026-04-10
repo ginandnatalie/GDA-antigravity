@@ -475,13 +475,38 @@ export function Ecosystem({ onOpenModal, editMode }: { onOpenModal: (id: string)
   return (
     <section id="ecosystem" className="bg-bg border-t border-border-custom">
       <div className="section-inner">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-14 gap-8">
-          <div className="max-w-[540px]">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-10 lg:gap-16 mb-16 items-start">
+          <div>
             <div className="section-label">Partner Ecosystem</div>
             <h2 className="section-title animate-fadeUp">The network that<br />gets you hired.</h2>
-            <p className="section-sub animate-fadeUp delay-100">Our employer and technology partnerships aren't logo placements. They're active recruitment pipelines, co-created content, and sponsored learner placements.</p>
+            <p className="section-sub animate-fadeUp delay-100">
+              Our employer and technology partnerships aren't logo placements. They're active recruitment pipelines, co-created content, and sponsored learner placements.
+            </p>
+            <button className="btn btn-outline mt-8 animate-fadeUp" onClick={() => onOpenModal('apply')}>Become a Partner</button>
           </div>
-          <button className="btn btn-outline animate-fadeUp" onClick={() => onOpenModal('apply')}>Become a Partner</button>
+          <div className="bg-white/3 border border-border-custom rounded-2xl p-6 animate-fadeUp delay-200">
+            <div className="font-syne font-bold text-[11px] uppercase tracking-widest text-gold mb-4 flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-gold"></span>
+              Partnership Desk
+            </div>
+            <ul className="space-y-4">
+              {[
+                { t: 'Employer Network', d: '48+ companies' },
+                { t: 'Talent Showcase 2026', d: 'Hiring events' },
+                { t: 'Corporate Training', d: 'Workforce modernisation' }
+              ].map((res, i) => (
+                <li key={i} className="group cursor-pointer">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="font-syne font-bold text-[13px] group-hover:text-gold transition-colors">{res.t}</div>
+                      <div className="text-[10px] text-text-muted">{res.d}</div>
+                    </div>
+                    <span className="text-text-dim text-xs group-hover:translate-x-1 transition-transform">→</span>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-14">

@@ -12,14 +12,40 @@ export function Requirements() {
   return (
     <section id="entry" className="bg-bg py-24 border-t border-border-custom px-6 sm:px-14">
       <div className="max-w-6xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-10 lg:gap-16 mb-16 items-start">
           <div>
             <div className="text-gold font-dm-mono text-[10px] uppercase tracking-widest mb-4">Prerequisites</div>
             <h2 className="font-syne font-extrabold text-4xl mb-6 text-white">Who can apply to<br />the Academy?</h2>
-            <p className="text-text-muted mb-8 leading-relaxed max-w-lg">
+            <p className="text-text-muted leading-relaxed max-w-lg">
               We look for passion over pedigree. Our admissions process is designed to find individuals with high potential and a drive to solve African problems using global tech.
             </p>
-            <div className="space-y-6">
+          </div>
+          <div className="bg-white/3 border border-border-custom rounded-2xl p-6 animate-fadeUp delay-200">
+            <div className="font-syne font-bold text-[11px] uppercase tracking-widest text-gold mb-4 flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-gold"></span>
+              Admission Links
+            </div>
+            <ul className="space-y-4">
+              {[
+                { t: 'Application Portal', d: 'Submit online' },
+                { t: 'Required Documents', d: 'Checklist PDF' },
+                { t: 'Interview Tips', d: 'GDA Prep Guide' }
+              ].map((res, i) => (
+                <li key={i} className="group cursor-pointer">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="font-syne font-bold text-[13px] group-hover:text-gold transition-colors">{res.t}</div>
+                      <div className="text-[10px] text-text-muted">{res.d}</div>
+                    </div>
+                    <span className="text-text-dim text-xs group-hover:translate-x-1 transition-transform">→</span>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+          <div className="space-y-6">
               {criteria.map((c, i) => (
                 <div key={i} className="flex gap-4 p-4 rounded-2xl bg-white/3 border border-border-custom">
                   <div className={`mt-0.5 ${c.mandatory ? 'text-emerald' : 'text-gold'}`}>

@@ -4,10 +4,37 @@ export function WhyGDA({ editMode }: { editMode?: boolean }) {
   return (
     <section id="why" className="bg-bg2 border-t border-border-custom">
       <div className="section-inner">
-        <div className="max-w-[540px] mb-14">
-          <div className="section-label">Why Ginashe Digital Academy</div>
-          <h2 className="section-title animate-fadeUp">Elite rigour.<br /><em className="italic font-light font-dm-sans text-gold">African</em> by design.</h2>
-          <p className="section-sub animate-fadeUp delay-100">We didn't copy a Western curriculum. We built ours from the ground up — mapped to Africa's cloud adoption curve, SETA standards, and real employer demand.</p>
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-10 lg:gap-16 mb-16 items-start">
+          <div>
+            <div className="section-label">Why GDA Academy</div>
+            <h2 className="section-title animate-fadeUp">Elite rigour.<br /><em className="italic font-light font-dm-sans text-gold">African</em> by design.</h2>
+            <p className="section-sub animate-fadeUp delay-100">
+              We didn't copy a Western curriculum. We built ours from the ground up — mapped to Africa's cloud adoption curve, SETA standards, and real employer demand.
+            </p>
+          </div>
+          <div className="bg-white/3 border border-border-custom rounded-2xl p-6 animate-fadeUp delay-200">
+            <div className="font-syne font-bold text-[11px] uppercase tracking-widest text-gold mb-4 flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-gold"></span>
+              Institutional Profile
+            </div>
+            <ul className="space-y-4">
+              {[
+                { t: 'Our Mission & Vision', d: 'Empowering the continent' },
+                { t: 'Academic Leadership', d: 'Industry veterans' },
+                { t: 'Governance & Values', d: 'Operational excellence' }
+              ].map((res, i) => (
+                <li key={i} className="group cursor-pointer">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="font-syne font-bold text-[13px] group-hover:text-gold transition-colors">{res.t}</div>
+                      <div className="text-[10px] text-text-muted">{res.d}</div>
+                    </div>
+                    <span className="text-text-dim text-xs group-hover:translate-x-1 transition-transform">→</span>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-border-custom border border-border-custom rounded-lg overflow-hidden">

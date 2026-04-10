@@ -103,22 +103,53 @@ export default function EventsPage() {
   return (
     <div className="min-h-screen pt-32 pb-24 px-6 md:px-14">
       <div className="max-w-7xl mx-auto mb-16">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="flex flex-col gap-4 text-center items-center"
-        >
-          <div className="flex items-center gap-2 font-dm-mono text-[10px] tracking-[0.2em] uppercase text-gold">
-            <Sparkles size={14} />
-            Events & Webinars
-          </div>
-          <h1 className="font-syne font-extrabold text-4xl md:text-6xl max-w-3xl leading-tight">
-            Connect. <span className="text-gold">Learn.</span> Transform.
-          </h1>
-          <p className="text-text-muted text-lg max-w-2xl leading-relaxed">
-            Join our expert-led sessions to discover how Ginashe Digital Academy can accelerate your career in the cloud and AI era.
-          </p>
-        </motion.div>
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-10 lg:gap-16 items-start">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="flex flex-col gap-4"
+          >
+            <div className="flex items-center gap-2 font-dm-mono text-[10px] tracking-[0.2em] uppercase text-gold">
+              <Sparkles size={14} />
+              Events & Webinars
+            </div>
+            <h1 className="font-syne font-extrabold text-4xl md:text-6xl leading-tight">
+              Connect. <span className="text-gold">Learn.</span> Transform.
+            </h1>
+            <p className="text-text-muted text-lg leading-relaxed max-w-2xl">
+              Join our expert-led sessions to discover how GDA can accelerate your career in the cloud and AI era.
+            </p>
+          </motion.div>
+
+          <motion.div 
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.2 }}
+            className="bg-white/3 border border-border-custom rounded-2xl p-6"
+          >
+            <div className="font-syne font-bold text-[11px] uppercase tracking-widest text-gold mb-4 flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-gold"></span>
+              Event Resources
+            </div>
+            <ul className="space-y-4">
+              {[
+                { t: '2026 Academic Calendar', d: 'Key dates' },
+                { t: 'Virtual Campus Tour', d: 'Explore GDA' },
+                { t: 'Event Sponsorship', d: 'Partner with us' }
+              ].map((res, i) => (
+                <li key={i} className="group cursor-pointer">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="font-syne font-bold text-[13px] group-hover:text-gold transition-colors">{res.t}</div>
+                      <div className="text-[10px] text-text-muted">{res.d}</div>
+                    </div>
+                    <span className="text-text-dim text-xs group-hover:translate-x-1 transition-transform">→</span>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+        </div>
       </div>
 
       <div className="max-w-7xl mx-auto space-y-8">

@@ -75,22 +75,53 @@ export default function NewsPage() {
     <div className="min-h-screen pt-32 pb-24 px-6 md:px-14">
       {/* Header */}
       <div className="max-w-7xl mx-auto mb-16">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="flex flex-col gap-4"
-        >
-          <div className="flex items-center gap-2 font-dm-mono text-[10px] tracking-[0.2em] uppercase text-gold">
-            <Newspaper size={14} />
-            News & Insights
-          </div>
-          <h1 className="font-syne font-extrabold text-4xl md:text-6xl max-w-3xl leading-tight">
-            The Girashe <span className="text-gold">Intelligence</span> Report
-          </h1>
-          <p className="text-text-muted text-lg max-w-2xl leading-relaxed">
-            Stay ahead of the curve with our latest updates on technology, career growth, and industry transformation across Africa.
-          </p>
-        </motion.div>
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-10 lg:gap-16 items-start">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="flex flex-col gap-4"
+          >
+            <div className="flex items-center gap-2 font-dm-mono text-[10px] tracking-[0.2em] uppercase text-gold">
+              <Newspaper size={14} />
+              News & Insights
+            </div>
+            <h1 className="font-syne font-extrabold text-4xl md:text-6xl leading-tight">
+              The GDA <span className="text-gold">Intelligence</span> Report
+            </h1>
+            <p className="text-text-muted text-lg leading-relaxed max-w-2xl">
+              Stay ahead of the curve with our latest updates on technology, career growth, and industry transformation across Africa.
+            </p>
+          </motion.div>
+
+          <motion.div 
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.2 }}
+            className="bg-white/3 border border-border-custom rounded-2xl p-6"
+          >
+            <div className="font-syne font-bold text-[11px] uppercase tracking-widest text-gold mb-4 flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-gold"></span>
+              GDA Media Desk
+            </div>
+            <ul className="space-y-4">
+              {[
+                { t: 'Press Kit 2026', d: 'Brand assets' },
+                { t: 'Faculty Blog', d: 'Deep dives' },
+                { t: 'Impact Reports', d: '2025 - 2026' }
+              ].map((res, i) => (
+                <li key={i} className="group cursor-pointer">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="font-syne font-bold text-[13px] group-hover:text-gold transition-colors">{res.t}</div>
+                      <div className="text-[10px] text-text-muted">{res.d}</div>
+                    </div>
+                    <span className="text-text-dim text-xs group-hover:translate-x-1 transition-transform">→</span>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+        </div>
 
         {/* Categories */}
         <motion.div 

@@ -4,10 +4,35 @@ export function Funding({ onOpenModal, editMode }: { onOpenModal: (id: string) =
   return (
     <section id="funding" className="bg-bg border-t border-border-custom">
       <div className="section-inner">
-        <div className="max-w-[540px] mb-14">
-          <div className="section-label">Financial Aid & Funding</div>
-          <h2 className="section-title animate-fadeUp">Cost should never be<br />the barrier to <em className="italic font-light font-dm-sans text-gold">greatness.</em></h2>
-          <p className="section-sub animate-fadeUp delay-100">GDA programmes can be fully funded through SETA skills levies, employer training budgets, or our flexible payment plans. Every option, explained clearly.</p>
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-10 lg:gap-16 mb-14 items-center">
+          <div className="max-w-[540px]">
+            <div className="section-label">Financial Aid & Funding</div>
+            <h2 className="section-title animate-fadeUp">Cost should never be<br />the barrier to <em className="italic font-light font-dm-sans text-gold">greatness.</em></h2>
+            <p className="section-sub animate-fadeUp delay-100">GDA programmes can be fully funded through SETA skills levies, employer training budgets, or our flexible payment plans. Every option, explained clearly.</p>
+          </div>
+          <div className="bg-card border border-border-custom rounded-2xl p-6 animate-fadeUp delay-200">
+            <div className="font-syne font-bold text-[11px] uppercase tracking-widest text-gold mb-4 flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-gold"></span>
+              Top Resources
+            </div>
+            <ul className="space-y-3">
+              {[
+                { t: '2026 Prospectus', d: 'Full fee breakdown' },
+                { t: 'SETA Funding Guide', d: 'Step-by-step PDF' },
+                { t: 'ISA Agreement Template', d: 'Terms & conditions' }
+              ].map((res, i) => (
+                <li key={i} className="group cursor-pointer">
+                  <div className="flex items-start gap-3">
+                    <span className="font-dm-mono text-[10px] text-text-dim mt-0.5">0{i+1}</span>
+                    <div>
+                      <div className="font-syne font-bold text-[13px] group-hover:text-gold transition-colors">{res.t}</div>
+                      <div className="text-[10px] text-text-muted">{res.d}</div>
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-border-custom border border-border-custom rounded-3xl overflow-hidden mb-8 animate-fadeUp">
@@ -124,10 +149,35 @@ export function FAQ({ editMode }: { editMode?: boolean }) {
   return (
     <section id="faq" className="bg-bg2 border-t border-border-custom">
       <div className="section-inner">
-        <div className="max-w-[540px] mb-14">
-          <div className="section-label">Frequently Asked Questions</div>
-          <h2 className="section-title animate-fadeUp">Every question,<br />answered honestly.</h2>
-          <p className="section-sub animate-fadeUp delay-100">Thousands of admissions queries answered — here are the ones that matter most, with real answers, not marketing copy.</p>
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-10 lg:gap-16 mb-14 items-center">
+          <div className="max-w-[540px]">
+            <div className="section-label">Frequently Asked Questions</div>
+            <h2 className="section-title animate-fadeUp">Every question,<br />answered honestly.</h2>
+            <p className="section-sub animate-fadeUp delay-100">Thousands of admissions queries answered — here are the ones that matter most, with real answers, not marketing copy.</p>
+          </div>
+          <div className="bg-surface border border-border-custom rounded-2xl p-6 animate-fadeUp delay-200">
+            <div className="font-syne font-bold text-[11px] uppercase tracking-widest text-emerald mb-4 flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald"></span>
+              Quick Help
+            </div>
+            <ul className="space-y-3">
+              {[
+                { t: 'WhatsApp Admissions', d: 'Instant chat' },
+                { t: 'Schedule a Call', d: '15-min discovery' },
+                { t: 'Student Handbook', d: 'Policy & rules' }
+              ].map((res, i) => (
+                <li key={i} className="group cursor-pointer">
+                  <div className="flex items-start gap-3">
+                    <span className="font-dm-mono text-[10px] text-text-dim mt-0.5">→</span>
+                    <div>
+                      <div className="font-syne font-bold text-[13px] group-hover:text-emerald transition-colors">{res.t}</div>
+                      <div className="text-[10px] text-text-muted">{res.d}</div>
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
 
         <div className="relative mb-9 animate-fadeUp">
