@@ -5,10 +5,11 @@ import { useAuth } from '../lib/auth';
 interface ModalsProps {
   activeModal: string | null;
   onClose: () => void;
+  onSwitchModal?: (id: string) => void;
   onLoginSuccess?: (role: string) => void;
 }
 
-export function Modals({ activeModal, onClose, onLoginSuccess }: ModalsProps) {
+export function Modals({ activeModal, onClose, onSwitchModal, onLoginSuccess }: ModalsProps) {
   const { user, signOut } = useAuth();
   const [studentTab, setStudentTab] = useState('login');
   const [adminTab, setAdminTab] = useState('login');
@@ -94,6 +95,15 @@ export function Modals({ activeModal, onClose, onLoginSuccess }: ModalsProps) {
   const handleIndSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!indForm.first || !indForm.email) return;
+
+    // 0. DOB Validation (No future dates)
+    const dobDate = new Date(indForm.dob);
+    const today = new Date();
+    if (dobDate > today) {
+      alert('Error: Date of Birth cannot be in the future.');
+      return;
+    }
+
     setIsSubmitting(true);
     setDuplicateWarning('');
     try {
@@ -387,7 +397,7 @@ export function Modals({ activeModal, onClose, onLoginSuccess }: ModalsProps) {
                   <button type="submit" disabled={isSubmitting} className="btn btn-sky w-full py-3.5 justify-center mt-2">
                     {isSubmitting ? 'Signing In...' : 'Access My Portal →'}
                   </button>
-                  <div className="text-center mt-3.5 text-[11px] text-text-muted">New student? <a className="text-gold no-underline cursor-pointer hover:underline" onClick={() => setApplyTab('ind')}>Apply for a programme</a></div>
+                  <div className="text-center mt-3.5 text-[11px] text-text-muted">New student? <a className="text-gold no-underline cursor-pointer hover:underline" onClick={() => onSwitchModal?.('apply')}>Apply for a programme</a></div>
                 </form>
               ) : (
                 <form className="flex flex-col gap-4" onSubmit={handleForgotPassword}>
@@ -606,7 +616,14 @@ export function Modals({ activeModal, onClose, onLoginSuccess }: ModalsProps) {
                     <div className="grid grid-cols-2 gap-3">
                       <div className="form-group">
                         <label className="block font-dm-mono text-[9px] tracking-[0.15em] uppercase text-text-muted mb-1.75">Date of Birth <span className="text-coral">*</span></label>
-                        <input type="date" className="w-full bg-surface border border-border-custom rounded-sm p-2.75 px-3.5 font-dm-sans text-[13px] text-text-custom outline-none focus:border-gold/40 transition-all" value={indForm.dob} onChange={e => setIndForm({...indForm, dob: e.target.value})} required />
+                        <input 
+                          type="date" 
+                          className="w-full bg-surface border border-border-custom rounded-sm p-2.75 px-3.5 font-dm-sans text-[13px] text-text-custom outline-none focus:border-gold/40 transition-all" 
+                          value={indForm.dob} 
+                          onChange={e => setIndForm({...indForm, dob: e.target.value})} 
+                          max={new Date().toISOString().split('T')[0]}
+                          required 
+                        />
                       </div>
                       <div className="form-group">
                         <label className="block font-dm-mono text-[9px] tracking-[0.15em] uppercase text-text-muted mb-1.75">Gender <span className="text-coral">*</span></label>

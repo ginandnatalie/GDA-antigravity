@@ -216,6 +216,7 @@ function AppContent() {
       <Modals 
         activeModal={activeModal} 
         onClose={closeModal} 
+        onSwitchModal={(id) => setActiveModal(id)}
         onLoginSuccess={(role) => {
           navigate(role === 'admin' ? '/admin' : '/portal');
         }} 
