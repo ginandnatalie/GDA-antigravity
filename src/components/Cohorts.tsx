@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { supabase } from '../lib/supabase';
 import SharedAdmissionForm from './SharedAdmissionForm';
 
-export function Cohorts({ onOpenModal }: { onOpenModal: (id: string) => void }) {
+export function Cohorts({ onOpenModal, editMode }: { onOpenModal: (id: string) => void, editMode?: boolean }) {
   return (
     <section id="cohorts" className="bg-bg2 border-t border-border-custom">
       <div className="section-inner">
