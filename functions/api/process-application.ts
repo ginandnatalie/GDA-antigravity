@@ -61,8 +61,8 @@ export async function onRequestPost(context) {
         await supabase.auth.admin.inviteUserByEmail(email.trim().toLowerCase(), {
           data: { full_name: name, manual_otp: manualOtp },
           redirectTo: `${origin}/verify`,
-          // IMPORTANT: Check if skip_invitation is supported in this environment
-          // options: { skip_invitation: true } // Some versions use this
+          // GOTRUE flag to skip the system invitation email
+          skipInvitation: true 
         });
 
         // Store the manual OTP locally for the email template
@@ -73,9 +73,9 @@ export async function onRequestPost(context) {
       }
     }
     
-    // 2. Prepare Receipt Confirmation Email
+    // 2. Prepare ACTIVATION Email (Email #1)
     const subject = isIndividual 
-      ? `Activate Your Ginashe Student Account: ${program}`
+      ? `ACTION REQUIRED: Activate Your Academy Account`
       : `Enquiry Received: ${type === 'organisation' ? 'Organisation' : 'Partnership'} - Ginashe Digital Academy`;
 
     const messageHtml = isIndividual ? `
@@ -85,10 +85,10 @@ export async function onRequestPost(context) {
         </div>
         
         <div style="background-color: #11141d; border: 1px solid #1e2330; border-radius: 12px; padding: 32px; margin-bottom: 24px;">
-          <h2 style="color: #D4AF37; font-size: 24px; font-weight: 800; margin-top: 0; margin-bottom: 16px; text-align: center;">Welcome to the Academy</h2>
+          <h2 style="color: #D4AF37; font-size: 24px; font-weight: 800; margin-top: 0; margin-bottom: 16px; text-align: center;">Activate Your Account</h2>
           <p style="font-size: 16px; margin-bottom: 24px;">Hi ${name},</p>
           <p style="line-height: 1.7; font-size: 15px; color: #d1d5db; margin-bottom: 24px;">
-            Your application for the <strong>${program}</strong> has been received! We are excited to have you join our digital ecosystem.
+            Thank you for applying to **Ginashe Digital Academy**. To begin your admission process and access your portal, please verify your account using the code below.
           </p>
 
           ${invitationLink ? `
@@ -98,28 +98,28 @@ export async function onRequestPost(context) {
             <p style="margin: 0 0 24px 0; line-height: 1.6; font-size: 14px; color: #d1d5db;">
               Enter this 6-digit code on the Academy activation screen to secure your account and set your password.
             </p>
-            <a href="${origin}/verify?email=${encodeURIComponent(email)}" style="display: inline-block; padding: 14px 32px; background-color: #D4AF37; color: #080b12; text-decoration: none; border-radius: 8px; font-weight: 900; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 10px 20px rgba(212,175,55,0.2);">Return to Activation Screen →</a>
+            <a href="${origin}/verify?email=${encodeURIComponent(email)}" style="display: inline-block; padding: 14px 32px; background-color: #D4AF37; color: #080b12; text-decoration: none; border-radius: 8px; font-weight: 900; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 10px 20px rgba(212,175,55,0.2);">Verify Now →</a>
           </div>
           ` : `
           <div style="background-color: #1a1a1c; padding: 24px; border-radius: 8px; border-left: 4px solid #D4AF37; margin: 32px 0;">
             <p style="margin: 0; font-weight: 800; color: #D4AF37; text-transform: uppercase; font-size: 12px; letter-spacing: 1px;">Portal Access:</p>
             <p style="margin: 12px 0 0 0; line-height: 1.6; font-size: 14px; color: #f0f0f0;">
-              You already have an active account. Please <a href="${origin}/portal" style="color: #D4AF37; text-decoration: underline;">sign in here</a> to view your application status.
+              Your account is already active. Please <a href="${origin}/portal" style="color: #D4AF37; text-decoration: underline;">sign in here</a> to check your application status.
             </p>
           </div>
           `}
           
-          <p style="line-height: 1.7; font-size: 14px; color: #9ca3af;">
-            Our admissions team will review your full profile and credentials within 2 business days. In the meantime, you can explore the portal.
+          <p style="line-height: 1.7; font-size: 14px; color: #9ca3af; text-align: center;">
+            This security code is required to safely initialize your student credentials.
           </p>
           
-          <p style="margin-top: 32px; font-weight: 600; color: #f0f0f0;">
+          <p style="margin-top: 32px; font-weight: 600; color: #f0f0f0; text-align: center;">
             Excellence through innovation,<br>
             <span style="color: #D4AF37;">GDA Admissions Team</span>
           </p>
         </div>
         
-        <div style="text-align: center; padding-top: 24px; border-top: 1px solid #1e2330;">
+        <div style="text-align: center; padding-top: 24px; border-top: 1px solid #1e2330; font-size: 12px; color: #6b7280;">
             Ginashe Digital Academy &copy; 2026. All rights reserved.
         </div>
       </div>

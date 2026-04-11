@@ -484,6 +484,33 @@ export function AdminDashboard() {
                 </div>
               </div>
 
+              {/* Address Data */}
+              <div className="pt-4 border-t border-border-custom">
+                <label className="block font-dm-mono text-[9px] uppercase text-text-dim mb-2">Residential Address</label>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="col-span-2">
+                    <label className="block font-dm-mono text-[8px] uppercase text-text-muted mb-0.5">Street Address</label>
+                    <p className="text-[13px]">{selectedApp.address_line1 || 'N/A'}</p>
+                  </div>
+                  <div>
+                    <label className="block font-dm-mono text-[8px] uppercase text-text-muted mb-0.5">City</label>
+                    <p className="text-[13px]">{selectedApp.city || 'N/A'}</p>
+                  </div>
+                  <div>
+                    <label className="block font-dm-mono text-[8px] uppercase text-text-muted mb-0.5">Province</label>
+                    <p className="text-[13px]">{selectedApp.province || 'N/A'}</p>
+                  </div>
+                  <div>
+                    <label className="block font-dm-mono text-[8px] uppercase text-text-muted mb-0.5">Postcode</label>
+                    <p className="text-[13px]">{selectedApp.postal_code || 'N/A'}</p>
+                  </div>
+                  <div>
+                    <label className="block font-dm-mono text-[8px] uppercase text-text-muted mb-0.5">Country</label>
+                    <p className="text-[13px]">{selectedApp.country || 'N/A'}</p>
+                  </div>
+                </div>
+              </div>
+
               {selectedApp.type === 'individual' && (
                 <>
                   <div>
@@ -1754,8 +1781,12 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
                 { label: 'Date of Birth', key: 'date_of_birth', type: 'date' },
                 { label: 'Gender', key: 'gender', type: 'select', options: ['Male', 'Female', 'Non-binary', 'Prefer not to say'] },
                 { label: 'Nationality', key: 'nationality', placeholder: 'South Africa' },
+                { label: 'Address Line 1', key: 'address_line1', placeholder: 'Street address' },
+                { label: 'City', key: 'city', placeholder: 'City' },
+                { label: 'Province', key: 'province', type: 'select', options: ['Gauteng', 'Western Cape', 'KwaZulu-Natal', 'Eastern Cape', 'Free State', 'Limpopo', 'Mpumalanga', 'North West', 'Northern Cape'] },
+                { label: 'Postal Code', key: 'postal_code', placeholder: '0000' },
               ].map(field => (
-                <div key={field.key}>
+                <div key={field.key} className={field.key === 'address_line1' ? 'col-span-2' : ''}>
                   <label className="block font-dm-mono text-[9px] uppercase text-text-dim mb-1">{field.label}</label>
                   {editingProfile ? (
                     field.type === 'select' ? (
