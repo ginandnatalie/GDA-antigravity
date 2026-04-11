@@ -446,6 +446,8 @@ export function AdminDashboard() {
                 { id: 'overview', label: 'Command Center', icon: BarChart3 },
                 { id: 'applications', label: 'Admissions', icon: FileText },
                 { id: 'courses', label: 'Curriculum', icon: BookOpen },
+                { id: 'academic', label: 'Academic Mgt', icon: Star },
+                { id: 'broadcasts', label: 'Broadcast Hub', icon: Zap },
                 { id: 'progress', label: 'Student Success', icon: Zap },
                 { id: 'finances', label: 'Financials', icon: CreditCard },
                 { id: 'news', label: 'Content CMS', icon: Layout },
@@ -545,6 +547,119 @@ export function AdminDashboard() {
               />
             ) : activeTab === 'courses' ? (
               <CourseManager courses={courses} onRefresh={fetchCourses} onEditContent={setEditingCourse} />
+            ) : activeTab === 'broadcasts' ? (
+              <div className="space-y-8 animate-fade">
+                 <div className="bg-card border border-border-custom rounded-3xl p-10">
+                    <h3 className="font-syne font-bold text-2xl mb-6">Create New Broadcast</h3>
+                    <div className="space-y-6">
+                       <div className="grid grid-cols-2 gap-6">
+                          <div className="space-y-2">
+                             <label className="text-[10px] font-dm-mono uppercase text-text-muted tracking-widest">Broadcast Title</label>
+                             <input id="bc-title" className="w-full bg-bg border border-border-custom rounded-xl p-4 text-sm" placeholder="Institutional Update..." />
+                          </div>
+                          <div className="space-y-2">
+                             <label className="text-[10px] font-dm-mono uppercase text-text-muted tracking-widest">Broadcast Type</label>
+                             <select id="bc-type" className="w-full bg-bg border border-border-custom rounded-xl p-4 text-sm appearance-none">
+                                <option value="info">General Information</option>
+                                <option value="warning">Policy Warning</option>
+                                <option value="urgent">Urgent Alert</option>
+                             </select>
+                          </div>
+                       </div>
+                       <div className="space-y-2">
+                          <label className="text-[10px] font-dm-mono uppercase text-text-muted tracking-widest">Message Content</label>
+                          <textarea id="bc-content" className="w-full bg-bg border border-border-custom rounded-xl p-4 text-sm h-48" placeholder="Detailed message for all students..." />
+                       </div>
+                       <div className="flex justify-end gap-3">
+                          <button 
+                            onClick={async () => {
+                               const title = (document.getElementById('bc-title') as HTMLInputElement).value;
+                               const type = (document.getElementById('bc-type') as HTMLSelectElement).value;
+                               const content = (document.getElementById('bc-content') as HTMLTextAreaElement).value;
+                               if (!title || !content) { alert('Title and content are required'); return; }
+                               
+                               const { error } = await supabase.from('announcements').insert({
+                                 title, content, type, priority: type === 'urgent' ? 'high' : 'normal', created_by: user?.id
+                               });
+                               if (error) alert(error.message);
+                               else {
+                                 alert('Broadcast sent successfully!');
+                                 (document.getElementById('bc-title') as HTMLInputElement).value = '';
+                                 (document.getElementById('bc-content') as HTMLTextAreaElement).value = '';
+                               }
+                            }}
+                            className="btn btn-gold px-12 py-4"
+                          >📡 Broadcast to Academy</button>
+                       </div>
+                    </div>
+                 </div>
+              </div>
+            ) : activeTab === 'academic' ? (
+              <div className="space-y-8 animate-fade">
+                 <div className="bg-card border border-border-custom rounded-3xl p-10">
+                    <h3 className="font-syne font-bold text-2xl mb-6">Create Academic Item</h3>
+                    <div className="space-y-6">
+                       <div className="grid grid-cols-2 gap-6">
+                          <div className="space-y-2">
+                             <label className="text-[10px] font-dm-mono uppercase text-text-muted tracking-widest">Linked Course</label>
+                             <select id="ac-course" className="w-full bg-bg border border-border-custom rounded-xl p-4 text-sm">
+                                <option value="">Select Course...</option>
+                                {courses.map((c: any) => <option key={c.id} value={c.id}>{c.title}</option>)}
+                             </select>
+                          </div>
+                          <div className="space-y-2">
+                             <label className="text-[10px] font-dm-mono uppercase text-text-muted tracking-widest">Item Type</label>
+                             <select id="ac-type" className="w-full bg-bg border border-border-custom rounded-xl p-4 text-sm">
+                                <option value="assignment">Assignment</option>
+                                <option value="assessment">Assessment</option>
+                                <option value="exam">Official Exam</option>
+                                <option value="capstone">Capstone Project</option>
+                             </select>
+                          </div>
+                       </div>
+                       <div className="grid grid-cols-2 gap-6">
+                          <div className="space-y-2">
+                             <label className="text-[10px] font-dm-mono uppercase text-text-muted tracking-widest">Item Title</label>
+                             <input id="ac-title" className="w-full bg-bg border border-border-custom rounded-xl p-4 text-sm" placeholder="Module 1 Mastery..." />
+                          </div>
+                          <div className="space-y-2">
+                             <label className="text-[10px] font-dm-mono uppercase text-text-muted tracking-widest">Total Marks</label>
+                             <input id="ac-marks" type="number" className="w-full bg-bg border border-border-custom rounded-xl p-4 text-sm" defaultValue="100" />
+                          </div>
+                       </div>
+                       <div className="space-y-2">
+                          <label className="text-[10px] font-dm-mono uppercase text-text-muted tracking-widest">Due Date</label>
+                          <input id="ac-due" type="date" className="w-full bg-bg border border-border-custom rounded-xl p-4 text-sm" />
+                       </div>
+                       <div className="space-y-2">
+                          <label className="text-[10px] font-dm-mono uppercase text-text-muted tracking-widest">Description / Specs</label>
+                          <textarea id="ac-desc" className="w-full bg-bg border border-border-custom rounded-xl p-4 text-sm h-32" />
+                       </div>
+                       <div className="flex justify-end">
+                          <button 
+                            onClick={async () => {
+                               const course_id = (document.getElementById('ac-course') as HTMLSelectElement).value;
+                               const type = (document.getElementById('ac-type') as HTMLSelectElement).value;
+                               const title = (document.getElementById('ac-title') as HTMLInputElement).value;
+                               const total_marks = parseInt((document.getElementById('ac-marks') as HTMLInputElement).value);
+                               const due_date = (document.getElementById('ac-due') as HTMLInputElement).value;
+                               const description = (document.getElementById('ac-desc') as HTMLTextAreaElement).value;
+
+                               const { error } = await supabase.from('assessments').insert({
+                                 course_id, type, title, total_marks, due_date: due_date || null, description
+                               });
+                               if (error) alert(error.message);
+                               else {
+                                 alert('Academic item created!');
+                                 (document.getElementById('ac-title') as HTMLInputElement).value = '';
+                               }
+                            }}
+                            className="btn btn-gold px-12 py-4"
+                          >💾 Save Academic Item</button>
+                       </div>
+                    </div>
+                 </div>
+              </div>
             ) : activeTab === 'news' ? (
               <NewsManager />
             ) : activeTab === 'events' ? (
@@ -1667,6 +1782,15 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
   const [editingProfile, setEditingProfile] = useState(false);
   const [profileForm, setProfileForm] = useState<any>({});
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  
+  // New State for LMS Features
+  const [courses, setCourses] = useState<any[]>([]);
+  const [announcements, setAnnouncements] = useState<any[]>([]);
+  const [assessments, setAssessments] = useState<any[]>([]);
+  const [submissions, setSubmissions] = useState<any[]>([]);
+  const [applyingCourse, setApplyingCourse] = useState<any>(null);
+  const [academicTab, setAcademicTab] = useState<'lessons' | 'assignments' | 'assessments' | 'exams' | 'capstone'>('lessons');
+  const [isApplyDropdownOpen, setIsApplyDropdownOpen] = useState(false);
 
   useEffect(() => {
     if (!user) return;
@@ -1726,6 +1850,17 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
       const { data: lessonProgress } = await supabase.from('lesson_progress').select('*').eq('user_id', user?.id);
       const { data: quizAttempts } = await supabase.from('quiz_attempts').select('*').eq('user_id', user?.id).eq('passed', true);
       const { data: modules } = await supabase.from('modules').select('*, lessons(*), quizzes(*)');
+
+      // New data fetches
+      const { data: allCourses } = await supabase.from('courses').select('*').eq('is_active', true);
+      const { data: allAnnouncements } = await supabase.from('announcements').select('*').eq('is_active', true).order('created_at', { ascending: false });
+      const { data: allAssessments } = await supabase.from('assessments').select('*');
+      const { data: allSubmissions } = await supabase.from('assessment_submissions').select('*').eq('user_id', user?.id);
+
+      setCourses(allCourses || []);
+      setAnnouncements(allAnnouncements || []);
+      setAssessments(allAssessments || []);
+      setSubmissions(allSubmissions || []);
 
       const progressMap: Record<string, number> = {};
       enrolls?.forEach(enroll => {
@@ -1817,6 +1952,7 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
               {[
                 { id: 'dashboard', label: 'Overview', icon: BarChart3 },
                 { id: 'courses', label: 'My Learning', icon: BookOpen },
+                { id: 'announcements', label: 'Announcements', icon: Zap }, // Using Zap for broadcasts
                 { id: 'finances', label: 'Billing', icon: CreditCard },
                 { id: 'applications', label: 'Admissions', icon: FileText },
                 { id: 'profile', label: 'Profile', icon: User },
@@ -1883,8 +2019,7 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
               Ginashe Digital Academy &bull; Secure Student Environment
             </p>
           </div>
-          
-          <div className="flex items-center gap-4 bg-surface/50 border border-border-custom p-2 rounded-2xl backdrop-blur-md animate-fadeLeft">
+    <div className="flex items-center gap-4 bg-surface/50 border border-border-custom p-2 rounded-2xl backdrop-blur-md animate-fadeLeft">
             <div className="text-right px-2">
               <p className="text-[10px] text-text-dim font-dm-mono uppercase">System Status</p>
               <p className="text-xs font-bold text-emerald flex items-center justify-end gap-1.5">
@@ -2031,62 +2166,130 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
         {/* ─── MY COURSES CONTENT ─── */}
         {activeSection === 'courses' && (
           <div className="space-y-10">
-            {enrollments.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {enrollments.map(enroll => (
-                  <div key={enroll.id} className="bg-card border border-border-custom rounded-[2rem] overflow-hidden group hover:border-gold/40 transition-all duration-500">
-                    <div className="h-48 bg-navy p-10 flex items-center justify-center relative overflow-hidden">
-                      <div className="absolute inset-0 bg-gold/5 rotate-12 group-hover:rotate-6 transition-transform duration-700" />
-                      <div className="text-6xl z-10 group-hover:scale-110 transition-transform duration-500">{enroll.courses?.thumbnail_url || '📘'}</div>
-                    </div>
-                    <div className="p-8">
-                      <div className="flex justify-between items-start mb-6">
-                        <div>
-                          <h3 className="font-syne font-bold text-xl mb-1 group-hover:text-gold transition-colors">{enroll.courses?.title}</h3>
-                          <p className="text-[10px] text-text-dim uppercase font-dm-mono">Enrolled {new Date(enroll.enrolled_at || Date.now()).toLocaleDateString()}</p>
+            {/* Academic Tabs */}
+            <div className="flex flex-wrap gap-2 border-b border-border-custom pb-4">
+              {[
+                { id: 'modules', label: 'Lessons', icon: BookOpen },
+                { id: 'assignments', label: 'Assignments', icon: Briefcase },
+                { id: 'assessments', label: 'Assessments', icon: Star },
+                { id: 'exams', label: 'Exams', icon: GraduationCap },
+                { id: 'capstone', label: 'Capstone', icon: ShieldCheck }
+              ].map(tab => (
+                <button
+                  key={tab.id}
+                  onClick={() => setAcademicTab(tab.id as any)}
+                  className={`flex items-center gap-2 px-6 py-3 rounded-xl font-dm-mono text-[10px] uppercase tracking-widest transition-all ${
+                    academicTab === tab.id 
+                      ? 'bg-gold/10 text-gold border border-gold/20' 
+                      : 'text-text-muted hover:text-text-custom hover:bg-white/5 border border-transparent'
+                  }`}
+                >
+                  <tab.icon className="w-3.5 h-3.5" />
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+
+            {academicTab === 'modules' && (
+              <div className="space-y-10">
+                {enrollments.length > 0 ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    {enrollments.map(enroll => (
+                      <div key={enroll.id} className="bg-card border border-border-custom rounded-[2rem] overflow-hidden group hover:border-gold/40 transition-all duration-500">
+                        <div className="h-48 bg-navy p-10 flex items-center justify-center relative overflow-hidden">
+                          <div className="absolute inset-0 bg-gold/5 rotate-12 group-hover:rotate-6 transition-transform duration-700" />
+                          <div className="text-6xl z-10 group-hover:scale-110 transition-transform duration-500">{enroll.courses?.thumbnail_url || '📘'}</div>
                         </div>
-                        {progress[enroll.course_id] === 100 && (
-                          <div className="p-2 bg-emerald/10 text-emerald rounded-lg"><ShieldCheck className="w-5 h-5" /></div>
-                        )}
-                      </div>
-                      
-                      <div className="space-y-6">
-                        <div className="space-y-3">
-                          <div className="flex justify-between text-[10px] font-dm-mono uppercase text-text-muted">
-                            <span>Completion</span>
-                            <span className="text-gold font-bold">{progress[enroll.course_id] || 0}%</span>
+                        <div className="p-8">
+                          <div className="flex justify-between items-start mb-6">
+                            <div>
+                              <h3 className="font-syne font-bold text-xl mb-1 group-hover:text-gold transition-colors">{enroll.courses?.title}</h3>
+                              <p className="text-[10px] text-text-dim uppercase font-dm-mono">Enrolled {new Date(enroll.enrolled_at || Date.now()).toLocaleDateString()}</p>
+                            </div>
+                            {progress[enroll.course_id] === 100 && (
+                              <div className="p-2 bg-emerald/10 text-emerald rounded-lg"><ShieldCheck className="w-5 h-5" /></div>
+                            )}
                           </div>
-                          <div className="h-1.5 bg-surface rounded-full overflow-hidden p-0.5 border border-border-custom">
-                            <div className="h-full bg-gradient-to-r from-gold to-gold-bright rounded-full transition-all duration-1000" style={{ width: `${progress[enroll.course_id] || 0}%` }} />
+                          
+                          <div className="space-y-6">
+                            <div className="space-y-3">
+                              <div className="flex justify-between text-[10px] font-dm-mono uppercase text-text-muted">
+                                <span>Completion</span>
+                                <span className="text-gold font-bold">{progress[enroll.course_id] || 0}%</span>
+                              </div>
+                              <div className="h-1.5 bg-surface rounded-full overflow-hidden p-0.5 border border-border-custom">
+                                <div className="h-full bg-gradient-to-r from-gold to-gold-bright rounded-full transition-all duration-1000" style={{ width: `${progress[enroll.course_id] || 0}%` }} />
+                              </div>
+                            </div>
+                            
+                            <div className="flex gap-3">
+                              <button onClick={() => onStartCourse(enroll.course_id)} className="flex-1 btn btn-gold py-4">
+                                {progress[enroll.course_id] > 0 ? 'Resume Lesson' : 'Launch Course'}
+                              </button>
+                            </div>
                           </div>
                         </div>
-                        
-                        <div className="flex gap-3">
-                          <button onClick={() => onStartCourse(enroll.course_id)} className="flex-1 btn btn-gold py-4">
-                            {progress[enroll.course_id] > 0 ? 'Resume Lesson' : 'Launch Course'}
-                          </button>
-                          {progress[enroll.course_id] === 100 && (
-                            <button onClick={() => setShowCertificate({ course: enroll.courses, profile })} className="btn btn-outline px-4">
-                              <GraduationCap className="w-5 h-5" />
-                            </button>
-                          )}
-                        </div>
                       </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="bg-card border border-border-custom border-dashed rounded-[3rem] p-20 text-center animate-pulse">
+                    <div className="text-5xl mb-6">🔭</div>
+                    <h3 className="font-syne font-extrabold text-2xl mb-4">No Active Classrooms</h3>
+                    <p className="text-text-muted max-w-sm mx-auto mb-10 text-sm leading-relaxed">
+                      Your journey hasn't started yet. Enroll in one of our professional certifications to begin.
+                    </p>
+                    <div className="flex justify-center gap-4">
+                      <a href="/admissions" className="btn btn-gold px-8 py-3">Browse Catalogue</a>
                     </div>
                   </div>
-                ))}
+                )}
               </div>
-            ) : (
-              <div className="bg-card border border-border-custom border-dashed rounded-[3rem] p-20 text-center animate-pulse">
-                <div className="text-5xl mb-6">🔭</div>
-                <h3 className="font-syne font-extrabold text-2xl mb-4">No Active Classrooms</h3>
-                <p className="text-text-muted max-w-sm mx-auto mb-10 text-sm leading-relaxed">
-                  Your journey hasn't started yet. Enroll in one of our professional certifications to begin.
-                </p>
-                <div className="flex justify-center gap-4">
-                  <a href="/admissions" className="btn btn-gold px-8 py-3">Browse Catalogue</a>
-                  <button onClick={() => setActiveSection('applications')} className="btn btn-outline">Check Status</button>
-                </div>
+            )}
+
+            { academicTab !== 'modules' && (
+              <div className="space-y-6">
+                {assessments.filter(a => a.type === academicTab.slice(0, -1) || a.type === academicTab).length > 0 ? (
+                  <div className="grid grid-cols-1 gap-4">
+                    {assessments
+                      .filter(a => a.type === academicTab.slice(0, -1) || a.type === academicTab)
+                      .map(assessment => {
+                        const sub = submissions.find(s => s.assessment_id === assessment.id);
+                        return (
+                          <div key={assessment.id} className="bg-card border border-border-custom rounded-2xl p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 hover:border-gold/20 transition-all">
+                             <div>
+                               <div className="flex items-center gap-2 mb-1">
+                                 <span className="text-[9px] font-dm-mono uppercase text-gold bg-gold/10 px-2 py-0.5 rounded border border-gold/10">Required</span>
+                                 <h4 className="font-bold text-lg">{assessment.title}</h4>
+                               </div>
+                               <p className="text-xs text-text-muted max-w-lg mb-2">{assessment.description}</p>
+                               <div className="flex items-center gap-4 text-[10px] text-text-dim uppercase font-dm-mono">
+                                 <span>Due: {assessment.due_date ? new Date(assessment.due_date).toLocaleDateString() : 'N/A'}</span>
+                                 <span>Points: {assessment.total_marks || 100}</span>
+                               </div>
+                             </div>
+                             <div className="flex flex-col items-end gap-2 shrink-0">
+                               {sub ? (
+                                 <div className={`px-4 py-1.5 rounded-full text-[10px] font-dm-mono uppercase border tracking-widest ${
+                                   sub.status === 'graded' ? 'border-emerald/20 text-emerald bg-emerald/5' : 'border-gold/20 text-gold bg-gold/5'
+                                 }`}>
+                                   {sub.status === 'graded' ? `Graded: ${sub.marks_obtained}/${assessment.total_marks}` : 'Submitted'}
+                                 </div>
+                               ) : (
+                                 <button className="btn btn-gold py-2 px-6 text-xs">+ Submit Work</button>
+                               )}
+                             </div>
+                          </div>
+                        );
+                      })
+                    }
+                  </div>
+                ) : (
+                  <div className="p-20 text-center bg-surface/10 rounded-3xl border border-white/5">
+                    <div className="text-4xl mb-4">📂</div>
+                    <p className="text-text-dim italic text-sm">No {academicTab} items published for your current enrollment yet.</p>
+                  </div>
+                )}
               </div>
             )}
           </div>
@@ -2098,51 +2301,147 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
         {/* ─── APPLICATIONS CONTENT ─── */}
         {activeSection === 'applications' && (
           <div className="space-y-6">
-            <div className="bg-card border border-border-custom rounded-3xl overflow-hidden">
-               <div className="bg-surface/30 p-6 border-b border-border-custom flex justify-between items-center">
-                  <h3 className="font-syne font-bold text-lg">My Applications</h3>
-                  <button className="text-[10px] text-gold font-dm-mono uppercase tracking-widest hover:underline">+ Submit New</button>
+            <div className="bg-card border border-border-custom rounded-3xl overflow-hidden shadow-xl">
+               <div className="bg-surface/30 p-8 border-b border-border-custom flex justify-between items-center">
+                  <div>
+                    <h3 className="font-syne font-bold text-2xl">Academic Admissions</h3>
+                    <p className="text-[10px] text-text-muted font-dm-mono uppercase mt-1">Intake Management & History</p>
+                  </div>
+                  
+                  {/* SMART DROPDOWN FOR SUBMIT NEW */}
+                  <div className="relative">
+                    <button 
+                      onClick={() => setIsApplyDropdownOpen(!isApplyDropdownOpen)}
+                      className="btn btn-gold px-6 py-3 flex items-center gap-2 group"
+                    >
+                      <Zap className={`w-4 h-4 transition-transform ${isApplyDropdownOpen ? 'rotate-12' : ''}`} />
+                      + Apply for New Course
+                    </button>
+                    
+                    {isApplyDropdownOpen && (
+                      <div className="absolute right-0 mt-3 w-72 bg-navy border border-gold/20 rounded-2xl shadow-2xl p-4 z-[60] animate-fadeUp">
+                        <div className="text-[10px] font-dm-mono text-gold uppercase tracking-[0.2em] mb-4 px-2">Available Certificates</div>
+                        <div className="space-y-1 max-h-64 overflow-y-auto custom-scrollbar">
+                          {courses
+                            .filter(course => !enrollments.some(e => e.course_id === course.id))
+                            .filter(course => !applications.some(a => a.program === course.title))
+                            .map(course => (
+                              <button
+                                key={course.id}
+                                onClick={() => {
+                                  setApplyingCourse(course);
+                                  setIsApplyDropdownOpen(false);
+                                }}
+                                className="w-full text-left p-3 hover:bg-gold/10 rounded-xl transition-all group/item"
+                              >
+                                <div className="font-bold text-sm group-hover/item:text-gold transition-colors">{course.title}</div>
+                                <div className="text-[9px] text-text-muted uppercase font-dm-mono mt-1">{course.category || 'Professional Certification'}</div>
+                              </button>
+                            ))
+                          }
+                          {courses.filter(course => !enrollments.some(e => e.course_id === course.id) && !applications.some(a => a.program === course.title)).length === 0 && (
+                            <div className="p-4 text-center text-text-muted text-xs italic">No new courses available to apply for at this time.</div>
+                          )}
+                        </div>
+                      </div>
+                    )}
+                  </div>
                </div>
-               <div className="divide-y divide-border-custom">
+               <div className="divide-y divide-border-custom bg-surface/10">
                 {applications.map(app => (
-                  <div key={app.id} className="p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 group hover:bg-white/2 transition-all">
-                    <div className="flex items-center gap-5">
-                      <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-2xl ${
-                        app.status === 'approved' ? 'bg-emerald/10 border border-emerald/20' : 'bg-gold/10 border border-gold/20'
+                  <div key={app.id} className="p-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 group hover:bg-white/2 transition-all">
+                    <div className="flex items-center gap-6">
+                      <div className={`w-16 h-16 rounded-[1.25rem] flex items-center justify-center text-3xl shadow-lg ${
+                        app.status === 'approved' ? 'bg-emerald/10 border border-emerald/20 text-emerald' : 
+                        app.status === 'rejected' ? 'bg-coral/10 border border-coral/20 text-coral' :
+                        'bg-gold/10 border border-gold/20 text-gold'
                       }`}>
                         {app.type === 'individual' ? '👤' : '🏢'}
                       </div>
                       <div>
-                        <h4 className="font-syne font-bold text-xl mb-1 group-hover:text-gold transition-colors">{app.program}</h4>
-                        <div className="flex items-center gap-3 font-dm-mono text-[10px] uppercase text-text-dim">
-                          <span>Ref: {app.id.slice(0, 8).toUpperCase()}</span>
+                        <h4 className="font-syne font-bold text-2xl mb-1 group-hover:text-gold transition-colors">{app.program}</h4>
+                        <div className="flex flex-wrap items-center gap-4 font-dm-mono text-[10px] uppercase text-text-dim">
+                          <span className="flex items-center gap-1.5"><ShieldCheck className="w-3 h-3" /> Ref: {app.id.slice(0, 8).toUpperCase()}</span>
                           <span className="w-1 h-1 rounded-full bg-border-custom" />
-                          <span>Submitted {new Date(app.created_at).toLocaleDateString()}</span>
+                          <span className="flex items-center gap-1.5"><Calendar className="w-3 h-3" /> Submitted {new Date(app.created_at).toLocaleDateString()}</span>
                         </div>
                       </div>
                     </div>
-                    <div className="flex flex-col items-end gap-2 text-right">
-                       <span className={`px-4 py-1.5 rounded-full text-[10px] font-dm-mono uppercase border tracking-widest ${
-                        app.status === 'approved' ? 'border-emerald/20 text-emerald bg-emerald-dim' :
-                        app.status === 'rejected' ? 'border-coral/20 text-coral bg-coral-dim' :
-                        'border-gold/20 text-gold bg-gold-dim'
+                    <div className="flex flex-col items-end gap-3 text-right">
+                       <span className={`px-5 py-2 rounded-full text-[10px] font-dm-mono uppercase border tracking-widest shadow-sm ${
+                        app.status === 'approved' ? 'border-emerald/20 text-emerald bg-emerald/5' :
+                        app.status === 'rejected' ? 'border-coral/20 text-coral bg-coral/5' :
+                        'border-gold/20 text-gold bg-gold/5'
                       }`}>
                         {app.status || 'Admissions Review'}
                       </span>
                       {app.student_number && (
-                        <p className="text-[12px] font-bold text-gold px-2">Assigned SN: {app.student_number}</p>
+                        <p className="text-[12px] font-extrabold text-gold px-2 bg-gold/10 rounded-lg py-1 border border-gold/20">Assigned Student ID: {app.student_number}</p>
                       )}
                     </div>
                   </div>
                 ))}
                 {applications.length === 0 && (
                   <div className="p-20 text-center">
-                    <div className="text-4xl mb-4">📝</div>
-                    <p className="text-text-muted text-sm italic">You haven't submitted any applications for the 2026 intake yet.</p>
+                    <div className="text-5xl mb-6">🖋️</div>
+                    <h4 className="font-syne font-bold text-xl mb-2">No Active Applications</h4>
+                    <p className="text-text-muted text-sm max-w-sm mx-auto">You haven't submitted any applications for the 2026 intake yet. Select a course from the dropdown above to begin.</p>
                   </div>
                 )}
                </div>
             </div>
+          </div>
+        )}
+
+        {/* ─── ANNOUNCEMENTS CONTENT ─── */}
+        {activeSection === 'announcements' && (
+          <div className="space-y-8 animate-fade">
+             <div className="bg-gradient-to-r from-navy to-surface border border-gold/20 rounded-[2.5rem] p-10 relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-gold/5 rounded-full blur-[80px]" />
+                <div className="relative z-10">
+                  <h3 className="font-syne font-extrabold text-3xl mb-2">Academy Broadcasts</h3>
+                  <p className="text-text-muted font-dm-mono text-xs uppercase tracking-widest">Global messages from institution staff</p>
+                </div>
+             </div>
+
+             <div className="grid grid-cols-1 gap-6">
+                {announcements.map(item => (
+                  <div key={item.id} className="bg-card border border-border-custom rounded-3xl p-8 hover:border-gold/30 transition-all group flex gap-8">
+                    <div className={`w-16 h-16 rounded-2xl flex items-center justify-center text-2xl shrink-0 shadow-inner ${
+                      item.type === 'urgent' ? 'bg-coral/10 text-coral border border-coral/20' :
+                      item.type === 'warning' ? 'bg-gold/10 text-gold border border-gold/20' :
+                      'bg-sky/10 text-sky border border-sky/20'
+                    }`}>
+                      {item.type === 'urgent' ? <Zap className="w-8 h-8" /> : <AlertCircle className="w-8 h-8" />}
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex justify-between items-start mb-4">
+                        <div>
+                          <div className="flex items-center gap-3 mb-2">
+                            <span className={`text-[9px] font-dm-mono uppercase px-2 py-0.5 rounded-md border ${
+                              item.type === 'urgent' ? 'border-coral/20 text-coral bg-coral/5' :
+                              'border-gold/20 text-gold bg-gold/5'
+                            }`}>{item.type} broadcast</span>
+                            <span className="text-[10px] text-text-dim flex items-center gap-1.5"><Clock className="w-3 h-3" /> {new Date(item.created_at).toLocaleString()}</span>
+                          </div>
+                          <h4 className="font-syne font-bold text-2xl mb-1 group-hover:text-gold transition-colors">{item.title}</h4>
+                        </div>
+                        {item.priority === 'high' && (
+                          <div className="px-3 py-1 bg-coral/10 text-coral text-[9px] font-dm-mono uppercase rounded-full border border-coral/20 animate-pulse">Priority High</div>
+                        )}
+                      </div>
+                      <div className="text-text-soft text-sm leading-relaxed prose prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: item.content }} />
+                    </div>
+                  </div>
+                ))}
+                {announcements.length === 0 && (
+                  <div className="bg-surface/20 border border-border-custom border-dashed rounded-[3rem] p-24 text-center">
+                    <div className="text-6xl mb-6">🔕</div>
+                    <h3 className="font-syne font-extrabold text-2xl mb-4 text-text-muted">No New Broadcasts</h3>
+                    <p className="text-text-dim max-w-xs mx-auto text-sm italic">All communications from the institution will appear here in real-time.</p>
+                  </div>
+                )}
+             </div>
           </div>
         )}
 
@@ -2421,6 +2720,89 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
              <button onClick={() => window.print()} className="btn bg-white text-black font-bold px-10 py-4 shadow-2xl hover:bg-gold transition-all flex items-center gap-3">
                <Zap className="w-5 h-5" /> Export to Digital PDF
              </button>
+          </div>
+        </div>
+      )}
+
+      {/* ─── QUICK APPLY MODAL ─── */}
+      {applyingCourse && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-navy/80 backdrop-blur-md animate-fade">
+          <div className="bg-bg border border-gold/20 rounded-[2.5rem] shadow-2xl max-w-2xl w-full p-8 md:p-12 relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-gold/5 rounded-full -mr-32 -mt-32 blur-[100px]" />
+            
+            <button onClick={() => setApplyingCourse(null)} className="absolute top-8 right-8 text-text-muted hover:text-white transition-colors">✕</button>
+
+            <div className="relative z-10 text-left">
+              <div className="inline-flex items-center gap-2 px-3 py-1 bg-gold/10 border border-gold/30 rounded-full text-gold text-[9px] uppercase font-dm-mono tracking-widest mb-6">
+                <Zap className="w-3 h-3 fill-gold" />
+                Intelligent Admission System
+              </div>
+
+              <h2 className="font-syne font-extrabold text-3xl mb-2">Apply for {applyingCourse.title}</h2>
+              <p className="text-text-muted text-sm mb-10 leading-relaxed">
+                We've pre-filled your application using your institutional profile. Verify your details before submitting.
+              </p>
+
+              <div className="space-y-6 mb-10">
+                <div className="grid grid-cols-2 gap-6 bg-surface/30 p-6 rounded-2xl border border-border-custom">
+                  <div>
+                    <label className="text-[9px] font-dm-mono uppercase text-text-dim tracking-widest block mb-1">Full Name</label>
+                    <div className="font-bold text-sm tracking-tight">{profile?.first_name} {profile?.last_name}</div>
+                  </div>
+                  <div>
+                    <label className="text-[9px] font-dm-mono uppercase text-text-dim tracking-widest block mb-1">Student ID</label>
+                    <div className="font-bold text-sm tracking-tight">{profile?.student_number || 'New Candidate'}</div>
+                  </div>
+                  <div className="col-span-2">
+                    <label className="text-[9px] font-dm-mono uppercase text-text-dim tracking-widest block mb-1">Institutional Email</label>
+                    <div className="font-bold text-sm text-gold tracking-tight">{user?.email}</div>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="text-[10px] font-dm-mono uppercase text-text-dim tracking-widest block mb-2">Motivation (Optional)</label>
+                  <textarea 
+                    id="app-motivation"
+                    className="w-full bg-surface border border-border-custom rounded-xl p-4 text-sm h-32 focus:border-gold/50 transition-all outline-none"
+                    placeholder="Briefly tell us why you want to join this programme..."
+                  />
+                </div>
+              </div>
+
+              <div className="flex gap-4">
+                <button onClick={() => setApplyingCourse(null)} className="flex-1 btn btn-outline py-4">Cancel</button>
+                <button 
+                  onClick={async () => {
+                    try {
+                      const motivation = (document.getElementById('app-motivation') as HTMLTextAreaElement)?.value;
+                      const { error } = await supabase.from('applications').insert({
+                        first_name: profile?.first_name,
+                        last_name: profile?.last_name,
+                        email: user?.email,
+                        phone: profile?.phone,
+                        program: applyingCourse.title,
+                        message: motivation,
+                        type: 'individual',
+                        status: 'pending'
+                      });
+                      if (error) throw error;
+                      
+                      await fetch('/api/process-application', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email: user?.email, name: `${profile?.first_name} ${profile?.last_name}`, program: applyingCourse.title })
+                      });
+
+                      setApplyingCourse(null);
+                      // @ts-ignore
+                      fetchStudentData();
+                      alert('Application submitted successfully!');
+                    } catch (err: any) { alert('Error: ' + err.message); }
+                  }}
+                  className="flex-[2] btn btn-gold py-4"
+                >Submit Application →</button>
+              </div>
+            </div>
           </div>
         </div>
       )}
