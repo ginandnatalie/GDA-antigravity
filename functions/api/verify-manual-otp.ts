@@ -61,7 +61,9 @@ export async function onRequestPost(context) {
       });
     }
 
-    // 4. Find the Supabase Auth user
+    // 4. Find or Create the Supabase Auth user
+    let userId = "";
+
     const { data: userSearch } = await supabase.auth.admin.listUsers();
     const users = (userSearch?.users || []) as any[];
     const targetUser = users.find(u => u.email?.toLowerCase() === email.trim().toLowerCase());
@@ -75,13 +77,15 @@ export async function onRequestPost(context) {
         user_metadata: { full_name: "GDA Student" }
       });
       if (createError) throw createError;
+      userId = newUser.user.id;
     } else {
       // Update existing user with the new password
-      const { error: updateError } = await supabase.auth.admin.updateUserById(targetUser.id, {
+      const { data: updatedUser, error: updateError } = await supabase.auth.admin.updateUserById(targetUser.id, {
         password: password,
         email_confirm: true
       });
       if (updateError) throw updateError;
+      userId = updatedUser.user.id;
     }
 
     // 5. DATA BRIDGE: Sync application details to the Profile
@@ -91,11 +95,11 @@ export async function onRequestPost(context) {
       .eq('id', app.id)
       .single();
 
-    if (fullApp) {
+    if (fullApp && userId) {
       const { error: profileError } = await supabase
         .from('profiles')
         .upsert({
-          id: targetUser ? targetUser.id : (await supabase.auth.admin.listUsers()).data.users.find(u => u.email?.toLowerCase() === email.trim().toLowerCase())?.id,
+          id: userId,
           first_name: fullApp.first_name,
           last_name: fullApp.last_name,
           phone: fullApp.phone,
@@ -111,7 +115,7 @@ export async function onRequestPost(context) {
           updated_at: new Date().toISOString()
         });
       
-      if (profileError) console.error("Profile sync error:", profileError.message);
+      if (profileError) console.error("Profile sync error for user", userId, ":", profileError.message);
     }
 
     // 6. OFFICIAL WELCOME EMAIL (Email #2)

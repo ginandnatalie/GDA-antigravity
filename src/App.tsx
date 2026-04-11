@@ -142,27 +142,7 @@ function AppContent() {
         <>
           {!isPortal && <Navbar onOpenModal={openModal} editMode={editMode} setEditMode={setEditMode} siteSettings={siteSettings} />}
           
-          {isPortal && (
-            <div className="bg-surface/50 border-b border-border-custom py-3 px-6 md:px-14 flex items-center justify-between sticky top-0 z-[1001] backdrop-blur-md">
-              <div className="flex items-center gap-4">
-                <div className="w-8 h-8 bg-gold rounded flex items-center justify-center">
-                  <img 
-                    src="https://firebasestorage.googleapis.com/v0/b/ginashe-digital.firebasestorage.app/o/Ginashe%20Logo.svg?alt=media&token=041611c8-fc50-4b78-ab91-29ecf2dbe517" 
-                    alt="GDA"
-                    className="w-5 h-5 brightness-0 invert-0 mix-blend-multiply"
-                  />
-                </div>
-                <span className="font-syne font-bold text-sm tracking-tight hidden sm:inline">Portal Access</span>
-              </div>
-              <Link 
-                to="/" 
-                className="flex items-center gap-2 font-dm-mono text-[10px] tracking-[0.15em] uppercase text-gold hover:text-text-custom transition-colors group"
-              >
-                <ArrowRight className="rotate-180 transition-transform group-hover:-translate-x-1" size={14} />
-                Back to main site
-              </Link>
-            </div>
-          )}
+
 
           <main className="flex-1">
             <Routes>
@@ -187,7 +167,7 @@ function AppContent() {
               
               <Route 
                 path="/admin" 
-                element={isAdmin ? <div className={isPortal ? "pt-8" : "pt-24"}><AdminDashboard /></div> : <Navigate to="/" />} 
+                element={isAdmin ? <AdminDashboard /> : <Navigate to="/" />} 
               />
               <Route 
                 path="/student-portal" 
@@ -195,7 +175,7 @@ function AppContent() {
               />
               <Route 
                 path="/portal" 
-                element={user ? <div className={isPortal ? "pt-8" : "pt-24"}><StudentPortal onStartCourse={(id) => navigate(`/course/${id}`)} /></div> : <Navigate to="/" />} 
+                element={user ? <StudentPortal onStartCourse={(id) => navigate(`/course/${id}`)} /> : <Navigate to="/" />} 
               />
               <Route 
                 path="/course/:courseId" 

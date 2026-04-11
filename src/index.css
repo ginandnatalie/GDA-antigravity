@@ -352,6 +352,30 @@
   .delay-200 { animation-delay: 0.2s; }
   .delay-300 { animation-delay: 0.3s; }
   .delay-400 { animation-delay: 0.4s; }
+
+  @keyframes fade {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  .animate-fade {
+    animation: fade 0.6s ease-out forwards;
+  }
+
+  @keyframes fadeRight {
+    from { opacity: 0; transform: translateX(-20px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  .animate-fadeRight {
+    animation: fadeRight 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+
+  @keyframes fadeLeft {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  .animate-fadeLeft {
+    animation: fadeLeft 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
 }
 
 @keyframes pulse-anim {

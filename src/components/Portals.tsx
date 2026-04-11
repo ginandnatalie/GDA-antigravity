@@ -4,6 +4,12 @@ import { useAuth } from '../lib/auth';
 import AcademyDashboard from './AcademyDashboard';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import { 
+  BarChart3, BookOpen, CreditCard, User, Settings, Layout, 
+  ChevronRight, LogOut, CheckCircle2, Clock, MapPin, Phone, 
+  Briefcase, GraduationCap, ArrowRight, ShieldCheck, Mail, Globe,
+  Calendar, Zap, Star, AlertCircle, FileText
+} from 'lucide-react';
 
 // ─── UTILITY: CSV Export ─────────────────────
 function exportToCSV(data: any[], filename: string) {
@@ -34,21 +40,26 @@ function exportToJSON(data: any[], filename: string) {
 // ─── ADMIN: Overview Stats ──────────────────────
 function OverviewStats({ applications, courses }: { applications: any[], courses: any[] }) {
   const stats = [
-    { label: 'Total Applications', value: applications.length, icon: '📝', color: 'bg-gold-dim text-gold' },
-    { label: 'Pending Review', value: applications.filter(a => !a.status || a.status === 'pending').length, icon: '⏳', color: 'bg-sky-dim text-sky' },
-    { label: 'Approved Students', value: applications.filter(a => a.status === 'approved' || a.status === 'enrolled').length, icon: '🎓', color: 'bg-emerald-dim text-emerald' },
-    { label: 'Total Courses', value: courses.length, icon: '📚', color: 'bg-purple-dim text-purple' },
+    { label: 'Total Applications', value: applications.length, icon: FileText, color: 'text-gold', bg: 'bg-gold/10' },
+    { label: 'Pending Review', value: applications.filter(a => !a.status || a.status === 'pending').length, icon: Clock, color: 'text-sky', bg: 'bg-sky/10' },
+    { label: 'Approved Students', value: applications.filter(a => a.status === 'approved' || a.status === 'enrolled').length, icon: ShieldCheck, color: 'text-emerald', bg: 'bg-emerald/10' },
+    { label: 'Total Courses', value: courses.length, icon: BookOpen, color: 'text-purple', bg: 'bg-purple/10' },
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 animate-fadeUp">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10 animate-fadeUp">
       {stats.map((s, i) => (
-        <div key={i} className="bg-card border border-border-custom rounded-2xl p-6 hover:border-gold/30 transition-all">
-          <div className="flex items-center gap-4 mb-3">
-            <div className={`w-10 h-10 rounded-lg flex items-center justify-center text-xl ${s.color} border border-border-custom`}>{s.icon}</div>
-            <div className="font-dm-mono text-[10px] uppercase tracking-widest text-text-dim">{s.label}</div>
+        <div key={i} className="bg-card border border-border-custom rounded-2xl p-6 hover:translate-y-[-4px] transition-all duration-300 group">
+          <div className="flex items-center gap-4 mb-4">
+            <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${s.bg} ${s.color} border border-white/5`}>
+              <s.icon className="w-5 h-5" />
+            </div>
+            <div className="w-8 h-8 rounded-full bg-surface border border-border-custom flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity ml-auto">
+              <ArrowRight className="w-3 h-3 text-gold" />
+            </div>
           </div>
-          <div className="font-syne font-extrabold text-3xl">{s.value}</div>
+          <div className="font-syne font-extrabold text-3xl mb-1">{s.value}</div>
+          <div className="font-dm-mono text-[10px] uppercase tracking-widest text-text-muted">{s.label}</div>
         </div>
       ))}
     </div>
@@ -60,34 +71,49 @@ function ApplicationTable({ apps, onUpdate, onSelect, isLoading, filters }: any)
   const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
 
   return (
-    <div className="bg-card border border-border-custom rounded-2xl overflow-hidden animate-fadeUp">
+    <div className="bg-card border border-border-custom rounded-3xl overflow-hidden animate-fadeUp shadow-2xl relative isolate">
+      <div className="absolute inset-0 bg-gold/2 pointer-events-none" />
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse">
           <thead>
-            <tr className="bg-surface border-b border-border-custom">
-              <th className="p-4 font-dm-mono text-[10px] uppercase tracking-widest text-text-muted">Applicant</th>
-              <th className="p-4 font-dm-mono text-[10px] uppercase tracking-widest text-text-muted">Program / Org</th>
-              <th className="p-4 font-dm-mono text-[10px] uppercase tracking-widest text-text-muted">Date</th>
-              <th className="p-4 font-dm-mono text-[10px] uppercase tracking-widest text-text-muted">Status</th>
-              <th className="p-4 font-dm-mono text-[10px] uppercase tracking-widest text-text-muted text-right">Actions</th>
+            <tr className="bg-surface/50 backdrop-blur-md border-b border-border-custom">
+              <th className="p-5 font-dm-mono text-[10px] uppercase tracking-[0.2em] text-text-muted">Applicant Identity</th>
+              <th className="p-5 font-dm-mono text-[10px] uppercase tracking-[0.2em] text-text-muted">Programme / Org</th>
+              <th className="p-5 font-dm-mono text-[10px] uppercase tracking-[0.2em] text-text-muted">Submission</th>
+              <th className="p-5 font-dm-mono text-[10px] uppercase tracking-[0.2em] text-text-muted">Current Status</th>
+              <th className="p-5 font-dm-mono text-[10px] uppercase tracking-[0.2em] text-text-muted text-right">Records</th>
             </tr>
           </thead>
           <tbody>
-            {apps.length === 0 ? (
-              <tr><td colSpan={5} className="p-12 text-center text-text-muted">No applications found.</td></tr>
+            {!apps.length ? (
+              <tr><td colSpan={5} className="p-20 text-center text-text-muted italic">No records found in the current queue.</td></tr>
             ) : apps.map((app: any) => (
-              <tr key={app.id} className="border-b border-border-custom hover:bg-white/2 transition-colors group">
-                <td className="p-4">
-                  <div className="font-bold text-sm">{app.type === 'individual' ? `${app.first_name} ${app.last_name}` : app.organization_name}</div>
-                  <div className="text-[10px] text-text-muted">{app.email}</div>
+              <tr 
+                key={app.id} 
+                className="border-b border-border-custom/50 hover:bg-gold/[0.03] transition-colors group cursor-pointer"
+                onClick={() => onSelect(app)}
+              >
+                <td className="p-5">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-surface border border-border-custom flex items-center justify-center font-bold text-xs">
+                      {app.first_name?.[0] || app.organization_name?.[0]}
+                    </div>
+                    <div>
+                      <div className="font-syne font-bold text-sm group-hover:text-gold transition-colors">{app.type === 'individual' ? `${app.first_name} ${app.last_name}` : app.organization_name}</div>
+                      <div className="text-[11px] text-text-dim font-dm-mono lowercase">{app.email}</div>
+                    </div>
+                  </div>
                 </td>
-                <td className="p-4">
-                  <div className="text-[12px] font-medium">{app.program || 'N/A'}</div>
-                  {app.organization_name && <div className="text-[9px] text-gold uppercase">{app.organization_name}</div>}
+                <td className="p-5">
+                  <div className="text-[12px] font-semibold text-text-custom">{app.program || 'N/A'}</div>
+                  {app.organization_name && <div className="text-[9px] text-gold/60 border border-gold/10 px-1.5 py-0.5 rounded inline-block uppercase tracking-tighter mt-1">{app.organization_name}</div>}
                 </td>
-                <td className="p-4 text-[11px] text-text-soft">{new Date(app.created_at).toLocaleDateString()}</td>
-                <td className="p-4">
-                  <span className={`px-2 py-0.5 rounded-full text-[9px] font-dm-mono uppercase border ${
+                <td className="p-5">
+                  <div className="text-[11px] text-text-soft font-dm-mono">{new Date(app.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</div>
+                  <div className="text-[9px] text-text-dim uppercase">{new Date(app.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+                </td>
+                <td className="p-5">
+                  <span className={`px-3 py-1 rounded-full text-[9px] font-dm-mono uppercase border tracking-widest ${
                     app.status === 'approved' ? 'bg-emerald-dim text-emerald border-emerald/20' :
                     app.status === 'rejected' ? 'bg-coral-dim text-coral border-coral/20' :
                     'bg-gold-dim text-gold border-gold/20'
@@ -95,8 +121,10 @@ function ApplicationTable({ apps, onUpdate, onSelect, isLoading, filters }: any)
                     {app.status || 'pending'}
                   </span>
                 </td>
-                <td className="p-4 text-right">
-                  <button onClick={() => onSelect(app)} className="text-gold text-[11px] font-bold hover:underline">Review →</button>
+                <td className="p-5 text-right">
+                  <button className="p-2 bg-surface hover:bg-gold hover:text-bg border border-border-custom rounded-xl transition-all shadow-sm">
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
                 </td>
               </tr>
             ))}
@@ -368,69 +396,130 @@ export function AdminDashboard() {
         />
       ) : (
         <>
-          <div className="flex justify-between items-end mb-8">
-            <div>
-              <div className="flex items-center gap-3 mb-3">
-                <h1 className="font-syne font-extrabold text-3xl">Admin Dashboard</h1>
-                <button
-                  onClick={() => setShowCommandPalette(true)}
-                  className="flex items-center gap-2 px-3 py-1.5 bg-surface border border-border-custom rounded-lg text-text-muted hover:text-text-custom hover:border-gold/30 transition-all"
-                >
-                  <span className="text-sm">🔍</span>
-                  <span className="font-dm-mono text-[9px] tracking-wider">CMD+K</span>
-                </button>
-              </div>
-              <div className="flex gap-4 mt-4 border-b border-border-custom overflow-x-auto">
-                {[
-                  { id: 'overview', label: 'Stats' },
-                  { id: 'applications', label: 'Admissions' },
-                  { id: 'courses', label: 'Courses' },
-                  { id: 'news', label: 'News' },
-                  { id: 'events', label: 'Events' },
-                  { id: 'finances', label: 'Finance' },
-                  { id: 'staff', label: 'Staff' },
-                  { id: 'settings', label: 'Site Settings' },
-                  { id: 'communications', label: 'Comms' },
-                ].filter(t => (t.id === 'staff' || t.id === 'settings') ? isSuperAdmin : true).map(tab => (
-                  <button
-                    key={tab.id}
-                    onClick={() => setActiveTab(tab.id as any)}
-                    className={`pb-2 px-1 font-dm-mono text-[10px] uppercase tracking-widest transition-all whitespace-nowrap ${activeTab === tab.id ? 'text-gold border-b-2 border-gold' : 'text-text-muted hover:text-text-custom'}`}
-                  >
-                    {tab.label}
-                  </button>
-                ))}
-              </div>
-            </div>
+          <div className="flex flex-col lg:flex-row min-h-screen bg-bg relative isolate">
+      {/* ─── ADMIN SIDEBAR ─── */}
+      <aside className="lg:w-64 lg:fixed lg:h-screen lg:border-r border-border-custom bg-surface/80 backdrop-blur-2xl z-20">
+        <div className="flex flex-col h-full p-6">
+          <div className="mb-10 px-2 flex items-center justify-between">
+            <h2 className="font-syne font-extrabold text-xl tracking-tighter flex items-center gap-2">
+              <div className="w-8 h-8 rounded-lg bg-gold text-bg flex items-center justify-center font-black">G</div>
+              ADMIN
+            </h2>
           </div>
 
-          {loading && activeTab !== 'overview' ? (
-            <div className="flex justify-center py-20">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gold"></div>
+          <nav className="flex-1 space-y-1">
+            {[
+              { id: 'overview', label: 'Command Center', icon: BarChart3 },
+              { id: 'applications', label: 'Admissions', icon: FileText },
+              { id: 'courses', label: 'Curriculum', icon: BookOpen },
+              { id: 'progress', label: 'Student Success', icon: Zap },
+              { id: 'finances', label: 'Financials', icon: CreditCard },
+              { id: 'news', label: 'Content CMS', icon: Layout },
+              { id: 'events', label: 'Events Hub', icon: Calendar },
+              { id: 'communications', label: 'Comms Logs', icon: Mail },
+              { id: 'staff', label: 'Staff Roles', icon: ShieldCheck, super: true },
+              { id: 'settings', label: 'Portal Config', icon: Settings, super: true },
+            ].filter(t => t.super ? isSuperAdmin : true).map((item) => (
+              <button
+                key={item.id}
+                onClick={() => setActiveTab(item.id as any)}
+                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-dm-mono text-[11px] uppercase tracking-widest transition-all group ${
+                  activeTab === item.id 
+                    ? 'bg-gold text-bg font-bold shadow-lg shadow-gold/20' 
+                    : 'text-text-muted hover:text-text-custom hover:bg-white/5'
+                }`}
+              >
+                <item.icon className="w-4 h-4" />
+                {item.label}
+              </button>
+            ))}
+          </nav>
+
+          <div className="mt-auto pt-6 border-t border-border-custom">
+            <button onClick={() => setShowCommandPalette(true)} className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-surface border border-border-custom text-text-muted hover:text-gold transition-all mb-4 font-dm-mono text-[10px] uppercase tracking-widest">
+              <span className="text-sm">🔍</span> Quick Search [K]
+            </button>
+            <button onClick={() => signOut()} className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-coral hover:bg-coral/5 transition-all font-dm-mono text-[11px] uppercase tracking-widest">
+              <LogOut className="w-4 h-4" /> Sign Out
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      {/* ─── ADMIN MAIN CONTENT ─── */}
+      <main className="flex-1 lg:ml-64 p-6 md:p-10 animate-fade">
+        {/* TOP BAR */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 gap-6">
+          <div className="animate-fadeRight">
+             <h1 className="font-syne font-extrabold text-4xl md:text-5xl tracking-tighter mb-2">
+               {activeTab === 'overview' ? 'Command Center' : activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}
+             </h1>
+             <p className="text-text-muted font-dm-mono text-[10px] uppercase tracking-[0.2em]">
+               Ginashe Admin System &bull; Active Session: {user?.email}
+             </p>
+          </div>
+
+          <div className="flex items-center gap-4 bg-surface/50 border border-border-custom p-2 rounded-2xl backdrop-blur-md animate-fadeLeft">
+            <div className="text-right px-2">
+              <p className="text-[10px] text-text-dim font-dm-mono uppercase">Database</p>
+              <p className="text-xs font-bold text-emerald flex items-center justify-end gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald animate-pulse" /> Connected
+              </p>
             </div>
-          ) : activeTab === 'overview' ? (
-            <OverviewStats applications={applications} courses={courses} />
-          ) : activeTab === 'applications' ? (
-            <ApplicationTable apps={applications} onUpdate={fetchApplications} onSelect={setSelectedApp} isLoading={loading} filters={{status: statusFilter, search: searchQuery}} />
-          ) : activeTab === 'courses' ? (
-            <CourseManager courses={courses} onRefresh={fetchCourses} onEditContent={setEditingCourse} />
-          ) : activeTab === 'news' ? (
-            <NewsManager />
-          ) : activeTab === 'events' ? (
-            <EventsManager />
-          ) : activeTab === 'finances' ? (
-            <FinanceManager />
-          ) : activeTab === 'progress' ? (
-            <StudentProgressTracker />
-          ) : activeTab === 'staff' ? (
-            <StaffManagement />
-          ) : activeTab === 'communications' ? (
-            <CommunicationLogs />
-          ) : (
-            <SiteSettings />
+            <div className="w-px h-8 bg-border-custom" />
+            <div className="flex items-center gap-4 pr-2 pl-2">
+               <button onClick={fetchApplications} className="p-2 hover:bg-white/5 rounded-lg transition-colors" title="Refresh Data">
+                 <Zap className={`w-4 h-4 text-gold ${updatingId ? 'animate-spin' : ''}`} />
+               </button>
+            </div>
+          </div>
+        </div>
+
+        {/* CONTENT RENDERER */}
+        <div className="relative">
+          {loading && activeTab !== 'overview' && (
+            <div className="absolute inset-0 z-50 flex items-center justify-center bg-bg/50 backdrop-blur-sm rounded-3xl min-h-[400px]">
+               <div className="text-center">
+                 <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-gold mx-auto mb-4"></div>
+                 <p className="font-dm-mono text-[10px] uppercase text-gold">Synchronizing Database...</p>
+               </div>
+            </div>
           )}
-        </>
-      )}
+
+          <div className={`transition-all duration-300 ${loading && activeTab !== 'overview' ? 'opacity-20 pointer-events-none' : 'opacity-100'}`}>
+            {activeTab === 'overview' ? (
+              <OverviewStats applications={applications} courses={courses} />
+            ) : activeTab === 'applications' ? (
+              <ApplicationTable 
+                apps={applications} 
+                onUpdate={fetchApplications} 
+                onSelect={setSelectedApp} 
+                isLoading={loading} 
+                filters={{status: statusFilter, search: searchQuery}} 
+              />
+            ) : activeTab === 'courses' ? (
+              <CourseManager courses={courses} onRefresh={fetchCourses} onEditContent={setEditingCourse} />
+            ) : activeTab === 'news' ? (
+              <NewsManager />
+            ) : activeTab === 'events' ? (
+              <EventsManager />
+            ) : activeTab === 'finances' ? (
+              <FinanceManager />
+            ) : activeTab === 'progress' ? (
+              <StudentProgressTracker />
+            ) : activeTab === 'staff' ? (
+              <StaffManagement />
+            ) : activeTab === 'communications' ? (
+              <CommunicationLogs />
+            ) : (
+              <SiteSettings />
+            )}
+            </div>
+          </div>
+        </main>
+      </div>
+    </>
+  )}
 
       {/* ─── APPLICATION DETAIL MODAL ─── */}
       {selectedApp && (
@@ -1613,294 +1702,579 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
   );
 
   return (
-    <div className="p-6 md:p-8 max-w-6xl mx-auto">
-      {/* ─── PORTAL HEADER ─── */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-        <div>
-          <h1 className="font-syne font-extrabold text-3xl mb-1">
-            Welcome back, {profile?.first_name || user?.email?.split('@')[0]}
-          </h1>
-          <div className="flex items-center gap-3 text-text-muted text-[12px]">
-            <span>{user?.email}</span>
-            {profile?.student_number && (
-              <>
-                <span className="text-border-custom">|</span>
-                <span className="font-dm-mono text-gold">{profile.student_number}</span>
-              </>
-            )}
+    <div className="flex flex-col lg:flex-row min-h-screen bg-bg relative isolate">
+      {/* ─── SIDEBAR NAVIGATION ─── */}
+      <aside className="lg:w-64 lg:fixed lg:h-screen lg:border-r border-border-custom bg-surface/50 backdrop-blur-xl z-20 transition-all duration-300">
+        <div className="flex flex-col h-full p-6">
+          <div className="mb-10 px-2">
+            <h2 className="font-syne font-extrabold text-xl tracking-tighter flex items-center gap-2">
+              <div className="w-8 h-8 rounded-lg bg-gold flex items-center justify-center text-bg">G</div>
+              PORTAL
+            </h2>
           </div>
-        </div>
-        <div className="flex gap-2">
-          <button onClick={() => signOut()} className="btn btn-outline btn-sm">Sign Out</button>
-        </div>
-      </div>
 
-      {/* ─── PORTAL TABS ─── */}
-      <div className="flex gap-4 mb-8 border-b border-border-custom overflow-x-auto">
-        {[
-          { id: 'dashboard', label: '📊 Dashboard', icon: '' },
-          { id: 'courses', label: '📚 My Courses', icon: '' },
-          { id: 'finances', label: '💰 Finances', icon: '' },
-          { id: 'applications', label: '📝 Applications', icon: '' },
-          { id: 'profile', label: '👤 Profile', icon: '' },
-          { id: 'settings', label: '⚙️ Settings', icon: '' },
-        ].map(tab => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveSection(tab.id as any)}
-            className={`pb-2 px-1 font-dm-mono text-[10px] uppercase tracking-widest transition-all whitespace-nowrap ${activeSection === tab.id ? 'text-gold border-b-2 border-gold' : 'text-text-muted hover:text-text-custom'}`}
-          >
-            {tab.label}
-          </button>
-        ))}
-      </div>
+          <nav className="flex-1 space-y-1">
+            {[
+              { id: 'dashboard', label: 'Overview', icon: BarChart3 },
+              { id: 'courses', label: 'My Learning', icon: BookOpen },
+              { id: 'finances', label: 'Billing', icon: CreditCard },
+              { id: 'applications', label: 'Admissions', icon: FileText },
+              { id: 'profile', label: 'Profile', icon: User },
+              { id: 'settings', label: 'Settings', icon: Settings },
+            ].map((item) => (
+              <button
+                key={item.id}
+                onClick={() => setActiveSection(item.id as any)}
+                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-dm-mono text-[11px] uppercase tracking-widest transition-all duration-200 group ${
+                  activeSection === item.id 
+                    ? 'bg-gold/10 text-gold border border-gold/20' 
+                    : 'text-text-muted hover:text-text-custom hover:bg-white/5 border border-transparent'
+                }`}
+              >
+                <item.icon className={`w-4 h-4 ${activeSection === item.id ? 'text-gold' : 'group-hover:text-gold'} transition-colors`} />
+                {item.label}
+              </button>
+            ))}
+          </nav>
 
-      {/* ─── DASHBOARD ─── */}
-      {activeSection === 'dashboard' && (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-card border border-border-custom rounded-xl p-6 text-center">
-            <div className="font-syne font-extrabold text-[32px] text-gold">{enrollments.length}</div>
-            <div className="font-dm-mono text-[9px] uppercase tracking-widest text-text-dim mt-1">Active Courses</div>
-          </div>
-          <div className="bg-card border border-border-custom rounded-xl p-6 text-center">
-            <div className="font-syne font-extrabold text-[32px] text-emerald">
-              {Object.values(progress).filter(p => p === 100).length}
+          <div className="mt-auto pt-6 border-t border-border-custom">
+            <div className="px-4 py-3 bg-surface border border-border-custom rounded-xl mb-4">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="w-8 h-8 rounded-full bg-gold/20 border border-gold/30 flex items-center justify-center text-gold font-bold text-xs uppercase">
+                  {profile?.first_name?.[0] || user?.email?.[0]}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-[11px] font-bold truncate">{profile?.first_name || 'Student'}</p>
+                  <p className="text-[9px] text-text-muted truncate uppercase tracking-tighter">ID: {profile?.student_number?.split('-').pop() || '...'}</p>
+                </div>
+              </div>
             </div>
-            <div className="font-dm-mono text-[9px] uppercase tracking-widest text-text-dim mt-1">Completed</div>
+            <button onClick={() => signOut()} className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-coral hover:bg-coral/5 transition-all font-dm-mono text-[11px] uppercase tracking-widest">
+              <LogOut className="w-4 h-4" />
+              Sign Out
+            </button>
           </div>
-          <div className="bg-card border border-border-custom rounded-xl p-6 text-center">
-            <div className="font-syne font-extrabold text-[32px] text-sky">{applications.length}</div>
-            <div className="font-dm-mono text-[9px] uppercase tracking-widest text-text-dim mt-1">Applications</div>
-          </div>
+        </div>
+      </aside>
 
-          {/* Next Steps Widget */}
-          <div className="md:col-span-3 bg-gold-dim border border-gold/20 rounded-xl p-6">
-            <h3 className="font-syne font-bold text-lg mb-2 text-gold">📋 Next Steps</h3>
-            <p className="text-[13px] text-text-soft leading-relaxed">
-              {applications.some(a => a.status === 'approved' && !enrollments.some(e => e.courses?.title === a.program))
-                ? 'You have an approved application! Head to "My Courses" to enroll and start learning.'
-                : applications.some(a => !a.status || a.status === 'pending')
-                ? 'Your application is under review. Our admissions team will contact you within 2 business days.'
-                : enrollments.length > 0
-                ? 'Continue where you left off — pick a course from "My Courses" to keep progressing.'
-                : 'Welcome to GDA! Apply for a programme to begin your journey.'}
+      {/* ─── MAIN CONTENT ─── */}
+      <main className="flex-1 lg:ml-64 p-6 md:p-10 animate-fade">
+        {/* HEADER SECTION */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 gap-6">
+          <div className="animate-fadeRight">
+            <h1 className="font-syne font-extrabold text-4xl md:text-5xl tracking-tighter mb-2">
+              {activeSection.charAt(0).toUpperCase() + activeSection.slice(1)}
+            </h1>
+            <p className="text-text-muted font-dm-mono text-[10px] uppercase tracking-[0.2em]">
+              Ginashe Digital Academy &bull; Secure Student Environment
             </p>
           </div>
+          
+          <div className="flex items-center gap-4 bg-surface/50 border border-border-custom p-2 rounded-2xl backdrop-blur-md animate-fadeLeft">
+            <div className="text-right px-2">
+              <p className="text-[10px] text-text-dim font-dm-mono uppercase">System Status</p>
+              <p className="text-xs font-bold text-emerald flex items-center justify-end gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald animate-pulse" />
+                Live
+              </p>
+            </div>
+            <div className="w-px h-8 bg-border-custom" />
+            <div className="flex items-center gap-2 pr-2">
+              <div className="p-2 bg-surface rounded-lg">
+                <Calendar className="w-3.5 h-3.5 text-gold" />
+              </div>
+              <span className="text-xs font-bold">{new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</span>
+            </div>
+          </div>
         </div>
-      )}
 
-      {/* ─── MY COURSES ─── */}
-      {activeSection === 'courses' && (
-        <div className="space-y-6">
-          {enrollments.map(enroll => (
-            <div key={enroll.id} className="bg-card border border-border-custom rounded-xl p-6">
-              <div className="flex justify-between items-center mb-4">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-lg bg-surface flex items-center justify-center text-xl">{enroll.courses?.thumbnail_url || '📘'}</div>
-                  <div>
-                    <div className="font-bold text-lg mb-1">{enroll.courses?.title}</div>
-                    <div className="text-sm text-text-muted">Enrolled {enroll.enrolled_at ? new Date(enroll.enrolled_at).toLocaleDateString() : ''}</div>
+        {/* ─── DASHBOARD CONTENT ─── */}
+        {activeSection === 'dashboard' && (
+          <div className="space-y-10">
+            {/* HERO BANNER */}
+            <section className="relative overflow-hidden bg-navy rounded-[2rem] border border-gold/20 p-8 md:p-12 group">
+              <div className="absolute top-0 right-0 w-96 h-96 bg-gold/5 rounded-full -mr-48 -mt-48 blur-[100px] group-hover:bg-gold/10 transition-all duration-700" />
+              <div className="relative z-10 flex flex-col md:flex-row items-center gap-10">
+                <div className="flex-1 text-center md:text-left">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 bg-gold/10 border border-gold/30 rounded-full text-gold text-[10px] uppercase font-dm-mono tracking-widest mb-6">
+                    <Zap className="w-3 h-3 fill-gold" />
+                    New Course Intake Open
+                  </div>
+                  <h2 className="font-syne font-extrabold text-3xl md:text-4xl mb-6">
+                    Welcome back, <span className="text-gold">{profile?.first_name || 'Scholar'}</span>!
+                  </h2>
+                  <p className="text-text-soft text-sm md:text-base max-w-lg mb-8 leading-relaxed">
+                    "Success in the cloud is about constant evolution. You are {profile?.student_number ? 'enrolled as a pioneer' : 'one step away from joining'} our 2026 cohort."
+                  </p>
+                  <div className="flex flex-wrap justify-center md:justify-start gap-4">
+                    <button onClick={() => setActiveSection('courses')} className="btn btn-gold group">
+                      Go to Classes <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                    </button>
+                    <button onClick={() => setActiveSection('profile')} className="btn btn-outline">Review Roadmap</button>
                   </div>
                 </div>
-                <div className="flex gap-2">
-                  {progress[enroll.course_id] === 100 && (
-                    <button onClick={() => setShowCertificate({ course: enroll.courses, profile })} className="btn btn-outline btn-sm">🎓 Certificate</button>
-                  )}
-                  <button onClick={() => onStartCourse(enroll.course_id)} className="btn btn-gold btn-sm">
-                    {progress[enroll.course_id] > 0 ? 'Continue' : 'Start Learning'}
+                <div className="w-48 h-48 md:w-64 md:h-64 relative">
+                  <div className="absolute inset-0 bg-gold/20 rounded-full animate-ping opacity-20" />
+                  <div className="relative w-full h-full bg-navy border-4 border-gold/30 rounded-3xl overflow-hidden flex items-center justify-center p-4">
+                    <div className="text-center font-syne">
+                      <div className="text-6xl mb-2">🚀</div>
+                      <div className="text-gold font-bold text-lg uppercase tracking-wider">Level 1</div>
+                      <div className="text-[10px] text-text-dim font-dm-mono">Cloud Resident</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            {/* KEY METRICS */}
+            <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+              {[
+                { label: 'Courses Enrolled', value: enrollments.length, color: 'text-gold', bg: 'bg-gold/10', border: 'border-gold/20', icon: BookOpen },
+                { label: 'Completed Credits', value: Object.values(progress).filter(p => p === 100).length, color: 'text-emerald', bg: 'bg-emerald/10', border: 'border-emerald/20', icon: CheckCircle2 },
+                { label: 'Applications', value: applications.length, color: 'text-sky', bg: 'bg-sky/10', border: 'border-sky/20', icon: FileText },
+                { label: 'Learning Hours', value: '12.4', color: 'text-purple', bg: 'bg-purple/10', border: 'border-purple/20', icon: Clock },
+              ].map((stat, i) => (
+                <div key={i} className={`bg-card border ${stat.border} rounded-2xl p-6 hover:translate-y-[-4px] transition-all duration-300 group`}>
+                  <div className="flex justify-between items-start mb-4">
+                    <div className={`p-3 ${stat.bg} ${stat.color} rounded-xl group-hover:scale-110 transition-transform`}>
+                      <stat.icon className="w-5 h-5" />
+                    </div>
+                    <div className="w-8 h-8 rounded-full bg-surface border border-border-custom flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                      <ArrowRight className="w-3 h-3 text-gold" />
+                    </div>
+                  </div>
+                  <div className="font-syne font-extrabold text-3xl mb-1">{stat.value}</div>
+                  <p className="text-[10px] text-text-dim font-dm-mono uppercase tracking-widest">{stat.label}</p>
+                </div>
+              ))}
+            </section>
+
+            <div className="grid grid-cols-1 xl:grid-cols-3 gap-10">
+              {/* ADMISSION ROADMAP / JOURNEY STEPPER */}
+              <div className="xl:col-span-1 space-y-6">
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="font-syne font-bold font-lg flex items-center gap-2">
+                    <div className="w-2 h-2 bg-gold animate-pulse rounded-full" />
+                    Admission Journey
+                  </h3>
+                  <span className="text-[10px] text-gold font-dm-mono uppercase">In Progress</span>
+                </div>
+                <div className="bg-surface/30 border border-border-custom rounded-2xl p-8 space-y-0">
+                  {[
+                    { title: 'Application Submitted', date: applications[0]?.created_at ? new Date(applications[0].created_at).toLocaleDateString() : 'Pending', completed: applications.length > 0 },
+                    { title: 'Document Review', date: 'Processing', completed: applications.some(a => ['reviewing', 'approved', 'interviewing'].includes(a.status || '')) },
+                    { title: 'Interview Invitation', date: '-', completed: applications.some(a => ['approved', 'interviewing'].includes(a.status || '')) },
+                    { title: 'Enrollment Offer', date: '-', completed: applications.some(a => a.status === 'approved') },
+                    { title: 'Official Welcome', date: '-', completed: enrollments.length > 0 },
+                  ].map((step, i, arr) => (
+                    <div key={i} className="relative pl-8 pb-10 last:pb-0">
+                      {i !== arr.length - 1 && (
+                        <div className={`absolute left-[11px] top-[24px] bottom-0 w-0.5 ${step.completed ? 'bg-gold' : 'bg-border-custom border-dashed border-l'}`} />
+                      )}
+                      <div className={`absolute left-0 top-0 w-6 h-6 rounded-full flex items-center justify-center z-10 ${
+                        step.completed ? 'bg-gold text-bg' : 'bg-surface border border-border-custom text-text-muted'
+                      }`}>
+                        {step.completed ? <CheckCircle2 className="w-3.5 h-3.5" /> : <div className="w-1.5 h-1.5 rounded-full bg-text-dim/30" />}
+                      </div>
+                      <div>
+                        <h4 className={`text-sm font-bold ${step.completed ? 'text-white' : 'text-text-muted'}`}>{step.title}</h4>
+                        <p className="text-[10px] text-text-dim uppercase tracking-tighter mt-1">{step.date}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* RECENT ANNOUNCEMENTS / FEED */}
+              <div className="xl:col-span-2 space-y-6">
+                <h3 className="font-syne font-bold font-lg">Academy Announcements</h3>
+                <div className="space-y-4">
+                  {[
+                    { type: 'Update', title: 'New Cloud Vendor Certification Path', body: 'We have officially added AWS Certified Cloud Practitioner to the April 2026 intake curriculum.', date: '2h ago' },
+                    { type: 'Event', title: 'Virtual Open Day: Live Q&A', body: 'Join Chef Instructor George on Friday at 6pm for a live session on Cloud Architecture careers.', date: 'Yesterday' }
+                  ].map((news, i) => (
+                    <div key={i} className="bg-card border border-border-custom p-6 rounded-2xl flex gap-6 hover:border-gold/30 transition-all group">
+                      <div className="w-2 rounded-full bg-gold/20 flex-shrink-0" />
+                      <div>
+                        <div className="flex items-center gap-3 mb-2">
+                          <span className="text-[9px] font-dm-mono uppercase text-gold bg-gold/10 px-2 py-0.5 rounded border border-gold/10">{news.type}</span>
+                          <span className="text-[10px] text-text-dim">{news.date}</span>
+                        </div>
+                        <h4 className="font-bold text-base mb-2 group-hover:text-gold transition-colors">{news.title}</h4>
+                        <p className="text-sm text-text-muted leading-relaxed line-clamp-2">{news.body}</p>
+                      </div>
+                    </div>
+                  ))}
+                  <button className="w-full py-4 text-[10px] font-dm-mono uppercase tracking-widest text-text-dim hover:text-gold transition-colors">
+                    View All News &bull; Press CMD+K to search
                   </button>
                 </div>
               </div>
-              <div className="space-y-2">
-                <div className="flex justify-between text-[10px] font-dm-mono uppercase tracking-wider text-text-muted">
-                  <span>Course Progress</span>
-                  <span>{progress[enroll.course_id] || 0}%</span>
-                </div>
-                <div className="h-1.5 bg-surface rounded-full overflow-hidden border border-border-custom">
-                  <div className="h-full bg-gold transition-all duration-500" style={{ width: `${progress[enroll.course_id] || 0}%` }} />
-                </div>
-              </div>
             </div>
-          ))}
-          {enrollments.length === 0 && (
-            <div className="bg-card border border-border-custom border-dashed rounded-xl p-10 text-center text-text-muted">
-              You are not currently enrolled in any courses.
-            </div>
-          )}
-        </div>
-      )}
+          </div>
+        )}
 
-      {/* ─── APPLICATIONS ─── */}
-      {activeSection === 'applications' && (
-        <div className="space-y-4">
-          {applications.map(app => (
-            <div key={app.id} className="bg-card border border-border-custom rounded-xl p-6 flex justify-between items-center">
-              <div>
-                <div className="font-bold text-lg mb-1">{app.program}</div>
-                <div className="text-sm text-text-muted">Submitted {new Date(app.created_at).toLocaleDateString()}</div>
-                {app.student_number && <div className="font-dm-mono text-[11px] text-gold mt-1">{app.student_number}</div>}
-              </div>
-              <span className={`px-3 py-1 rounded-full text-[10px] font-dm-mono uppercase border ${
-                app.status === 'approved' ? 'border-emerald/20 text-emerald bg-emerald-dim' :
-                app.status === 'rejected' ? 'border-coral/20 text-coral bg-coral-dim' :
-                'border-gold/20 text-gold bg-gold-dim'
-              }`}>
-                {app.status || 'Under Review'}
-              </span>
-            </div>
-          ))}
-          {applications.length === 0 && (
-            <div className="bg-card border border-border-custom border-dashed rounded-xl p-10 text-center text-text-muted">
-              You haven't submitted any applications yet.
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* ─── PROFILE ─── */}
-      {activeSection === 'profile' && (
-        <div className="max-w-2xl space-y-6">
-          <div className="flex justify-between items-center">
-            <h2 className="font-syne font-bold text-xl">My Profile</h2>
-            {editingProfile ? (
-              <div className="flex gap-2">
-                <button onClick={() => { setEditingProfile(false); setProfileForm(profile); }} className="btn btn-outline btn-sm">Cancel</button>
-                <button onClick={handleSaveProfile} className="btn btn-gold btn-sm">Save Changes</button>
+        {/* ─── MY COURSES CONTENT ─── */}
+        {activeSection === 'courses' && (
+          <div className="space-y-10">
+            {enrollments.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {enrollments.map(enroll => (
+                  <div key={enroll.id} className="bg-card border border-border-custom rounded-[2rem] overflow-hidden group hover:border-gold/40 transition-all duration-500">
+                    <div className="h-48 bg-navy p-10 flex items-center justify-center relative overflow-hidden">
+                      <div className="absolute inset-0 bg-gold/5 rotate-12 group-hover:rotate-6 transition-transform duration-700" />
+                      <div className="text-6xl z-10 group-hover:scale-110 transition-transform duration-500">{enroll.courses?.thumbnail_url || '📘'}</div>
+                    </div>
+                    <div className="p-8">
+                      <div className="flex justify-between items-start mb-6">
+                        <div>
+                          <h3 className="font-syne font-bold text-xl mb-1 group-hover:text-gold transition-colors">{enroll.courses?.title}</h3>
+                          <p className="text-[10px] text-text-dim uppercase font-dm-mono">Enrolled {new Date(enroll.enrolled_at || Date.now()).toLocaleDateString()}</p>
+                        </div>
+                        {progress[enroll.course_id] === 100 && (
+                          <div className="p-2 bg-emerald/10 text-emerald rounded-lg"><ShieldCheck className="w-5 h-5" /></div>
+                        )}
+                      </div>
+                      
+                      <div className="space-y-6">
+                        <div className="space-y-3">
+                          <div className="flex justify-between text-[10px] font-dm-mono uppercase text-text-muted">
+                            <span>Completion</span>
+                            <span className="text-gold font-bold">{progress[enroll.course_id] || 0}%</span>
+                          </div>
+                          <div className="h-1.5 bg-surface rounded-full overflow-hidden p-0.5 border border-border-custom">
+                            <div className="h-full bg-gradient-to-r from-gold to-gold-bright rounded-full transition-all duration-1000" style={{ width: `${progress[enroll.course_id] || 0}%` }} />
+                          </div>
+                        </div>
+                        
+                        <div className="flex gap-3">
+                          <button onClick={() => onStartCourse(enroll.course_id)} className="flex-1 btn btn-gold py-4">
+                            {progress[enroll.course_id] > 0 ? 'Resume Lesson' : 'Launch Course'}
+                          </button>
+                          {progress[enroll.course_id] === 100 && (
+                            <button onClick={() => setShowCertificate({ course: enroll.courses, profile })} className="btn btn-outline px-4">
+                              <GraduationCap className="w-5 h-5" />
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
             ) : (
-              <button onClick={() => setEditingProfile(true)} className="btn btn-gold btn-sm">Edit Profile</button>
+              <div className="bg-card border border-border-custom border-dashed rounded-[3rem] p-20 text-center animate-pulse">
+                <div className="text-5xl mb-6">🔭</div>
+                <h3 className="font-syne font-extrabold text-2xl mb-4">No Active Classrooms</h3>
+                <p className="text-text-muted max-w-sm mx-auto mb-10 text-sm leading-relaxed">
+                  Your journey hasn't started yet. Enroll in one of our professional certifications to begin.
+                </p>
+                <div className="flex justify-center gap-4">
+                  <a href="/admissions" className="btn btn-gold px-8 py-3">Browse Catalogue</a>
+                  <button onClick={() => setActiveSection('applications')} className="btn btn-outline">Check Status</button>
+                </div>
+              </div>
             )}
           </div>
+        )}
 
-          <div className="bg-card border border-border-custom rounded-xl p-6 space-y-5">
-            <div className="grid grid-cols-2 gap-4">
-              {[
-                { label: 'First Name', key: 'first_name', placeholder: 'Your first name' },
-                { label: 'Last Name', key: 'last_name', placeholder: 'Your last name' },
-                { label: 'Phone', key: 'phone', placeholder: '+27 XX XXX XXXX' },
-                { label: 'Date of Birth', key: 'date_of_birth', type: 'date' },
-                { label: 'Gender', key: 'gender', type: 'select', options: ['Male', 'Female', 'Non-binary', 'Prefer not to say'] },
-                { label: 'Nationality', key: 'nationality', placeholder: 'South Africa' },
-                { label: 'Address Line 1', key: 'address_line1', placeholder: 'Street address' },
-                { label: 'City', key: 'city', placeholder: 'City' },
-                { label: 'Province', key: 'province', type: 'select', options: ['Gauteng', 'Western Cape', 'KwaZulu-Natal', 'Eastern Cape', 'Free State', 'Limpopo', 'Mpumalanga', 'North West', 'Northern Cape'] },
-                { label: 'Postal Code', key: 'postal_code', placeholder: '0000' },
-              ].map(field => (
-                <div key={field.key} className={field.key === 'address_line1' ? 'col-span-2' : ''}>
-                  <label className="block font-dm-mono text-[9px] uppercase text-text-dim mb-1">{field.label}</label>
-                  {editingProfile ? (
-                    field.type === 'select' ? (
-                      <select className="w-full bg-surface border border-border-custom rounded p-2 text-sm" value={profileForm[field.key] || ''} onChange={e => setProfileForm({...profileForm, [field.key]: e.target.value})}>
-                        <option value="">Select…</option>
-                        {field.options?.map(o => <option key={o}>{o}</option>)}
-                      </select>
-                    ) : (
-                      <input type={field.type || 'text'} className="w-full bg-surface border border-border-custom rounded p-2 text-sm" placeholder={field.placeholder || ''} value={profileForm[field.key] || ''} onChange={e => setProfileForm({...profileForm, [field.key]: e.target.value})} />
-                    )
-                  ) : (
-                    <p className="text-sm">{profile?.[field.key] || 'Not set'}</p>
-                  )}
+        {/* ─── FINANCES CONTENT ─── */}
+        {activeSection === 'finances' && <MyFinance />}
+
+        {/* ─── APPLICATIONS CONTENT ─── */}
+        {activeSection === 'applications' && (
+          <div className="space-y-6">
+            <div className="bg-card border border-border-custom rounded-3xl overflow-hidden">
+               <div className="bg-surface/30 p-6 border-b border-border-custom flex justify-between items-center">
+                  <h3 className="font-syne font-bold text-lg">My Applications</h3>
+                  <button className="text-[10px] text-gold font-dm-mono uppercase tracking-widest hover:underline">+ Submit New</button>
+               </div>
+               <div className="divide-y divide-border-custom">
+                {applications.map(app => (
+                  <div key={app.id} className="p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 group hover:bg-white/2 transition-all">
+                    <div className="flex items-center gap-5">
+                      <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-2xl ${
+                        app.status === 'approved' ? 'bg-emerald/10 border border-emerald/20' : 'bg-gold/10 border border-gold/20'
+                      }`}>
+                        {app.type === 'individual' ? '👤' : '🏢'}
+                      </div>
+                      <div>
+                        <h4 className="font-syne font-bold text-xl mb-1 group-hover:text-gold transition-colors">{app.program}</h4>
+                        <div className="flex items-center gap-3 font-dm-mono text-[10px] uppercase text-text-dim">
+                          <span>Ref: {app.id.slice(0, 8).toUpperCase()}</span>
+                          <span className="w-1 h-1 rounded-full bg-border-custom" />
+                          <span>Submitted {new Date(app.created_at).toLocaleDateString()}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex flex-col items-end gap-2 text-right">
+                       <span className={`px-4 py-1.5 rounded-full text-[10px] font-dm-mono uppercase border tracking-widest ${
+                        app.status === 'approved' ? 'border-emerald/20 text-emerald bg-emerald-dim' :
+                        app.status === 'rejected' ? 'border-coral/20 text-coral bg-coral-dim' :
+                        'border-gold/20 text-gold bg-gold-dim'
+                      }`}>
+                        {app.status || 'Admissions Review'}
+                      </span>
+                      {app.student_number && (
+                        <p className="text-[12px] font-bold text-gold px-2">Assigned SN: {app.student_number}</p>
+                      )}
+                    </div>
+                  </div>
+                ))}
+                {applications.length === 0 && (
+                  <div className="p-20 text-center">
+                    <div className="text-4xl mb-4">📝</div>
+                    <p className="text-text-muted text-sm italic">You haven't submitted any applications for the 2026 intake yet.</p>
+                  </div>
+                )}
+               </div>
+            </div>
+          </div>
+        )}
+
+        {/* ─── PROFILE CONTENT ─── */}
+        {activeSection === 'profile' && (
+          <div className="grid grid-cols-1 xl:grid-cols-3 gap-10">
+            <div className="xl:col-span-1 space-y-8">
+              {/* PROFILE PROGRESS CARD */}
+              <div className="bg-navy rounded-[2.5rem] p-8 border border-gold/20 relative overflow-hidden shadow-2xl">
+                <div className="absolute inset-0 bg-gold/5 opacity-50 backdrop-blur-3xl" />
+                <div className="relative text-center">
+                  <div className="relative inline-block mb-6">
+                    <div className="w-32 h-32 rounded-3xl bg-surface border-4 border-gold/30 flex items-center justify-center text-4xl overflow-hidden shadow-inner">
+                      {profile?.first_name?.[0] || 'G'}
+                    </div>
+                    <div className="absolute -bottom-2 -right-2 p-2 bg-gold text-bg rounded-xl shadow-lg">
+                      <Zap className="w-4 h-4 fill-bg" />
+                    </div>
+                  </div>
+                  <h3 className="font-syne font-extrabold text-2xl mb-1">{profile?.first_name} {profile?.last_name}</h3>
+                  <p className="text-[10px] text-text-dim font-dm-mono uppercase tracking-[0.3em] mb-8">Cloud Resident</p>
+                  
+                  <div className="space-y-6 pt-6 border-t border-white/5">
+                    <div className="flex justify-between items-end mb-2">
+                       <span className="text-[10px] font-dm-mono uppercase text-text-soft">Profile Strength</span>
+                       <span className="text-sm font-bold text-gold">
+                         {Math.round((Object.values(profileForm || {}).filter(v => !!v).length / Object.keys(profileForm || {}).length) * 100)}%
+                       </span>
+                    </div>
+                    <div className="h-1.5 bg-surface rounded-full overflow-hidden border border-white/5">
+                       <div className="h-full bg-gold transition-all duration-1000" style={{ width: `${(Object.values(profileForm || {}).filter(v => !!v).length / Object.keys(profileForm || {}).length) * 100}%` }} />
+                    </div>
+                    <p className="text-[11px] text-text-muted leading-relaxed">Complete your profile details to unlock all academy features.</p>
+                  </div>
                 </div>
-              ))}
+              </div>
+
+              {/* SECURITY SUMMARY */}
+              <div className="bg-card border border-border-custom rounded-3xl p-6">
+                <h4 className="text-sm font-bold mb-4 flex items-center gap-2">
+                  <ShieldCheck className="w-4 h-4 text-emerald" />
+                  Security Protocol
+                </h4>
+                <div className="space-y-4">
+                  <div className="flex items-center gap-4">
+                    <div className="w-1.5 h-1.5 rounded-full bg-emerald" />
+                    <div>
+                      <p className="text-[12px] font-bold">Email Verified</p>
+                      <p className="text-[10px] text-text-dim">{user?.email}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <div className="w-1.5 h-1.5 rounded-full bg-gold" />
+                    <div>
+                      <p className="text-[12px] font-bold">Authentication</p>
+                      <p className="text-[10px] text-text-dim">Passkey / OTP Enabled</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            <div className="pt-4 border-t border-border-custom">
-              <label className="block font-dm-mono text-[9px] uppercase text-text-dim mb-1">Bio</label>
-              {editingProfile ? (
-                <textarea className="w-full bg-surface border border-border-custom rounded p-2 text-sm h-20" placeholder="Tell us about yourself..." value={profileForm.bio || ''} onChange={e => setProfileForm({...profileForm, bio: e.target.value})} />
-              ) : (
-                <p className="text-sm text-text-soft">{profile?.bio || 'No bio set.'}</p>
-              )}
-            </div>
-
-            <div className="pt-4 border-t border-border-custom">
-              <h3 className="font-syne font-bold text-sm mb-3">Emergency Contact</h3>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block font-dm-mono text-[9px] uppercase text-text-dim mb-1">Name</label>
+            <div className="xl:col-span-2 space-y-8">
+              <div className="bg-card border border-border-custom rounded-3xl overflow-hidden shadow-xl">
+                <div className="bg-surface/30 p-8 border-b border-border-custom flex justify-between items-center">
+                  <div>
+                    <h3 className="font-syne font-bold text-2xl">Personal Information</h3>
+                    <p className="text-[10px] text-text-muted font-dm-mono uppercase mt-1">Identity & Residency Data</p>
+                  </div>
                   {editingProfile ? (
-                    <input className="w-full bg-surface border border-border-custom rounded p-2 text-sm" value={profileForm.emergency_contact_name || ''} onChange={e => setProfileForm({...profileForm, emergency_contact_name: e.target.value})} />
+                    <div className="flex gap-2">
+                      <button onClick={() => setEditingProfile(false)} className="btn btn-outline btn-sm">Discard</button>
+                      <button onClick={handleSaveProfile} className="btn btn-gold btn-sm px-6">Commit Changes</button>
+                    </div>
                   ) : (
-                    <p className="text-sm">{profile?.emergency_contact_name || 'Not set'}</p>
+                    <button onClick={() => setEditingProfile(true)} className="btn btn-gold btn-sm px-6">Modify Details</button>
                   )}
                 </div>
-                <div>
-                  <label className="block font-dm-mono text-[9px] uppercase text-text-dim mb-1">Phone</label>
-                  {editingProfile ? (
-                    <input className="w-full bg-surface border border-border-custom rounded p-2 text-sm" value={profileForm.emergency_contact_phone || ''} onChange={e => setProfileForm({...profileForm, emergency_contact_phone: e.target.value})} />
-                  ) : (
-                    <p className="text-sm">{profile?.emergency_contact_phone || 'Not set'}</p>
-                  )}
+                
+                <div className="p-10 space-y-10">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8 text-left">
+                    {[
+                      { label: 'First Name', key: 'first_name', icon: User },
+                      { label: 'Last Name', key: 'last_name', icon: User },
+                      { label: 'Contact Number', key: 'phone', icon: Phone },
+                      { label: 'Date of Birth', key: 'date_of_birth', icon: Calendar, type: 'date' },
+                      { label: 'Nationality', key: 'nationality', icon: Globe },
+                      { label: 'Postal Code', key: 'postal_code', icon: MapPin },
+                    ].map(field => (
+                      <div key={field.key} className="space-y-2 group">
+                        <label className="flex items-center gap-2 text-[10px] font-dm-mono uppercase text-text-dim tracking-widest group-hover:text-gold transition-colors">
+                          <field.icon className="w-3 h-3" />
+                          {field.label}
+                        </label>
+                        {editingProfile ? (
+                          <input 
+                            type={field.type || 'text'} 
+                            className="w-full bg-bg border border-border-custom rounded-xl p-3 text-sm focus:border-gold/50 transition-all outline-none" 
+                            value={profileForm[field.key] || ''} 
+                            onChange={e => setProfileForm({...profileForm, [field.key]: e.target.value})} 
+                          />
+                        ) : (
+                          <div className="p-3 bg-surface/30 border border-transparent rounded-xl text-sm font-bold">
+                            {profile?.[field.key] || <span className="text-text-muted font-normal italic">Requires completion</span>}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                    <div className="col-span-1 md:col-span-2 space-y-2">
+                       <label className="flex items-center gap-2 text-[10px] font-dm-mono uppercase text-text-dim tracking-widest">
+                          <MapPin className="w-3 h-3" />
+                          Residential Address
+                        </label>
+                        {editingProfile ? (
+                          <input 
+                            className="w-full bg-bg border border-border-custom rounded-xl p-3 text-sm" 
+                            value={profileForm.address_line1 || ''} 
+                            onChange={e => setProfileForm({...profileForm, address_line1: e.target.value})} 
+                          />
+                        ) : (
+                          <div className="p-3 bg-surface/30 border border-transparent rounded-xl text-sm font-bold">
+                            {profile?.address_line1 || <span className="text-text-muted font-normal italic">Address not set</span>}
+                          </div>
+                        )}
+                    </div>
+                  </div>
+
+                  <div className="pt-10 border-t border-border-custom">
+                     <div className="flex items-center gap-4 mb-8">
+                       <Briefcase className="w-5 h-5 text-gold" />
+                       <h4 className="font-syne font-bold text-lg">Biographical Statement</h4>
+                     </div>
+                     {editingProfile ? (
+                       <textarea 
+                        className="w-full bg-bg border border-border-custom rounded-xl p-5 text-sm h-40 focus:border-gold/50 transition-all outline-none" 
+                        placeholder="Tell us about your technical background and career goals..." 
+                        value={profileForm.bio || ''} 
+                        onChange={e => setProfileForm({...profileForm, bio: e.target.value})} 
+                       />
+                     ) : (
+                       <div className="p-6 bg-surface/20 border border-border-custom rounded-2xl italic text-text-soft text-sm leading-relaxed">
+                         "{profile?.bio || 'No biographical information provided. Editing your profile allows you to introduce yourself to instructors.'}"
+                       </div>
+                     )}
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* ─── FINANCES ─── */}
-      {activeSection === 'finances' && <MyFinance />}
+        {/* ─── SETTINGS CONTENT ─── */}
+        {activeSection === 'settings' && (
+          <div className="max-w-4xl space-y-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="bg-card border border-border-custom rounded-3xl p-8 space-y-6">
+                 <div className="flex items-center gap-3 mb-2">
+                   <div className="p-3 bg-gold/10 text-gold rounded-2xl"><Settings className="w-6 h-6" /></div>
+                   <h3 className="font-syne font-bold text-xl">Account Configuration</h3>
+                 </div>
+                 <div className="space-y-6">
+                    <div>
+                      <label className="text-[10px] font-dm-mono uppercase text-text-dim mb-1 block">Primary Identity</label>
+                      <div className="p-4 bg-surface rounded-xl border border-border-custom font-mono text-sm">{user?.email}</div>
+                    </div>
+                    <button onClick={handlePasswordReset} className="w-full btn btn-outline flex items-center justify-center gap-2 py-4">
+                      <ShieldCheck className="w-4 h-4" /> Reset Access Credentials
+                    </button>
+                    <p className="text-[11px] text-text-muted leading-relaxed">
+                      Passwords must reside in our secure cloud identity vault. Resetting will send a secure link to your verified email.
+                    </p>
+                 </div>
+              </div>
 
-      {/* ─── SETTINGS ─── */}
-      {activeSection === 'settings' && (
-        <div className="max-w-xl space-y-6">
-          <h2 className="font-syne font-bold text-xl">Account Settings</h2>
-
-          <div className="bg-card border border-border-custom rounded-xl p-6 space-y-4">
-            <h3 className="font-syne font-bold text-sm">Security</h3>
-            <div>
-              <label className="block font-dm-mono text-[9px] uppercase text-text-dim mb-1">Email Address</label>
-              <p className="text-sm font-mono">{user?.email}</p>
+              <div className="bg-navy border border-white/5 rounded-3xl p-8 flex flex-col justify-between">
+                 <div>
+                   <h3 className="font-syne font-bold font-xl mb-4">GDA Data Privacy</h3>
+                   <p className="text-sm text-text-soft leading-relaxed mb-6">
+                     You have full sovereignty over your educational data. Download your complete record in standard JSON format for transferability.
+                   </p>
+                 </div>
+                 <div className="space-y-4">
+                    <button onClick={() => exportToJSON([profile || {}], 'gda-archive')} className="w-full btn btn-outline border-white/10 hover:border-gold/50 py-4 flex items-center gap-3 justify-center">
+                       <Globe className="w-4 h-4" /> Download Records Archive
+                    </button>
+                 </div>
+              </div>
             </div>
-            <button onClick={handlePasswordReset} className="btn btn-outline btn-sm">🔐 Reset Password</button>
-          </div>
 
-          <div className="bg-card border border-border-custom rounded-xl p-6 space-y-4">
-            <h3 className="font-syne font-bold text-sm">Data & Privacy</h3>
-            <button onClick={() => exportToJSON([profile || {}], 'my-gda-profile')} className="btn btn-outline btn-sm">📥 Download My Data</button>
-            <p className="text-[11px] text-text-dim">You can request a full copy of your data at any time. For account deletion, contact academy@ginashe.co.za.</p>
+            <div className="bg-coral/5 border border-coral/20 rounded-3xl p-10 flex flex-col md:flex-row items-center gap-10">
+               <div className="p-5 bg-coral/10 text-coral rounded-3xl border border-coral/20"><AlertCircle className="w-8 h-8" /></div>
+               <div className="flex-1 text-center md:text-left">
+                  <h4 className="font-syne font-bold text-xl text-coral mb-2">Institutional Sign Out</h4>
+                  <p className="text-sm text-text-muted">Sign out of your secure academic session. Your progress and data are encrypted and persisted.</p>
+               </div>
+               <button onClick={() => signOut()} className="btn bg-coral/10 text-coral border border-coral/20 hover:bg-coral px-8 py-3 transition-colors">Terminate Session</button>
+            </div>
           </div>
-
-          <div className="bg-coral/5 border border-coral/20 rounded-xl p-6">
-            <h3 className="font-syne font-bold text-sm text-coral mb-2">Danger Zone</h3>
-            <p className="text-[12px] text-text-muted mb-3">Signing out will end your current session. All your data remains safe.</p>
-            <button onClick={() => signOut()} className="btn btn-sm bg-coral/10 text-coral border border-coral/20 hover:bg-coral/20">Sign Out</button>
-          </div>
-        </div>
-      )}
+        )}
+      </main>
 
       {/* ─── CERTIFICATE MODAL ─── */}
       {showCertificate && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-          <div className="bg-white text-black p-12 rounded-none shadow-2xl max-w-4xl w-full relative border-[20px] border-gold/20">
-            <button onClick={() => setShowCertificate(null)} className="absolute top-4 right-4 text-black/40 hover:text-black">✕</button>
-            <div className="text-center border-4 border-gold/40 p-12">
-              <div className="text-gold text-5xl mb-8">🎓</div>
-              <h1 className="font-syne font-extrabold text-4xl mb-4 uppercase tracking-tighter">Certificate of Completion</h1>
-              <p className="text-gray-500 font-dm-mono text-sm uppercase tracking-widest mb-12">This is to certify that</p>
-              <div className="border-b-2 border-black/10 pb-2 mb-4 inline-block px-12">
-                <h2 className="font-syne font-bold text-5xl text-black">{showCertificate.profile?.first_name} {showCertificate.profile?.last_name}</h2>
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-navy/90 backdrop-blur-xl animate-fade">
+          <div className="bg-white text-black p-1 md:p-12 rounded-none shadow-2xl max-w-4xl w-full relative border-[24px] border-gold/10">
+            <button onClick={() => setShowCertificate(null)} className="absolute top-4 right-4 text-black/40 hover:text-black z-10 p-2">✕</button>
+            <div className="text-center border-[6px] border-gold/30 p-12 md:p-20 relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-32 h-32 border-l border-t border-gold opacity-50" />
+              <div className="absolute top-0 right-0 w-32 h-32 border-r border-t border-gold opacity-50" />
+              <div className="absolute bottom-0 left-0 w-32 h-32 border-l border-b border-gold opacity-50" />
+              <div className="absolute bottom-0 right-0 w-32 h-32 border-r border-b border-gold opacity-50" />
+              
+              <div className="text-gold text-6xl mb-10 opacity-30 select-none">🎓</div>
+              <h1 className="font-syne font-extrabold text-4xl md:text-5xl mb-6 uppercase tracking-tighter">Certificate of Excellence</h1>
+              <p className="text-gray-400 font-dm-mono text-[12px] uppercase tracking-[0.4em] mb-14">Presented by Ginashe Digital Academy</p>
+              
+              <div className="relative mb-6">
+                <div className="h-px bg-black/10 absolute top-1/2 left-0 right-0" />
+                <span className="relative z-10 bg-white px-6 text-gray-500 font-dm-mono text-[10px] uppercase tracking-widest">This is to certify that</span>
               </div>
-              <p className="text-gray-500 font-dm-mono text-sm uppercase tracking-widest mb-12">has successfully completed the course</p>
-              <h3 className="font-syne font-bold text-3xl text-gold mb-16">{showCertificate.course.title}</h3>
+              
+              <h2 className="font-syne font-bold text-5xl md:text-6xl text-black mb-10 tracking-tight">{showCertificate.profile?.first_name} {showCertificate.profile?.last_name}</h2>
+              
+              <p className="text-gray-500 font-dm-mono text-[11px] uppercase tracking-widest mb-14">Has demonstrated professional mastery in the curriculum of</p>
+              <h3 className="font-syne font-bold text-3xl md:text-4xl text-gold mb-20 italic">"{showCertificate.course.title}"</h3>
+              
               <div className="flex justify-between items-end pt-12 border-t border-black/5">
                 <div className="text-left">
-                  <div className="font-dm-mono text-[10px] uppercase text-gray-400 mb-1">Date Issued</div>
-                  <div className="font-bold">{new Date().toLocaleDateString()}</div>
+                  <div className="font-dm-mono text-[9px] uppercase text-gray-400 mb-2">Digital Stamp</div>
+                  <div className="text-xs font-mono select-all">GDA-AUTH-{showCertificate.course.id.slice(0, 8).toUpperCase()}</div>
                 </div>
-                <div className="text-center">
-                  <div className="w-32 h-1 bg-black/10 mb-2"></div>
-                  <div className="font-dm-mono text-[10px] uppercase text-gray-400">Ginashe Academy</div>
+                <div className="text-center px-8 border-x border-black/5">
+                  <div className="font-dm-sans text-[11px] mb-2 italic">Ginashe Digital Board of Instructors</div>
+                  <div className="w-40 h-px bg-black opacity-20 mx-auto" />
                 </div>
                 <div className="text-right">
-                  <div className="font-dm-mono text-[10px] uppercase text-gray-400 mb-1">Certificate ID</div>
-                  <div className="font-mono text-xs">GDA-{Math.random().toString(36).substr(2, 9).toUpperCase()}</div>
+                  <div className="font-dm-mono text-[9px] uppercase text-gray-400 mb-2">Issued On</div>
+                  <div className="font-bold text-sm tracking-tighter">{new Date().toLocaleDateString('en-GB')}</div>
                 </div>
               </div>
             </div>
-            <div className="mt-8 flex justify-center gap-4">
-              <button onClick={() => window.print()} className="btn bg-black text-white hover:bg-black/80">🖨️ Print to PDF</button>
-            </div>
+          </div>
+          <div className="fixed bottom-10 left-1/2 -translate-x-1/2">
+             <button onClick={() => window.print()} className="btn bg-white text-black font-bold px-10 py-4 shadow-2xl hover:bg-gold transition-all flex items-center gap-3">
+               <Zap className="w-5 h-5" /> Export to Digital PDF
+             </button>
           </div>
         </div>
       )}
