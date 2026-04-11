@@ -26,6 +26,7 @@ export default function Navbar({ onOpenModal, editMode, setEditMode, siteSetting
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [expandedMobileItem, setExpandedMobileItem] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
 
   const isAdmin = profile?.role === 'admin' || profile?.role === 'super_admin' || user?.email?.includes('ginashe.co.za');
@@ -278,48 +279,116 @@ export default function Navbar({ onOpenModal, editMode, setEditMode, siteSetting
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div 
-            initial={{ opacity: 0, scale: 1.1 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 1.1 }}
-            className="fixed inset-0 z-[2000] bg-[#070a10]/98 backdrop-blur-3xl lg:hidden p-8 pt-28"
+            initial={{ opacity: 0, x: '100%' }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: '100%' }}
+            transition={{ type: 'spring', damping: 40, stiffness: 450 }}
+            className="fixed inset-0 z-[2000] bg-[#070a10]/98 backdrop-blur-3xl lg:hidden overflow-y-auto"
           >
-            <div className="flex flex-col h-full gap-10">
+            <div className="min-h-screen flex flex-col p-6 pt-24 pb-12 gap-10">
               <div className="flex flex-col gap-8">
-                <div className="text-gold font-jetbrains text-[11px] tracking-[0.3em] uppercase">Navigation_Matrix</div>
-                <ul className="flex flex-col gap-7 list-none">
+                <div className="text-gold font-jetbrains text-[10px] uppercase tracking-[0.4em] flex items-center gap-4">
+                  <div className="h-px flex-1 bg-gold/20" />
+                  NAVIGATION_MATRIX
+                  <div className="h-px flex-1 bg-gold/20" />
+                </div>
+                
+                <ul className="flex flex-col list-none gap-2">
                   {navItems.map(item => (
-                    <li key={item.label}>
-                      <Link 
-                        to={item.path} 
-                        className="text-5xl font-outfit font-black text-white no-underline hover:text-gold transition-colors"
-                        onClick={() => setIsMobileMenuOpen(false)}
-                      >
-                        {item.label}
-                      </Link>
+                    <li key={item.label} className="border-b border-white/5 last:border-0 pb-2">
+                      {item.hasMega ? (
+                        <div className="flex flex-col">
+                          <button 
+                            onClick={() => setExpandedMobileItem(expandedMobileItem === item.label ? null : item.label)}
+                            className="flex items-center justify-between w-full py-4 text-left group"
+                          >
+                            <span className={`text-4xl font-outfit font-black transition-colors ${expandedMobileItem === item.label ? 'text-gold' : 'text-white'}`}>
+                              {item.label}
+                            </span>
+                            <ChevronDown className={`w-8 h-8 transition-transform duration-500 ${expandedMobileItem === item.label ? 'rotate-180 text-gold' : 'text-text-muted hover:text-white'}`} />
+                          </button>
+                          
+                          <AnimatePresence>
+                            {expandedMobileItem === item.label && (
+                              <motion.div 
+                                initial={{ height: 0, opacity: 0 }}
+                                animate={{ height: 'auto', opacity: 1 }}
+                                exit={{ height: 0, opacity: 0 }}
+                                transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+                                className="overflow-hidden"
+                              >
+                                <div className="grid grid-cols-1 gap-3 py-4 pl-2">
+                                  {/* Render Curriculum sub-items */}
+                                  {item.label === 'Curriculum' && [
+                                    { title: 'Cloud Engineering', desc: 'Azure, AWS & GCP', icon: <Cpu className="w-4 h-4" /> },
+                                    { title: 'AI & Data Science', desc: 'ML & Neural Networks', icon: <Zap className="w-4 h-4" /> },
+                                    { title: 'Digital Leadership', desc: 'Executive Strategy', icon: <Briefcase className="w-4 h-4" /> },
+                                    { title: 'Full-Stack Web', desc: 'Modern Frameworks', icon: <Code className="w-4 h-4" /> }
+                                  ].map((c, i) => (
+                                    <Link key={i} to="/curriculum" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/5">
+                                      <div className="w-10 h-10 rounded-xl bg-gold/10 flex items-center justify-center text-gold">{c.icon}</div>
+                                      <div>
+                                        <div className="font-bold text-sm text-white">{c.title}</div>
+                                        <div className="text-[10px] text-text-muted">{c.desc}</div>
+                                      </div>
+                                    </Link>
+                                  ))}
+                                  
+                                  {/* Render Admissions sub-items */}
+                                  {item.label === 'Admissions' && [
+                                    { title: 'How to Apply', icon: <Rocket className="w-4 h-4" />, path: '/admissions#apply' },
+                                    { title: 'Scholarships', icon: <CreditCard className="w-4 h-4" />, path: '/admissions#funding' },
+                                    { title: 'Tuition & Fees', icon: <Landmark className="w-4 h-4" />, path: '/admissions#tuition' },
+                                    { title: 'Entry Requirements', icon: <Shield className="w-4 h-4" />, path: '/admissions#entry' }
+                                  ].map((l, i) => (
+                                    <Link key={i} to={l.path} onClick={() => setIsMobileMenuOpen(false)} className="flex items-center justify-between p-4 rounded-2xl bg-white/5 border border-white/5">
+                                      <div className="flex items-center gap-4">
+                                        <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-gold">{l.icon}</div>
+                                        <span className="font-bold text-sm text-white">{l.title}</span>
+                                      </div>
+                                      <ChevronRight className="w-4 h-4 text-text-muted" />
+                                    </Link>
+                                  ))}
+
+                                  {/* Render Discover sub-items */}
+                                  {item.label === 'Discover' && discoverItems.map((d, i) => (
+                                    <Link key={i} to={d.path} onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/5">
+                                      <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-gold">{d.icon}</div>
+                                      <div>
+                                        <div className="font-bold text-sm text-white">{d.label}</div>
+                                        <div className="text-[10px] text-text-muted">{d.desc}</div>
+                                      </div>
+                                    </Link>
+                                  ))}
+                                </div>
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+                        </div>
+                      ) : (
+                        <Link 
+                          to={item.path} 
+                          className="block py-4 text-4xl font-outfit font-black text-white no-underline hover:text-gold transition-colors"
+                          onClick={() => setIsMobileMenuOpen(false)}
+                        >
+                          {item.label}
+                        </Link>
+                      )}
                     </li>
                   ))}
                 </ul>
               </div>
-
-              <div className="mt-4 grid grid-cols-2 gap-4">
-                {discoverItems.map(item => (
-                  <Link 
-                    key={item.label} 
-                    to={item.path} 
-                    className="p-4 rounded-2xl bg-white/5 border border-white/5 no-underline"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    <div className="text-gold mb-2">{item.icon}</div>
-                    <div className="font-outfit font-bold text-white text-[15px]">{item.label}</div>
-                  </Link>
-                ))}
-              </div>
               
               <div className="mt-auto flex flex-col gap-4">
-                <button onClick={() => { setIsMobileMenuOpen(false); onOpenModal('student'); }} className="w-full py-5 rounded-2xl border border-white/10 font-outfit font-extrabold text-white text-lg hover:bg-white/5 transition-all uppercase tracking-widest">
-                  Student Portal
-                </button>
-                <button onClick={() => { setIsMobileMenuOpen(false); onOpenModal('apply'); }} className="w-full py-5 rounded-2xl bg-gold font-outfit font-extrabold text-navy text-lg hover:brightness-110 transition-all uppercase tracking-widest">
+                <div className="grid grid-cols-2 gap-4">
+                  <button onClick={() => { setIsMobileMenuOpen(false); onOpenModal('student'); }} className="py-4 rounded-2xl border border-white/10 font-outfit font-black text-white text-[13px] hover:bg-white/5 transition-all uppercase tracking-widest flex items-center justify-center gap-2">
+                    <User size={16} /> Portal
+                  </button>
+                  <button onClick={() => { setIsMobileMenuOpen(false); onOpenModal('apply'); }} className="py-4 rounded-2xl bg-white/5 border border-gold/30 font-outfit font-black text-gold text-[13px] hover:bg-gold/10 transition-all uppercase tracking-widest flex items-center justify-center gap-2">
+                    <Rocket size={16} /> Status
+                  </button>
+                </div>
+                <button onClick={() => { setIsMobileMenuOpen(false); onOpenModal('apply'); }} className="w-full py-5 rounded-2xl bg-gold font-outfit font-black text-navy text-[15px] hover:brightness-110 transition-all uppercase tracking-[0.2em] shadow-[0_10px_30px_rgba(244,162,26,0.3)]">
                   Apply Now
                 </button>
               </div>

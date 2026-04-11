@@ -151,6 +151,7 @@ export function AdminDashboard() {
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc');
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [showCommandPalette, setShowCommandPalette] = useState(false);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
   const isSuperAdmin = profile?.role === 'super_admin' || user?.email === 'ginandNatalie@gmail.com' || user?.email === 'academy@ginashe.co.za';
 
@@ -167,12 +168,24 @@ export function AdminDashboard() {
   }, []);
 
   useEffect(() => {
-    if (activeTab === 'applications') {
-      fetchApplications();
-    } else if (activeTab === 'courses') {
-      fetchCourses();
-    }
-  }, [activeTab]);
+    fetchApplications();
+    fetchCourses();
+
+    // ─── ADMIN REAL-TIME HUB ───
+    const channel = supabase
+      .channel('admin-dashboard-realtime')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'applications' }, () => {
+        fetchApplications();
+      })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'posts' }, () => {
+        fetchCourses(); // Actually should be news, but matching current logic
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
 
   async function fetchApplications() {
     setLoading(true);
@@ -229,12 +242,7 @@ export function AdminDashboard() {
         updated_at: new Date().toISOString()
       };
 
-      // Generate student number on approval
-      if (newStatus === 'approved' && !app?.student_number) {
-        const year = new Date().getFullYear();
-        const seq = String(Math.floor(Math.random() * 9000) + 1000);
-        updateData.student_number = `GDA-${year}-${seq}`;
-      }
+
 
       const { error } = await supabase
         .from('applications')
@@ -398,56 +406,79 @@ export function AdminDashboard() {
         <>
           <div className="flex flex-col lg:flex-row min-h-screen bg-bg relative isolate">
       {/* ─── ADMIN SIDEBAR ─── */}
-      <aside className="lg:w-64 lg:fixed lg:h-screen lg:border-r border-border-custom bg-surface/80 backdrop-blur-2xl z-20">
-        <div className="flex flex-col h-full p-6">
-          <div className="mb-10 px-2 flex items-center justify-between">
-            <h2 className="font-syne font-extrabold text-xl tracking-tighter flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-gold text-bg flex items-center justify-center font-black">G</div>
-              ADMIN
-            </h2>
-          </div>
+      <aside className={`lg:fixed lg:h-screen lg:border-r border-border-custom bg-surface/80 backdrop-blur-2xl z-20 transition-all duration-200 ease-[0.22,1,0.36,1] ${isSidebarCollapsed ? 'lg:w-20' : 'lg:w-64'}`}>
+        <div className="flex flex-col h-full relative">
+          {/* Collapse Toggle Button */}
+          <button 
+            onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+            className="absolute -right-3 top-20 w-6 h-6 bg-gold text-bg rounded-full flex items-center justify-center shadow-lg z-30 hover:scale-110 transition-transform"
+          >
+            {isSidebarCollapsed ? <ChevronRight size={14} /> : <ChevronRight size={14} className="rotate-180" />}
+          </button>
 
-          <nav className="flex-1 space-y-1">
-            {[
-              { id: 'overview', label: 'Command Center', icon: BarChart3 },
-              { id: 'applications', label: 'Admissions', icon: FileText },
-              { id: 'courses', label: 'Curriculum', icon: BookOpen },
-              { id: 'progress', label: 'Student Success', icon: Zap },
-              { id: 'finances', label: 'Financials', icon: CreditCard },
-              { id: 'news', label: 'Content CMS', icon: Layout },
-              { id: 'events', label: 'Events Hub', icon: Calendar },
-              { id: 'communications', label: 'Comms Logs', icon: Mail },
-              { id: 'staff', label: 'Staff Roles', icon: ShieldCheck, super: true },
-              { id: 'settings', label: 'Portal Config', icon: Settings, super: true },
-            ].filter(t => t.super ? isSuperAdmin : true).map((item) => (
-              <button
-                key={item.id}
-                onClick={() => setActiveTab(item.id as any)}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-dm-mono text-[11px] uppercase tracking-widest transition-all group ${
-                  activeTab === item.id 
-                    ? 'bg-gold text-bg font-bold shadow-lg shadow-gold/20' 
-                    : 'text-text-muted hover:text-text-custom hover:bg-white/5'
-                }`}
+          <div className="p-6 h-full flex flex-col">
+            <div className={`mb-10 flex items-center overflow-hidden transition-all duration-200 ${isSidebarCollapsed ? 'justify-center' : 'px-2 justify-start gap-2'}`}>
+              <div className="w-8 h-8 rounded-lg bg-gold text-bg flex items-center justify-center font-black shrink-0">G</div>
+              {!isSidebarCollapsed && (
+                <h2 className="font-syne font-extrabold text-xl tracking-tighter whitespace-nowrap animate-fade">
+                  ADMIN
+                </h2>
+              )}
+            </div>
+
+            <nav className="flex-1 space-y-1">
+              {[
+                { id: 'overview', label: 'Command Center', icon: BarChart3 },
+                { id: 'applications', label: 'Admissions', icon: FileText },
+                { id: 'courses', label: 'Curriculum', icon: BookOpen },
+                { id: 'progress', label: 'Student Success', icon: Zap },
+                { id: 'finances', label: 'Financials', icon: CreditCard },
+                { id: 'news', label: 'Content CMS', icon: Layout },
+                { id: 'events', label: 'Events Hub', icon: Calendar },
+                { id: 'communications', label: 'Comms Logs', icon: Mail },
+                { id: 'staff', label: 'Staff Roles', icon: ShieldCheck, super: true },
+                { id: 'settings', label: 'Portal Config', icon: Settings, super: true },
+              ].filter(t => t.super ? isSuperAdmin : true).map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => setActiveTab(item.id as any)}
+                  title={isSidebarCollapsed ? item.label : ''}
+                  className={`w-full flex items-center rounded-xl font-dm-mono text-[11px] uppercase tracking-widest transition-all duration-200 group ${
+                    activeTab === item.id 
+                      ? 'bg-gold text-bg font-bold shadow-lg shadow-gold/20' 
+                      : 'text-text-muted hover:text-text-custom hover:bg-white/5'
+                  } ${isSidebarCollapsed ? 'justify-center p-3' : 'px-4 py-3 gap-3'}`}
+                >
+                  <item.icon className="w-4 h-4 shrink-0" />
+                  {!isSidebarCollapsed && <span className="whitespace-nowrap animate-fade">{item.label}</span>}
+                </button>
+              ))}
+            </nav>
+
+            <div className="mt-auto pt-6 border-t border-border-custom space-y-2">
+              <button 
+                onClick={() => setShowCommandPalette(true)} 
+                title={isSidebarCollapsed ? 'Quick Search' : ''}
+                className={`w-full flex items-center rounded-xl bg-surface border border-border-custom text-text-muted hover:text-gold transition-all font-dm-mono text-[10px] uppercase tracking-widest ${isSidebarCollapsed ? 'justify-center p-3' : 'px-4 py-3 gap-3'}`}
               >
-                <item.icon className="w-4 h-4" />
-                {item.label}
+                <span className="text-sm shrink-0 text-center">🔍</span>
+                {!isSidebarCollapsed && <span className="whitespace-nowrap animate-fade">Quick Search [K]</span>}
               </button>
-            ))}
-          </nav>
-
-          <div className="mt-auto pt-6 border-t border-border-custom">
-            <button onClick={() => setShowCommandPalette(true)} className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-surface border border-border-custom text-text-muted hover:text-gold transition-all mb-4 font-dm-mono text-[10px] uppercase tracking-widest">
-              <span className="text-sm">🔍</span> Quick Search [K]
-            </button>
-            <button onClick={() => signOut()} className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-coral hover:bg-coral/5 transition-all font-dm-mono text-[11px] uppercase tracking-widest">
-              <LogOut className="w-4 h-4" /> Sign Out
-            </button>
+              <button 
+                onClick={() => signOut()} 
+                title={isSidebarCollapsed ? 'Sign Out' : ''}
+                className={`w-full flex items-center rounded-xl text-coral hover:bg-coral/5 transition-all font-dm-mono text-[11px] uppercase tracking-widest ${isSidebarCollapsed ? 'justify-center p-3' : 'px-4 py-3 gap-3'}`}
+              >
+                <LogOut className="w-4 h-4 shrink-0" /> 
+                {!isSidebarCollapsed && <span className="whitespace-nowrap animate-fade">Sign Out</span>}
+              </button>
+            </div>
           </div>
         </div>
       </aside>
 
       {/* ─── ADMIN MAIN CONTENT ─── */}
-      <main className="flex-1 lg:ml-64 p-6 md:p-10 animate-fade">
+      <main className={`flex-1 p-6 md:p-10 animate-fade transition-all duration-200 ease-[0.22,1,0.36,1] ${isSidebarCollapsed ? 'lg:ml-20' : 'lg:ml-64'}`}>
         {/* TOP BAR */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 gap-6">
           <div className="animate-fadeRight">
@@ -1620,9 +1651,52 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
   const [activeSection, setActiveSection] = useState<'dashboard' | 'courses' | 'finances' | 'applications' | 'profile' | 'settings'>('dashboard');
   const [editingProfile, setEditingProfile] = useState(false);
   const [profileForm, setProfileForm] = useState<any>({});
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
   useEffect(() => {
-    if (user) fetchStudentData();
+    if (!user) return;
+    
+    fetchStudentData();
+
+    // ─── UNIFIED REAL-TIME HUB ───
+    const channel = supabase
+      .channel(`student-portal-${user.id}`)
+      .on('postgres_changes', { 
+        event: '*', 
+        schema: 'public', 
+        table: 'profiles', 
+        filter: `id=eq.${user.id}` 
+      }, (payload) => {
+        setProfile(payload.new);
+        setProfileForm(payload.new);
+      })
+      .on('postgres_changes', { 
+        event: '*', 
+        schema: 'public', 
+        table: 'applications', 
+        filter: `email=eq.${user.email?.toLowerCase()}` 
+      }, () => {
+        fetchStudentData(); // Re-fetch applications
+      })
+      .on('postgres_changes', { 
+        event: '*', 
+        schema: 'public', 
+        table: 'posts' 
+      }, () => {
+        fetchStudentData(); // Re-fetch if news changes
+      })
+      .on('postgres_changes', { 
+        event: '*', 
+        schema: 'public', 
+        table: 'events' 
+      }, () => {
+        fetchStudentData(); // Re-fetch if events change
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, [user]);
 
   async function fetchStudentData() {
@@ -1704,61 +1778,86 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
   return (
     <div className="flex flex-col lg:flex-row min-h-screen bg-bg relative isolate">
       {/* ─── SIDEBAR NAVIGATION ─── */}
-      <aside className="lg:w-64 lg:fixed lg:h-screen lg:border-r border-border-custom bg-surface/50 backdrop-blur-xl z-20 transition-all duration-300">
-        <div className="flex flex-col h-full p-6">
-          <div className="mb-10 px-2">
-            <h2 className="font-syne font-extrabold text-xl tracking-tighter flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-gold flex items-center justify-center text-bg">G</div>
-              PORTAL
-            </h2>
-          </div>
+      <aside className={`lg:fixed lg:h-screen lg:border-r border-border-custom bg-surface/50 backdrop-blur-xl z-20 transition-all duration-200 ease-[0.22,1,0.36,1] ${isSidebarCollapsed ? 'lg:w-20' : 'lg:w-64'}`}>
+        <div className="flex flex-col h-full relative">
+          {/* Collapse Toggle Button */}
+          <button 
+            onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+            className="absolute -right-3 top-20 w-6 h-6 bg-gold text-bg rounded-full flex items-center justify-center shadow-lg z-30 hover:scale-110 transition-transform"
+          >
+            {isSidebarCollapsed ? <ChevronRight size={14} /> : <ChevronRight size={14} className="rotate-180" />}
+          </button>
 
-          <nav className="flex-1 space-y-1">
-            {[
-              { id: 'dashboard', label: 'Overview', icon: BarChart3 },
-              { id: 'courses', label: 'My Learning', icon: BookOpen },
-              { id: 'finances', label: 'Billing', icon: CreditCard },
-              { id: 'applications', label: 'Admissions', icon: FileText },
-              { id: 'profile', label: 'Profile', icon: User },
-              { id: 'settings', label: 'Settings', icon: Settings },
-            ].map((item) => (
-              <button
-                key={item.id}
-                onClick={() => setActiveSection(item.id as any)}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-dm-mono text-[11px] uppercase tracking-widest transition-all duration-200 group ${
-                  activeSection === item.id 
-                    ? 'bg-gold/10 text-gold border border-gold/20' 
-                    : 'text-text-muted hover:text-text-custom hover:bg-white/5 border border-transparent'
-                }`}
-              >
-                <item.icon className={`w-4 h-4 ${activeSection === item.id ? 'text-gold' : 'group-hover:text-gold'} transition-colors`} />
-                {item.label}
-              </button>
-            ))}
-          </nav>
-
-          <div className="mt-auto pt-6 border-t border-border-custom">
-            <div className="px-4 py-3 bg-surface border border-border-custom rounded-xl mb-4">
-              <div className="flex items-center gap-3 mb-2">
-                <div className="w-8 h-8 rounded-full bg-gold/20 border border-gold/30 flex items-center justify-center text-gold font-bold text-xs uppercase">
-                  {profile?.first_name?.[0] || user?.email?.[0]}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-[11px] font-bold truncate">{profile?.first_name || 'Student'}</p>
-                  <p className="text-[9px] text-text-muted truncate uppercase tracking-tighter">ID: {profile?.student_number?.split('-').pop() || '...'}</p>
-                </div>
-              </div>
+          <div className="p-6 flex flex-col h-full">
+            <div className={`mb-10 flex items-center overflow-hidden transition-all duration-200 ${isSidebarCollapsed ? 'justify-center' : 'px-2 justify-start gap-2'}`}>
+              <div className="w-8 h-8 rounded-lg bg-gold flex items-center justify-center text-bg shrink-0">G</div>
+              {!isSidebarCollapsed && (
+                <h2 className="font-syne font-extrabold text-xl tracking-tighter whitespace-nowrap animate-fade">
+                  PORTAL
+                </h2>
+              )}
             </div>
-            <button onClick={() => signOut()} className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-coral hover:bg-coral/5 transition-all font-dm-mono text-[11px] uppercase tracking-widest">
-              <LogOut className="w-4 h-4" />
-              Sign Out
-            </button>
+
+            <nav className="flex-1 space-y-1">
+              {[
+                { id: 'dashboard', label: 'Overview', icon: BarChart3 },
+                { id: 'courses', label: 'My Learning', icon: BookOpen },
+                { id: 'finances', label: 'Billing', icon: CreditCard },
+                { id: 'applications', label: 'Admissions', icon: FileText },
+                { id: 'profile', label: 'Profile', icon: User },
+                { id: 'settings', label: 'Settings', icon: Settings },
+              ].map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => setActiveSection(item.id as any)}
+                  title={isSidebarCollapsed ? item.label : ''}
+                  className={`w-full flex items-center rounded-xl font-dm-mono text-[11px] uppercase tracking-widest transition-all duration-200 group ${
+                    activeSection === item.id 
+                      ? 'bg-gold/10 text-gold border border-gold/20' 
+                      : 'text-text-muted hover:text-text-custom hover:bg-white/5 border border-transparent'
+                  } ${isSidebarCollapsed ? 'justify-center p-3' : 'px-4 py-3 gap-3'}`}
+                >
+                  <item.icon className={`w-4 h-4 shrink-0 ${activeSection === item.id ? 'text-gold' : 'group-hover:text-gold'} transition-colors`} />
+                  {!isSidebarCollapsed && <span className="whitespace-nowrap animate-fade">{item.label}</span>}
+                </button>
+              ))}
+            </nav>
+
+            <div className="mt-auto pt-6 border-t border-border-custom space-y-4">
+              {!isSidebarCollapsed ? (
+                <div className="px-4 py-3 bg-surface border border-border-custom rounded-xl animate-fade">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-gold/20 border border-gold/30 flex items-center justify-center text-gold font-bold text-xs uppercase shrink-0">
+                      {profile?.first_name?.[0] || user?.email?.[0]}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-[11px] font-bold truncate">{profile?.first_name || 'Student'}</p>
+                      <p className="text-[9px] text-text-muted truncate uppercase tracking-tighter">ID: {profile?.student_number?.split('-').pop() || '...'}</p>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div title={`${profile?.first_name || 'Student'}`} className="flex justify-center py-2">
+                  <div className="w-8 h-8 rounded-full bg-gold/20 border border-gold/30 flex items-center justify-center text-gold font-bold text-xs uppercase shadow-sm">
+                    {profile?.first_name?.[0] || user?.email?.[0]}
+                  </div>
+                </div>
+              )}
+              <button 
+                onClick={() => signOut()} 
+                title={isSidebarCollapsed ? 'Sign Out' : ''}
+                className={`w-full flex items-center rounded-xl text-coral hover:bg-coral/5 transition-all font-dm-mono text-[11px] uppercase tracking-widest ${isSidebarCollapsed ? 'justify-center p-3' : 'px-4 py-3 gap-3'}`}
+              >
+                <LogOut className="w-4 h-4 shrink-0" />
+                {!isSidebarCollapsed && <span className="whitespace-nowrap animate-fade">Sign Out</span>}
+              </button>
+            </div>
           </div>
         </div>
       </aside>
 
       {/* ─── MAIN CONTENT ─── */}
-      <main className="flex-1 lg:ml-64 p-6 md:p-10 animate-fade">
+      <main className={`flex-1 p-6 md:p-10 animate-fade transition-all duration-200 ease-[0.22,1,0.36,1] ${isSidebarCollapsed ? 'lg:ml-20' : 'lg:ml-64'}`}>
         {/* HEADER SECTION */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 gap-6">
           <div className="animate-fadeRight">
@@ -2154,6 +2253,38 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
                           </div>
                         )}
                     </div>
+                  </div>
+
+                  {/* EMERGENCY CONTACT SECTION */}
+                  <div className="pt-10 border-t border-border-custom">
+                     <div className="flex items-center gap-4 mb-8">
+                       <ShieldCheck className="w-5 h-5 text-gold" />
+                       <h4 className="font-syne font-bold text-lg">Next of Kin / Emergency Contact</h4>
+                     </div>
+                     <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8 text-left">
+                        {[
+                          { label: 'Name / Relationship', key: 'emergency_contact_name', icon: User },
+                          { label: 'Emergency Contact Phone', key: 'emergency_contact_phone', icon: Phone },
+                        ].map(field => (
+                          <div key={field.key} className="space-y-2 group">
+                            <label className="flex items-center gap-2 text-[10px] font-dm-mono uppercase text-text-dim tracking-widest group-hover:text-gold transition-colors">
+                              <field.icon className="w-3 h-3" />
+                              {field.label}
+                            </label>
+                            {editingProfile ? (
+                              <input 
+                                className="w-full bg-bg border border-border-custom rounded-xl p-3 text-sm focus:border-gold/50 transition-all outline-none" 
+                                value={profileForm[field.key] || ''} 
+                                onChange={e => setProfileForm({...profileForm, [field.key]: e.target.value})} 
+                              />
+                            ) : (
+                              <div className="p-3 bg-surface/30 border border-transparent rounded-xl text-sm font-bold">
+                                {profile?.[field.key] || <span className="text-text-muted font-normal italic">Requires completion</span>}
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                     </div>
                   </div>
 
                   <div className="pt-10 border-t border-border-custom">

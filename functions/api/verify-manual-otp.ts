@@ -96,6 +96,17 @@ export async function onRequestPost(context) {
       .single();
 
     if (fullApp && userId) {
+      // Generate Student Number if they don't have one
+      let studentNumber = fullApp.student_number;
+      if (!studentNumber) {
+        const { data: newSN, error: snError } = await supabase.rpc('generate_student_number');
+        if (!snError) {
+          studentNumber = newSN;
+          // Update application with the new student number
+          await supabase.from('applications').update({ student_number: studentNumber }).eq('id', app.id);
+        }
+      }
+
       const { error: profileError } = await supabase
         .from('profiles')
         .upsert({
@@ -106,11 +117,16 @@ export async function onRequestPost(context) {
           date_of_birth: fullApp.date_of_birth,
           gender: fullApp.gender,
           nationality: fullApp.nationality,
+          id_number: fullApp.id_number,
+          student_number: studentNumber,
           address_line1: fullApp.address_line1,
+          address_line2: fullApp.address_line2,
           city: fullApp.city,
           province: fullApp.province,
           country: fullApp.country,
           postal_code: fullApp.postal_code,
+          emergency_contact_name: fullApp.emergency_contact_name || fullApp.next_of_kin_name,
+          emergency_contact_phone: fullApp.emergency_contact_phone || fullApp.next_of_kin_phone,
           role: 'student',
           updated_at: new Date().toISOString()
         });
