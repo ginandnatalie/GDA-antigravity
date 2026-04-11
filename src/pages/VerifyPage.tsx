@@ -11,7 +11,8 @@ import {
   Lock, 
   Eye, 
   EyeOff,
-  RefreshCcw
+  RefreshCcw,
+  Loader2
 } from 'lucide-react';
 
 type VerifyStep = 'email' | 'otp' | 'password' | 'success';
@@ -19,7 +20,7 @@ type VerifyStep = 'email' | 'otp' | 'password' | 'success';
 export default function VerifyPage() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { user, signOut } = useAuth();
+  const { signOut } = useAuth();
   
   // State
   const [step, setStep] = useState<VerifyStep>('otp');
@@ -39,13 +40,10 @@ export default function VerifyPage() {
   useEffect(() => {
     if (!email) {
       setStep('email');
-    } else if (user) {
-      // If user is already signed in (maybe from a link), go straight to password
-      setStep('password');
     } else {
       setStep('otp');
     }
-  }, [email, user]);
+  }, [email]);
 
   // Cooldown timer for resending OTP
   useEffect(() => {
@@ -77,46 +75,41 @@ export default function VerifyPage() {
   const handleResendOtp = async () => {
     if (resendCooldown > 0 || !email) return;
     setLoading(true);
+    setError(null);
     try {
-      const { error } = await supabase.auth.signInWithOtp({ 
-        email,
-        options: { shouldCreateUser: true }
+      // Calls the same application processing logic which generates a new manual OTP
+      const response = await fetch('/api/process-application', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email,
+          name: "GDA Student",
+          program: "Ginashe Digital Academy",
+          type: 'individual'
+        })
       });
-      if (error) throw error;
+
+      if (!response.ok) throw new Error("Failed to resend code");
+
       setResendCooldown(60);
       setError(null);
     } catch (err: any) {
-      setError(err.message);
+      setError(err.message || "Failed to resend activation code.");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleVerifyOtp = async (e?: React.FormEvent) => {
-    if (e) e.preventDefault();
+  const handleVerifyOtpStep = (e: React.FormEvent) => {
+    e.preventDefault();
     const token = otp.join('');
     if (token.length < 6) return;
-
-    setLoading(true);
-    setError(null);
-    try {
-      const { error } = await supabase.auth.verifyOtp({
-        email,
-        token,
-        type: 'email'
-      });
-      if (error) throw error;
-      
-      // Verification successful, Supabase signs user in automatically
-      setStep('password');
-    } catch (err: any) {
-      setError(err.message || "Invalid or expired code. Please try again.");
-    } finally {
-      setLoading(false);
-    }
+    
+    // Simply move to password step (Verification happens on final submit)
+    setStep('password');
   };
 
-  const handleSetPassword = async (e: React.FormEvent) => {
+  const handleFinalActivation = async (e: React.FormEvent) => {
     e.preventDefault();
     if (password !== confirmPassword) {
       setError("Passwords do not match");
@@ -130,14 +123,25 @@ export default function VerifyPage() {
     setLoading(true);
     setError(null);
     try {
-      const { error } = await supabase.auth.updateUser({ password });
-      if (error) throw error;
+      // Call the Manual OTP Verification API
+      const response = await fetch('/api/verify-manual-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email,
+          otp: otp.join(''),
+          password
+        })
+      });
+
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || "Verification failed");
 
       // SUCCESS!
       await signOut();
       setStep('success');
     } catch (err: any) {
-      setError(err.message || "Failed to update password");
+      setError(err.message || "Failed to activate account. Please check your code.");
     } finally {
       setLoading(false);
     }
@@ -180,8 +184,8 @@ export default function VerifyPage() {
             </h1>
             <p className="text-text-soft text-[14px] leading-relaxed">
               {step === 'email' && "Enter the email you used for your application to receive a verification code."}
-              {step === 'otp' && <>We sent a 6-digit code to <span className="text-gold font-medium">{email}</span>. Please enter it below.</>}
-              {step === 'password' && "Verification successful! Now choose a strong password to complete your setup."}
+              {step === 'otp' && <>Check <span className="text-gold font-medium">{email}</span> for your 6-digit activation code.</>}
+              {step === 'password' && "Code accepted for verification. Now choose a strong password to complete your setup."}
               {step === 'success' && "Your Ginashe Digital Academy account is now active and ready for use."}
             </p>
           </div>
@@ -206,14 +210,14 @@ export default function VerifyPage() {
                 </div>
               </div>
               <button type="submit" className="btn btn-gold w-full py-4 font-syne font-bold text-[14px]">
-                Send Verification Code <ArrowRight size={16} className="ml-2" />
+                Continue to Verification <ArrowRight size={16} className="ml-2" />
               </button>
             </form>
           )}
 
           {/* Step 2: OTP Entry */}
           {step === 'otp' && (
-            <form onSubmit={handleVerifyOtp} className="space-y-8">
+            <form onSubmit={handleVerifyOtpStep} className="space-y-8">
               <div className="flex justify-between gap-2 md:gap-3">
                 {otp.map((digit, idx) => (
                   <input
@@ -236,7 +240,7 @@ export default function VerifyPage() {
                   disabled={loading || otp.join('').length < 6}
                   className="btn btn-gold w-full py-4 font-syne font-bold text-[14px]"
                 >
-                  {loading ? "Verifying..." : "Verify Code →"}
+                  Verify Code →
                 </button>
                 
                 <button
@@ -252,9 +256,9 @@ export default function VerifyPage() {
             </form>
           )}
 
-          {/* Step 3: Password Setup */}
+          {/* Step 3: Password Setup & Final Verify */}
           {step === 'password' && (
-            <form onSubmit={handleSetPassword} className="space-y-5">
+            <form onSubmit={handleFinalActivation} className="space-y-5">
               <div>
                 <label className="block font-dm-mono text-[10px] tracking-widest uppercase text-text-muted mb-2 ml-1">New Password</label>
                 <div className="relative group">
@@ -292,8 +296,25 @@ export default function VerifyPage() {
                 </div>
               </div>
 
-              <button type="submit" disabled={loading} className="btn btn-gold w-full py-4 mt-2 font-syne font-bold text-[14px]">
-                {loading ? "Activating..." : "Set Password & Finish →"}
+              <div className="pt-2">
+                <button type="submit" disabled={loading} className="btn btn-gold w-full py-4 font-syne font-bold text-[14px] shadow-[0_12px_24px_rgba(212,175,55,0.2)]">
+                  {loading ? (
+                    <span className="flex items-center gap-2 justify-center">
+                      <Loader2 className="animate-spin" size={18} />
+                      Activating Account...
+                    </span>
+                  ) : (
+                    "Authorize & Finish →"
+                  )}
+                </button>
+              </div>
+
+              <button 
+                type="button"
+                onClick={() => setStep('otp')}
+                className="w-full text-center text-[11px] text-text-muted hover:text-gold transition-colors pt-2"
+              >
+                ← Back to code entry
               </button>
             </form>
           )}
@@ -308,7 +329,7 @@ export default function VerifyPage() {
                 onClick={() => navigate('/')}
                 className="btn btn-gold w-full py-4 font-syne font-bold text-[14px]"
               >
-                Go to Login Portal <ArrowRight size={16} className="ml-2" />
+                Go to Student Portal <ArrowRight size={16} className="ml-2" />
               </button>
             </div>
           )}

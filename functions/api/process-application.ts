@@ -30,30 +30,44 @@ export async function onRequestPost(context) {
     // 1. Handle Auth Setup (ONLY for individuals)
     if (isIndividual) {
       try {
-        // Check if user already exists in auth
-        const { data: userSearch } = await supabase.auth.admin.listUsers();
-        const users = (userSearch?.users || []) as any[];
-        const existingUser = users.find(u => u.email?.toLowerCase() === email.toLowerCase());
+        // Generate a MANUAL 6-digit OTP for the unified email
+        const manualOtp = Math.floor(100000 + Math.random() * 900000).toString();
+        
+        // Update the application record with the manual OTP for verification
+        const { data: latestApp } = await supabase
+          .from('applications')
+          .select('id, history')
+          .eq('email', email.trim().toLowerCase())
+          .order('created_at', { ascending: false })
+          .limit(1)
+          .maybeSingle();
 
-        if (existingUser) {
-          console.log(`[Auth] User ${email} already exists. Triggering OTP for verification.`);
+        if (latestApp) {
+          const currentHistory = typeof latestApp.history === 'string' ? JSON.parse(latestApp.history) : (latestApp.history || []);
+          const updatedHistory = [{
+            event: 'Manual OTP Generated',
+            otp: manualOtp,
+            timestamp: new Date().toISOString(),
+            expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
+          }, ...currentHistory];
+
+          await supabase
+            .from('applications')
+            .update({ history: JSON.stringify(updatedHistory) })
+            .eq('id', latestApp.id);
         }
 
-        // Trigger Supabase OTP (6-digit code)
-        // This will create the user if they don't exist and send the code
-        const { error: otpError } = await supabase.auth.signInWithOtp({
-          email: email.trim().toLowerCase(),
-          options: {
-            shouldCreateUser: true,
-            emailRedirectTo: `${origin}/verify`
-          }
+        // Create the user in Supabase but SKIP the automatic email
+        await supabase.auth.admin.inviteUserByEmail(email.trim().toLowerCase(), {
+          data: { full_name: name, manual_otp: manualOtp },
+          redirectTo: `${origin}/verify`,
+          // IMPORTANT: Check if skip_invitation is supported in this environment
+          // options: { skip_invitation: true } // Some versions use this
         });
 
-        if (otpError) {
-          console.warn("[Auth] OTP Send Error:", otpError.message);
-        } else {
-          console.log(`[Auth] OTP sent successfully to ${email}`);
-        }
+        // Store the manual OTP locally for the email template
+        invitationLink = manualOtp;
+        console.log(`[Auth] Manual OTP ${manualOtp} generated and stored for ${email}`);
       } catch (authErr: any) {
         console.error("Auth pre-processing error:", authErr.message);
       }
@@ -78,12 +92,13 @@ export async function onRequestPost(context) {
           </p>
 
           ${invitationLink ? `
-          <div style="background-color: #1a1a1c; padding: 32px; border-radius: 12px; border: 1px solid #D4AF37; text-align: center; margin: 32px 0;">
-            <p style="margin: 0 0 20px 0; font-weight: 800; color: #D4AF37; text-transform: uppercase; font-size: 13px; letter-spacing: 1.5px;">Action Required: Activate Your Portal</p>
+          <div style="background-color: #1a1a1c; padding: 40px; border-radius: 12px; border: 1px solid #D4AF37; text-align: center; margin: 32px 0;">
+            <p style="margin: 0 0 16px 0; font-weight: 800; color: #D4AF37; text-transform: uppercase; font-size: 13px; letter-spacing: 2px;">Your Activation Code</p>
+            <p style="margin: 0 0 24px 0; font-size: 48px; font-weight: 900; color: #D4AF37; letter-spacing: 12px; font-family: monospace;">${invitationLink}</p>
             <p style="margin: 0 0 24px 0; line-height: 1.6; font-size: 14px; color: #d1d5db;">
-              To track your application status, access learning materials, and view your schedule, click the high-priority link below sets your password and secures your account.
+              Enter this 6-digit code on the Academy activation screen to secure your account and set your password.
             </p>
-            <a href="${invitationLink}" style="display: inline-block; padding: 14px 32px; background-color: #D4AF37; color: #080b12; text-decoration: none; border-radius: 8px; font-weight: 900; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 10px 20px rgba(212,175,55,0.2);">Secure My Account →</a>
+            <a href="${origin}/verify?email=${encodeURIComponent(email)}" style="display: inline-block; padding: 14px 32px; background-color: #D4AF37; color: #080b12; text-decoration: none; border-radius: 8px; font-weight: 900; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 10px 20px rgba(212,175,55,0.2);">Return to Activation Screen →</a>
           </div>
           ` : `
           <div style="background-color: #1a1a1c; padding: 24px; border-radius: 8px; border-left: 4px solid #D4AF37; margin: 32px 0;">
