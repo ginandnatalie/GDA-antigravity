@@ -164,6 +164,7 @@ function AppContent() {
               <Route path="/news/:slug" element={<NewsDetailPage />} />
               <Route path="/events" element={<EventsPage />} />
               <Route path="/verify" element={<VerifyPage />} />
+              <Route path="/activate" element={<StaffActivationView />} />
               
               <Route 
                 path="/admin" 
