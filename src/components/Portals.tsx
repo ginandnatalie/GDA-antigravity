@@ -156,17 +156,12 @@ export function AdminDashboard() {
   const [applications, setApplications] = useState<any[]>([]);
   const [courses, setCourses] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'overview' | 'applications' | 'courses' | 'news' | 'events' | 'finances' | 'progress' | 'staff' | 'settings' | 'communications'>('overview');
-  const [filter, setFilter] = useState('all');
-  const [statusFilter, setStatusFilter] = useState('all');
-  const [updatingId, setUpdatingId] = useState<string | null>(null);
-  const [selectedApp, setSelectedApp] = useState<any | null>(null);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [sortField, setSortField] = useState('created_at');
-  const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc');
-  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
-  const [showCommandPalette, setShowCommandPalette] = useState(false);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const [campuses, setCampuses] = useState<any[]>([]);
+  const [selectedCampus, setSelectedCampus] = useState<string>('all');
+  const [notifications, setNotifications] = useState<any[]>([]);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [governanceSettings, setGovernanceSettings] = useState<any>({});
 
   const isSuperAdmin = profile?.role === 'super_admin' || user?.email === 'ginandNatalie@gmail.com' || user?.email === 'academy@ginashe.co.za';
 
@@ -185,22 +180,41 @@ export function AdminDashboard() {
   useEffect(() => {
     fetchApplications();
     fetchCourses();
+    fetchCampuses();
+    fetchGovernance();
+    fetchNotifications();
 
-    // ─── ADMIN REAL-TIME HUB ───
     const channel = supabase
       .channel('admin-dashboard-realtime')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'applications' }, () => {
-        fetchApplications();
-      })
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'posts' }, () => {
-        fetchCourses(); // Actually should be news, but matching current logic
-      })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'applications' }, () => fetchApplications())
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'school_settings' }, () => fetchGovernance())
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'system_notifications', filter: `user_id=eq.${user?.id}` }, () => fetchNotifications())
       .subscribe();
 
-    return () => {
-      supabase.removeChannel(channel);
-    };
+    return () => { supabase.removeChannel(channel); };
   }, []);
+
+  async function fetchCampuses() {
+    const { data } = await supabase.from('campuses').select('*').eq('is_active', true);
+    setCampuses(data || []);
+  }
+
+  async function fetchGovernance() {
+    const { data } = await supabase.from('school_settings').select('*');
+    const settings: any = {};
+    data?.forEach(s => settings[s.key] = s.value);
+    setGovernanceSettings(settings);
+  }
+
+  async function fetchNotifications() {
+    const { data } = await supabase
+      .from('system_notifications')
+      .select('*')
+      .eq('user_id', user?.id)
+      .eq('is_read', false)
+      .order('created_at', { ascending: false });
+    setNotifications(data || []);
+  }
 
   async function fetchApplications() {
     setLoading(true);
@@ -443,7 +457,7 @@ export function AdminDashboard() {
 
             <nav className="flex-1 space-y-1">
               {[
-                { id: 'overview', label: 'Command Center', icon: BarChart3 },
+                { id: 'overview', label: 'Command Hub', icon: Zap },
                 { id: 'applications', label: 'Admissions', icon: FileText },
                 { id: 'courses', label: 'Curriculum', icon: BookOpen },
                 { id: 'academic', label: 'Academic Mgt', icon: Star },
@@ -452,8 +466,7 @@ export function AdminDashboard() {
                 { id: 'finances', label: 'Financials', icon: CreditCard },
                 { id: 'news', label: 'Content CMS', icon: Layout },
                 { id: 'events', label: 'Events Hub', icon: Calendar },
-                { id: 'communications', label: 'Comms Logs', icon: Mail },
-                { id: 'staff', label: 'Staff Roles', icon: ShieldCheck, super: true },
+                { id: 'governance', label: 'Campus Governance', icon: ShieldCheck, super: true },
                 { id: 'settings', label: 'Portal Config', icon: Settings, super: true },
               ].filter(t => t.super ? isSuperAdmin : true).map((item) => (
                 <button
@@ -507,18 +520,68 @@ export function AdminDashboard() {
              </p>
           </div>
 
-          <div className="flex items-center gap-4 bg-surface/50 border border-border-custom p-2 rounded-2xl backdrop-blur-md animate-fadeLeft">
-            <div className="text-right px-2">
-              <p className="text-[10px] text-text-dim font-dm-mono uppercase">Database</p>
-              <p className="text-xs font-bold text-emerald flex items-center justify-end gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald animate-pulse" /> Connected
-              </p>
+          <div className="flex items-center gap-4 animate-fadeLeft">
+            {/* Notifications Bell */}
+            <div className="relative">
+              <button 
+                onClick={() => setShowNotifications(!showNotifications)}
+                className={`p-3 rounded-2xl border transition-all ${notifications.length > 0 ? 'bg-gold/10 border-gold/30 text-gold animate-pulse' : 'bg-surface/50 border-border-custom text-text-muted hover:text-gold'}`}
+              >
+                <Zap className="w-4 h-4" />
+                {notifications.length > 0 && (
+                  <span className="absolute -top-1 -right-1 w-4 h-4 bg-coral text-white text-[8px] font-bold rounded-full flex items-center justify-center border-2 border-bg">
+                    {notifications.length}
+                  </span>
+                )}
+              </button>
+
+              {showNotifications && (
+                <div className="absolute right-0 mt-4 w-80 bg-card border border-border-custom rounded-2xl shadow-2xl z-[100] overflow-hidden">
+                   <div className="p-4 border-b border-border-custom flex justify-between items-center bg-surface">
+                      <span className="text-[10px] font-dm-mono uppercase tracking-widest font-bold">Priority Notices</span>
+                      <button onClick={() => setShowNotifications(false)} className="text-[10px] text-text-dim">CLOSE</button>
+                   </div>
+                   <div className="max-h-96 overflow-y-auto">
+                      {notifications.map(n => (
+                        <div key={n.id} className="p-4 border-b border-border-custom/50 hover:bg-white/5 transition-colors cursor-pointer" onClick={async () => {
+                           await supabase.from('system_notifications').update({ is_read: true }).eq('id', n.id);
+                           fetchNotifications();
+                           if (n.link) setActiveTab('courses'); // Redirect to courses for inquiries
+                        }}>
+                           <div className="flex items-center gap-2 mb-1">
+                              <span className="w-1.5 h-1.5 rounded-full bg-gold" />
+                              <span className="text-[11px] font-bold">{n.title}</span>
+                           </div>
+                           <p className="text-[10px] text-text-soft leading-relaxed">{n.message}</p>
+                           <div className="text-[8px] text-text-dim font-dm-mono uppercase mt-2">{new Date(n.created_at).toLocaleString()}</div>
+                        </div>
+                      ))}
+                      {notifications.length === 0 && (
+                        <div className="p-10 text-center">
+                           <p className="text-[10px] text-text-dim italic">System clear. No pending interactions.</p>
+                        </div>
+                      )}
+                   </div>
+                </div>
+              )}
             </div>
-            <div className="w-px h-8 bg-border-custom" />
-            <div className="flex items-center gap-4 pr-2 pl-2">
-               <button onClick={fetchApplications} className="p-2 hover:bg-white/5 rounded-lg transition-colors" title="Refresh Data">
-                 <Zap className={`w-4 h-4 text-gold ${updatingId ? 'animate-spin' : ''}`} />
-               </button>
+
+            <div className="flex items-center gap-4 bg-surface/50 border border-border-custom p-2 rounded-2xl backdrop-blur-md">
+              <select 
+                value={selectedCampus} 
+                onChange={(e) => setSelectedCampus(e.target.value)}
+                className="bg-transparent border-none text-[10px] font-dm-mono uppercase focus:ring-0 cursor-pointer text-gold pr-8"
+              >
+                <option value="all">All Campuses</option>
+                {campuses.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+              </select>
+              <div className="w-px h-8 bg-border-custom" />
+              <div className="text-right px-2">
+                <p className="text-[10px] text-text-dim font-dm-mono uppercase">Database</p>
+                <p className="text-xs font-bold text-emerald flex items-center justify-end gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald animate-pulse" /> Connected
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -617,23 +680,26 @@ export function AdminDashboard() {
                              </select>
                           </div>
                        </div>
-                       <div className="grid grid-cols-2 gap-6">
+                       <div className="grid grid-cols-3 gap-6">
                           <div className="space-y-2">
-                             <label className="text-[10px] font-dm-mono uppercase text-text-muted tracking-widest">Item Title</label>
-                             <input id="ac-title" className="w-full bg-bg border border-border-custom rounded-xl p-4 text-sm" placeholder="Module 1 Mastery..." />
+                             <label className="text-[10px] font-dm-mono uppercase text-text-muted tracking-widest">Weighting (%)</label>
+                             <input id="ac-weight" type="number" className="w-full bg-bg border border-border-custom rounded-xl p-4 text-sm" defaultValue="20" title="Proportion of the final module grade" />
                           </div>
                           <div className="space-y-2">
-                             <label className="text-[10px] font-dm-mono uppercase text-text-muted tracking-widest">Total Marks</label>
-                             <input id="ac-marks" type="number" className="w-full bg-bg border border-border-custom rounded-xl p-4 text-sm" defaultValue="100" />
+                             <label className="text-[10px] font-dm-mono uppercase text-text-muted tracking-widest">Passing Score (%)</label>
+                             <input id="ac-pass" type="number" className="w-full bg-bg border border-border-custom rounded-xl p-4 text-sm" defaultValue="50" />
+                          </div>
+                          <div className="space-y-2">
+                             <label className="text-[10px] font-dm-mono uppercase text-text-muted tracking-widest">Integrity Logic</label>
+                             <select id="ac-proctor" className="w-full bg-bg border border-border-custom rounded-xl p-4 text-sm">
+                                <option value="false">Standard Mode</option>
+                                <option value="true">Active Proctoring (Focus Tracking)</option>
+                             </select>
                           </div>
                        </div>
                        <div className="space-y-2">
-                          <label className="text-[10px] font-dm-mono uppercase text-text-muted tracking-widest">Due Date</label>
-                          <input id="ac-due" type="date" className="w-full bg-bg border border-border-custom rounded-xl p-4 text-sm" />
-                       </div>
-                       <div className="space-y-2">
-                          <label className="text-[10px] font-dm-mono uppercase text-text-muted tracking-widest">Description / Specs</label>
-                          <textarea id="ac-desc" className="w-full bg-bg border border-border-custom rounded-xl p-4 text-sm h-32" />
+                          <label className="text-[10px] font-dm-mono uppercase text-text-muted tracking-widest">Instructions / Reference Material</label>
+                          <textarea id="ac-desc" className="w-full bg-bg border border-border-custom rounded-xl p-4 text-sm h-32" placeholder="Submission guidelines, required files, etc..." />
                        </div>
                        <div className="flex justify-end">
                           <button 
@@ -642,15 +708,18 @@ export function AdminDashboard() {
                                const type = (document.getElementById('ac-type') as HTMLSelectElement).value;
                                const title = (document.getElementById('ac-title') as HTMLInputElement).value;
                                const total_marks = parseInt((document.getElementById('ac-marks') as HTMLInputElement).value);
+                               const weight = parseInt((document.getElementById('ac-weight') as HTMLInputElement).value);
+                               const passing_score = parseInt((document.getElementById('ac-pass') as HTMLInputElement).value);
+                               const is_proctored = (document.getElementById('ac-proctor') as HTMLSelectElement).value === 'true';
                                const due_date = (document.getElementById('ac-due') as HTMLInputElement).value;
                                const description = (document.getElementById('ac-desc') as HTMLTextAreaElement).value;
 
                                const { error } = await supabase.from('assessments').insert({
-                                 course_id, type, title, total_marks, due_date: due_date || null, description
+                                 course_id, type, title, total_marks, weight, passing_score, is_proctored, due_date: due_date || null, description
                                });
                                if (error) alert(error.message);
                                else {
-                                 alert('Academic item created!');
+                                 alert('Academic item created with integrity controls!');
                                  (document.getElementById('ac-title') as HTMLInputElement).value = '';
                                }
                             }}
@@ -668,6 +737,57 @@ export function AdminDashboard() {
               <FinanceManager />
             ) : activeTab === 'progress' ? (
               <StudentProgressTracker />
+            ) : activeTab === 'governance' ? (
+              <div className="space-y-8 animate-fade">
+                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="bg-card border border-border-custom rounded-3xl p-10">
+                       <h3 className="font-syne font-bold text-2xl mb-2">Institutional Overrides</h3>
+                       <p className="text-text-muted text-xs mb-8">Master controls for Academy-wide features. Overrides per-course settings.</p>
+                       <div className="space-y-6">
+                          {[
+                            { key: 'global_discussions_enabled', label: 'Peer-to-Peer Discussions', desc: 'Activates student forums and social hubs.' },
+                            { key: 'global_ai_tutor_enabled', label: 'Intelligent AI Tutor', desc: 'Allows students to query curriculum via GDA_Brain.' },
+                            { key: 'campus_overlap_allowed', label: 'Cross-Campus Enrollment', desc: 'Allows students to hold active seats in multiple branches.' },
+                            { key: 'transcripts_enabled', label: 'Institutional Transcripts (Beta)', desc: 'Must be manually activated for SuperAdmin verification.' },
+                          ].map(opt => (
+                            <div key={opt.key} className="flex items-center justify-between p-4 bg-bg border border-border-custom rounded-2xl">
+                               <div>
+                                  <div className="text-sm font-bold">{opt.label}</div>
+                                  <div className="text-[10px] text-text-dim uppercase tracking-tighter">{opt.desc}</div>
+                               </div>
+                               <button 
+                                 onClick={async () => {
+                                    const newVal = governanceSettings[opt.key] === 'true' ? 'false' : 'true';
+                                    const { error } = await supabase.from('school_settings').update({ value: JSON.stringify(newVal) }).eq('key', opt.key);
+                                    if (error) alert(error.message);
+                                    else fetchGovernance();
+                                 }}
+                                 className={`w-12 h-6 rounded-full relative transition-colors ${governanceSettings[opt.key] === 'true' ? 'bg-gold' : 'bg-surface border border-border-custom'}`}
+                               >
+                                  <div className={`absolute top-1 w-4 h-4 rounded-full bg-white transition-all ${governanceSettings[opt.key] === 'true' ? 'left-7' : 'left-1'}`} />
+                               </button>
+                            </div>
+                          ))}
+                       </div>
+                    </div>
+                    <div className="bg-navy border border-gold/10 rounded-3xl p-10 flex flex-col justify-between">
+                       <div>
+                          <h3 className="font-syne font-bold text-2xl mb-2 text-gold">DHET Compliance Hub</h3>
+                          <p className="text-sm text-text-soft leading-relaxed mb-6">Access immutable records required for SACE, SAQA, and Department audits. No records can be deleted from this portal.</p>
+                       </div>
+                       <div className="space-y-4">
+                          <button onClick={() => setActiveTab('communications')} className="w-full btn btn-outline py-4 flex items-center justify-between px-6">
+                             <span className="text-xs uppercase tracking-widest font-dm-mono">View Audit Trails</span>
+                             <ShieldCheck className="w-4 h-4" />
+                          </button>
+                          <button className="w-full btn btn-gold py-4 flex items-center justify-between px-6">
+                             <span className="text-xs text-bg uppercase tracking-widest font-bold">Generate Annual Report</span>
+                             <BarChart3 className="w-4 h-4 text-bg" />
+                          </button>
+                       </div>
+                    </div>
+                 </div>
+              </div>
             ) : activeTab === 'staff' ? (
               <StaffManagement />
             ) : activeTab === 'communications' ? (
@@ -835,73 +955,64 @@ export function AdminDashboard() {
 // ─── COMMUNICATION LOGS ──────────────────────
 function CommunicationLogs() {
   const [logs, setLogs] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [auditLogs, setAuditLogs] = useState<any[]>([]);
+  const [activeSubTab, setActiveSubTab] = useState<'comms' | 'audit'>('comms');
 
   useEffect(() => {
     fetchLogs();
+    fetchAuditLogs();
   }, []);
 
   async function fetchLogs() {
-    setLoading(true);
-    try {
-      const { data, error } = await supabase
-        .from('communication_logs')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(100);
-      
-      if (error) throw error;
-      setLogs(data || []);
-    } catch (err: any) {
-      console.error('Error fetching communication logs:', err.message);
-    } finally {
-      setLoading(false);
-    }
+    const { data } = await supabase.from('email_logs').select('*').order('created_at', { ascending: false });
+    setLogs(data || []);
   }
 
-  if (loading) return <div className="flex justify-center py-20"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gold"></div></div>;
+  async function fetchAuditLogs() {
+    const { data } = await supabase.from('institutional_audit_logs').select('*').order('timestamp', { ascending: false });
+    setAuditLogs(data || []);
+  }
 
   return (
-    <div className="space-y-4">
-      <div className="flex justify-between items-center">
-        <h2 className="font-syne font-bold text-xl">Communication Log</h2>
-        <button onClick={() => exportToCSV(logs, 'gda-communications')} className="btn btn-outline btn-sm">📤 Export CSV</button>
+    <div className="space-y-8 animate-fade">
+      <div className="flex gap-4 border-b border-border-custom pb-4">
+        <button onClick={() => setActiveSubTab('comms')} className={`text-[10px] uppercase tracking-widest font-dm-mono px-4 py-2 rounded-lg ${activeSubTab === 'comms' ? 'bg-gold/10 text-gold' : 'text-text-muted hover:text-text-custom'}`}>Communication History</button>
+        <button onClick={() => setActiveSubTab('audit')} className={`text-[10px] uppercase tracking-widest font-dm-mono px-4 py-2 rounded-lg ${activeSubTab === 'audit' ? 'bg-gold/10 text-gold' : 'text-text-muted hover:text-text-custom'}`}>Institutional Audit Logs</button>
       </div>
-      <div className="bg-card border border-border-custom rounded-xl overflow-hidden">
-        <table className="w-full text-left border-collapse">
-          <thead>
-            <tr className="bg-surface border-b border-border-custom">
-              <th className="p-4 font-dm-mono text-[10px] uppercase tracking-widest text-text-muted">Date</th>
-              <th className="p-4 font-dm-mono text-[10px] uppercase tracking-widest text-text-muted">Recipient</th>
-              <th className="p-4 font-dm-mono text-[10px] uppercase tracking-widest text-text-muted">Type</th>
-              <th className="p-4 font-dm-mono text-[10px] uppercase tracking-widest text-text-muted">Subject</th>
-              <th className="p-4 font-dm-mono text-[10px] uppercase tracking-widest text-text-muted">Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {logs.map(log => (
-              <tr key={log.id} className="border-b border-border-custom hover:bg-white/2">
-                <td className="p-4 text-[11px] text-text-soft">{new Date(log.created_at).toLocaleString()}</td>
-                <td className="p-4 text-[12px]">{log.recipient_email}</td>
-                <td className="p-4">
-                  <span className="px-2 py-0.5 rounded-full text-[9px] font-dm-mono uppercase bg-sky-dim text-sky border border-sky/20">
-                    {log.email_type}
-                  </span>
-                </td>
-                <td className="p-4 text-[12px] text-text-soft max-w-[250px] truncate">{log.subject}</td>
-                <td className="p-4">
-                  <span className={`text-[9px] font-dm-mono uppercase ${log.status === 'sent' ? 'text-emerald' : 'text-coral'}`}>
-                    {log.status}
-                  </span>
-                </td>
-              </tr>
-            ))}
-            {logs.length === 0 && (
-              <tr><td colSpan={5} className="p-12 text-center text-text-muted">No communication logs found. Emails will appear here after they are sent.</td></tr>
-            )}
-          </tbody>
-        </table>
-      </div>
+
+      {activeSubTab === 'comms' ? (
+        <div className="bg-card border border-border-custom rounded-3xl overflow-hidden">
+          <div className="p-8 text-center text-text-dim text-sm italic">Showing historical communication logs...</div>
+        </div>
+      ) : (
+        <div className="bg-card border border-border-custom rounded-3xl overflow-hidden shadow-2xl">
+           <table className="w-full text-left border-collapse">
+             <thead>
+               <tr className="bg-surface/50 border-b border-border-custom">
+                 <th className="p-6 text-[10px] uppercase tracking-widest text-text-muted font-dm-mono">Timestamp</th>
+                 <th className="p-6 text-[10px] uppercase tracking-widest text-text-muted font-dm-mono">Action</th>
+                 <th className="p-6 text-[10px] uppercase tracking-widest text-text-muted font-dm-mono">Target</th>
+                 <th className="p-6 text-[10px] uppercase tracking-widest text-text-muted font-dm-mono">Details</th>
+               </tr>
+             </thead>
+             <tbody className="divide-y divide-border-custom">
+               {auditLogs.map(log => (
+                 <tr key={log.id} className="hover:bg-white/2 transition-colors">
+                   <td className="p-6 text-xs text-text-dim font-dm-mono">{new Date(log.timestamp).toLocaleString()}</td>
+                   <td className="p-6">
+                      <span className={`px-2 py-1 rounded text-[9px] font-bold uppercase ${
+                        log.action.includes('BLUR') ? 'bg-coral/10 text-coral' : 'bg-gold/10 text-gold'
+                      }`}>{log.action}</span>
+                   </td>
+                   <td className="p-6 text-xs font-bold text-text-custom">{log.target_type}</td>
+                   <td className="p-6 text-xs text-text-muted italic">{log.reason || 'Standard system event'}</td>
+                 </tr>
+               ))}
+             </tbody>
+           </table>
+           {auditLogs.length === 0 && <div className="p-20 text-center text-text-dim text-sm italic">No institutional audit records found.</div>}
+        </div>
+      )}
     </div>
   );
 }
@@ -1778,7 +1889,7 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState<Record<string, number>>({});
   const [showCertificate, setShowCertificate] = useState<any>(null);
-  const [activeSection, setActiveSection] = useState<'dashboard' | 'courses' | 'finances' | 'applications' | 'profile' | 'settings'>('dashboard');
+  const [activeSection, setActiveSection] = useState<'dashboard' | 'courses' | 'finances' | 'applications' | 'profile' | 'settings' | 'vault' | 'records'>('dashboard');
   const [editingProfile, setEditingProfile] = useState(false);
   const [profileForm, setProfileForm] = useState<any>({});
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
@@ -1791,6 +1902,11 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
   const [applyingCourse, setApplyingCourse] = useState<any>(null);
   const [academicTab, setAcademicTab] = useState<'lessons' | 'assignments' | 'assessments' | 'exams' | 'capstone'>('lessons');
   const [isApplyDropdownOpen, setIsApplyDropdownOpen] = useState(false);
+  const [documents, setDocuments] = useState<any[]>([]);
+  const [proctoringAlert, setProctoringAlert] = useState<string | null>(null);
+  const [lessonComments, setLessonComments] = useState<any[]>([]);
+  const [notifications, setNotifications] = useState<any[]>([]);
+  const [schoolSettings, setSchoolSettings] = useState<any>({});
 
   useEffect(() => {
     if (!user) return;
@@ -1838,6 +1954,32 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
     };
   }, [user]);
 
+  // ─── EXAM PROCTORING (INTEGRITY LOGIC) ───
+  useEffect(() => {
+    if (activeSection === 'courses' && academicTab === 'exams') {
+      const handleBlur = () => {
+        setProctoringAlert('Security Alert: Academic integrity tracking active. Please do not leave the exam window.');
+        supabase.from('institutional_audit_logs').insert({
+          user_id: user?.id,
+          action: 'EXAM_WINDOW_BLUR',
+          target_type: 'exam_session',
+          target_id: user?.id as any,
+          reason: 'Student left the exam tab/window'
+        });
+      };
+      const handleFocus = () => {
+        setTimeout(() => setProctoringAlert(null), 5000);
+      };
+
+      window.addEventListener('blur', handleBlur);
+      window.addEventListener('focus', handleFocus);
+      return () => {
+        window.removeEventListener('blur', handleBlur);
+        window.removeEventListener('focus', handleFocus);
+      };
+    }
+  }, [activeSection, academicTab, user?.id]);
+
   async function fetchStudentData() {
     setLoading(true);
     try {
@@ -1856,11 +1998,20 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
       const { data: allAnnouncements } = await supabase.from('announcements').select('*').eq('is_active', true).order('created_at', { ascending: false });
       const { data: allAssessments } = await supabase.from('assessments').select('*');
       const { data: allSubmissions } = await supabase.from('assessment_submissions').select('*').eq('user_id', user?.id);
+      const { data: allDocs } = await supabase.from('student_documents').select('*').eq('student_id', user?.id);
+      const { data: allNotifs } = await supabase.from('system_notifications').select('*').eq('user_id', user?.id).order('created_at', { ascending: false });
+      const { data: settings } = await supabase.from('school_settings').select('*');
 
       setCourses(allCourses || []);
       setAnnouncements(allAnnouncements || []);
       setAssessments(allAssessments || []);
       setSubmissions(allSubmissions || []);
+      setDocuments(allDocs || []);
+      setNotifications(allNotifs || []);
+      
+      const setMap: any = {};
+      settings?.forEach(s => setMap[s.key] = s.value);
+      setSchoolSettings(setMap);
 
       const progressMap: Record<string, number> = {};
       enrolls?.forEach(enroll => {
@@ -1916,6 +2067,24 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
     } catch (err: any) { alert('Error: ' + err.message); }
   }
 
+  async function handleUpload(type: string) {
+    const url = prompt('Enter the document URL (Simulation: normally you would choose a file):', 'https://example.com/doc.pdf');
+    if (!url) return;
+    
+    const { error } = await supabase.from('student_documents').insert({
+      student_id: user?.id,
+      type,
+      file_url: url,
+      status: 'pending'
+    });
+    
+    if (error) alert(error.message);
+    else {
+      alert('Artifact uploaded for verification!');
+      fetchStudentData();
+    }
+  }
+
   if (loading) return (
     <div className="min-h-[50vh] flex items-center justify-center">
       <div className="text-center">
@@ -1952,7 +2121,9 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
               {[
                 { id: 'dashboard', label: 'Overview', icon: BarChart3 },
                 { id: 'courses', label: 'My Learning', icon: BookOpen },
-                { id: 'announcements', label: 'Announcements', icon: Zap }, // Using Zap for broadcasts
+                { id: 'vault', label: 'My Vault', icon: ShieldCheck },
+                { id: 'records', label: 'Academic Record', icon: Star },
+                { id: 'announcements', label: 'Announcements', icon: Zap },
                 { id: 'finances', label: 'Billing', icon: CreditCard },
                 { id: 'applications', label: 'Admissions', icon: FileText },
                 { id: 'profile', label: 'Profile', icon: User },
@@ -2019,6 +2190,12 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
               Ginashe Digital Academy &bull; Secure Student Environment
             </p>
           </div>
+          {proctoringAlert && (
+             <div className="fixed top-10 left-1/2 -translate-x-1/2 z-[9999] px-6 py-3 bg-coral text-bg rounded-full flex items-center gap-3 shadow-2xl animate-bounce">
+               <AlertTriangle className="w-5 h-5" />
+               <span className="text-xs font-bold uppercase tracking-widest">{proctoringAlert}</span>
+             </div>
+          )}
     <div className="flex items-center gap-4 bg-surface/50 border border-border-custom p-2 rounded-2xl backdrop-blur-md animate-fadeLeft">
             <div className="text-right px-2">
               <p className="text-[10px] text-text-dim font-dm-mono uppercase">System Status</p>
@@ -2265,12 +2442,13 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
                                <p className="text-xs text-text-muted max-w-lg mb-2">{assessment.description}</p>
                                <div className="flex items-center gap-4 text-[10px] text-text-dim uppercase font-dm-mono">
                                  <span>Due: {assessment.due_date ? new Date(assessment.due_date).toLocaleDateString() : 'N/A'}</span>
-                                 <span>Points: {assessment.total_marks || 100}</span>
+                                 <span>Weight: {assessment.weight || 0}%</span>
+                                 {assessment.is_proctored && <span className="text-gold font-bold flex items-center gap-1"><ShieldCheck className="w-3 h-3" /> Integrity Tracking</span>}
                                </div>
                              </div>
                              <div className="flex flex-col items-end gap-2 shrink-0">
                                {sub ? (
-                                 <div className={`px-4 py-1.5 rounded-full text-[10px] font-dm-mono uppercase border tracking-widest ${
+                                 <div className={`px-4 py-1.5 rounded-full text-[10px] font-dm-mono uppercase border tracking-widest shadow-sm ${
                                    sub.status === 'graded' ? 'border-emerald/20 text-emerald bg-emerald/5' : 'border-gold/20 text-gold bg-gold/5'
                                  }`}>
                                    {sub.status === 'graded' ? `Graded: ${sub.marks_obtained}/${assessment.total_marks}` : 'Submitted'}
@@ -2841,7 +3019,6 @@ function StudentProgressTracker() {
       });
 
       setStudents(processed || []);
-    } catch (err: any) { console.error('Error:', err.message); }
     finally { setLoading(false); }
   }
 
