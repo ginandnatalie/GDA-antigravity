@@ -63,7 +63,7 @@ export async function onRequestPost(context) {
           redirectTo: `${origin}/verify`,
           // GOTRUE flag to skip the system invitation email
           skipInvitation: true 
-        });
+        } as any);
 
         // Store the manual OTP locally for the email template
         invitationLink = manualOtp;

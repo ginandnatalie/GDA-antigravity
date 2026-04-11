@@ -37,6 +37,21 @@ function exportToJSON(data: any[], filename: string) {
   URL.revokeObjectURL(url);
 }
 
+// ─── ADMIN: AI Match Badge ─────────────────────
+function AIMatchBadge({ score }: { score: number }) {
+  if (score === undefined || score === null) return null;
+  const percentage = Math.round(score * 100);
+  const color = percentage >= 80 ? 'text-emerald' : percentage >= 60 ? 'text-gold' : 'text-text-muted';
+  const bg = percentage >= 80 ? 'bg-emerald/10' : percentage >= 60 ? 'bg-gold/10' : 'bg-white/5';
+
+  return (
+    <div className={`px-2.5 py-1 rounded-lg ${bg} ${color} border border-current/10 flex items-center gap-2 group transition-all`}>
+      <Zap size={10} className={percentage >= 80 ? 'animate-pulse' : ''} />
+      <span className="font-dm-mono text-[9px] font-bold uppercase tracking-wider">AI_MATCH: {percentage}%</span>
+    </div>
+  );
+}
+
 // ─── ADMIN: Overview Stats ──────────────────────
 function OverviewStats({ applications, courses }: { applications: any[], courses: any[] }) {
   const stats = [
@@ -137,7 +152,7 @@ function ApplicationTable({ apps, onUpdate, onSelect, isLoading, filters }: any)
 
 // ─── ADMIN DASHBOARD (MAIN) ──────────────────
 export function AdminDashboard() {
-  const { user, profile } = useAuth();
+  const { user, profile, signOut } = useAuth();
   const [applications, setApplications] = useState<any[]>([]);
   const [courses, setCourses] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);

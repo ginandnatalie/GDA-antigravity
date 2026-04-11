@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Calendar, User, Clock, Share2, Facebook, Twitter, Linkedin, ChevronRight, Tag } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Calendar, User, Clock, Share2, Facebook, Twitter, Linkedin, ChevronRight, Tag } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 
 // Mock data for initial design

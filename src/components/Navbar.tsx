@@ -7,7 +7,7 @@ import {
   ChevronDown, BookOpen, Briefcase, HelpCircle, CreditCard, Users, FileText, 
   Landmark, Calendar, Newspaper, Zap, Globe, Languages, CheckCircle, 
   MessageSquare, Wallet, ExternalLink, ChevronRight, Layout, Info, Phone, 
-  Rocket, Shield, Cpu, Code
+  Rocket, Shield, Cpu, Code, User
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -283,9 +283,9 @@ export default function Navbar({ onOpenModal, editMode, setEditMode, siteSetting
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: '100%' }}
             transition={{ type: 'spring', damping: 40, stiffness: 450 }}
-            className="fixed inset-0 z-[2000] bg-[#070a10]/98 backdrop-blur-3xl lg:hidden overflow-y-auto"
+            className="fixed inset-0 z-[5000] bg-[#070a10] lg:hidden overflow-y-auto"
           >
-            <div className="min-h-screen flex flex-col p-6 pt-24 pb-12 gap-10">
+            <div className="h-screen flex flex-col p-6 pt-24 pb-12 gap-10">
               <div className="flex flex-col gap-8">
                 <div className="text-gold font-jetbrains text-[10px] uppercase tracking-[0.4em] flex items-center gap-4">
                   <div className="h-px flex-1 bg-gold/20" />
