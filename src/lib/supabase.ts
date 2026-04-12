@@ -10,7 +10,14 @@ if (!supabaseUrl || !supabaseAnonKey) {
   }
 }
 
-export const supabase = createClient(supabaseUrl || '', supabaseAnonKey || '');
+export const supabase = createClient(supabaseUrl || '', supabaseAnonKey || '', {
+  auth: {
+    storage: typeof window !== 'undefined' ? window.sessionStorage : undefined,
+    autoRefreshToken: true,
+    persistSession: true,
+    detectSessionInUrl: true
+  }
+});
 
 export const uploadFile = async (file: File, bucket: string = 'documents', folder: string = 'cvs') => {
   console.log('Starting file upload...', { bucket, folder, fileName: file.name });

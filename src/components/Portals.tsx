@@ -158,7 +158,7 @@ export function AdminDashboard() {
   const [applications, setApplications] = useState<any[]>([]);
   const [courses, setCourses] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [campuses, setCampuses] = useState<any[]>([]);
   const [selectedCampus, setSelectedCampus] = useState<string>('all');
@@ -169,6 +169,7 @@ export function AdminDashboard() {
   const [showCommandPalette, setShowCommandPalette] = useState(false);
   const [pendingApprovals, setPendingApprovals] = useState<any[]>([]);
   const [selectedApp, setSelectedApp] = useState<any>(null);
+  const [academicSchedule, setAcademicSchedule] = useState<any[]>([]);
   
   // Dashboard application list state
   const [statusFilter, setStatusFilter] = useState('all');
@@ -179,7 +180,10 @@ export function AdminDashboard() {
   const [filter, setFilter] = useState('all');
   const [updatingId, setUpdatingId] = useState<string | null>(null);
 
-  const isSuperAdmin = profile?.role === 'super_admin' || user?.email === 'ginandNatalie@gmail.com' || user?.email === 'academy@ginashe.co.za';
+  const isSuperAdmin = profile?.role === 'super_admin' || 
+    user?.email === 'academy@ginashe.co.za' || 
+    user?.email === 'ginashetraining@gmail.com' || 
+    user?.email === 'george@ginashe.co.za';
 
   // ─── CMD+K Shortcut ──────────────
   useEffect(() => {
@@ -200,6 +204,17 @@ export function AdminDashboard() {
     fetchGovernance();
     fetchNotifications();
     fetchAlumniApprovals();
+    fetchAcademicSchedule();
+
+    // ─── INSTANT SECURITY DECOMMISSIONING ───
+    const handleLeave = (e: BeforeUnloadEvent) => {
+      // If NOT a refresh, clear session synchronously
+      const navType = (performance.getEntriesByType("navigation")[0] as any)?.type;
+      if (navType !== 'reload') {
+        window.sessionStorage.clear();
+      }
+    };
+    window.addEventListener('beforeunload', handleLeave);
 
     const channel = supabase
       .channel('admin-dashboard-realtime')
@@ -207,9 +222,13 @@ export function AdminDashboard() {
       .on('postgres_changes', { event: '*', schema: 'public', table: 'school_settings' }, () => fetchGovernance())
       .on('postgres_changes', { event: '*', schema: 'public', table: 'system_notifications', filter: `user_id=eq.${user?.id}` }, () => fetchNotifications())
       .on('postgres_changes', { event: '*', schema: 'public', table: 'alumni_records' }, () => fetchAlumniApprovals())
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'academic_schedule' }, () => fetchAcademicSchedule())
       .subscribe();
 
-    return () => { supabase.removeChannel(channel); };
+    return () => { 
+      supabase.removeChannel(channel); 
+      window.removeEventListener('beforeunload', handleLeave);
+    };
   }, []);
 
   async function fetchCampuses() {
@@ -241,6 +260,11 @@ export function AdminDashboard() {
       .eq('is_approved', false)
       .order('created_at', { ascending: false });
     setPendingApprovals(data || []);
+  }
+
+  async function fetchAcademicSchedule() {
+    const { data } = await supabase.from('academic_schedule').select('*').order('start_time', { ascending: true });
+    setAcademicSchedule(data || []);
   }
 
   async function handleApproveAlumni(record: any) {
@@ -509,13 +533,16 @@ export function AdminDashboard() {
           <div className="p-4 h-full flex flex-col">
             {/* Institutional Navigation */}
             <div className="mb-8">
-              <a 
-                href="/" 
-                className={`flex items-center rounded-xl bg-gold/10 border border-gold/30 text-gold hover:bg-gold hover:text-bg transition-all font-bold text-[10px] uppercase tracking-tighter ${isSidebarCollapsed ? 'justify-center p-3' : 'px-4 py-3 gap-2.5'}`}
+              <button 
+                onClick={async () => {
+                   await supabase.auth.signOut();
+                   window.location.href = '/';
+                }}
+                className={`w-full flex items-center rounded-xl bg-gold/10 border border-gold/30 text-gold hover:bg-gold hover:text-bg transition-all font-bold text-[10px] uppercase tracking-tighter ${isSidebarCollapsed ? 'justify-center p-3' : 'px-4 py-3 gap-2.5'}`}
               >
                 <Globe className="w-4 h-4 shrink-0" />
                 {!isSidebarCollapsed && <span className="whitespace-nowrap">Main Website →</span>}
-              </a>
+              </button>
             </div>
 
             <div className={`mb-8 flex items-center overflow-hidden transition-all duration-200 ${isSidebarCollapsed ? 'lg:justify-center' : 'px-2 justify-start gap-2.5'}`}>
@@ -528,13 +555,17 @@ export function AdminDashboard() {
               )}
             </div>
 
-            <nav className="flex-1 space-y-1">
+            <nav className="flex-1 space-y-1 overflow-y-auto custom-scrollbar pr-2">
               {[
                 { id: 'overview', label: 'Command Hub', icon: Zap },
                 { id: 'applications', label: 'Admissions', icon: FileText },
                 { id: 'courses', label: 'Curriculum', icon: BookOpen },
-                { id: 'academic', label: 'Academic Mgt', icon: Star },
+                { id: 'academic', label: 'Academic Assets', icon: Star },
                 { id: 'broadcasts', label: 'Broadcast Hub', icon: Zap },
+                { id: 'registry', label: 'Global Registry', icon: User },
+                { id: 'timetable', label: 'Campus Timetable', icon: Calendar },
+                { id: 'attendance', label: 'Attendance Registry', icon: CheckCircle2 },
+                { id: 'vault', label: 'Resource Vault', icon: Lock },
                 { id: 'progress', label: 'Student Success', icon: Zap },
                 { id: 'finances', label: 'Financials', icon: CreditCard },
                 { id: 'news', label: 'Content CMS', icon: Layout },
@@ -711,52 +742,7 @@ export function AdminDashboard() {
             ) : activeTab === 'courses' ? (
               <CourseManager courses={courses} onRefresh={fetchCourses} onEditContent={setEditingCourse} />
             ) : activeTab === 'broadcasts' ? (
-              <div className="space-y-8 animate-fade">
-                 <div className="bg-card border border-border-custom rounded-3xl p-10">
-                    <h3 className="font-syne font-bold text-2xl mb-6">Create New Broadcast</h3>
-                    <div className="space-y-6">
-                       <div className="grid grid-cols-2 gap-6">
-                          <div className="space-y-2">
-                             <label className="text-[10px] font-dm-mono uppercase text-text-muted tracking-widest">Broadcast Title</label>
-                             <input id="bc-title" className="w-full bg-bg border border-border-custom rounded-xl p-4 text-sm" placeholder="Institutional Update..." />
-                          </div>
-                          <div className="space-y-2">
-                             <label className="text-[10px] font-dm-mono uppercase text-text-muted tracking-widest">Broadcast Type</label>
-                             <select id="bc-type" className="w-full bg-bg border border-border-custom rounded-xl p-4 text-sm appearance-none">
-                                <option value="info">General Information</option>
-                                <option value="warning">Policy Warning</option>
-                                <option value="urgent">Urgent Alert</option>
-                             </select>
-                          </div>
-                       </div>
-                       <div className="space-y-2">
-                          <label className="text-[10px] font-dm-mono uppercase text-text-muted tracking-widest">Message Content</label>
-                          <textarea id="bc-content" className="w-full bg-bg border border-border-custom rounded-xl p-4 text-sm h-48" placeholder="Detailed message for all students..." />
-                       </div>
-                       <div className="flex justify-end gap-3">
-                          <button 
-                            onClick={async () => {
-                               const title = (document.getElementById('bc-title') as HTMLInputElement).value;
-                               const type = (document.getElementById('bc-type') as HTMLSelectElement).value;
-                               const content = (document.getElementById('bc-content') as HTMLTextAreaElement).value;
-                               if (!title || !content) { alert('Title and content are required'); return; }
-                               
-                               const { error } = await supabase.from('announcements').insert({
-                                 title, content, type, priority: type === 'urgent' ? 'high' : 'normal', created_by: user?.id
-                               });
-                               if (error) alert(error.message);
-                               else {
-                                 alert('Broadcast sent successfully!');
-                                 (document.getElementById('bc-title') as HTMLInputElement).value = '';
-                                 (document.getElementById('bc-content') as HTMLTextAreaElement).value = '';
-                               }
-                            }}
-                            className="btn btn-gold px-12 py-4"
-                          >📡 Broadcast to Academy</button>
-                       </div>
-                    </div>
-                 </div>
-              </div>
+              <BroadcastHub />
             ) : activeTab === 'academic' ? (
               <div className="space-y-8 animate-fade">
                  <div className="bg-card border border-border-custom rounded-3xl p-10">
@@ -888,6 +874,14 @@ export function AdminDashboard() {
                     </div>
                  </div>
               </div>
+            ) : activeTab === 'registry' ? (
+              <InstitutionalUserRegistry />
+            ) : activeTab === 'timetable' ? (
+              <TimetableManager courses={courses} />
+            ) : activeTab === 'attendance' ? (
+              <AttendanceHub courses={courses} />
+            ) : activeTab === 'vault' ? (
+              <InstitutionalResourceVault />
             ) : activeTab === 'staff' ? (
               <StaffManagement />
             ) : activeTab === 'graduation' ? (
@@ -1121,7 +1115,240 @@ function CommunicationLogs() {
   );
 }
 
-// ─── STAFF MANAGEMENT ────────────────────────
+// ─── INSTITUTIONAL USER REGISTRY ────────────────
+function InstitutionalUserRegistry() {
+  const { user, profile } = useAuth();
+  const [users, setUsers] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState('');
+  const [roleFilter, setRoleFilter] = useState('all');
+
+  const isSuperAdmin = profile?.role === 'super_admin' || 
+    user?.email === 'academy@ginashe.co.za' || 
+    user?.email === 'ginashetraining@gmail.com' || 
+    user?.email === 'george@ginashe.co.za';
+
+  const INSTITUTIONAL_ROLES = [
+    { id: 'super_admin', label: 'Super Admin', color: 'text-gold', bg: 'bg-gold/10' },
+    { id: 'campus_manager', label: 'Campus Manager', color: 'text-sky', bg: 'bg-sky/10' },
+    { id: 'head_of_department', label: 'HOD', color: 'text-purple', bg: 'bg-purple/10' },
+    { id: 'lecturer_senior', label: 'Senior Lecturer', color: 'text-emerald', bg: 'bg-emerald/10' },
+    { id: 'lecturer_junior', label: 'Lecturer', color: 'text-emerald/70', bg: 'bg-emerald/5' },
+    { id: 'registrar', label: 'Registrar', color: 'text-amber', bg: 'bg-amber/10' },
+    { id: 'bursar', label: 'Bursar', color: 'text-rose', bg: 'bg-rose/10' },
+    { id: 'student', label: 'Student', color: 'text-text-dim', bg: 'bg-surface' },
+  ];
+
+  useEffect(() => { fetchUsers(); }, [roleFilter]);
+
+  async function fetchUsers() {
+    setLoading(true);
+    let query = supabase.from('profiles').select('*');
+    if (roleFilter !== 'all') query = query.eq('role', roleFilter);
+    const { data } = await query.order('last_name', { ascending: true });
+    setUsers(data || []);
+    setLoading(false);
+  }
+
+  async function updateRole(targetUserId: string, newRole: string) {
+    if (!isSuperAdmin) { alert('Access Denied: SuperAdmin Blessing Required'); return; }
+    const { error } = await supabase.from('profiles').update({ role: newRole }).eq('id', targetUserId);
+    if (error) alert(error.message);
+    else {
+      alert('Institutional Hierarchy Updated.');
+      fetchUsers();
+    }
+  }
+
+  const filtered = users.filter(u => 
+    `${u.first_name} ${u.last_name}`.toLowerCase().includes(search.toLowerCase()) ||
+    u.email?.toLowerCase().includes(search.toLowerCase()) ||
+    u.student_number?.toLowerCase().includes(search.toLowerCase())
+  );
+
+  return (
+    <div className="space-y-6 animate-fade">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div>
+          <h2 className="font-syne font-black text-2xl tracking-tighter">Global User Registry</h2>
+          <p className="text-[10px] font-dm-mono text-gold uppercase tracking-widest">Master Identity Management</p>
+        </div>
+        <div className="flex items-center gap-3">
+          <div className="relative">
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-text-dim text-xs">🔍</span>
+            <input 
+              placeholder="Search Identity..."
+              className="bg-surface border border-border-custom rounded-xl py-2 pl-9 pr-4 text-xs font-dm-mono w-64 focus:border-gold/50 transition-all outline-none"
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+            />
+          </div>
+          <select 
+            className="bg-surface border border-border-custom rounded-xl py-2 px-4 text-xs font-dm-mono uppercase"
+            value={roleFilter}
+            onChange={e => setRoleFilter(e.target.value)}
+          >
+            <option value="all">Every Position</option>
+            {INSTITUTIONAL_ROLES.map(r => <option key={r.id} value={r.id}>{r.label}</option>)}
+          </select>
+        </div>
+      </div>
+
+      <div className="bg-[#0a0d14] border border-gold/10 rounded-2xl overflow-hidden shadow-2xl relative isolate">
+        <div className="absolute inset-0 bg-gold/[0.01] pointer-events-none" />
+        <div className="overflow-x-auto custom-scrollbar">
+          <table className="w-full text-left">
+            <thead>
+              <tr className="bg-surface/50 border-b border-gold/10 text-gold text-[9px] uppercase font-dm-mono tracking-[0.2em]">
+                <th className="p-4">Identity / Number</th>
+                <th className="p-4">Governance Role</th>
+                <th className="p-4">Assigned Campus</th>
+                <th className="p-4 text-right">Records Architecture</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gold/5">
+              {filtered.map(u => (
+                <tr key={u.id} className="hover:bg-gold/5 transition-colors group">
+                  <td className="p-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-lg bg-surface border border-gold/10 flex items-center justify-center font-black text-[10px] text-gold">
+                        {u.first_name?.[0]}{u.last_name?.[0]}
+                      </div>
+                      <div>
+                        <div className="font-bold text-sm text-text-soft">{u.first_name} {u.last_name}</div>
+                        <div className="text-[10px] text-text-dim font-dm-mono lowercase">{u.email}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="p-4">
+                    <div className="flex items-center gap-2">
+                      <span className={`px-2 py-0.5 rounded text-[9px] font-black uppercase tracking-tighter border ${
+                        INSTITUTIONAL_ROLES.find(r => r.id === (u.role || 'student'))?.bg || 'bg-surface'
+                      } ${INSTITUTIONAL_ROLES.find(r => r.id === (u.role || 'student'))?.color || 'text-text-dim'}`}>
+                        {u.role || 'student'}
+                      </span>
+                    </div>
+                  </td>
+                  <td className="p-4">
+                    <div className="text-[10px] font-dm-mono text-text-dim uppercase tracking-widest">{u.campus_id ? 'Authenticated Branch' : 'Remote Access'}</div>
+                  </td>
+                  <td className="p-4 text-right">
+                    {isSuperAdmin && (
+                      <select 
+                        className="bg-bg border border-gold/20 rounded-lg py-1 px-2 text-[10px] font-dm-mono focus:border-gold transition-all outline-none"
+                        value={u.role || 'student'}
+                        onChange={(e) => updateRole(u.id, e.target.value)}
+                      >
+                        {INSTITUTIONAL_ROLES.map(r => <option key={r.id} value={r.id}>{r.label}</option>)}
+                      </select>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── BROADCAST HUB ──────────────────────────
+function BroadcastHub() {
+  const { user } = useAuth();
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const [type, setType] = useState<'info' | 'warning' | 'urgent'>('info');
+  const [isSending, setIsSending] = useState(false);
+
+  async function handleBroadcast() {
+    if (!title || !content) { alert('Policy violation: Title and Content required.'); return; }
+    setIsSending(true);
+
+    try {
+      // 1. Log to Announcements
+      const { error: annErr } = await supabase.from('announcements').insert({
+        title, content, type, priority: type === 'urgent' ? 'high' : 'normal', created_by: user?.id
+      });
+      if (annErr) throw annErr;
+
+      // 2. Dispatch Push Alerts (Simulated via system_notifications for all users)
+      const { data: users } = await supabase.from('profiles').select('id');
+      if (users && type === 'urgent') {
+        const notifications = users.map(u => ({
+          user_id: u.id,
+          title: `URGENT: ${title}`,
+          message: content,
+          is_read: false
+        }));
+        await supabase.from('system_notifications').insert(notifications);
+      }
+
+      alert('Institutional Bulletin Dispatched.');
+      setTitle(''); setContent(''); setType('info');
+    } catch (err: any) { alert(err.message); }
+    finally { setIsSending(false); }
+  }
+
+  return (
+    <div className="space-y-8 animate-fade">
+      <div className="bg-card border border-border-custom rounded-3xl p-10 relative overflow-hidden isolate">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-gold/5 rounded-full -mr-32 -mt-32 blur-[100px]" />
+        
+        <h3 className="font-syne font-black text-3xl mb-2 tracking-tighter">Broadcast Command Center</h3>
+        <p className="text-xs text-text-muted mb-8 max-w-xl">Dispatch institutional directives, emergency alerts, and curriculum updates across the academy ecosystem.</p>
+        
+        <div className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <label className="text-[10px] font-dm-mono uppercase text-text-dim tracking-widest">Protocol Title</label>
+              <input 
+                className="w-full bg-bg border border-border-custom rounded-xl p-4 text-sm focus:border-gold transition-all outline-none" 
+                placeholder="Institutional Directive #772..." 
+                value={title}
+                onChange={e => setTitle(e.target.value)}
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-[10px] font-dm-mono uppercase text-text-dim tracking-widest">Dispatch Priority</label>
+              <select 
+                className="w-full bg-bg border border-border-custom rounded-xl p-4 text-sm appearance-none focus:border-gold transition-all outline-none cursor-pointer"
+                value={type}
+                onChange={e => setType(e.target.value as any)}
+              >
+                <option value="info">General Information</option>
+                <option value="warning">Policy Warning</option>
+                <option value="urgent">Urgent Alert (Push Global)</option>
+              </select>
+            </div>
+          </div>
+          
+          <div className="space-y-2">
+            <label className="text-[10px] font-dm-mono uppercase text-text-dim tracking-widest">Bulletin Content</label>
+            <textarea 
+              className="w-full bg-bg border border-border-custom rounded-xl p-4 text-sm h-48 focus:border-gold transition-all outline-none resize-none custom-scrollbar" 
+              placeholder="Explicit details regarding the institutional update..."
+              value={content}
+              onChange={e => setContent(e.target.value)}
+            />
+          </div>
+          
+          <div className="flex justify-end gap-3 pt-4">
+            <button 
+              onClick={handleBroadcast}
+              disabled={isSending}
+              className={`btn btn-gold px-12 py-4 flex items-center gap-3 group ${isSending ? 'opacity-50 cursor-not-allowed' : ''}`}
+            >
+              <Zap className={`w-4 h-4 ${type === 'urgent' ? 'animate-pulse fill-bg' : ''}`} />
+              {isSending ? 'DISPATCHING...' : 'DISPATCH DIRECTIVE'}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function StaffManagement() {
   const [staff, setStaff] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -1331,6 +1558,423 @@ function SiteSettings() {
 }
 
 // ─── COURSE MANAGER ──────────────────────────
+// ─── TIMETABLE MANAGER ───────────────────────
+function TimetableManager({ courses }: { courses: any[] }) {
+  const [schedule, setSchedule] = useState<any[]>([]);
+  const [isAdding, setIsAdding] = useState(false);
+  const [activeCategory, setActiveCategory] = useState<'subject' | 'institutional' | 'exam' | 'term'>('subject');
+  const [form, setForm] = useState<any>({ title: '', description: '', category: 'subject', start_time: '', end_time: '', course_id: '', location: '' });
+
+  useEffect(() => {
+    fetchSchedule();
+  }, []);
+
+  async function fetchSchedule() {
+    const { data } = await supabase.from('academic_schedule').select('*, courses(title)').order('start_time', { ascending: true });
+    setSchedule(data || []);
+  }
+
+  async function handleSave() {
+    try {
+      if (!form.title || !form.start_time) throw new Error('Title and Start Time are required');
+      
+      const { error } = await supabase.from('academic_schedule').upsert({
+        ...form,
+        course_id: form.category === 'subject' || form.category === 'exam' ? form.course_id || null : null
+      });
+
+      if (error) throw error;
+      setIsAdding(false);
+      setForm({ title: '', description: '', category: activeCategory, start_time: '', end_time: '', course_id: '', location: '' });
+      fetchSchedule();
+    } catch (err: any) {
+      alert(err.message);
+    }
+  }
+
+  const filteredSchedule = schedule.filter(s => s.category === activeCategory);
+
+  return (
+    <div className="space-y-6 animate-fade">
+      <div className="flex justify-between items-center bg-card border border-border-custom p-6 rounded-3xl">
+        <div>
+          <h2 className="font-syne font-black text-2xl tracking-tighter uppercase">Institutional Command: Scheduling</h2>
+          <div className="flex gap-4 mt-2">
+            {['subject', 'institutional', 'exam', 'term'].map(cat => (
+              <button 
+                key={cat}
+                onClick={() => setActiveCategory(cat as any)}
+                className={`text-[9px] font-dm-mono uppercase tracking-widest px-3 py-1 rounded-full border transition-all ${
+                  activeCategory === cat ? 'bg-gold text-bg border-gold font-bold' : 'border-white/10 text-text-muted hover:border-gold/30'
+                }`}
+              >
+                {cat.replace('_', ' ')}s
+              </button>
+            ))}
+          </div>
+        </div>
+        <button onClick={() => setIsAdding(!isAdding)} className="btn btn-gold px-8 py-3 text-[10px] font-black tracking-widest uppercase shadow-xl shadow-gold/10">
+          {isAdding ? 'DISCARD PROTOCOL' : `+ DEPLOY ${activeCategory.toUpperCase()}`}
+        </button>
+      </div>
+
+      {isAdding && (
+        <div className="bg-navy border border-gold/20 rounded-[2.5rem] p-8 animate-fadeDown shadow-2xl relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-gold/5 rounded-full -mr-32 -mt-32 blur-3xl opacity-50" />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative z-10">
+            <div className="space-y-2">
+              <label className="text-[9px] font-dm-mono text-gold uppercase tracking-[0.2em] px-2">Directive Title</label>
+              <input 
+                className="w-full bg-bg border border-border-custom rounded-xl p-3 text-sm focus:border-gold outline-none" 
+                value={form.title} 
+                onChange={e => setForm({...form, title: e.target.value})} 
+                placeholder="e.g. Module 4 Sync Session"
+              />
+            </div>
+            {(activeCategory === 'subject' || activeCategory === 'exam') && (
+              <div className="space-y-2">
+                <label className="text-[9px] font-dm-mono text-gold uppercase tracking-[0.2em] px-2">Target Academic Stream</label>
+                <select 
+                  className="w-full bg-bg border border-border-custom rounded-xl p-3 text-sm outline-none" 
+                  value={form.course_id} 
+                  onChange={e => setForm({...form, course_id: e.target.value})}
+                >
+                  <option value="">Select Modular Course</option>
+                  {courses.map(c => <option key={c.id} value={c.id}>{c.title}</option>)}
+                </select>
+              </div>
+            )}
+            <div className="space-y-2">
+              <label className="text-[9px] font-dm-mono text-gold uppercase tracking-[0.2em] px-2">Temporal Point (Start)</label>
+              <input 
+                type="datetime-local"
+                className="w-full bg-bg border border-border-custom rounded-xl p-3 text-sm" 
+                value={form.start_time} 
+                onChange={e => setForm({...form, start_time: e.target.value})} 
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-[9px] font-dm-mono text-gold uppercase tracking-[0.2em] px-2">Closure Point (End)</label>
+              <input 
+                type="datetime-local"
+                className="w-full bg-bg border border-border-custom rounded-xl p-3 text-sm" 
+                value={form.end_time} 
+                onChange={e => setForm({...form, end_time: e.target.value})} 
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-[9px] font-dm-mono text-gold uppercase tracking-[0.2em] px-2">Geographical / Digital Node</label>
+              <input 
+                className="w-full bg-bg border border-border-custom rounded-xl p-3 text-sm" 
+                value={form.location} 
+                onChange={e => setForm({...form, location: e.target.value})} 
+                placeholder="Room 402 / MS Teams / Global"
+              />
+            </div>
+            <div className="flex items-end">
+              <button onClick={handleSave} className="w-full btn btn-gold py-3 text-[10px] font-black uppercase tracking-widest">COMMIT TO REGISTER</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className="bg-card border border-border-custom rounded-3xl overflow-hidden shadow-xl">
+        <div className="divide-y divide-white/5">
+          {filteredSchedule.map(session => (
+            <div key={session.id} className="p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 hover:bg-gold/[0.02] transition-colors group">
+              <div className="flex items-center gap-6">
+                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-xl shadow-lg ${
+                  session.category === 'exam' ? 'bg-coral/20 text-coral' : 'bg-gold/20 text-gold'
+                }`}>
+                  {session.category === 'exam' ? '📋' : '📅'}
+                </div>
+                <div>
+                  <h4 className="font-syne font-bold text-lg leading-none mb-2">{session.title}</h4>
+                  <div className="flex flex-wrap items-center gap-4 text-[9px] font-dm-mono uppercase text-text-dim">
+                    <span className="flex items-center gap-1.5"><Clock className="w-3 h-3" /> {new Date(session.start_time).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}</span>
+                    {session.location && <span className="flex items-center gap-1.5"><MapPin className="w-3 h-3" /> {session.location}</span>}
+                    {session.courses && <span className="text-gold font-black">&bull; {session.courses.title}</span>}
+                  </div>
+                </div>
+              </div>
+              <div className="flex items-center gap-4">
+                 <button 
+                  onClick={async () => {
+                    if (confirm('Decommission this record?')) {
+                      await supabase.from('academic_schedule').delete().eq('id', session.id);
+                      fetchSchedule();
+                    }
+                  }}
+                  className="p-2 text-coral hover:bg-coral/10 rounded-lg transition-colors"
+                >
+                  <LogOut className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          ))}
+          {filteredSchedule.length === 0 && (
+            <div className="p-20 text-center text-text-dim italic text-sm">No active {activeCategory} archives detected for the current query.</div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── ATTENDANCE HUB ─────────────────────────
+function AttendanceHub({ courses }: { courses: any[] }) {
+  const [selectedCourse, setSelectedCourse] = useState('');
+  
+  return (
+    <div className="space-y-6 animate-fade">
+      <div className="flex justify-between items-center">
+        <div>
+          <h2 className="font-syne font-black text-2xl tracking-tighter">Attendance Registry</h2>
+          <p className="text-[10px] font-dm-mono text-gold uppercase tracking-widest">Institutional Presence Tracking</p>
+        </div>
+        <select 
+          className="bg-surface border border-border-custom rounded-xl py-2 px-4 text-xs font-dm-mono uppercase outline-none focus:border-gold"
+          value={selectedCourse}
+          onChange={(e) => setSelectedCourse(e.target.value)}
+        >
+          <option value="">Select Target Module</option>
+          {courses.map((c: any) => <option key={c.id} value={c.id}>{c.title}</option>)}
+        </select>
+      </div>
+
+      <div className="bg-[#0a0d14] border border-gold/10 rounded-3xl p-20 text-center relative isolate overflow-hidden">
+        <div className="absolute inset-0 bg-gold/[0.02] pointer-events-none" />
+        <CheckCircle2 className="w-12 h-12 text-gold/20 mx-auto mb-6" />
+        <h3 className="font-syne font-bold text-xl mb-2 text-text-soft">Ready for Protocol</h3>
+        <p className="text-xs text-text-muted max-w-sm mx-auto">Select a module above to initiate the digital attendance register. All presence markers are immutable once signed by the facilitator.</p>
+      </div>
+    </div>
+  );
+}
+
+// ─── INSTITUTIONAL RESOURCE VAULT ───────────
+function InstitutionalResourceVault() {
+  const complianceFiles = [
+    { title: 'DHET_Accreditation_2026.pdf', type: 'Certificate', date: '2026-01-10' },
+    { title: 'Institutional_Governance_Framework.docx', type: 'Policy', date: '2026-02-15' },
+    { title: 'SACE_Compliance_Checklist.pdf', type: 'Audit', date: '2026-03-01' },
+    { title: 'SAQA_Level_Descript_P1.pdf', type: 'Standard', date: '2025-11-20' },
+  ];
+
+  return (
+    <div className="space-y-6 animate-fade">
+      <div className="flex justify-between items-center gap-4">
+        <div>
+          <h2 className="font-syne font-black text-2xl tracking-tighter">Institutional Resource Vault</h2>
+          <p className="text-[10px] font-dm-mono text-gold uppercase tracking-widest">Encrypted Compliance Repository</p>
+        </div>
+        <button className="btn btn-gold btn-sm uppercase tracking-widest font-black text-[9px] px-6">+ DEPOSIT DOCUMENT</button>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        {complianceFiles.map((file, i) => (
+          <div key={i} className="bg-card border border-border-custom rounded-2xl p-5 hover:border-gold/30 transition-all group cursor-pointer relative isolate overflow-hidden">
+            <div className="absolute top-0 right-0 w-16 h-16 bg-white/2 rounded-full -mr-8 -mt-8 blur-2xl" />
+            <div className="flex justify-between items-start mb-4">
+              <div className="p-2.5 bg-surface border border-border-custom rounded-xl text-gold">
+                <FileText className="w-4 h-4" />
+              </div>
+              <span className="text-[8px] font-dm-mono uppercase text-text-dim px-2 py-0.5 border border-border-custom rounded-full">{file.type}</span>
+            </div>
+            <h4 className="font-bold text-sm mb-1 group-hover:text-gold transition-colors truncate">{file.title}</h4>
+            <p className="text-[9px] text-text-dim font-dm-mono uppercase tracking-widest">Stored: {file.date}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ─── STUDENT TIMETABLE ───────────────────────
+function StudentTimetable() {
+  const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+  const slots = ['08:00', '10:00', '12:00', '14:00', '16:00'];
+
+  return (
+    <div className="space-y-6 animate-fade">
+      <div className="flex justify-between items-center">
+        <div>
+          <h2 className="font-syne font-black text-2xl tracking-tighter">My Personal Schedule</h2>
+          <p className="text-[10px] font-dm-mono text-gold uppercase tracking-widest">Active Academic Commitment</p>
+        </div>
+        <button className="btn btn-outline btn-sm text-[9px] font-black uppercase tracking-widest">Download PDF</button>
+      </div>
+
+      <div className="bg-[#0a0d14] border border-gold/10 rounded-2xl overflow-hidden shadow-2xl">
+        <div className="grid grid-cols-6 divide-x divide-gold/10 border-b border-gold/10 bg-surface/50">
+          <div className="p-4 bg-surface" />
+          {days.map(d => <div key={d} className="p-4 text-[10px] font-black text-gold uppercase text-center tracking-widest">{d}</div>)}
+        </div>
+        {slots.map(time => (
+          <div key={time} className="grid grid-cols-6 divide-x divide-gold/5 bg-transparent group">
+            <div className="p-4 text-[10px] font-dm-mono text-text-dim text-right bg-surface/20">{time}</div>
+            {[1, 2, 3, 4, 5].map(i => (
+              <div key={i} className="p-4 min-h-[100px] hover:bg-gold/[0.02] transition-colors relative isolate">
+                {/* Simulated session */}
+                {i === 1 && time === '08:00' && (
+                  <div className="absolute inset-2 p-2 bg-gold/10 border border-gold/30 rounded-lg animate-fade">
+                    <div className="text-[8px] font-black text-gold uppercase leading-tight mb-1">Cloud Architecture</div>
+                    <div className="text-[7px] text-text-soft font-dm-mono italic uppercase">Room 402 • 08:00 - 10:00</div>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ─── ACADEMIC CALENDAR VIEW ──────────────────
+function AcademicCalendarView({ schedule, enrollments }: { schedule: any[], enrollments: any[] }) {
+  const [activeTab, setActiveTab] = useState<'subject' | 'institutional' | 'term'>('subject');
+
+  // Filter based on enrollments if subject category
+  const filteredEvents = useMemo(() => {
+    if (activeTab === 'institutional' || activeTab === 'term') {
+      return schedule.filter(s => s.category === activeTab);
+    }
+    // Filter subject and exam events by student's active course IDs
+    const enrolledCourseIds = enrollments.map(e => e.course_id);
+    return schedule.filter(s => 
+      (s.category === 'subject' || s.category === 'exam') && 
+      enrolledCourseIds.includes(s.course_id)
+    );
+  }, [schedule, enrollments, activeTab]);
+
+  return (
+    <div className="space-y-6 animate-fade">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 border-b border-border-custom">
+        <div>
+          <h2 className="font-syne font-black text-3xl tracking-tighter uppercase mb-2">Academic Ledger</h2>
+          <div className="flex gap-4">
+             {[
+               { id: 'subject', label: 'Academic Subjects', icon: BookOpen },
+               { id: 'institutional', label: 'Institutional', icon: Globe },
+               { id: 'term', label: 'Full Term', icon: GraduationCap }
+             ].map(tab => (
+               <button 
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id as any)}
+                className={`flex items-center gap-2 text-[9px] font-dm-mono uppercase tracking-[0.2em] px-4 py-2 border rounded-xl transition-all ${
+                  activeTab === tab.id ? 'bg-gold text-bg border-gold font-bold shadow-lg shadow-gold/20' : 'border-white/10 text-text-dim hover:border-gold/30'
+                }`}
+               >
+                 <tab.icon className="w-3 h-3" />
+                 {tab.label}
+               </button>
+             ))}
+          </div>
+        </div>
+        <div className="text-right">
+           <p className="text-[10px] text-text-dim font-dm-mono uppercase">Reference Protocol: 2026_LETS_GO</p>
+        </div>
+      </div>
+
+      {activeTab === 'term' ? (
+        <div className="relative py-10 pl-10">
+          {/* Vertical Timeline Track */}
+          <div className="absolute left-6 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-gold/30 to-transparent" />
+          
+          <div className="space-y-12">
+            {filteredEvents.map((ev, i) => (
+              <div key={i} className="relative group animate-fadeRight" style={{ animationDelay: `${i * 100}ms` }}>
+                {/* Timeline Node */}
+                <div className={`absolute -left-[35px] w-4 h-4 rounded-full border-2 border-bg shadow-xl transition-all group-hover:scale-150 ${
+                  ev.category === 'exam' ? 'bg-coral shadow-coral/50' : 'bg-gold shadow-gold/50'
+                }`} />
+                
+                <div className="bg-card border border-border-custom p-6 rounded-[2rem] hover:border-gold/30 transition-all flex flex-col md:flex-row md:items-center gap-10">
+                   <div className="md:w-32 shrink-0">
+                      <div className="text-lg font-black font-syne text-gold leading-none">{new Date(ev.start_time).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</div>
+                      <div className="text-[10px] font-dm-mono text-text-dim uppercase tracking-widest mt-1">{new Date(ev.start_time).getFullYear()}</div>
+                   </div>
+                   <div className="flex-1">
+                      <h4 className="font-syne font-bold text-xl mb-1 group-hover:text-gold transition-colors">{ev.title}</h4>
+                      <p className="text-xs text-text-soft leading-relaxed max-w-xl">{ev.description}</p>
+                   </div>
+                   <div className="text-right">
+                      {ev.location && <div className="text-[10px] font-dm-mono uppercase text-gold bg-gold/10 px-3 py-1 rounded-full border border-gold/20 inline-flex items-center gap-2"><MapPin className="w-3.5 h-3.5" /> {ev.location}</div>}
+                   </div>
+                </div>
+              </div>
+            ))}
+            {filteredEvents.length === 0 && (
+              <div className="p-20 text-center text-text-dim italic text-sm">No terminal milestones detected for the current session.</div>
+            )}
+          </div>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredEvents.map((ev, i) => (
+            <div key={i} className={`bg-card border border-border-custom rounded-3xl p-8 relative overflow-hidden group hover:border-gold/50 transition-all animate-fade ${
+              ev.category === 'exam' ? 'ring-1 ring-coral/20' : ''
+            }`}>
+              <div className={`absolute top-0 right-0 p-3 rounded-bl-2xl text-[8px] font-black uppercase tracking-widest shadow-inner ${
+                ev.category === 'exam' ? 'bg-coral/20 text-coral border-b border-l border-coral/30' : 'bg-gold/20 text-gold border-b border-l border-gold/30'
+              }`}>{ev.category === 'exam' ? 'IMMUTABLE EXAM' : ev.category.replace('_', ' ')}</div>
+              
+              <div className="mb-6 flex items-center justify-between">
+                <div className="w-12 h-12 rounded-2xl bg-surface border border-white/5 flex items-center justify-center text-2xl shadow-xl">
+                  {ev.category === 'exam' ? <ShieldCheck className="w-6 h-6 text-coral" /> : <Calendar className="w-6 h-6 text-gold" />}
+                </div>
+                <div className="text-right">
+                  <div className="text-[12px] font-bold text-text-emphasis">{new Date(ev.start_time).toLocaleDateString('en-GB', { day: 'numeric', month: 'long' })}</div>
+                  <div className="text-[10px] font-dm-mono text-gold uppercase tracking-tighter">{new Date(ev.start_time).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}</div>
+                </div>
+              </div>
+
+              <h4 className="font-syne font-extrabold text-xl mb-3 group-hover:text-gold transition-colors">{ev.title}</h4>
+              <p className="text-xs text-text-muted leading-relaxed mb-6 line-clamp-3">{ev.description || 'Institutional mandate details available upon request.'}</p>
+              
+              <div className="pt-6 border-t border-white/5 flex items-center justify-between">
+                <span className="text-[9px] font-dm-mono uppercase tracking-[0.2em] text-text-dim">{ev.location || 'GDA_GLOBAL_NODE'}</span>
+                <button className="text-gold hover:underline text-[9px] font-black uppercase tracking-widest">Details →</button>
+              </div>
+            </div>
+          ))}
+          {filteredEvents.length === 0 && (
+            <div className="col-span-full p-24 text-center bg-surface/10 rounded-[3rem] border border-dashed border-white/10">
+               <div className="text-5xl mb-6 opacity-30">📭</div>
+               <h3 className="font-syne font-bold text-xl mb-2 text-text-soft">Query Response Null</h3>
+               <p className="text-xs text-text-dim italic">No events matching the current category/enrollment criteria found in the academic ledger.</p>
+            </div>
+          )}
+        </div>
+      )}
+
+      <div className="bg-gradient-to-r from-navy to-bg border border-gold/10 rounded-[2.5rem] p-10 flex flex-col lg:flex-row items-center justify-between gap-10">
+         <div className="max-w-xl text-center lg:text-left">
+            <h3 className="font-syne font-bold text-2xl mb-2 text-gold">Institutional Schedule Sync</h3>
+            <p className="text-xs text-text-muted leading-relaxed uppercase tracking-tighter">Integrate the official Ginashe academic schedule with your personal terminal. Supports Google Calendar, Apple iCal, and MS Outlook via secure iCal Protocol.</p>
+         </div>
+         <button className="btn btn-gold px-12 py-4 text-[11px] font-black uppercase tracking-[0.2em] shadow-2xl shadow-gold/20 whitespace-nowrap">DEPLOY ICAL FEED</button>
+      </div>
+    </div>
+  );
+}
+
+function StudentVault({ documents, onUpload }: { documents: any[], onUpload: (type: string) => void }) {
+  return (
+    <div className="space-y-6 animate-fade">
+      <div className="flex justify-between items-center">
+        <div>
+          <h2 className="font-syne font-black text-2xl tracking-tighter">My Document Vault</h2>
+          <p className="text-[10px] font-dm-mono text-gold uppercase tracking-widest">Secure Personal Records</p>
+        </div>
+        <button className="btn btn-gold btn-sm uppercase tracking-widest font-black text-[9px] px-6">+ UPLOAD RECORD</button>
+      </div>
+      <div className="bg-card border border-border-custom rounded-3xl p-20 text-center text-text-dim text-sm italic">No documents uploaded to your secure vault.</div>
+    </div>
+  );
+}
+
 function CourseManager({ courses, onRefresh, onEditContent }: { courses: any[], onRefresh: () => void, onEditContent: (course: any) => void }) {
   const [isAdding, setIsAdding] = useState(false);
   const [newCourse, setNewCourse] = useState({ title: '', description: '', slug: '', thumbnail_url: '📘' });
@@ -2042,7 +2686,7 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState<Record<string, number>>({});
   const [showCertificate, setShowCertificate] = useState<any>(null);
-  const [activeSection, setActiveSection] = useState<'dashboard' | 'courses' | 'finances' | 'applications' | 'profile' | 'settings' | 'vault' | 'records'>('dashboard');
+  const [activeSection, setActiveSection] = useState<'dashboard' | 'courses' | 'finances' | 'applications' | 'profile' | 'settings' | 'vault' | 'records' | 'timetable' | 'calendar'>('dashboard');
   const [editingProfile, setEditingProfile] = useState(false);
   const [profileForm, setProfileForm] = useState<any>({});
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(true);
@@ -2061,6 +2705,7 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
   const [lessonComments, setLessonComments] = useState<any[]>([]);
   const [notifications, setNotifications] = useState<any[]>([]);
   const [schoolSettings, setSchoolSettings] = useState<any>({});
+  const [academicSchedule, setAcademicSchedule] = useState<any[]>([]);
 
   useEffect(() => {
     if (!user) return;
@@ -2097,14 +2742,24 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
       .on('postgres_changes', { 
         event: '*', 
         schema: 'public', 
-        table: 'events' 
+        table: 'academic_schedule' 
       }, () => {
-        fetchStudentData(); // Re-fetch if events change
+        fetchStudentData(); // Re-fetch if academic schedule changes
       })
       .subscribe();
 
+    const handleLeave = (e: BeforeUnloadEvent) => {
+      // If NOT a refresh, clear session synchronously
+      const navType = (performance.getEntriesByType("navigation")[0] as any)?.type;
+      if (navType !== 'reload') {
+        window.sessionStorage.clear();
+      }
+    };
+    window.addEventListener('beforeunload', handleLeave);
+
     return () => {
       supabase.removeChannel(channel);
+      window.removeEventListener('beforeunload', handleLeave);
     };
   }, [user]);
 
@@ -2155,6 +2810,7 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
       const { data: allDocs } = await supabase.from('student_documents').select('*').eq('student_id', user?.id);
       const { data: allNotifs } = await supabase.from('system_notifications').select('*').eq('user_id', user?.id).order('created_at', { ascending: false });
       const { data: settings } = await supabase.from('school_settings').select('*');
+      const { data: schedule } = await supabase.from('academic_schedule').select('*').order('start_time', { ascending: true });
 
       setCourses(allCourses || []);
       setAnnouncements(allAnnouncements || []);
@@ -2162,6 +2818,7 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
       setSubmissions(allSubmissions || []);
       setDocuments(allDocs || []);
       setNotifications(allNotifs || []);
+      setAcademicSchedule(schedule || []);
       
       const setMap: any = {};
       settings?.forEach(s => setMap[s.key] = s.value);
@@ -2269,13 +2926,16 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
           <div className="p-4 h-full flex flex-col">
             {/* Institutional Navigation */}
             <div className="mb-8">
-              <a 
-                href="/" 
-                className={`flex items-center rounded-xl bg-gold/10 border border-gold/30 text-gold hover:bg-gold hover:text-bg transition-all font-bold text-[10px] uppercase tracking-tighter ${isSidebarCollapsed ? 'justify-center p-3' : 'px-4 py-3 gap-2.5'}`}
+              <button 
+                onClick={async () => {
+                   await supabase.auth.signOut();
+                   window.location.href = '/';
+                }}
+                className={`w-full flex items-center rounded-xl bg-gold/10 border border-gold/30 text-gold hover:bg-gold hover:text-bg transition-all font-bold text-[10px] uppercase tracking-tighter ${isSidebarCollapsed ? 'justify-center p-3' : 'px-4 py-3 gap-2.5'}`}
               >
                 <Globe className="w-4 h-4 shrink-0" />
                 {!isSidebarCollapsed && <span className="whitespace-nowrap">Main Website →</span>}
-              </a>
+              </button>
             </div>
 
             <div className={`mb-8 flex items-center overflow-hidden transition-all duration-200 ${isSidebarCollapsed ? 'lg:justify-center' : 'px-2 justify-start gap-2.5'}`}>
@@ -2288,13 +2948,15 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
               )}
             </div>
 
-            <nav className="flex-1 space-y-1">
+            <nav className="flex-1 space-y-1 overflow-y-auto custom-scrollbar pr-2">
               {[
                 { id: 'dashboard', label: 'Overview', icon: BarChart3 },
                 { id: 'courses', label: 'My Learning', icon: BookOpen },
                 { id: 'vault', label: 'My Vault', icon: ShieldCheck },
                 { id: 'records', label: 'Academic Record', icon: Star },
                 { id: 'announcements', label: 'Announcements', icon: Zap },
+                { id: 'timetable', label: 'My Timetable', icon: Calendar },
+                { id: 'calendar', label: 'Academic Calendar', icon: GraduationCap },
                 { id: 'finances', label: 'Billing', icon: CreditCard },
                 { id: 'applications', label: 'Admissions', icon: FileText },
                 { id: 'profile', label: 'Profile', icon: User },
@@ -2605,10 +3267,14 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
                       .map(assessment => {
                         const sub = submissions.find(s => s.assessment_id === assessment.id);
                         return (
-                          <div key={assessment.id} className="bg-card border border-border-custom rounded-2xl p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 hover:border-gold/20 transition-all">
+                          <div key={assessment.id} className={`bg-card border rounded-2xl p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 transition-all ${
+                            academicTab === 'exams' ? 'border-coral/50 bg-coral/5 shadow-lg shadow-coral/10' : 'border-border-custom hover:border-gold/20'
+                          }`}>
                              <div>
                                <div className="flex items-center gap-2 mb-1">
-                                 <span className="text-[9px] font-dm-mono uppercase text-gold bg-gold/10 px-2 py-0.5 rounded border border-gold/10">Required</span>
+                                 <span className={`text-[9px] font-dm-mono uppercase px-2 py-0.5 rounded border ${
+                                   academicTab === 'exams' ? 'text-coral bg-coral/10 border-coral/20' : 'text-gold bg-gold/10 border-gold/10'
+                                 }`}>{academicTab === 'exams' ? 'Final Examination' : 'Required'}</span>
                                  <h4 className="font-bold text-lg">{assessment.title}</h4>
                                </div>
                                <p className="text-xs text-text-muted max-w-lg mb-2">{assessment.description}</p>
@@ -2742,6 +3408,15 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
             </div>
           </div>
         )}
+
+        {/* ─── TIMETABLE CONTENT ─── */}
+        {activeSection === 'timetable' && <StudentTimetable />}
+
+        {/* ─── CALENDAR CONTENT ─── */}
+        {activeSection === 'calendar' && <AcademicCalendarView schedule={academicSchedule} enrollments={enrollments} />}
+
+        {/* ─── VAULT CONTENT ─── */}
+        {activeSection === 'vault' && <StudentVault documents={documents} onUpload={handleUpload} />}
 
         {/* ─── ANNOUNCEMENTS CONTENT ─── */}
         {activeSection === 'announcements' && (
@@ -3705,7 +4380,15 @@ export function StaffActivationView() {
       <div className="w-20 h-20 bg-coral/10 text-coral rounded-3xl flex items-center justify-center text-3xl mb-8">⚠️</div>
       <h2 className="font-syne font-extrabold text-3xl mb-4">Activation Failed</h2>
       <p className="text-text-soft text-sm max-w-md mb-8">{error}</p>
-      <a href="/" className="btn btn-gold px-12 py-4 shadow-xl">Return to Academy Home</a>
+      <button 
+        onClick={async () => {
+          await supabase.auth.signOut();
+          window.location.href = '/';
+        }} 
+        className="btn btn-gold px-12 py-4 shadow-xl"
+      >
+        Return to Academy Home
+      </button>
     </div>
   );
 
