@@ -62,19 +62,21 @@ function OverviewStats({ applications, courses }: { applications: any[], courses
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10 animate-fadeUp">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6 animate-fadeUp">
       {stats.map((s, i) => (
-        <div key={i} className="bg-card border border-border-custom rounded-2xl p-6 hover:translate-y-[-4px] transition-all duration-300 group">
-          <div className="flex items-center gap-4 mb-4">
-            <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${s.bg} ${s.color} border border-white/5`}>
-              <s.icon className="w-5 h-5" />
+        <div key={i} className="bg-[#0a0d14] border border-gold/10 rounded-2xl p-5 hover:border-gold/30 transition-all duration-300 group relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-16 h-16 bg-gold/2 rounded-full -mr-8 -mt-8 blur-2xl" />
+          <div className="flex items-center gap-3 mb-3">
+            <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${s.bg} ${s.color} border border-gold/5`}>
+              <s.icon className="w-4 h-4" />
             </div>
-            <div className="w-8 h-8 rounded-full bg-surface border border-border-custom flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity ml-auto">
-              <ArrowRight className="w-3 h-3 text-gold" />
+            <div className="flex-1" />
+            <div className="w-6 h-6 rounded-lg bg-surface border border-border-custom flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+              <ArrowRight className="w-2.5 h-2.5 text-gold" />
             </div>
           </div>
-          <div className="font-syne font-extrabold text-3xl mb-1">{s.value}</div>
-          <div className="font-dm-mono text-[10px] uppercase tracking-widest text-text-muted">{s.label}</div>
+          <div className="font-syne font-black text-3xl mb-0.5 tracking-tighter">{s.value}</div>
+          <div className="font-dm-mono text-[9px] uppercase tracking-[0.15em] text-text-muted font-bold">{s.label}</div>
         </div>
       ))}
     </div>
@@ -92,11 +94,11 @@ function ApplicationTable({ apps, onUpdate, onSelect, isLoading, filters }: any)
         <table className="w-full text-left border-collapse">
           <thead>
             <tr className="bg-surface/50 backdrop-blur-md border-b border-border-custom">
-              <th className="p-5 font-dm-mono text-[10px] uppercase tracking-[0.2em] text-text-muted">Applicant Identity</th>
-              <th className="p-5 font-dm-mono text-[10px] uppercase tracking-[0.2em] text-text-muted">Programme / Org</th>
-              <th className="p-5 font-dm-mono text-[10px] uppercase tracking-[0.2em] text-text-muted">Submission</th>
-              <th className="p-5 font-dm-mono text-[10px] uppercase tracking-[0.2em] text-text-muted">Current Status</th>
-              <th className="p-5 font-dm-mono text-[10px] uppercase tracking-[0.2em] text-text-muted text-right">Records</th>
+              <th className="p-3.5 font-dm-mono text-[9px] uppercase tracking-[0.2em] text-text-muted font-bold">Applicant Identity</th>
+              <th className="p-3.5 font-dm-mono text-[9px] uppercase tracking-[0.2em] text-text-muted font-bold">Programme / Org</th>
+              <th className="p-3.5 font-dm-mono text-[9px] uppercase tracking-[0.2em] text-text-muted font-bold">Submission</th>
+              <th className="p-3.5 font-dm-mono text-[9px] uppercase tracking-[0.2em] text-text-muted font-bold">Current Status</th>
+              <th className="p-3.5 font-dm-mono text-[9px] uppercase tracking-[0.2em] text-text-muted font-bold text-right">Records</th>
             </tr>
           </thead>
           <tbody>
@@ -108,7 +110,7 @@ function ApplicationTable({ apps, onUpdate, onSelect, isLoading, filters }: any)
                 className="border-b border-border-custom/50 hover:bg-gold/[0.03] transition-colors group cursor-pointer"
                 onClick={() => onSelect(app)}
               >
-                <td className="p-5">
+                <td className="p-3.5">
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded-lg bg-surface border border-border-custom flex items-center justify-center font-bold text-xs">
                       {app.first_name?.[0] || app.organization_name?.[0]}
@@ -127,7 +129,7 @@ function ApplicationTable({ apps, onUpdate, onSelect, isLoading, filters }: any)
                   <div className="text-[11px] text-text-soft font-dm-mono">{new Date(app.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</div>
                   <div className="text-[9px] text-text-dim uppercase">{new Date(app.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
                 </td>
-                <td className="p-5">
+                <td className="p-3.5">
                   <span className={`px-3 py-1 rounded-full text-[9px] font-dm-mono uppercase border tracking-widest ${
                     app.status === 'approved' ? 'bg-emerald-dim text-emerald border-emerald/20' :
                     app.status === 'rejected' ? 'bg-coral-dim text-coral border-coral/20' :
@@ -441,7 +443,7 @@ export function AdminDashboard() {
   const [editingCourse, setEditingCourse] = useState<any>(null);
 
   return (
-    <div className="p-8 max-w-7xl mx-auto">
+    <div className="w-full min-h-screen bg-bg">
       {/* ─── CMD+K Command Palette ─── */}
       {showCommandPalette && (
         <div className="fixed inset-0 z-[5000] bg-bg/90 backdrop-blur-md flex items-start justify-center pt-[15vh]" onClick={() => setShowCommandPalette(false)}>
@@ -504,13 +506,24 @@ export function AdminDashboard() {
             {isSidebarCollapsed ? <ChevronRight size={14} /> : <ChevronRight size={14} className="rotate-180" />}
           </button>
 
-          <div className="p-6 h-full flex flex-col">
-            <div className={`mb-10 flex items-center overflow-hidden transition-all duration-200 ${isSidebarCollapsed ? 'lg:justify-center' : 'px-2 justify-start gap-2'}`}>
-              <div className="w-8 h-8 rounded-lg bg-gold text-bg flex items-center justify-center font-black shrink-0">G</div>
+          <div className="p-4 h-full flex flex-col">
+            {/* Institutional Navigation */}
+            <div className="mb-8">
+              <a 
+                href="/" 
+                className={`flex items-center rounded-xl bg-gold/10 border border-gold/30 text-gold hover:bg-gold hover:text-bg transition-all font-bold text-[10px] uppercase tracking-tighter ${isSidebarCollapsed ? 'justify-center p-3' : 'px-4 py-3 gap-2.5'}`}
+              >
+                <Globe className="w-4 h-4 shrink-0" />
+                {!isSidebarCollapsed && <span className="whitespace-nowrap">Main Website →</span>}
+              </a>
+            </div>
+
+            <div className={`mb-8 flex items-center overflow-hidden transition-all duration-200 ${isSidebarCollapsed ? 'lg:justify-center' : 'px-2 justify-start gap-2.5'}`}>
+              <div className="w-9 h-9 rounded-xl bg-gold text-bg flex items-center justify-center font-black shadow-lg shadow-gold/20 shrink-0">G</div>
               {(!isSidebarCollapsed || isMobileMenuOpen) && (
                 <div className="flex flex-col animate-fade">
-                  <h2 className="font-syne font-extrabold text-xl tracking-tighter whitespace-nowrap leading-none">ADMIN</h2>
-                  <span className="text-[8px] font-dm-mono text-gold tracking-widest uppercase opacity-70">Control Hub</span>
+                  <h2 className="font-syne font-extrabold text-lg tracking-tighter whitespace-nowrap leading-none">ADMIN HUB</h2>
+                  <span className="text-[7px] font-dm-mono text-gold tracking-widest uppercase opacity-70">Institutional Control</span>
                 </div>
               )}
             </div>
@@ -586,9 +599,9 @@ export function AdminDashboard() {
       )}
 
       {/* ─── ADMIN MAIN CONTENT ─── */}
-      <main className={`flex-1 p-6 md:p-10 animate-fade transition-all duration-200 ease-[0.22,1,0.36,1] ${isSidebarCollapsed ? 'lg:ml-20' : 'lg:ml-64'}`}>
+      <main className={`flex-1 p-4 md:p-6 lg:p-8 animate-fade transition-all duration-300 ease-[0.25,0.1,0.25,1] ${isSidebarCollapsed ? 'lg:ml-20' : 'lg:ml-64'}`}>
         {/* TOP BAR */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 gap-6">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-6">
           <div className="flex items-center gap-4 animate-fadeRight">
             {/* Mobile Menu Toggle */}
             <button 
@@ -1452,44 +1465,48 @@ function CourseContentEditor({ course, onBack }: { course: any, onBack: () => vo
   }
 
   return (
-    <div className="space-y-8">
-      <div className="flex items-center gap-4">
-        <button onClick={onBack} className="p-2 rounded-full hover:bg-surface border border-border-custom">←</button>
+    <div className="space-y-6 animate-fade">
+      <div className="flex items-center gap-4 bg-[#0a0d14] p-4 rounded-2xl border border-gold/10 relative overflow-hidden group">
+        <div className="absolute inset-0 bg-gold/[0.02] pointer-events-none" />
+        <button onClick={onBack} className="w-10 h-10 rounded-xl bg-surface border border-gold/10 flex items-center justify-center hover:bg-gold/10 transition-colors group">
+          <ChevronRight className="w-5 h-5 text-gold rotate-180" />
+        </button>
         <div>
-          <h2 className="font-syne font-bold text-2xl">{course.title}</h2>
-          <p className="text-text-muted text-sm">Manage modules, lessons, and quizzes</p>
+          <h2 className="font-syne font-black text-xl uppercase tracking-tighter text-gold">{course.title}</h2>
+          <p className="text-text-muted text-[10px] font-dm-mono uppercase tracking-widest">Master Curriculum Architect</p>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-1 space-y-6">
-          <div className="flex justify-between items-center">
-            <h3 className="font-syne font-bold text-lg">Curriculum</h3>
-            <button onClick={() => setIsAddingModule(true)} className="text-gold text-[11px] font-bold">+ Add Module</button>
+        <div className="lg:col-span-1 space-y-4">
+          <div className="flex justify-between items-center px-2">
+            <h3 className="font-syne font-black text-sm uppercase tracking-widest text-text-muted">Curriculum</h3>
+            <button onClick={() => setIsAddingModule(true)} className="text-gold text-[9px] font-black uppercase tracking-widest hover:underline">+ Add Module</button>
           </div>
 
           {isAddingModule && (
-            <form onSubmit={handleAddModule} className="bg-card border border-border-custom p-4 rounded-xl flex gap-2">
-              <input autoFocus placeholder="Module Title" className="flex-1 bg-surface border border-border-custom rounded-md p-2 text-sm" value={newModuleTitle} onChange={e => setNewModuleTitle(e.target.value)} />
-              <button type="submit" className="btn btn-gold btn-sm">Add</button>
+            <form onSubmit={handleAddModule} className="bg-[#0a0d14] border border-gold/20 p-3 rounded-xl flex gap-2 animate-fadeUp">
+              <input autoFocus placeholder="Module Identifier" className="flex-1 bg-surface border border-gold/10 rounded-md p-2 text-[11px] font-dm-mono" value={newModuleTitle} onChange={e => setNewModuleTitle(e.target.value)} />
+              <button type="submit" className="btn btn-gold px-3 text-[9px] font-black uppercase">Add</button>
             </form>
           )}
 
-          <div className="space-y-4">
+          <div className="space-y-3">
             {modules.map((mod, mIdx) => (
-              <div key={mod.id} className="bg-card border border-border-custom rounded-xl overflow-hidden">
-                <div className="bg-surface p-3 border-b border-border-custom flex justify-between items-center">
-                  <span className="font-dm-mono text-[10px] uppercase text-text-muted">Module {mIdx + 1}: {mod.title}</span>
+              <div key={mod.id} className="bg-[#0a0d14] border border-gold/10 rounded-2xl overflow-hidden group hover:border-gold/30 transition-all">
+                <div className="bg-surface/30 p-3 border-b border-gold/10 flex justify-between items-center">
+                  <span className="font-dm-mono text-[9px] uppercase tracking-widest text-gold/80 font-bold">MOD_{mIdx + 1}: {mod.title}</span>
                   <div className="flex gap-2">
-                    <button onClick={() => handleAddLesson(mod.id)} className="text-[10px] text-gold hover:underline">+ Lesson</button>
-                    <button onClick={() => handleAddQuiz(mod.id)} className="text-[10px] text-gold hover:underline">+ Quiz</button>
+                    <button onClick={() => handleAddLesson(mod.id)} className="text-[9px] font-black text-emerald uppercase tracking-tighter hover:underline px-1">+ LSN</button>
+                    <button onClick={() => handleAddQuiz(mod.id)} className="text-[9px] font-black text-sky uppercase tracking-tighter hover:underline px-1">+ QZ</button>
                   </div>
                 </div>
-                <div className="p-2 space-y-1">
+                <div className="p-1 px-2 pb-2 space-y-0.5">
                   {mod.lessons?.sort((a: any, b: any) => a.order_index - b.order_index).map((lesson: any) => (
                     <button key={lesson.id} onClick={() => { setEditingLesson(lesson); setEditingQuiz(null); }}
-                      className={`w-full text-left p-2 rounded text-[12px] transition-all ${editingLesson?.id === lesson.id ? 'bg-gold/10 text-gold' : 'hover:bg-white/5 text-text-soft'}`}>
-                      📄 {lesson.title}
+                      className={`w-full text-left p-2 rounded-lg text-[11px] font-bold transition-all flex items-center gap-2 ${editingLesson?.id === lesson.id ? 'bg-gold/10 text-gold border border-gold/20' : 'hover:bg-white/5 text-text-soft border border-transparent'}`}>
+                      <FileText size={12} className={editingLesson?.id === lesson.id ? 'text-gold' : 'text-text-dim'} /> 
+                      <span className="truncate">{lesson.title}</span>
                     </button>
                   ))}
                   {mod.quizzes?.map((quiz: any) => (
@@ -1497,8 +1514,9 @@ function CourseContentEditor({ course, onBack }: { course: any, onBack: () => vo
                       const { data: questions } = await supabase.from('quiz_questions').select('*').eq('quiz_id', quiz.id).order('order_index', { ascending: true });
                       setEditingQuiz({ ...quiz, questions: questions || [] }); setEditingLesson(null);
                     }}
-                      className={`w-full text-left p-2 rounded text-[12px] transition-all ${editingQuiz?.id === quiz.id ? 'bg-gold/10 text-gold' : 'hover:bg-white/5 text-text-soft'}`}>
-                      ❓ {quiz.title}
+                      className={`w-full text-left p-2 rounded-lg text-[11px] font-bold transition-all flex items-center gap-2 ${editingQuiz?.id === quiz.id ? 'bg-gold/10 text-gold border border-gold/20' : 'hover:bg-white/5 text-text-soft border border-transparent'}`}>
+                      <ShieldCheck size={12} className={editingQuiz?.id === quiz.id ? 'text-gold' : 'text-text-dim'} />
+                      <span className="truncate">{quiz.title}</span>
                     </button>
                   ))}
                 </div>
@@ -1509,93 +1527,98 @@ function CourseContentEditor({ course, onBack }: { course: any, onBack: () => vo
 
         <div className="lg:col-span-2">
           {editingLesson ? (
-            <form onSubmit={handleSaveLesson} className="bg-card border border-border-custom rounded-xl p-8 space-y-6">
-              <div className="flex justify-between items-center">
-                <h3 className="font-syne font-bold text-xl">Edit Lesson</h3>
+            <form onSubmit={handleSaveLesson} className="bg-[#0a0d14] border border-gold/20 rounded-3xl p-6 md:p-8 space-y-6 shadow-2xl relative animate-fadeLeft">
+               <div className="absolute top-0 right-0 w-32 h-32 bg-gold/5 rounded-full -mr-16 -mt-16 blur-2xl" />
+              <div className="flex justify-between items-center relative z-10">
+                <h3 className="font-syne font-black text-xl uppercase tracking-tighter text-gold">Edit Academic Module</h3>
                 <div className="flex gap-2">
-                  <button type="button" onClick={() => setEditingLesson(null)} className="btn btn-outline btn-sm">Cancel</button>
-                  <button type="submit" className="btn btn-gold btn-sm">Save Changes</button>
+                  <button type="button" onClick={() => setEditingLesson(null)} className="btn btn-outline px-4 py-2 text-[10px] font-black uppercase tracking-widest">Cancel</button>
+                  <button type="submit" className="btn btn-gold px-6 py-2 text-[10px] font-black uppercase tracking-widest">Persist Changes</button>
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-4 relative z-10">
                 <div className="col-span-2">
-                  <label className="block font-dm-mono text-[10px] uppercase text-text-muted mb-1">Lesson Title</label>
-                  <input required className="w-full bg-surface border border-border-custom rounded-md p-3 text-sm" value={editingLesson.title} onChange={e => setEditingLesson({ ...editingLesson, title: e.target.value })} />
+                  <label className="block font-dm-mono text-[9px] uppercase tracking-[0.2em] text-text-muted mb-1 font-bold">Lesson Identifier</label>
+                  <input required className="w-full bg-surface border border-gold/10 rounded-xl p-3 text-sm font-bold focus:border-gold/30 transition-all" value={editingLesson.title} onChange={e => setEditingLesson({ ...editingLesson, title: e.target.value })} />
                 </div>
                 <div>
-                  <label className="block font-dm-mono text-[10px] uppercase text-text-muted mb-1">Video URL</label>
-                  <input className="w-full bg-surface border border-border-custom rounded-md p-3 text-sm" value={editingLesson.video_url} onChange={e => setEditingLesson({ ...editingLesson, video_url: e.target.value })} />
+                  <label className="block font-dm-mono text-[9px] uppercase tracking-[0.2em] text-text-muted mb-1 font-bold">Video Asset URL</label>
+                  <input className="w-full bg-surface border border-gold/10 rounded-xl p-3 text-sm font-dm-mono focus:border-gold/30 transition-all" value={editingLesson.video_url} onChange={e => setEditingLesson({ ...editingLesson, video_url: e.target.value })} />
                 </div>
                 <div>
-                  <label className="block font-dm-mono text-[10px] uppercase text-text-muted mb-1">Duration</label>
-                  <input className="w-full bg-surface border border-border-custom rounded-md p-3 text-sm" value={editingLesson.duration} onChange={e => setEditingLesson({ ...editingLesson, duration: e.target.value })} />
+                  <label className="block font-dm-mono text-[9px] uppercase tracking-[0.2em] text-text-muted mb-1 font-bold">Estimated Duration</label>
+                  <input className="w-full bg-surface border border-gold/10 rounded-xl p-3 text-sm font-dm-mono focus:border-gold/30 transition-all" value={editingLesson.duration} onChange={e => setEditingLesson({ ...editingLesson, duration: e.target.value })} />
                 </div>
               </div>
-              <div>
-                <label className="block font-dm-mono text-[10px] uppercase text-text-muted mb-1">Content (Markdown)</label>
-                <textarea className="w-full bg-surface border border-border-custom rounded-md p-3 text-sm h-64 font-mono" value={editingLesson.content} onChange={e => setEditingLesson({ ...editingLesson, content: e.target.value })} />
+              <div className="relative z-10">
+                <label className="block font-dm-mono text-[9px] uppercase tracking-[0.2em] text-text-muted mb-1 font-bold">Academic Content (Markdown)</label>
+                <textarea className="w-full bg-surface border border-gold/10 rounded-xl p-4 text-sm h-64 font-mono focus:border-gold/30 transition-all custom-scrollbar" value={editingLesson.content} onChange={e => setEditingLesson({ ...editingLesson, content: e.target.value })} />
               </div>
             </form>
           ) : editingQuiz ? (
-            <form onSubmit={handleSaveQuiz} className="bg-card border border-border-custom rounded-xl p-8 space-y-6">
-              <div className="flex justify-between items-center">
-                <h3 className="font-syne font-bold text-xl">Edit Quiz</h3>
+            <form onSubmit={handleSaveQuiz} className="bg-[#0a0d14] border border-gold/20 rounded-3xl p-6 md:p-8 space-y-6 shadow-2xl relative animate-fadeLeft">
+               <div className="absolute top-0 right-0 w-32 h-32 bg-sky/5 rounded-full -mr-16 -mt-16 blur-2xl" />
+              <div className="flex justify-between items-center relative z-10">
+                <h3 className="font-syne font-black text-xl uppercase tracking-tighter text-sky">Refine Assessment</h3>
                 <div className="flex gap-2">
-                  <button type="button" onClick={() => setEditingQuiz(null)} className="btn btn-outline btn-sm">Cancel</button>
-                  <button type="submit" className="btn btn-gold btn-sm">Save Quiz</button>
+                  <button type="button" onClick={() => setEditingQuiz(null)} className="btn btn-outline px-4 py-2 text-[10px] font-black uppercase tracking-widest">Cancel</button>
+                  <button type="submit" className="btn btn-gold px-6 py-2 text-[10px] font-black uppercase tracking-widest">Seal Quiz</button>
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-4 relative z-10">
                 <div className="col-span-2">
-                  <label className="block font-dm-mono text-[10px] uppercase text-text-muted mb-1">Quiz Title</label>
-                  <input required className="w-full bg-surface border border-border-custom rounded-md p-3 text-sm" value={editingQuiz.title} onChange={e => setEditingQuiz({ ...editingQuiz, title: e.target.value })} />
+                  <label className="block font-dm-mono text-[9px] uppercase tracking-[0.2em] text-text-muted mb-1 font-bold">Assessment Title</label>
+                  <input required className="w-full bg-surface border border-gold/10 rounded-xl p-3 text-sm font-bold focus:border-gold/30 transition-all" value={editingQuiz.title} onChange={e => setEditingQuiz({ ...editingQuiz, title: e.target.value })} />
                 </div>
                 <div className="col-span-2">
-                  <label className="block font-dm-mono text-[10px] uppercase text-text-muted mb-1">Description</label>
-                  <input className="w-full bg-surface border border-border-custom rounded-md p-3 text-sm" value={editingQuiz.description} onChange={e => setEditingQuiz({ ...editingQuiz, description: e.target.value })} />
+                  <label className="block font-dm-mono text-[9px] uppercase tracking-[0.2em] text-text-muted mb-1 font-bold">Executive Summary</label>
+                  <input className="w-full bg-surface border border-gold/10 rounded-xl p-3 text-sm focus:border-gold/30 transition-all" value={editingQuiz.description} onChange={e => setEditingQuiz({ ...editingQuiz, description: e.target.value })} />
                 </div>
                 <div>
-                  <label className="block font-dm-mono text-[10px] uppercase text-text-muted mb-1">Passing Score (%)</label>
-                  <input type="number" className="w-full bg-surface border border-border-custom rounded-md p-3 text-sm" value={editingQuiz.passing_score} onChange={e => setEditingQuiz({ ...editingQuiz, passing_score: parseInt(e.target.value) })} />
+                  <label className="block font-dm-mono text-[9px] uppercase tracking-[0.2em] text-text-muted mb-1 font-bold">Threshold (%)</label>
+                  <input type="number" className="w-full bg-surface border border-gold/10 rounded-xl p-3 text-sm font-dm-mono focus:border-gold/30 transition-all" value={editingQuiz.passing_score} onChange={e => setEditingQuiz({ ...editingQuiz, passing_score: parseInt(e.target.value) })} />
                 </div>
               </div>
-              <div className="space-y-6 pt-6 border-t border-border-custom">
+              <div className="space-y-6 pt-6 border-t border-gold/10 relative z-10">
                 <div className="flex justify-between items-center">
-                  <h4 className="font-syne font-bold text-lg">Questions</h4>
+                  <h4 className="font-syne font-black text-lg uppercase tracking-widest text-text-soft">Assessment Nodes</h4>
                   <button type="button" onClick={() => setEditingQuiz({
                     ...editingQuiz, questions: [...editingQuiz.questions, { question: '', options: ['', '', '', ''], correct_answer: 0 }]
-                  })} className="text-gold text-[11px] font-bold">+ Add Question</button>
+                  })} className="text-gold text-[9px] font-black uppercase tracking-widest border border-gold/20 px-3 py-1 rounded-full hover:bg-gold/10 transition-all">+ Add Vector</button>
                 </div>
-                {editingQuiz.questions.map((q: any, qIdx: number) => (
-                  <div key={qIdx} className="bg-surface p-4 rounded-xl border border-border-custom space-y-4">
-                    <div className="flex justify-between items-start">
-                      <span className="font-dm-mono text-[10px] text-text-muted">Question {qIdx + 1}</span>
-                      <button type="button" onClick={() => {
-                        const newQs = [...editingQuiz.questions]; newQs.splice(qIdx, 1);
-                        setEditingQuiz({ ...editingQuiz, questions: newQs });
-                      }} className="text-coral text-[10px]">Remove</button>
+                <div className="max-h-[50vh] overflow-y-auto pr-2 space-y-4 custom-scrollbar">
+                  {editingQuiz.questions.map((q: any, qIdx: number) => (
+                    <div key={qIdx} className="bg-surface/50 p-4 rounded-xl border border-gold/5 space-y-4 group">
+                      <div className="flex justify-between items-start">
+                        <span className="font-dm-mono text-[9px] text-text-muted uppercase tracking-widest font-bold">Vector_{qIdx + 1}</span>
+                        <button type="button" onClick={() => {
+                          const newQs = [...editingQuiz.questions]; newQs.splice(qIdx, 1);
+                          setEditingQuiz({ ...editingQuiz, questions: newQs });
+                        }} className="text-coral text-[9px] font-black uppercase tracking-tighter opacity-0 group-hover:opacity-100 transition-opacity">Expunge</button>
+                      </div>
+                      <input placeholder="Enter assessment vector prompt" className="w-full bg-bg border border-gold/10 rounded-xl p-3 text-sm focus:border-gold/20 transition-all" value={q.question}
+                        onChange={e => { const newQs = [...editingQuiz.questions]; newQs[qIdx].question = e.target.value; setEditingQuiz({ ...editingQuiz, questions: newQs }); }} />
+                      <div className="grid grid-cols-2 gap-3">
+                        {q.options.map((opt: string, oIdx: number) => (
+                          <div key={oIdx} className="flex items-center gap-3 bg-bg/50 p-2 rounded-lg border border-transparent hover:border-gold/10 transition-all">
+                            <input type="radio" name={`correct-${qIdx}`} checked={q.correct_answer === oIdx}
+                              className="accent-gold h-4 w-4"
+                              onChange={() => { const newQs = [...editingQuiz.questions]; newQs[qIdx].correct_answer = oIdx; setEditingQuiz({ ...editingQuiz, questions: newQs }); }} />
+                            <input placeholder={`Vector Option ${oIdx + 1}`} className="flex-1 bg-transparent border-none p-1 text-[11px] focus:ring-0" value={opt}
+                              onChange={e => { const newQs = [...editingQuiz.questions]; newQs[qIdx].options[oIdx] = e.target.value; setEditingQuiz({ ...editingQuiz, questions: newQs }); }} />
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                    <input placeholder="Enter question text" className="w-full bg-bg border border-border-custom rounded-md p-2 text-sm" value={q.question}
-                      onChange={e => { const newQs = [...editingQuiz.questions]; newQs[qIdx].question = e.target.value; setEditingQuiz({ ...editingQuiz, questions: newQs }); }} />
-                    <div className="grid grid-cols-2 gap-2">
-                      {q.options.map((opt: string, oIdx: number) => (
-                        <div key={oIdx} className="flex items-center gap-2">
-                          <input type="radio" name={`correct-${qIdx}`} checked={q.correct_answer === oIdx}
-                            onChange={() => { const newQs = [...editingQuiz.questions]; newQs[qIdx].correct_answer = oIdx; setEditingQuiz({ ...editingQuiz, questions: newQs }); }} />
-                          <input placeholder={`Option ${oIdx + 1}`} className="flex-1 bg-bg border border-border-custom rounded-md p-2 text-[12px]" value={opt}
-                            onChange={e => { const newQs = [...editingQuiz.questions]; newQs[qIdx].options[oIdx] = e.target.value; setEditingQuiz({ ...editingQuiz, questions: newQs }); }} />
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             </form>
           ) : (
-            <div className="bg-card border border-border-custom border-dashed rounded-xl p-20 text-center">
-              <div className="text-4xl mb-4">📝</div>
-              <h3 className="font-syne font-bold text-xl mb-2">Select a lesson or quiz to edit</h3>
-              <p className="text-text-muted">Choose an item from the sidebar to modify its content and settings.</p>
+            <div className="bg-[#0a0d14] border-2 border-dashed border-gold/10 rounded-3xl p-20 text-center animate-pulse">
+              <div className="text-5xl mb-6 grayscale group-hover:grayscale-0 transition-all">🏛️</div>
+              <h3 className="font-syne font-black text-xl mb-2 uppercase tracking-tighter text-gold/40">Select Academic Node</h3>
+              <p className="text-text-dim text-[11px] uppercase tracking-widest max-w-xs mx-auto">Choose a curriculum component to begin architectural refinement.</p>
             </div>
           )}
         </div>
@@ -1820,55 +1843,75 @@ function FinanceManager() {
       </div>
 
       <div className="grid grid-cols-3 gap-4">
-        <div className="bg-card border border-border-custom p-4 rounded-xl">
-          <div className="text-[10px] uppercase text-text-muted font-dm-mono mb-1">Total Revenue</div>
-          <div className="text-2xl font-syne font-bold text-emerald">R {invoices.filter(i => i.status === 'paid').reduce((acc, i) => acc + i.amount, 0).toLocaleString()}</div>
+        <div className="bg-[#0a0d14] border border-gold/10 p-5 rounded-2xl relative overflow-hidden group hover:border-gold/30 transition-all">
+          <div className="absolute top-0 right-0 w-12 h-12 bg-gold/2 rounded-full -mr-6 -mt-6 blur-xl" />
+          <div className="text-[9px] uppercase tracking-[0.15em] text-text-muted font-dm-mono mb-1 font-bold">Total Revenue</div>
+          <div className="text-2xl font-syne font-black text-emerald tracking-tighter">R {invoices.filter(i => i.status === 'paid').reduce((acc, i) => acc + i.amount, 0).toLocaleString()}</div>
         </div>
-        <div className="bg-card border border-border-custom p-4 rounded-xl">
-          <div className="text-[10px] uppercase text-text-muted font-dm-mono mb-1">Pending</div>
-          <div className="text-2xl font-syne font-bold text-gold">R {invoices.filter(i => i.status === 'pending').reduce((acc, i) => acc + i.amount, 0).toLocaleString()}</div>
+        <div className="bg-[#0a0d14] border border-gold/10 p-5 rounded-2xl relative overflow-hidden group hover:border-gold/30 transition-all">
+          <div className="absolute top-0 right-0 w-12 h-12 bg-gold/2 rounded-full -mr-6 -mt-6 blur-xl" />
+          <div className="text-[9px] uppercase tracking-[0.15em] text-text-muted font-dm-mono mb-1 font-bold">Pending Approval</div>
+          <div className="text-2xl font-syne font-black text-gold tracking-tighter">R {invoices.filter(i => i.status === 'pending').reduce((acc, i) => acc + i.amount, 0).toLocaleString()}</div>
         </div>
-        <div className="bg-card border border-border-custom p-4 rounded-xl">
-          <div className="text-[10px] uppercase text-text-muted font-dm-mono mb-1">Total Outstanding</div>
-          <div className="text-2xl font-syne font-bold text-coral">R {invoices.filter(i => i.status === 'overdue').reduce((acc, i) => acc + i.amount, 0).toLocaleString()}</div>
+        <div className="bg-[#0a0d14] border border-gold/10 p-5 rounded-2xl relative overflow-hidden group hover:border-gold/30 transition-all">
+          <div className="absolute top-0 right-0 w-12 h-12 bg-gold/2 rounded-full -mr-6 -mt-6 blur-xl" />
+          <div className="text-[9px] uppercase tracking-[0.15em] text-text-muted font-dm-mono mb-1 font-bold">Institutional Outstanding</div>
+          <div className="text-2xl font-syne font-black text-coral tracking-tighter">R {invoices.filter(i => i.status === 'overdue').reduce((acc, i) => acc + i.amount, 0).toLocaleString()}</div>
         </div>
       </div>
 
-      <div className="bg-card border border-border-custom rounded-xl overflow-hidden">
-        <div className="bg-surface p-4 border-b border-border-custom font-bold text-sm">Recent Invoices</div>
-        <table className="w-full">
-          <thead>
-            <tr className="border-b border-border-custom bg-surface/50 text-left">
-              <th className="p-3 text-[10px] uppercase tracking-widest text-text-dim">Invoice #</th>
-              <th className="p-3 text-[10px] uppercase tracking-widest text-text-dim">Student</th>
-              <th className="p-3 text-[10px] uppercase tracking-widest text-text-dim">Amount</th>
-              <th className="p-3 text-[10px] uppercase tracking-widest text-text-dim">Status</th>
-              <th className="p-3 text-[10px] uppercase tracking-widest text-text-dim">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {invoices.map(inv => (
-              <tr key={inv.id} className="border-b border-border-custom">
-                <td className="p-3 text-sm font-dm-mono">{inv.invoice_number}</td>
-                <td className="p-3 text-sm">
-                  {inv.profiles?.first_name} {inv.profiles?.last_name}
-                  <div className="text-[9px] text-text-dim">{inv.student_number}</div>
-                </td>
-                <td className="p-3 text-sm font-bold">R {inv.amount.toLocaleString()}</td>
-                <td className="p-3">
-                  <span className={`px-2 py-0.5 rounded-full text-[9px] uppercase font-dm-mono border ${inv.status === 'paid' ? 'bg-emerald-dim text-emerald border-emerald/20' : 'bg-gold-dim text-gold border-gold/20'}`}>
-                    {inv.status}
-                  </span>
-                </td>
-                <td className="p-3">
-                  {inv.status !== 'paid' && (
-                    <button onClick={() => markAsPaid(inv.id)} className="text-emerald text-[10px] font-bold hover:underline">Mark Paid</button>
-                  )}
-                </td>
+      <div className="bg-[#0a0d14] border border-gold/10 rounded-2xl overflow-hidden shadow-2xl relative isolate">
+        <div className="absolute inset-0 bg-gold/[0.01] pointer-events-none" />
+        <div className="overflow-x-auto custom-scrollbar">
+          <table className="w-full text-left">
+            <thead>
+              <tr className="bg-surface/50 border-b border-gold/10 text-gold text-[9px] uppercase font-dm-mono tracking-[0.2em]">
+                <th className="p-4">Invoice Cluster</th>
+                <th className="p-4">Finalist Identity</th>
+                <th className="p-4">Institutional Balance</th>
+                <th className="p-4">Verification</th>
+                <th className="p-4 text-right">Governance</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="divide-y divide-gold/5">
+              {invoices.map(inv => (
+                <tr key={inv.id} className="hover:bg-gold/5 transition-colors group">
+                  <td className="p-4">
+                    <div className="text-[10px] font-dm-mono text-text-soft font-bold">{inv.invoice_number}</div>
+                    <div className="text-[8px] text-text-dim uppercase tracking-widest">{new Date(inv.created_at || Date.now()).toLocaleDateString('en-GB')}</div>
+                  </td>
+                  <td className="p-4">
+                    <div className="font-bold text-sm text-text-soft">{inv.profiles?.first_name} {inv.profiles?.last_name}</div>
+                    <div className="text-[9px] text-text-dim font-dm-mono uppercase">{inv.student_number}</div>
+                  </td>
+                  <td className="p-4">
+                    <div className="font-syne font-black text-sm text-white">R {inv.amount?.toLocaleString()}</div>
+                  </td>
+                  <td className="p-4">
+                    <span className={`px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest border ${
+                      inv.status === 'paid' ? 'bg-emerald/10 text-emerald border-emerald/20' : 'bg-gold/10 text-gold border-gold/20'
+                    }`}>
+                      {inv.status}
+                    </span>
+                  </td>
+                  <td className="p-4 text-right">
+                    {inv.status !== 'paid' && (
+                      <button
+                        onClick={() => markAsPaid(inv.id)}
+                        className="btn btn-gold px-4 py-1.5 rounded-lg text-[9px] font-black tracking-widest hover:scale-105 transition-all shadow-[0_0_15px_rgba(212,175,55,0.1)]"
+                      >
+                        SEAL PAYMENT
+                      </button>
+                    )}
+                  </td>
+                </tr>
+              ))}
+              {invoices.length === 0 && (
+                <tr><td colSpan={5} className="p-12 text-center text-text-muted italic text-[10px] uppercase tracking-widest">Archive is currently vacant.</td></tr>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
@@ -1895,76 +1938,95 @@ function MyFinance() {
   }
 
   return (
-    <div className="space-y-8">
-      <div className="bg-navy border border-gold/20 rounded-2xl p-8 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-32 h-32 bg-gold/5 rounded-full -mr-16 -mt-16 blur-3xl" />
-        <h2 className="font-syne font-bold text-xl mb-6 flex items-center gap-2">
-          <CreditCard className="w-5 h-5 text-gold" />
-          Financial Statement
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div>
-            <div className="text-[10px] uppercase tracking-widest text-text-dim font-dm-mono mb-1">Total Balance Due</div>
-            <div className="text-4xl font-syne font-extrabold text-white">
-              R {invoices.filter(i => i.status !== 'paid').reduce((acc, i) => acc + Number(i.amount), 0).toLocaleString()}
-            </div>
-            <div className="mt-4 flex gap-2">
-              <button className="btn btn-gold btn-sm">Pay Outstanding</button>
-              <button onClick={() => exportToCSV(invoices, 'my-statement')} className="btn btn-outline btn-sm">Download Statement</button>
-            </div>
-          </div>
-          <div className="space-y-3">
-            <div className="flex justify-between items-center p-3 bg-white/5 rounded-xl border border-white/5">
-              <span className="text-[12px] text-text-soft">Last Payment</span>
-              <span className="text-sm font-bold">{txs[0] ? `R ${txs[0].amount}` : 'N/A'}</span>
-            </div>
-            <div className="flex justify-between items-center p-3 bg-white/5 rounded-xl border border-white/5">
-              <span className="text-[12px] text-text-soft">Next Due Date</span>
-              <span className="text-sm font-bold text-gold">{invoices.find(i => i.status !== 'paid')?.due_date || 'None'}</span>
-            </div>
+    <div className="space-y-8 animate-fade">
+      <div className="flex justify-between items-center px-2">
+        <h2 className="font-syne font-black text-2xl uppercase tracking-tighter text-gold">Financial Ledger</h2>
+        <div className="flex items-center gap-2 pr-2">
+          <div className="text-right">
+            <p className="text-[9px] text-text-muted font-dm-mono uppercase tracking-widest">System Record</p>
+            <p className="text-[10px] font-bold text-emerald flex items-center justify-end gap-1.5 uppercase tracking-tighter">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald animate-pulse" />
+              Verified
+            </p>
           </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div className="space-y-4">
-          <h3 className="font-syne font-bold text-lg">Invoices</h3>
-          <div className="space-y-3">
-            {invoices.map(inv => (
-              <div key={inv.id} className="bg-card border border-border-custom rounded-xl p-4 flex justify-between items-center">
-                <div>
-                  <div className="font-dm-mono text-[11px] text-gold">{inv.invoice_number}</div>
-                  <div className="text-sm font-bold mt-1">GDA Program Fees</div>
-                  <div className="text-[10px] text-text-muted mt-1">Due {inv.due_date}</div>
-                </div>
-                <div className="text-right">
-                  <div className="font-bold text-sm">R {inv.amount.toLocaleString()}</div>
-                  <span className={`text-[9px] uppercase font-dm-mono ${inv.status === 'paid' ? 'text-emerald' : 'text-gold'}`}>{inv.status}</span>
-                </div>
-              </div>
-            ))}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="bg-[#0a0d14] border border-gold/10 p-6 rounded-2xl relative overflow-hidden group hover:border-gold/30 transition-all duration-300">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-gold/5 rounded-full -mr-16 -mt-16 blur-3xl group-hover:bg-gold/10 transition-all" />
+          <div className="text-[9px] uppercase tracking-[0.2em] text-text-muted font-dm-mono mb-2 font-bold">Account Balance Due</div>
+          <div className="text-4xl font-syne font-black text-white tracking-tighter">
+            R {invoices.filter(i => i.status !== 'paid').reduce((acc, i) => acc + Number(i.amount), 0).toLocaleString()}
+          </div>
+          <div className="mt-6 flex gap-3 relative z-10">
+            <button className="btn btn-gold px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-[0_0_20px_rgba(212,175,55,0.15)] hover:shadow-[0_0_30px_rgba(212,175,55,0.25)] transition-all">Settle Balance</button>
+            <button onClick={() => exportToCSV(invoices, 'my-statement')} className="btn btn-outline px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-white/5 transition-all">Download Audit</button>
           </div>
         </div>
-
-        <div className="space-y-4">
-          <h3 className="font-syne font-bold text-lg">Payment History</h3>
-          <div className="space-y-3">
-            {txs.map(tx => (
-              <div key={tx.id} className="flex items-center gap-4 p-4 border-b border-border-custom">
-                <div className="w-10 h-10 rounded-full bg-surface border border-border-custom flex items-center justify-center">
-                  <ArrowRight className="w-4 h-4 text-emerald" />
-                </div>
-                <div className="flex-1">
-                  <div className="text-sm font-bold">R {tx.amount.toLocaleString()}</div>
-                  <div className="text-[10px] text-text-muted uppercase tracking-widest">{tx.payment_method} • {tx.reference}</div>
-                </div>
-                <div className="text-[10px] text-text-dim text-right">
-                  {new Date(tx.created_at).toLocaleDateString()}
-                </div>
+        
+        <div className="grid grid-rows-2 gap-3">
+           <div className="bg-[#0a0d14] border border-gold/10 p-4 rounded-xl flex justify-between items-center group hover:border-gold/20 transition-all">
+              <div>
+                <span className="text-[9px] text-text-muted font-dm-mono uppercase tracking-widest block mb-0.5">Last Transaction</span>
+                <span className="text-lg font-syne font-black text-emerald tracking-tighter">{txs[0] ? `R ${txs[0].amount.toLocaleString()}` : 'N/A'}</span>
               </div>
-            ))}
-            {txs.length === 0 && <div className="text-center py-10 text-text-dim text-sm italic">No transactions found.</div>}
-          </div>
+              <div className="w-10 h-10 rounded-xl bg-emerald/5 border border-emerald/10 flex items-center justify-center">
+                <ArrowRight className="w-4 h-4 text-emerald" />
+              </div>
+           </div>
+           <div className="bg-[#0a0d14] border border-gold/10 p-4 rounded-xl flex justify-between items-center group hover:border-gold/20 transition-all">
+              <div>
+                <span className="text-[9px] text-text-muted font-dm-mono uppercase tracking-widest block mb-0.5">Next Commitment</span>
+                <span className="text-lg font-syne font-black text-gold tracking-tighter">{invoices.find(i => i.status !== 'paid')?.due_date || 'N/A'}</span>
+              </div>
+              <div className="w-10 h-10 rounded-xl bg-gold/5 border border-gold/10 flex items-center justify-center">
+                <Calendar className="w-4 h-4 text-gold" />
+              </div>
+           </div>
+        </div>
+      </div>
+
+      <div className="bg-[#0a0d14] border border-gold/10 rounded-3xl overflow-hidden shadow-2xl relative isolate">
+        <div className="absolute inset-0 bg-gold/[0.01] pointer-events-none" />
+        <div className="p-4 border-b border-gold/10 bg-surface/30 flex justify-between items-center">
+          <span className="font-syne font-bold text-xs uppercase tracking-widest text-gold/80">Institutional Ledger</span>
+          <span className="text-[9px] font-dm-mono text-text-muted uppercase tracking-widest">{invoices.length} RECORDS</span>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full text-left">
+            <thead>
+              <tr className="bg-surface/50 border-b border-gold/10 text-gold text-[9px] uppercase font-dm-mono tracking-[0.2em]">
+                <th className="p-4">Reference</th>
+                <th className="p-4">Date</th>
+                <th className="p-4">Allocation</th>
+                <th className="p-4">Quantum</th>
+                <th className="p-4">Status</th>
+                <th className="p-4 text-right">Verification</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gold/5">
+              {invoices.map(inv => (
+                <tr key={inv.id} className="hover:bg-gold/5 transition-colors group">
+                  <td className="p-4 text-[11px] font-dm-mono text-text-soft">{inv.invoice_number}</td>
+                  <td className="p-4 text-[11px] font-dm-mono text-text-dim">{new Date(inv.created_at).toLocaleDateString('en-GB')}</td>
+                  <td className="p-4 text-[11px] font-bold text-text-soft uppercase tracking-tighter">GDA Program Fees</td>
+                  <td className="p-4 font-syne font-black text-sm">R {inv.amount.toLocaleString()}</td>
+                  <td className="p-4">
+                    <span className={`px-2 py-0.5 rounded-lg text-[9px] uppercase font-dm-mono border tracking-widest ${inv.status === 'paid' ? 'bg-emerald/10 text-emerald border-emerald/20' : 'bg-gold/10 text-gold border-gold/20'}`}>
+                      {inv.status}
+                    </span>
+                  </td>
+                  <td className="p-4 text-right">
+                    <button className="text-[9px] font-black uppercase text-text-dim hover:text-gold transition-colors tracking-widest">Verify Record</button>
+                  </td>
+                </tr>
+              ))}
+              {invoices.length === 0 && (
+                <tr><td colSpan={6} className="p-12 text-center text-text-muted italic text-xs">No institutional records found in your ledger.</td></tr>
+              )}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
@@ -1983,7 +2045,8 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
   const [activeSection, setActiveSection] = useState<'dashboard' | 'courses' | 'finances' | 'applications' | 'profile' | 'settings' | 'vault' | 'records'>('dashboard');
   const [editingProfile, setEditingProfile] = useState(false);
   const [profileForm, setProfileForm] = useState<any>({});
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(true);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   
   // New State for LMS Features
   const [courses, setCourses] = useState<any[]>([]);
@@ -2193,23 +2256,35 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
   return (
     <div className="flex flex-col lg:flex-row min-h-screen bg-bg relative isolate">
       {/* ─── SIDEBAR NAVIGATION ─── */}
-      <aside className={`lg:fixed lg:h-screen lg:border-r border-border-custom bg-surface/50 backdrop-blur-xl z-20 transition-all duration-200 ease-[0.22,1,0.36,1] ${isSidebarCollapsed ? 'lg:w-20' : 'lg:w-64'}`}>
+      <aside className={`fixed lg:h-screen lg:border-r border-border-custom bg-[#0a0d14]/95 backdrop-blur-3xl z-50 transition-all duration-300 ease-[0.25,0.1,0.25,1] ${isSidebarCollapsed ? 'lg:w-20' : 'lg:w-64'} ${isMobileMenuOpen ? 'translate-x-0 w-64' : '-translate-x-full lg:translate-x-0'}`}>
         <div className="flex flex-col h-full relative">
-          {/* Collapse Toggle Button */}
+          {/* Collapse Toggle Button (Desktop Only) */}
           <button 
             onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
-            className="absolute -right-3 top-20 w-6 h-6 bg-gold text-bg rounded-full flex items-center justify-center shadow-lg z-30 hover:scale-110 transition-transform"
+            className="absolute -right-3 top-20 w-6 h-6 bg-gold text-bg rounded-full hidden lg:flex items-center justify-center shadow-lg z-30 hover:scale-110 transition-transform"
           >
             {isSidebarCollapsed ? <ChevronRight size={14} /> : <ChevronRight size={14} className="rotate-180" />}
           </button>
 
-          <div className="p-6 flex flex-col h-full">
-            <div className={`mb-10 flex items-center overflow-hidden transition-all duration-200 ${isSidebarCollapsed ? 'justify-center' : 'px-2 justify-start gap-2'}`}>
-              <div className="w-8 h-8 rounded-lg bg-gold flex items-center justify-center text-bg shrink-0">G</div>
-              {!isSidebarCollapsed && (
-                <h2 className="font-syne font-extrabold text-xl tracking-tighter whitespace-nowrap animate-fade">
-                  PORTAL
-                </h2>
+          <div className="p-4 h-full flex flex-col">
+            {/* Institutional Navigation */}
+            <div className="mb-8">
+              <a 
+                href="/" 
+                className={`flex items-center rounded-xl bg-gold/10 border border-gold/30 text-gold hover:bg-gold hover:text-bg transition-all font-bold text-[10px] uppercase tracking-tighter ${isSidebarCollapsed ? 'justify-center p-3' : 'px-4 py-3 gap-2.5'}`}
+              >
+                <Globe className="w-4 h-4 shrink-0" />
+                {!isSidebarCollapsed && <span className="whitespace-nowrap">Main Website →</span>}
+              </a>
+            </div>
+
+            <div className={`mb-8 flex items-center overflow-hidden transition-all duration-200 ${isSidebarCollapsed ? 'lg:justify-center' : 'px-2 justify-start gap-2.5'}`}>
+              <div className="w-9 h-9 rounded-xl bg-gold text-bg flex items-center justify-center font-black shadow-lg shadow-gold/20 shrink-0 uppercase tracking-tighter">G</div>
+              {(!isSidebarCollapsed || isMobileMenuOpen) && (
+                <div className="flex flex-col animate-fade">
+                  <h2 className="font-syne font-extrabold text-lg tracking-tighter whitespace-nowrap leading-none">STUDENT HUB</h2>
+                  <span className="text-[7px] font-dm-mono text-gold tracking-widest uppercase opacity-70 italic font-bold">Observer Portal</span>
+                </div>
               )}
             </div>
 
@@ -2231,12 +2306,12 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
                   title={isSidebarCollapsed ? item.label : ''}
                   className={`w-full flex items-center rounded-xl font-dm-mono text-[11px] uppercase tracking-widest transition-all duration-200 group ${
                     activeSection === item.id 
-                      ? 'bg-gold/10 text-gold border border-gold/20' 
+                      ? 'bg-gold text-bg font-bold shadow-lg shadow-gold/20' 
                       : 'text-text-muted hover:text-text-custom hover:bg-white/5 border border-transparent'
-                  } ${isSidebarCollapsed ? 'justify-center p-3' : 'px-4 py-3 gap-3'}`}
+                  } ${(isSidebarCollapsed && !isMobileMenuOpen) ? 'lg:justify-center p-3' : 'px-4 py-3 gap-3'}`}
                 >
                   <item.icon className={`w-4 h-4 shrink-0 ${activeSection === item.id ? 'text-gold' : 'group-hover:text-gold'} transition-colors`} />
-                  {!isSidebarCollapsed && <span className="whitespace-nowrap animate-fade">{item.label}</span>}
+                  {(!isSidebarCollapsed || isMobileMenuOpen) && <span className="whitespace-nowrap animate-fade">{item.label}</span>}
                 </button>
               ))}
             </nav>
@@ -2275,9 +2350,9 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
       </aside>
 
       {/* ─── MAIN CONTENT ─── */}
-      <main className={`flex-1 p-6 md:p-10 animate-fade transition-all duration-200 ease-[0.22,1,0.36,1] ${isSidebarCollapsed ? 'lg:ml-20' : 'lg:ml-64'}`}>
+      <main className={`flex-1 p-4 md:p-6 lg:p-8 animate-fade transition-all duration-300 ease-[0.25,0.1,0.25,1] ${isSidebarCollapsed ? 'lg:ml-20' : 'lg:ml-64'}`}>
         {/* HEADER SECTION */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 gap-6">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-6">
           <div className="animate-fadeRight">
             <h1 className="font-syne font-extrabold text-4xl md:text-5xl tracking-tighter mb-2">
               {activeSection.charAt(0).toUpperCase() + activeSection.slice(1)}
@@ -2312,17 +2387,17 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
 
         {/* ─── DASHBOARD CONTENT ─── */}
         {activeSection === 'dashboard' && (
-          <div className="space-y-10">
+          <div className="space-y-8 animate-fade">
             {/* HERO BANNER */}
-            <section className="relative overflow-hidden bg-navy rounded-[2rem] border border-gold/20 p-8 md:p-12 group">
+            <section className="relative overflow-hidden bg-navy rounded-[2rem] border border-gold/20 p-6 md:p-10 group shadow-2xl">
               <div className="absolute top-0 right-0 w-96 h-96 bg-gold/5 rounded-full -mr-48 -mt-48 blur-[100px] group-hover:bg-gold/10 transition-all duration-700" />
-              <div className="relative z-10 flex flex-col md:flex-row items-center gap-10">
+              <div className="relative z-10 flex flex-col md:flex-row items-center gap-8">
                 <div className="flex-1 text-center md:text-left">
-                  <div className="inline-flex items-center gap-2 px-3 py-1 bg-gold/10 border border-gold/30 rounded-full text-gold text-[10px] uppercase font-dm-mono tracking-widest mb-6">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 bg-gold/10 border border-gold/30 rounded-full text-gold text-[9px] uppercase font-dm-mono tracking-widest mb-4">
                     <Zap className="w-3 h-3 fill-gold" />
                     New Course Intake Open
                   </div>
-                  <h2 className="font-syne font-extrabold text-3xl md:text-4xl mb-6">
+                  <h2 className="font-syne font-extrabold text-2xl md:text-3xl mb-4 leading-tight">
                     Welcome back, <span className="text-gold">{profile?.first_name || 'Scholar'}</span>!
                   </h2>
                   <p className="text-text-soft text-sm md:text-base max-w-lg mb-8 leading-relaxed">
@@ -2349,24 +2424,25 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
             </section>
 
             {/* KEY METRICS */}
-            <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+            <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
               {[
                 { label: 'Courses Enrolled', value: enrollments.length, color: 'text-gold', bg: 'bg-gold/10', border: 'border-gold/20', icon: BookOpen },
                 { label: 'Completed Credits', value: Object.values(progress).filter(p => p === 100).length, color: 'text-emerald', bg: 'bg-emerald/10', border: 'border-emerald/20', icon: CheckCircle2 },
                 { label: 'Applications', value: applications.length, color: 'text-sky', bg: 'bg-sky/10', border: 'border-sky/20', icon: FileText },
                 { label: 'Learning Hours', value: '12.4', color: 'text-purple', bg: 'bg-purple/10', border: 'border-purple/20', icon: Clock },
               ].map((stat, i) => (
-                <div key={i} className={`bg-card border ${stat.border} rounded-2xl p-6 hover:translate-y-[-4px] transition-all duration-300 group`}>
-                  <div className="flex justify-between items-start mb-4">
-                    <div className={`p-3 ${stat.bg} ${stat.color} rounded-xl group-hover:scale-110 transition-transform`}>
-                      <stat.icon className="w-5 h-5" />
+                <div key={i} className="bg-[#0a0d14] border border-gold/10 rounded-2xl p-5 hover:border-gold/30 transition-all duration-300 group relative overflow-hidden">
+                  <div className="absolute top-0 right-0 w-16 h-16 bg-gold/2 rounded-full -mr-8 -mt-8 blur-2xl" />
+                  <div className="flex justify-between items-start mb-3">
+                    <div className={`p-2.5 ${stat.bg} ${stat.color} rounded-xl group-hover:scale-110 transition-transform`}>
+                      <stat.icon className="w-4 h-4" />
                     </div>
-                    <div className="w-8 h-8 rounded-full bg-surface border border-border-custom flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                      <ArrowRight className="w-3 h-3 text-gold" />
+                    <div className="w-6 h-6 rounded-lg bg-surface border border-border-custom flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                      <ArrowRight className="w-2.5 h-2.5 text-gold" />
                     </div>
                   </div>
-                  <div className="font-syne font-extrabold text-3xl mb-1">{stat.value}</div>
-                  <p className="text-[10px] text-text-dim font-dm-mono uppercase tracking-widest">{stat.label}</p>
+                  <div className="font-syne font-black text-3xl mb-0.5 tracking-tighter">{stat.value}</div>
+                  <p className="text-[9px] text-text-muted font-dm-mono uppercase tracking-[0.15em] font-bold">{stat.label}</p>
                 </div>
               ))}
             </section>
@@ -3301,7 +3377,7 @@ function GraduationPipeline({ pendingApprovals, onApprove }: { pendingApprovals:
                   <button
                     onClick={() => handleGraduate(s)}
                     disabled={!s.isEligible}
-                    className={`px-6 py-2 rounded-xl text-[10px] font-black transition-transform ${s.isEligible ? 'btn btn-gold hover:scale-105' : 'bg-surface text-text-dim cursor-not-allowed'}`}
+                    className={`px-6 py-2 rounded-xl text-[10px] font-black tracking-widest transition-all ${s.isEligible ? 'btn btn-gold hover:scale-105 shadow-[0_0_20px_rgba(212,175,55,0.1)]' : 'bg-surface text-text-dim cursor-not-allowed opacity-50'}`}
                   >
                     {s.isEligible ? '🎓 SEAL GRADUATION' : 'NOT READY'}
                   </button>
@@ -3309,61 +3385,65 @@ function GraduationPipeline({ pendingApprovals, onApprove }: { pendingApprovals:
               </tr>
             ))}
             {eligible.length === 0 && (
-              <tr><td colSpan={6} className="p-12 text-center text-text-muted italic">No candidates near graduation threshold.</td></tr>
+              <tr><td colSpan={6} className="p-12 text-center text-text-muted italic text-xs uppercase tracking-widest font-dm-mono">No candidates near graduation threshold.</td></tr>
             )}
           </tbody>
         </table>
       </div>
 
-      <InstitutionalApprovalQueue pendingApprovals={pendingApprovals} onApprove={onApprove} />
+      {pendingApprovals && pendingApprovals.length > 0 && (
+        <InstitutionalApprovalQueue pendingApprovals={pendingApprovals} onApprove={onApprove} />
+      )}
     </div>
   );
 }
 
 // ─── INSTITUTIONAL APPROVAL QUEUE (Shared) ────
 function InstitutionalApprovalQueue({ pendingApprovals, onApprove }: { pendingApprovals: any[], onApprove: (record: any) => void }) {
-  if (!pendingApprovals || pendingApprovals.length === 0) return null;
-
   return (
     <div className="space-y-4 pt-12 animate-fade">
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3 px-2">
         <div className="w-1.5 h-6 bg-gold rounded-full shadow-[0_0_10px_rgba(212,175,55,0.4)]" />
-        <h3 className="font-syne font-bold text-xl uppercase tracking-tighter text-gold">Institutional Approval Queue</h3>
-        <span className="text-[9px] font-dm-mono bg-gold/10 text-gold px-3 py-1 rounded-full border border-gold/20">{pendingApprovals.length} PENDING</span>
+        <h3 className="font-syne font-black text-xl uppercase tracking-tighter text-gold">Institutional Approval Queue</h3>
+        <span className="text-[9px] font-dm-mono bg-gold/10 text-gold px-3 py-1 rounded-full border border-gold/20 tracking-widest">{pendingApprovals.length} PENDING</span>
       </div>
-      <div className="bg-card border border-gold/20 rounded-3xl overflow-hidden shadow-2xl max-h-[50vh] overflow-y-auto custom-scrollbar relative">
-        <table className="w-full text-left">
-          <thead className="sticky top-0 z-10 bg-bg/80 backdrop-blur-md">
-            <tr className="border-b border-gold/10 text-gold text-[9px] uppercase font-dm-mono">
-              <th className="p-6">Finalist</th>
-              <th className="p-6">GPA</th>
-              <th className="p-6">Sealed Date</th>
-              <th className="p-6">Governance ID</th>
-              <th className="p-6 text-right">Action</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-border-custom">
-            {pendingApprovals.map(r => (
-              <tr key={r.id} className="hover:bg-gold/5 transition-colors">
-                <td className="p-6">
-                  <div className="font-bold text-sm">{r.profiles?.first_name} {r.profiles?.last_name}</div>
-                  <div className="text-[10px] text-text-muted">{r.profiles?.student_number}</div>
-                </td>
-                <td className="p-6 font-syne font-black text-emerald">{r.gpa_final}%</td>
-                <td className="p-6 text-xs text-text-dim">{new Date(r.created_at).toLocaleDateString()}</td>
-                <td className="p-6 text-[10px] font-dm-mono text-gold/60">{r.credential_id}</td>
-                <td className="p-6 text-right">
-                  <button
-                    onClick={() => onApprove(r)}
-                    className="btn btn-gold px-6 py-2 rounded-xl text-[10px] font-black hover:scale-105 transition-transform"
-                  >
-                    GRANT BLESSING
-                  </button>
-                </td>
+      
+      <div className="bg-[#0a0d14] border border-gold/10 rounded-3xl overflow-hidden shadow-2xl relative isolate">
+        <div className="absolute inset-0 bg-gold/[0.01] pointer-events-none" />
+        <div className="overflow-x-auto custom-scrollbar">
+          <table className="w-full text-left">
+            <thead>
+              <tr className="bg-surface/50 border-b border-gold/10 text-gold text-[9px] uppercase font-dm-mono tracking-[0.2em]">
+                <th className="p-4">Finalist Identity</th>
+                <th className="p-4">Final GPA</th>
+                <th className="p-4">Sealed Date</th>
+                <th className="p-4">Governance_ID</th>
+                <th className="p-4 text-right">Action</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="divide-y divide-gold/5">
+              {pendingApprovals.map(r => (
+                <tr key={r.id} className="hover:bg-gold/5 transition-colors group">
+                  <td className="p-4">
+                    <div className="font-bold text-sm text-text-soft">{r.profiles?.first_name} {r.profiles?.last_name}</div>
+                    <div className="text-[9px] text-text-dim font-dm-mono uppercase">{r.profiles?.student_number}</div>
+                  </td>
+                  <td className="p-4 font-syne font-black text-emerald text-sm">{r.gpa_final}%</td>
+                  <td className="p-4 text-[11px] text-text-dim font-dm-mono">{new Date(r.created_at).toLocaleDateString('en-GB')}</td>
+                  <td className="p-4 text-[9px] font-dm-mono text-gold/60 uppercase tracking-tighter">{r.credential_id}</td>
+                  <td className="p-4 text-right">
+                    <button
+                      onClick={() => onApprove(r)}
+                      className="btn btn-gold px-5 py-2 rounded-xl text-[9px] font-black tracking-widest hover:scale-105 transition-transform shadow-[0_0_20px_rgba(212,175,55,0.1)]"
+                    >
+                      GRANT BLESSING
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
@@ -3388,42 +3468,59 @@ function InstitutionalAuditHub({ pendingApprovals, onApprove }: { pendingApprova
   if (loading) return <div className="flex justify-center py-20"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gold"></div></div>;
 
   return (
-    <div className="space-y-8 animate-fade">
-      <div className="flex items-center gap-3">
-        <ShieldCheck className="w-5 h-5 text-gold" />
-        <h2 className="font-syne font-extrabold text-2xl tracking-tighter">Institutional Audit Trail</h2>
-        <span className="text-[9px] font-dm-mono bg-surface text-text-muted px-3 py-1 rounded-full border border-border-custom">{logs.length} RECORDS</span>
+    <div className="space-y-6 animate-fade">
+      <div className="flex items-center justify-between px-2">
+        <div className="flex items-center gap-3">
+          <ShieldCheck className="w-6 h-6 text-gold" />
+          <h2 className="font-syne font-black text-2xl tracking-tighter uppercase text-white">System Audit Log</h2>
+        </div>
+        <span className="text-[9px] font-dm-mono bg-gold/5 text-gold/80 px-4 py-1.5 rounded-full border border-gold/10 tracking-[0.2em] uppercase">{logs.length} Immutable Records</span>
       </div>
 
-      <div className="bg-card border border-border-custom rounded-3xl overflow-hidden shadow-2xl max-h-[60vh] overflow-y-auto custom-scrollbar">
-        <table className="w-full text-left">
-          <thead className="sticky top-0 z-10 bg-surface">
-            <tr className="border-b border-border-custom text-[9px] uppercase font-dm-mono text-text-muted tracking-widest">
-              <th className="p-5">Action</th>
-              <th className="p-5">Target</th>
-              <th className="p-5">Reason</th>
-              <th className="p-5">Timestamp</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-border-custom">
-            {logs.map(log => (
-              <tr key={log.id} className="hover:bg-white/[0.02] transition-colors">
-                <td className="p-5">
-                  <span className="text-[10px] font-bold text-gold bg-gold/10 px-2 py-1 rounded-lg">{log.action}</span>
-                </td>
-                <td className="p-5 text-[11px] font-dm-mono text-text-muted">{log.target_type}: {log.target_id?.substring(0, 8)}...</td>
-                <td className="p-5 text-[11px] text-text-soft max-w-xs truncate">{log.reason}</td>
-                <td className="p-5 text-[10px] font-dm-mono text-text-dim">{new Date(log.created_at).toLocaleString()}</td>
+      <div className="bg-[#0a0d14] border border-gold/10 rounded-3xl overflow-hidden shadow-2xl relative isolate">
+        <div className="absolute inset-0 bg-gold/[0.01] pointer-events-none" />
+        <div className="overflow-x-auto custom-scrollbar max-h-[60vh]">
+          <table className="w-full text-left">
+            <thead className="sticky top-0 z-20 bg-surface/90 backdrop-blur-md">
+              <tr className="border-b border-gold/10 text-[9px] uppercase font-dm-mono text-gold/60 tracking-[0.2em]">
+                <th className="p-4">Action Cluster</th>
+                <th className="p-4">Entity Identifier</th>
+                <th className="p-4">Rationale</th>
+                <th className="p-4 text-right">Chronology</th>
               </tr>
-            ))}
-            {logs.length === 0 && (
-              <tr><td colSpan={4} className="p-12 text-center text-text-muted italic">No audit records found.</td></tr>
-            )}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="divide-y divide-gold/5">
+              {logs.map(log => (
+                <tr key={log.id} className="hover:bg-gold/5 transition-colors group">
+                  <td className="p-4">
+                    <span className="text-[9px] font-black text-gold bg-gold/10 px-3 py-1 rounded-lg border border-gold/20 uppercase tracking-widest">{log.action}</span>
+                  </td>
+                  <td className="p-4 font-dm-mono">
+                    <div className="text-[10px] text-text-soft font-bold uppercase tracking-tighter">{log.target_type}</div>
+                    <div className="text-[9px] text-text-dim">{log.target_id?.substring(0, 12)}...</div>
+                  </td>
+                  <td className="p-4 text-[11px] text-text-soft leading-relaxed max-w-sm">
+                    {log.reason || 'No executive rationale provided.'}
+                  </td>
+                  <td className="p-4 text-[10px] font-dm-mono text-text-dim text-right">
+                    {new Date(log.created_at).toLocaleString('en-GB', { 
+                      day: '2-digit', 
+                      month: 'short', 
+                      year: 'numeric',
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      second: '2-digit'
+                    })}
+                  </td>
+                </tr>
+              ))}
+              {logs.length === 0 && (
+                <tr><td colSpan={4} className="p-16 text-center text-text-muted italic text-[11px] uppercase tracking-[0.3em]">Institutional archive is currently vacant.</td></tr>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
-
-      <InstitutionalApprovalQueue pendingApprovals={pendingApprovals} onApprove={onApprove} />
     </div>
   );
 }
@@ -3447,55 +3544,55 @@ function AlumniHub({ profile }: { profile: any }) {
       <div className="absolute inset-0 bg-white/2 blur-[100px] rounded-full -ml-[40%] -mb-[40%]" />
       
       <div className="max-w-4xl w-full relative z-10">
-        <div className="bg-surface/30 backdrop-blur-2xl border border-white/10 rounded-[4rem] p-12 md:p-20 shadow-2xl relative overflow-hidden group">
-          {/* Top Branding */}
+        <div className="bg-[#0a0d14]/80 backdrop-blur-2xl border border-gold/10 rounded-[3rem] p-10 md:p-16 shadow-[0_0_50px_rgba(0,0,0,0.5)] relative overflow-hidden group">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-gold/5 rounded-full -mr-32 -mt-32 blur-[100px] animate-pulse" />
+          
           <div className="flex flex-col items-center text-center space-y-8">
-            <div className="w-24 h-24 bg-gold rounded-3xl flex items-center justify-center shadow-2xl shadow-gold/20 mb-4 transform group-hover:rotate-6 transition-transform">
-               <span className="text-navy font-syne font-black text-4xl">G</span>
+            <div className="w-20 h-20 bg-gold rounded-2xl flex items-center justify-center shadow-[0_0_40px_rgba(212,175,55,0.3)] mb-2 transform group-hover:rotate-6 transition-all duration-700">
+               <span className="text-navy font-syne font-black text-3xl">G</span>
             </div>
             
             <div className="space-y-4">
-               <span className="text-[10px] font-dm-mono uppercase tracking-[0.4em] text-gold bg-gold/10 px-6 py-2 rounded-full border border-gold/20">Institutional Alumni Hub</span>
-               <h1 className="font-syne font-black text-5xl md:text-6xl tracking-tighter leading-none">
-                 Congratulations, <br/><span className="text-gold">{profile?.first_name}.</span>
+               <span className="text-[9px] font-dm-mono uppercase tracking-[0.5em] text-gold bg-gold/5 px-6 py-2 rounded-full border border-gold/20">Institutional Alumni Governance</span>
+               <h1 className="font-syne font-black text-5xl md:text-6xl tracking-tighter leading-none text-white">
+                 Honorably Sealed, <br/><span className="text-gold">{profile?.first_name}.</span>
                </h1>
             </div>
 
             {record ? (
-               <div className="w-full mt-12 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-                  {/* Left: Credential Details */}
-                  <div className="space-y-8 text-left">
-                     <div className="p-8 bg-white/5 border border-white/5 rounded-3xl space-y-6">
+               <div className="w-full mt-12 grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+                  <div className="space-y-6 text-left relative z-10">
+                     <div className="p-6 bg-white/[0.02] border border-gold/10 rounded-3xl space-y-5">
                         <div className="space-y-1">
-                           <p className="text-[10px] font-dm-mono uppercase text-text-muted tracking-widest">Master Credential ID</p>
-                           <p className="text-lg font-bold text-gold selection:bg-gold selection:text-navy">{record.credential_id}</p>
+                           <p className="text-[9px] font-dm-mono uppercase text-text-dim tracking-widest">Master Credential Lock</p>
+                           <p className="text-base font-bold text-gold/90 font-dm-mono">{record.credential_id}</p>
                         </div>
-                        <div className="grid grid-cols-2 gap-6">
+                        <div className="grid grid-cols-2 gap-4">
                            <div className="space-y-1">
-                              <p className="text-[10px] font-dm-mono uppercase text-text-muted tracking-widest">Final GPA</p>
-                              <p className="text-4xl font-syne font-black text-emerald">{record.gpa_final}%</p>
+                              <p className="text-[9px] font-dm-mono uppercase text-text-dim tracking-widest">Aggregate GPA</p>
+                              <p className="text-4xl font-syne font-black text-emerald tracking-tighter">{record.gpa_final}%</p>
                            </div>
                            <div className="space-y-1">
-                              <p className="text-[10px] font-dm-mono uppercase text-text-muted tracking-widest">Seal Date</p>
-                              <p className="text-lg font-bold">{new Date(record.graduation_date).toLocaleDateString()}</p>
+                              <p className="text-[9px] font-dm-mono uppercase text-text-dim tracking-widest">Sealing Date</p>
+                              <p className="text-lg font-bold text-text-soft">{new Date(record.graduation_date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}</p>
                            </div>
                         </div>
-                        <div className="pt-6 border-t border-white/5">
-                           <p className={`text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-full inline-block ${record.is_approved ? 'bg-emerald/10 text-emerald border border-emerald/20' : 'bg-gold/10 text-gold border border-gold/20 animate-pulse'}`}>
-                             {record.is_approved ? '✓ INSTITUTIONALLY BLESSED' : '⏳ AWAITING FINAL BLESSING'}
+                        <div className="pt-4 border-t border-gold/5">
+                           <p className={`text-[9px] font-black uppercase tracking-[0.2em] px-4 py-2 rounded-lg inline-block ${record.is_approved ? 'bg-emerald/5 text-emerald border border-emerald/20' : 'bg-gold/5 text-gold border border-gold/20 animate-pulse'}`}>
+                             {record.is_approved ? '✓ INSTITUTIONALLY RECOGNIZED' : '⏳ PENDING FINAL AUDIT'}
                            </p>
                         </div>
                      </div>
                      
-                     <div className="px-4">
-                        <p className="text-xs text-text-soft italic text-center md:text-left">
-                          "This credential is cryptographically sealed and recorded in the Ginashe Institutional Audit Trail. Your academic integrity has been verified across all four governance pillars."
+                     <div className="px-2">
+                        <p className="text-[11px] text-text-dim italic leading-relaxed">
+                          "This academic record is cryptographically verified and permanently inscribed in the Ginashe Institutional Audit Hub. Your excellence is now part of our legacy."
                         </p>
                      </div>
 
-                     <div className="flex flex-col sm:flex-row gap-4">
-                        <button className="flex-1 btn btn-gold py-5 shadow-2xl shadow-gold/20 font-black tracking-tighter">DOWNLOAD CERTIFICATE</button>
-                        <button className="flex-1 btn btn-outline py-5 border-white/10 hover:border-gold/50">SHARE ON LINKEDIN</button>
+                     <div className="flex flex-col sm:flex-row gap-3 pt-2">
+                        <button className="flex-1 btn btn-gold py-4 text-[10px] font-black tracking-widest shadow-[0_0_25px_rgba(212,175,55,0.15)] hover:scale-[1.02] transition-all">GENERATE CERTIFICATE</button>
+                        <button className="flex-1 btn btn-outline py-4 text-[10px] font-black tracking-widest border-gold/10 hover:border-gold/30 transition-all">SHARE EXCELLENCE</button>
                      </div>
                   </div>
 
@@ -3623,71 +3720,72 @@ export function StaffActivationView() {
 
   return (
     <div className="min-h-screen bg-bg flex flex-col lg:flex-row animate-fade">
-      <div className="lg:w-1/2 p-20 flex flex-col justify-between relative overflow-hidden bg-navy">
-        <div className="absolute inset-0 bg-gold/5 blur-[120px] rounded-full -mr-32 -mt-32" />
+      <div className="lg:w-1/2 p-12 md:p-20 flex flex-col justify-between relative overflow-hidden bg-[#0a0d14]">
+        <div className="absolute inset-0 bg-gold/5 blur-[120px] rounded-full -mr-32 -mt-32 animate-pulse" />
         <div className="relative z-10">
-          <div className="flex items-center gap-4 mb-20">
-            <div className="w-12 h-12 bg-gold text-bg rounded-2xl flex items-center justify-center text-xl font-black">G</div>
-            <h1 className="font-syne font-black text-2xl tracking-tighter">GINASHE_DIGITAL</h1>
+          <div className="flex items-center gap-4 mb-16">
+            <div className="w-10 h-10 bg-gold text-bg rounded-xl flex items-center justify-center text-lg font-black shadow-[0_0_20px_rgba(212,175,55,0.2)]">G</div>
+            <h1 className="font-syne font-black text-xl uppercase tracking-widest text-white">Institutional_Access</h1>
           </div>
           <div className="space-y-6">
-            <span className="text-[10px] font-dm-mono uppercase text-gold tracking-widest bg-gold/10 px-4 py-1.5 rounded-full border border-gold/20">Institutional Access</span>
-            <h2 className="font-syne font-black text-5xl leading-none">Activate Your <span className="text-gold">Staff Identity.</span></h2>
-            <p className="text-text-soft max-w-md leading-relaxed">
-              Complete your onboarding by setting a secure institutional password. This will unlock access to the GDA governance modules allocated to your role.
+            <span className="text-[9px] font-dm-mono uppercase text-gold tracking-widest bg-gold/5 px-4 py-1.5 rounded-full border border-gold/20">Legacy Validation Active</span>
+            <h2 className="font-syne font-black text-5xl md:text-6xl leading-[0.9] tracking-tighter text-white">Activate <br/><span className="text-gold">Staff Hub.</span></h2>
+            <p className="text-text-dim max-w-sm text-[13px] leading-relaxed">
+              Complete your cryptographic onboarding by setting your institutional credentials. This will grant you governance access allocated to your professional role.
             </p>
           </div>
         </div>
-        <div className="relative z-10 pt-20 border-t border-white/5">
+        <div className="relative z-10 pt-12 border-t border-gold/10">
           <div className="flex items-center gap-4">
-            <div className="w-10 h-10 rounded-full bg-surface border border-gold/20 flex items-center justify-center text-xs text-gold font-bold">SF</div>
+            <div className="w-12 h-12 rounded-2xl bg-surface border border-gold/20 flex items-center justify-center text-xs text-gold font-bold shadow-inner">SF</div>
             <div>
-              <p className="text-[10px] text-text-dim uppercase font-dm-mono">Allocated ID</p>
-              <p className="text-sm font-bold">{profileData?.staff_number}</p>
+              <p className="text-[9px] text-text-muted uppercase font-dm-mono tracking-widest mb-0.5">Assigned Professional ID</p>
+              <p className="text-sm font-black text-white">{profileData?.staff_number}</p>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="lg:w-1/2 flex flex-col justify-center p-12 lg:p-24 bg-bg border-l border-border-custom">
-        <div className="max-w-md w-full mx-auto space-y-12">
+      <div className="lg:w-1/2 flex flex-col justify-center p-12 lg:p-24 bg-bg border-l border-border-custom relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-gold/2 rounded-full blur-[100px]" />
+        <div className="max-w-md w-full mx-auto space-y-12 relative z-10">
           <div className="space-y-4">
-            <h3 className="font-syne font-bold text-2xl">Identity Verification</h3>
-            <p className="text-text-soft text-sm italic">Institutional primary domain verified: <span className="text-gold">{profileData?.email}</span></p>
+            <h3 className="font-syne font-black text-2xl uppercase tracking-tighter text-white">Set Command Password</h3>
+            <p className="text-text-soft text-sm italic">Institutional primary domain verified: <span className="text-gold font-dm-mono">{profileData?.email}</span></p>
           </div>
           <div className="space-y-8">
             <div className="space-y-3">
-              <label className="text-[10px] font-dm-mono uppercase text-text-soft tracking-widest flex items-center gap-2">
-                <Lock size={10} /> Choose Institutional Password
+              <label className="text-[9px] font-dm-mono uppercase text-text-muted tracking-widest flex items-center gap-2 ml-1">
+                <Lock size={10} className="text-gold" /> Choose Secure Password
               </label>
               <input
                 type="password"
-                className="w-full bg-bg border border-border-custom focus:border-gold rounded-2xl p-5 outline-none transition-all placeholder:text-text-dim text-sm"
+                className="w-full bg-[#0a0d14] border border-gold/10 focus:border-gold/30 rounded-2xl p-5 outline-none transition-all placeholder:text-text-dim text-sm text-white selection:bg-gold selection:text-navy"
                 placeholder="Minimum 8 characters"
                 value={password}
                 onChange={e => setPassword(e.target.value)}
               />
             </div>
-            <div className="bg-surface/50 border border-border-custom p-6 rounded-2xl space-y-4">
-              <h4 className="font-dm-mono text-[10px] uppercase font-bold text-gold">Role Privileges</h4>
+            <div className="bg-[#0a0d14]/50 border border-gold/5 p-6 rounded-2xl space-y-4">
+              <h4 className="font-dm-mono text-[9px] uppercase font-bold text-gold tracking-widest">Role Privileges</h4>
               <div className="flex items-center gap-3">
-                <ShieldCheck className="text-gold w-4 h-4" />
-                <span className="text-xs font-bold uppercase tracking-wider">{profileData?.role}</span>
+                <ShieldCheck className="text-gold w-5 h-5" />
+                <span className="text-xs font-black uppercase tracking-wider text-text-soft">{profileData?.role} ACCESS ENABLED</span>
               </div>
-              <p className="text-[10px] text-text-dim leading-relaxed">
-                By activating this account, you agree to the GDA Institutional Governance Policy and Data Integrity standards.
+              <p className="text-[10px] text-text-dim leading-relaxed font-bold">
+                BY ACTIVATING THIS ACCOUNT, YOU AGREE TO THE GDA INSTITUTIONAL GOVERNANCE POLICY AND DATA INTEGRITY STANDARDS.
               </p>
             </div>
             <button
               onClick={handleActivate}
               disabled={loading}
-              className="w-full btn btn-gold py-5 shadow-2xl shadow-gold/10 font-black tracking-tighter text-lg flex items-center justify-center gap-4"
+              className="w-full btn btn-gold py-5 shadow-[0_0_30px_rgba(212,175,55,0.1)] rounded-2xl font-black tracking-[0.2em] text-sm flex items-center justify-center gap-4 hover:scale-[1.01] transition-all"
             >
-              {loading ? 'Processing...' : 'ACTIVATE IDENTITY'} <ArrowRight size={20} />
+              {loading ? 'INITIALIZING...' : 'ACTIVATE STAFF IDENTITY'} <ArrowRight size={18} />
             </button>
           </div>
-          <div className="pt-8 border-t border-border-custom">
-            <p className="text-[10px] text-text-dim text-center">GINASHE DIGITAL ACADEMY HUB SECURITY (v3.2.0)</p>
+          <div className="pt-8 border-t border-gold/10">
+            <p className="text-[9px] text-text-dim text-center font-dm-mono tracking-widest">GINASHE DIGITAL ACADEMY HUB SECURITY (INSTITUTIONAL_V5)</p>
           </div>
         </div>
       </div>
