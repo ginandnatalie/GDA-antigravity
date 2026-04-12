@@ -157,6 +157,7 @@ export function AdminDashboard() {
   const [courses, setCourses] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [campuses, setCampuses] = useState<any[]>([]);
   const [selectedCampus, setSelectedCampus] = useState<string>('all');
   const [notifications, setNotifications] = useState<any[]>([]);
@@ -493,23 +494,24 @@ export function AdminDashboard() {
         <>
           <div className="flex flex-col lg:flex-row min-h-screen bg-bg relative isolate">
       {/* ─── ADMIN SIDEBAR ─── */}
-      <aside className={`lg:fixed lg:h-screen lg:border-r border-border-custom bg-surface/80 backdrop-blur-2xl z-20 transition-all duration-200 ease-[0.22,1,0.36,1] ${isSidebarCollapsed ? 'lg:w-20' : 'lg:w-64'}`}>
+      <aside className={`fixed lg:h-screen lg:border-r border-border-custom bg-surface/80 backdrop-blur-2xl z-50 transition-all duration-300 ease-[0.25,0.1,0.25,1] ${isSidebarCollapsed ? 'lg:w-20' : 'lg:w-64'} ${isMobileMenuOpen ? 'translate-x-0 w-64' : '-translate-x-full lg:translate-x-0'}`}>
         <div className="flex flex-col h-full relative">
-          {/* Collapse Toggle Button */}
+          {/* Collapse Toggle Button (Desktop Only) */}
           <button 
             onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
-            className="absolute -right-3 top-20 w-6 h-6 bg-gold text-bg rounded-full flex items-center justify-center shadow-lg z-30 hover:scale-110 transition-transform"
+            className="absolute -right-3 top-20 w-6 h-6 bg-gold text-bg rounded-full hidden lg:flex items-center justify-center shadow-lg z-30 hover:scale-110 transition-transform"
           >
             {isSidebarCollapsed ? <ChevronRight size={14} /> : <ChevronRight size={14} className="rotate-180" />}
           </button>
 
           <div className="p-6 h-full flex flex-col">
-            <div className={`mb-10 flex items-center overflow-hidden transition-all duration-200 ${isSidebarCollapsed ? 'justify-center' : 'px-2 justify-start gap-2'}`}>
+            <div className={`mb-10 flex items-center overflow-hidden transition-all duration-200 ${isSidebarCollapsed ? 'lg:justify-center' : 'px-2 justify-start gap-2'}`}>
               <div className="w-8 h-8 rounded-lg bg-gold text-bg flex items-center justify-center font-black shrink-0">G</div>
-              {!isSidebarCollapsed && (
-                <h2 className="font-syne font-extrabold text-xl tracking-tighter whitespace-nowrap animate-fade">
-                  ADMIN
-                </h2>
+              {(!isSidebarCollapsed || isMobileMenuOpen) && (
+                <div className="flex flex-col animate-fade">
+                  <h2 className="font-syne font-extrabold text-xl tracking-tighter whitespace-nowrap leading-none">ADMIN</h2>
+                  <span className="text-[8px] font-dm-mono text-gold tracking-widest uppercase opacity-70">Control Hub</span>
+                </div>
               )}
             </div>
 
@@ -531,61 +533,78 @@ export function AdminDashboard() {
               ].filter(t => t.super ? isSuperAdmin : true).map((item) => (
                 <button
                   key={item.id}
-                  onClick={() => setActiveTab(item.id as any)}
-                  title={isSidebarCollapsed ? item.label : ''}
+                  onClick={() => { setActiveTab(item.id as any); setIsMobileMenuOpen(false); }}
+                  title={(isSidebarCollapsed && !isMobileMenuOpen) ? item.label : ''}
                   className={`w-full flex items-center rounded-xl font-dm-mono text-[11px] uppercase tracking-widest transition-all duration-200 group ${
                     activeTab === item.id 
                       ? 'bg-gold text-bg font-bold shadow-lg shadow-gold/20' 
                       : 'text-text-muted hover:text-text-custom hover:bg-white/5'
-                  } ${isSidebarCollapsed ? 'justify-center p-3' : 'px-4 py-3 gap-3'}`}
+                  } ${(isSidebarCollapsed && !isMobileMenuOpen) ? 'lg:justify-center p-3' : 'px-4 py-3 gap-3'}`}
                 >
                   <item.icon className="w-4 h-4 shrink-0" />
-                  {!isSidebarCollapsed && <span className="whitespace-nowrap animate-fade">{item.label}</span>}
+                  {(!isSidebarCollapsed || isMobileMenuOpen) && <span className="whitespace-nowrap animate-fade">{item.label}</span>}
                 </button>
               ))}
             </nav>
 
-            <div className="mt-auto pt-6 border-t border-border-custom space-y-2">
+            <div className="mt-auto pt-6 border-t border-border-custom space-y-1">
               <button 
                 onClick={() => setShowCommandPalette(true)} 
-                title={isSidebarCollapsed ? 'Quick Search' : ''}
-                className={`w-full flex items-center rounded-xl bg-surface border border-border-custom text-text-muted hover:text-gold transition-all font-dm-mono text-[10px] uppercase tracking-widest ${isSidebarCollapsed ? 'justify-center p-3' : 'px-4 py-3 gap-3'}`}
+                title={(isSidebarCollapsed && !isMobileMenuOpen) ? 'Quick Search' : ''}
+                className={`w-full flex items-center rounded-xl bg-surface border border-border-custom text-text-muted hover:text-gold transition-all font-dm-mono text-[10px] uppercase tracking-widest ${(isSidebarCollapsed && !isMobileMenuOpen) ? 'lg:justify-center p-3' : 'px-4 py-3 gap-3'}`}
               >
                 <span className="text-sm shrink-0 text-center">🔍</span>
-                {!isSidebarCollapsed && <span className="whitespace-nowrap animate-fade">Quick Search [K]</span>}
+                {(!isSidebarCollapsed || isMobileMenuOpen) && <span className="whitespace-nowrap animate-fade">Quick Search [K]</span>}
               </button>
               <button 
                 onClick={handlePasswordReset} 
-                title={isSidebarCollapsed ? 'Security Protocol' : ''}
-                className={`w-full flex items-center rounded-xl text-text-muted hover:text-gold hover:bg-gold/5 transition-all font-dm-mono text-[11px] uppercase tracking-widest ${isSidebarCollapsed ? 'justify-center p-3' : 'px-4 py-3 gap-3'}`}
+                title={(isSidebarCollapsed && !isMobileMenuOpen) ? 'Security' : ''}
+                className={`w-full flex items-center rounded-xl text-text-muted hover:text-gold hover:bg-gold/5 transition-all font-dm-mono text-[11px] uppercase tracking-widest ${(isSidebarCollapsed && !isMobileMenuOpen) ? 'lg:justify-center p-3' : 'px-4 py-3 gap-3'}`}
               >
                 <Lock className="w-4 h-4 shrink-0" /> 
-                {!isSidebarCollapsed && <span className="whitespace-nowrap animate-fade">Secure Token Reset</span>}
+                {(!isSidebarCollapsed || isMobileMenuOpen) && <span className="whitespace-nowrap animate-fade">Secure Reset</span>}
               </button>
               <button 
                 onClick={() => signOut()} 
-                title={isSidebarCollapsed ? 'Sign Out' : ''}
-                className={`w-full flex items-center rounded-xl text-coral hover:bg-coral/5 transition-all font-dm-mono text-[11px] uppercase tracking-widest ${isSidebarCollapsed ? 'justify-center p-3' : 'px-4 py-3 gap-3'}`}
+                title={(isSidebarCollapsed && !isMobileMenuOpen) ? 'Sign Out' : ''}
+                className={`w-full flex items-center rounded-xl text-coral hover:bg-coral/5 transition-all font-dm-mono text-[11px] uppercase tracking-widest ${(isSidebarCollapsed && !isMobileMenuOpen) ? 'lg:justify-center p-3' : 'px-4 py-3 gap-3'}`}
               >
                 <LogOut className="w-4 h-4 shrink-0" /> 
-                {!isSidebarCollapsed && <span className="whitespace-nowrap animate-fade">Sign Out</span>}
+                {(!isSidebarCollapsed || isMobileMenuOpen) && <span className="whitespace-nowrap animate-fade">Sign Out</span>}
               </button>
             </div>
           </div>
         </div>
       </aside>
 
+      {/* Mobile Overlay */}
+      {isMobileMenuOpen && (
+        <div 
+          className="fixed inset-0 bg-bg/80 backdrop-blur-sm z-40 lg:hidden animate-fade"
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
+      )}
+
       {/* ─── ADMIN MAIN CONTENT ─── */}
       <main className={`flex-1 p-6 md:p-10 animate-fade transition-all duration-200 ease-[0.22,1,0.36,1] ${isSidebarCollapsed ? 'lg:ml-20' : 'lg:ml-64'}`}>
         {/* TOP BAR */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 gap-6">
-          <div className="animate-fadeRight">
-             <h1 className="font-syne font-extrabold text-4xl md:text-5xl tracking-tighter mb-2">
-               {activeTab === 'overview' ? 'Command Center' : activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}
-             </h1>
-             <p className="text-text-muted font-dm-mono text-[10px] uppercase tracking-[0.2em]">
-               Ginashe Admin System &bull; Active Session: {user?.email}
-             </p>
+          <div className="flex items-center gap-4 animate-fadeRight">
+            {/* Mobile Menu Toggle */}
+            <button 
+              onClick={() => setIsMobileMenuOpen(true)}
+              className="lg:hidden p-3 bg-surface border border-border-custom rounded-2xl text-gold"
+            >
+              <Layout className="w-5 h-5" />
+            </button>
+            <div>
+               <h1 className="font-syne font-extrabold text-4xl md:text-5xl tracking-tighter mb-2">
+                 {activeTab === 'overview' ? 'Command Center' : activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}
+               </h1>
+               <p className="text-text-muted font-dm-mono text-[10px] uppercase tracking-[0.2em]">
+                 Ginashe Admin System &bull; Active Session: {user?.email}
+               </p>
+            </div>
           </div>
 
           <div className="flex items-center gap-4 animate-fadeLeft">
