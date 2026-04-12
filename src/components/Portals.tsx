@@ -261,6 +261,19 @@ export function AdminDashboard() {
     }
   }
 
+  async function handlePasswordReset() {
+    if (!user?.email) return;
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(user.email, {
+        redirectTo: `${window.location.origin}/portal`,
+      });
+      if (error) throw error;
+      alert(`Institutional security protocol initiated. A recovery link has been dispatched to ${user.email}. Please follow the instructions to secure your access.`);
+    } catch (err: any) {
+      alert(`Security protocol failed: ${err.message}`);
+    }
+  }
+
   async function fetchApplications() {
     setLoading(true);
     try {
@@ -540,6 +553,14 @@ export function AdminDashboard() {
               >
                 <span className="text-sm shrink-0 text-center">🔍</span>
                 {!isSidebarCollapsed && <span className="whitespace-nowrap animate-fade">Quick Search [K]</span>}
+              </button>
+              <button 
+                onClick={handlePasswordReset} 
+                title={isSidebarCollapsed ? 'Security Protocol' : ''}
+                className={`w-full flex items-center rounded-xl text-text-muted hover:text-gold hover:bg-gold/5 transition-all font-dm-mono text-[11px] uppercase tracking-widest ${isSidebarCollapsed ? 'justify-center p-3' : 'px-4 py-3 gap-3'}`}
+              >
+                <Lock className="w-4 h-4 shrink-0" /> 
+                {!isSidebarCollapsed && <span className="whitespace-nowrap animate-fade">Secure Token Reset</span>}
               </button>
               <button 
                 onClick={() => signOut()} 

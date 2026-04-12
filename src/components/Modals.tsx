@@ -62,6 +62,7 @@ export function Modals({ activeModal, onClose, onSwitchModal, onLoginSuccess }: 
       if (error) throw error;
       alert('A branded password reset link has been sent to your email!');
       setStudentTab('login');
+      setAdminTab('login');
     } catch (err: any) {
       alert(err.message);
     } finally {
@@ -341,6 +342,7 @@ export function Modals({ activeModal, onClose, onSwitchModal, onLoginSuccess }: 
             </div>
             <div className="flex gap-0.5 px-7 md:px-8 pt-4 border-b border-border-custom">
               <button className={`px-4.5 pb-3 rounded-t-sm font-dm-mono text-[10px] tracking-[0.1em] uppercase cursor-pointer border-none bg-none transition-all border-b-2 ${adminTab === 'login' ? 'text-gold border-gold' : 'text-text-muted border-transparent hover:text-text-soft'}`} onClick={() => setAdminTab('login')}>Staff Login</button>
+              <button className={`px-4.5 pb-3 rounded-t-sm font-dm-mono text-[10px] tracking-[0.1em] uppercase cursor-pointer border-none bg-none transition-all border-b-2 ${adminTab === 'forgot' ? 'text-gold border-gold' : 'text-text-muted border-transparent hover:text-text-soft'}`} onClick={() => setAdminTab('forgot')}>Reset Password</button>
               <button className={`px-4.5 pb-3 rounded-t-sm font-dm-mono text-[10px] tracking-[0.1em] uppercase cursor-pointer border-none bg-none transition-all border-b-2 ${adminTab === 'twofa' ? 'text-gold border-gold' : 'text-text-muted border-transparent hover:text-text-soft'}`} onClick={() => setAdminTab('twofa')}>2FA Verify</button>
             </div>
             <div className="p-6 md:p-8">
@@ -389,6 +391,24 @@ export function Modals({ activeModal, onClose, onSwitchModal, onLoginSuccess }: 
                     {isSubmitting ? 'Signing In...' : 'Continue to 2FA →'}
                   </button>
                   <div className="text-center mt-3.5 text-[11px] text-text-muted">Unauthorised access attempts are logged and reported to Ginashe Digital.</div>
+                </form>
+              ) : adminTab === 'forgot' ? (
+                <form className="flex flex-col gap-4" onSubmit={handleForgotPassword}>
+                  <div className="form-group">
+                    <label className="block font-dm-mono text-[9px] tracking-[0.15em] uppercase text-text-muted mb-1.75">Institutional Email Address</label>
+                    <input 
+                      type="email" 
+                      className="w-full bg-surface border border-border-custom rounded-sm p-2.75 px-3.5 font-dm-sans text-[13px] text-text-custom outline-none focus:border-gold/40 transition-all" 
+                      placeholder="name@ginashe.co.za" 
+                      value={forgotEmail}
+                      onChange={e => setForgotEmail(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <button type="submit" disabled={isSubmitting} className="btn btn-gold w-full py-3.5 justify-center mt-2">
+                    {isSubmitting ? 'Sending...' : 'Send Recovery Link'}
+                  </button>
+                  <div className="text-center mt-3.5 text-[11px] text-text-muted"><a className="text-gold no-underline cursor-pointer hover:underline" onClick={() => setAdminTab('login')}>← Back to sign in</a></div>
                 </form>
               ) : (
                 <div className="flex flex-col gap-4">
