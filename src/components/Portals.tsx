@@ -248,6 +248,14 @@ export function AdminDashboard() {
     if (error) {
       alert(error.message);
     } else {
+      await supabase.from('institutional_audit_logs').insert({
+        action: 'INSTITUTIONAL_BLESSING_GRANTED',
+        performed_by: user?.id,
+        target_type: 'alumni_record',
+        target_id: record.id,
+        reason: `Institutional validation completed for ${record.profiles?.first_name} ${record.profiles?.last_name}. Seal finalized.`,
+        new_value: { record_id: record.id, status: 'approved' }
+      });
       alert('Institutional Blessing Granted!');
       fetchAlumniApprovals();
     }
@@ -3393,38 +3401,98 @@ function AlumniHub({ profile }: { profile: any }) {
   }, [profile.id]);
 
   return (
-    <div className="min-h-screen bg-bg text-text-custom flex items-center justify-center p-8">
-      <div className="max-w-2xl w-full text-center space-y-8">
-        <div className="text-6xl">🎓</div>
-        <h1 className="font-syne font-extrabold text-4xl tracking-tighter">Alumni Portal</h1>
-        <p className="text-text-muted text-sm">Welcome back, {profile?.first_name}. Your institutional journey has been sealed.</p>
-
-        {record ? (
-          <div className="bg-card border border-gold/20 rounded-3xl p-10 space-y-6">
-            <div className="grid grid-cols-2 gap-6">
-              <div>
-                <div className="text-[10px] font-dm-mono uppercase text-text-dim tracking-widest">Credential ID</div>
-                <div className="font-bold text-gold text-lg">{record.credential_id}</div>
-              </div>
-              <div>
-                <div className="text-[10px] font-dm-mono uppercase text-text-dim tracking-widest">Final GPA</div>
-                <div className="font-syne font-black text-3xl text-emerald">{record.gpa_final}%</div>
-              </div>
-              <div>
-                <div className="text-[10px] font-dm-mono uppercase text-text-dim tracking-widest">Graduation Date</div>
-                <div className="text-sm font-bold">{new Date(record.graduation_date).toLocaleDateString()}</div>
-              </div>
-              <div>
-                <div className="text-[10px] font-dm-mono uppercase text-text-dim tracking-widest">Status</div>
-                <div className={`text-sm font-bold ${record.is_approved ? 'text-emerald' : 'text-gold animate-pulse'}`}>
-                  {record.is_approved ? '✅ INSTITUTIONALLY BLESSED' : '⏳ AWAITING BLESSING'}
-                </div>
-              </div>
+    <div className="min-h-screen bg-navy text-text-custom flex items-center justify-center p-8 relative overflow-hidden isolate">
+      {/* Decorative Background Elements */}
+      <div className="absolute inset-0 bg-gold/5 blur-[150px] rounded-full -mr-[50%] -mt-[50%]" />
+      <div className="absolute inset-0 bg-white/2 blur-[100px] rounded-full -ml-[40%] -mb-[40%]" />
+      
+      <div className="max-w-4xl w-full relative z-10">
+        <div className="bg-surface/30 backdrop-blur-2xl border border-white/10 rounded-[4rem] p-12 md:p-20 shadow-2xl relative overflow-hidden group">
+          {/* Top Branding */}
+          <div className="flex flex-col items-center text-center space-y-8">
+            <div className="w-24 h-24 bg-gold rounded-3xl flex items-center justify-center shadow-2xl shadow-gold/20 mb-4 transform group-hover:rotate-6 transition-transform">
+               <span className="text-navy font-syne font-black text-4xl">G</span>
             </div>
+            
+            <div className="space-y-4">
+               <span className="text-[10px] font-dm-mono uppercase tracking-[0.4em] text-gold bg-gold/10 px-6 py-2 rounded-full border border-gold/20">Institutional Alumni Hub</span>
+               <h1 className="font-syne font-black text-5xl md:text-6xl tracking-tighter leading-none">
+                 Congratulations, <br/><span className="text-gold">{profile?.first_name}.</span>
+               </h1>
+            </div>
+
+            {record ? (
+               <div className="w-full mt-12 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                  {/* Left: Credential Details */}
+                  <div className="space-y-8 text-left">
+                     <div className="p-8 bg-white/5 border border-white/5 rounded-3xl space-y-6">
+                        <div className="space-y-1">
+                           <p className="text-[10px] font-dm-mono uppercase text-text-muted tracking-widest">Master Credential ID</p>
+                           <p className="text-lg font-bold text-gold selection:bg-gold selection:text-navy">{record.credential_id}</p>
+                        </div>
+                        <div className="grid grid-cols-2 gap-6">
+                           <div className="space-y-1">
+                              <p className="text-[10px] font-dm-mono uppercase text-text-muted tracking-widest">Final GPA</p>
+                              <p className="text-4xl font-syne font-black text-emerald">{record.gpa_final}%</p>
+                           </div>
+                           <div className="space-y-1">
+                              <p className="text-[10px] font-dm-mono uppercase text-text-muted tracking-widest">Seal Date</p>
+                              <p className="text-lg font-bold">{new Date(record.graduation_date).toLocaleDateString()}</p>
+                           </div>
+                        </div>
+                        <div className="pt-6 border-t border-white/5">
+                           <p className={`text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-full inline-block ${record.is_approved ? 'bg-emerald/10 text-emerald border border-emerald/20' : 'bg-gold/10 text-gold border border-gold/20 animate-pulse'}`}>
+                             {record.is_approved ? '✓ INSTITUTIONALLY BLESSED' : '⏳ AWAITING FINAL BLESSING'}
+                           </p>
+                        </div>
+                     </div>
+                     
+                     <div className="px-4">
+                        <p className="text-xs text-text-soft italic text-center md:text-left">
+                          "This credential is cryptographically sealed and recorded in the Ginashe Institutional Audit Trail. Your academic integrity has been verified across all four governance pillars."
+                        </p>
+                     </div>
+
+                     <div className="flex flex-col sm:flex-row gap-4">
+                        <button className="flex-1 btn btn-gold py-5 shadow-2xl shadow-gold/20 font-black tracking-tighter">DOWNLOAD CERTIFICATE</button>
+                        <button className="flex-1 btn btn-outline py-5 border-white/10 hover:border-gold/50">SHARE ON LINKEDIN</button>
+                     </div>
+                  </div>
+
+                  {/* Right: The Seal */}
+                  <div className="flex justify-center flex-col items-center space-y-6">
+                     <div className="relative">
+                        <div className="absolute inset-0 bg-gold/20 blur-[60px] rounded-full animate-pulse" />
+                        <img 
+                          src="/gda_institutional_seal_gold_large_1775998447207.png" 
+                          alt="GDA Institutional Seal" 
+                          className={`w-64 h-64 object-contain relative z-10 ${record.is_approved ? 'grayscale-0' : 'grayscale transition-all duration-1000'}`}
+                        />
+                        {record.is_approved && (
+                          <div className="absolute -top-4 -right-4 bg-emerald text-navy p-3 rounded-full shadow-2xl z-20 animate-bounce">
+                             <CheckCircle2 size={24} />
+                          </div>
+                        )}
+                     </div>
+                     <p className="text-[10px] font-dm-mono uppercase text-text-dim tracking-widest">
+                        {record.is_approved ? 'Official Digital Seal Active' : 'Seal Pending Activation'}
+                     </p>
+                  </div>
+               </div>
+            ) : (
+               <div className="py-20 flex flex-col items-center space-y-4">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gold" />
+                  <p className="text-[10px] font-dm-mono uppercase text-gold tracking-widest">Recalling Sealed Record...</p>
+               </div>
+            )}
           </div>
-        ) : (
-          <div className="text-text-dim text-sm italic">Loading alumni record...</div>
-        )}
+        </div>
+
+        {/* Footer Brand */}
+        <div className="mt-12 flex flex-col items-center space-y-4 opacity-50">
+           <div className="h-px w-20 bg-white/10" />
+           <p className="text-[10px] font-dm-mono uppercase text-text-dim tracking-[0.2em]">GINASHE DIGITAL ACADEMY | ALUMNI GOVERNANCE</p>
+        </div>
       </div>
     </div>
   );
