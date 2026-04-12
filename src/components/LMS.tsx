@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../lib/auth';
+import { Mail, Zap } from 'lucide-react';
 
 interface Lesson {
   id: string;

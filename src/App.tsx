@@ -6,7 +6,7 @@ import { supabase } from './lib/supabase';
 import Navbar from './components/Navbar';
 import { Footer } from './components/Footer';
 import { Modals } from './components/Modals';
-import { AdminDashboard, StudentPortal } from './components/Portals';
+import { AdminDashboard, StudentPortal, StaffActivationView } from './components/Portals';
 import { CourseViewer } from './components/LMS';
 import { ArrowRight } from 'lucide-react';
 
