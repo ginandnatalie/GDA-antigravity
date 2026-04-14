@@ -1,0 +1,2566 @@
+--- FOLDER: tmp_launchpad_2_3 ---
+GINASHE DIGITAL ACADEMY
+Cloud Computing Track — Foundation Level
+Cloud Launchpad
+Phases 2 & 3: Course Architecture & Module 1 Lesson Plan
+NQF Level 3 – 4
+120 Contact Hours  ·  12 Weeks
+39 SETA Credits  ·  MICT SETA
+QCTO Accreditation Pathway
+South Africa & Pan-African Edition
+Prepared by Ginashe Group — 11 April 2026
+2
+PHASE
+Cloud Launchpad — Course Architecture
+Full module structure, learner journey, outcomes & SETA alignment
+2.1 Course Overview
+Cloud Launchpad is the gateway course of the Cloud Computing track at Ginashe Digital Academy. It is designed for learners with no prior technical background — school leavers, career changers, and early-workforce individuals — and equips them with the foundational knowledge and practical skills to pursue entry-level cloud roles or continue to the Associate level of the track.
+Duration
+Total Hours
+NQF Level
+SETA Credits
+12 weeks
+120 contact hours
+NQF L3 – L4
+39 credits
+2.2 Target Learner Profile
+School leavers (Grade 12 / Matric) with basic computer literacy
+Unemployed youth seeking entry into the ICT sector
+Working adults in non-technical roles seeking a career change
+Government-sponsored learners under SETA learnerships
+SMMEs staff requiring foundational cloud awareness
+2.3 Entry Requirements
+Grade 10 literacy and numeracy (Grade 12 preferred but not required)
+Basic computer literacy — able to use email, a browser, and a keyboard
+Internet access for self-study and lab work (data stipend available for qualifying learners)
+No prior IT or programming knowledge required
+2.4 The 12-Week Learner Journey
+Learners progress through six modules in sequence. Each module builds on the previous, creating a logical stack from conceptual understanding through to a live cloud deployment.
+Week
+Module
+Hours
+NQF
+Content Focus
+1–2
+Module 1
+20 hrs
+L3
+Digital & Cloud Foundations — IaaS/PaaS/SaaS, deployment models, major providers, cloud economics, career pathways
+3–4
+Module 2
+20 hrs
+L3–L4
+Linux Essentials — file system, shell, permissions, package management, Bash scripting
+5–6
+Module 3
+20 hrs
+L4
+Networking Fundamentals — OSI/TCP-IP, IP addressing, DNS, firewalls, VPN, cloud VPC concepts
+7–8
+Module 4
+25 hrs
+L4
+Cloud Infrastructure — compute, storage, databases, IAM, billing, first workload deployment
+9–10
+Module 5
+15 hrs
+L4
+Cloud Security — shared responsibility, encryption, POPIA compliance, network security
+11–12
+Module 6
+20 hrs
+L4
+Capstone Project — SA SME brief, architecture design, deploy, present, portfolio of evidence
+2.5 Course-Level Learning Outcomes
+On successful completion of Cloud Launchpad, learners will be able to:
+Explain cloud computing concepts, service models, and deployment types
+Administer a Linux server using the command line interface
+Configure basic IP networks, DNS, and cloud virtual private networks
+Deploy a functional workload on AWS or Azure using both the console and CLI
+Apply the shared responsibility model to secure a basic cloud environment
+Demonstrate POPIA awareness in the context of cloud data handling
+Estimate and interpret a basic cloud cost forecast
+Present a cloud solution architecture to a mixed technical and non-technical audience
+2.6 Assessment Strategy
+Summative breakdown
+Formative module quizzes — 20%
+Practical lab submissions — 30%
+Mid-point checkpoint (Modules 2+3) — 10%
+Capstone project: design, deploy, defend — 30%
+Portfolio of Evidence (PoE) across all modules — 10%
+Pass requirements
+Overall pass mark: 70%
+Minimum 60% per individual assessment component
+One supplementary re-assessment per component allowed
+Learners below 60% on PoE must resubmit before certificate is issued
+Capstone defence: minimum 10-minute presentation to panel of two
+2.7 SETA Unit Standard Alignment
+US Number
+Title
+NQF
+Credits
+Module
+US 116928
+Demonstrate an understanding of ICT and the internet
+L3
+3
+M1, M4
+US 252250
+Use technology to research information
+L3
+3
+M1
+US 116942
+Install and configure a desktop operating system
+L4
+5
+M2
+US 117005
+Manage files and directories using an operating system
+L3
+3
+M2
+US 114076
+Install and configure network infrastructure
+L4
+6
+M3
+US 259604
+Demonstrate understanding of network protocols
+L4
+4
+M3
+US 259606
+Deploy and manage cloud-based services
+L4
+6
+M4
+US 116935
+Apply information security principles
+L4
+4
+M5
+US 259605
+Implement security controls in a cloud environment
+L4
+5
+M5, M6
+Total: 39 credits  ·  MICT SETA  ·  Contributes toward SAQA-registered qualification in IT Technical Support / Cloud Computing
+3
+PHASE
+Module 1: Digital & Cloud Foundations
+Full lesson plan — 4 lessons, 20 hours, Weeks 1–2
+3.1 Module Overview
+This is the opening module of Cloud Launchpad. It requires no prior technical knowledge and focuses on building conceptual understanding and orientation. By the end of Week 2, every learner will have created a cloud account, explored a live console, and estimated their first cloud cost. The South African and pan-African context is woven throughout to ensure relevance and motivation.
+Module
+Weeks
+Hours
+SETA US
+Module 1 of 6
+Weeks 1 – 2
+20 hours / 4 lessons
+US 116928 · US 252250
+3.2 Module Learning Outcomes
+On completion of Module 1 learners will be able to:
+Define digitalisation and digital transformation using South African examples
+Explain IaaS, PaaS, and SaaS with a real-world use case for each
+Compare public, private, hybrid, and multi-cloud deployment models
+Identify AWS, Azure, and GCP and their key service categories
+Explain cloud cost efficiency through pay-as-you-go and OpEx models
+Describe how digital transformation is reshaping South Africa and Africa
+Map at least three cloud career pathways available after GDA programmes
+Access and navigate a cloud provider free-tier console independently
+3.3 Lesson Plans
+Lesson 1: What is the digital world? — From analogue to cloud
+Week 1 · Day 1  ·  5 hours
+Learning objectives
+Lesson objectives
+Define digital transformation and explain why it matters in South Africa
+Distinguish between digitisation, digitalisation, and digital transformation
+Explain what the cloud is in plain language
+Describe the evolution from mainframe to cloud computing
+Resources needed
+Slides: 'From filing cabinet to cloud' (provided in LMS)
+Worksheet: SA industry transformation examples (printed)
+Video: 'What is cloud computing?' — AWS Explainer (5 min, link in LMS)
+Internet access for free-tier account setup in final hour
+Session plan
+Time
+Type
+Activity & description
+0:00
+Discussion
+Ice-breaker (20 min) — Learners share one digital service used today. Facilitator maps responses on whiteboard, revealing how many are cloud-powered.
+0:20
+Lecture
+The digital revolution — SA context (40 min) — Mobile money (M-Pesa, SnapScan), e-government (SARS eFiling, Home Affairs), banking apps. What changed and why digital adoption happened fast in Africa.
+1:00
+Lecture
+Three terms you must know (30 min) — Digitisation vs Digitalisation vs Digital Transformation. Worked example: a bottle store going from paper stock sheets to spreadsheet to cloud POS to full DX with loyalty app and analytics.
+1:30
+Group work
+Case study: Pick-n-Pay vs Shoprite (30 min) — Learners read one-page case, identify where each company sits on the DX journey, present back in 2 minutes per group.
+2:00
+Lecture
+From mainframe to cloud — a visual history (45 min) — 1960s mainframe → 1980s PC → 1990s internet → 2000s virtualisation → 2006 AWS launch → today's hyperscalers. Career implications for learners.
+2:45
+Break
+15 minutes
+3:00
+Lecture
+What IS the cloud? (30 min) — The NIST definition unpacked: on-demand self-service, broad network access, resource pooling, rapid elasticity, measured service. Each concept illustrated with a relatable SA analogy (e.g., Eskom prepaid meter = measured service).
+3:30
+Lab
+Create your free-tier cloud account (60 min) — Guided step-by-step: learners set up an AWS Free Tier or Azure for Students account. Navigate the console. Identify 5 services on the dashboard. Screenshot submitted as Lab 1a.
+4:30
+Discussion
+Exit ticket & reflection (30 min) — Each learner writes: one thing understood, one thing still unclear, one SA business they would like to help transform. Facilitator reviews before Lesson 2.
+Formative assessment
+3-question exit ticket (ungraded) — collected for facilitator review
+Lab 1a: cloud console screenshot submitted to LMS
+Facilitator notes
+Expect mixed tech exposure — meet learners where they are, not where you expect them to be
+Use WhatsApp as a cloud analogy — almost all learners already use it daily
+Account setup: have a pre-configured demo account ready if internet connectivity fails
+The ice-breaker typically surfaces 10–15 cloud services from everyday SA life — use them throughout the module
+Lesson 2: Cloud service models — IaaS, PaaS, and SaaS
+Week 1 · Day 2  ·  5 hours
+Learning objectives
+Lesson objectives
+Define and compare IaaS, PaaS, and SaaS in plain language
+Match real products and services to the correct service model
+Explain the shared responsibility split across each model
+Recommend the right model for a given SA business scenario
+Resources needed
+Slides: service model comparison diagram (provided in LMS)
+Printed card sort activity: IaaS/PaaS/SaaS sorting cards (1 set per 3 learners)
+Worksheet: 'Which model fits?' — 5 SA business scenarios (printed)
+AWS/Azure console access from Lesson 1 accounts
+Session plan
+Time
+Type
+Activity & description
+0:00
+Discussion
+Recap Lesson 1 (15 min) — Quick 5-question verbal quiz. Address exit ticket uncertainties from previous session.
+0:15
+Lecture
+The pizza analogy — build, rent, or order? (30 min) — Classic pizza-as-a-service adapted for SA: making pizza at home (on-prem) vs buying dough (IaaS) vs ordering a base (PaaS) vs full delivery (SaaS). Walk through each layer of the responsibility stack per model.
+0:45
+Group work
+Card sort — classify 20 products (30 min) — Teams of 3 sort printed cards (Gmail, EC2, Azure App Service, Salesforce, Kubernetes Engine, Dropbox, etc.) into IaaS/PaaS/SaaS columns. Groups compare and discuss any disagreements.
+1:15
+Lecture
+Deep dive: IaaS (45 min) — Virtual machines, virtual storage, virtual networking. AWS EC2 and Azure VM walkthroughs. When to choose IaaS: lift-and-shift migrations, custom OS requirements, legacy applications.
+2:00
+Lecture
+Deep dive: PaaS (30 min) — Managed runtimes, databases-as-a-service. AWS Elastic Beanstalk, Azure App Service, Firebase. Developer focus: deploy code without managing servers. SA startup use cases highlighted.
+2:30
+Break
+15 minutes
+2:45
+Lecture
+Deep dive: SaaS (30 min) — Everything managed by the provider. Microsoft 365, Google Workspace, Zoom, Sage (widely used in SA SMEs). Licensing models. Data sovereignty considerations for African organisations.
+3:15
+Workshop
+'Which model fits?' — SA business scenarios (45 min) — 5 written scenarios (spaza shop, government department, fintech startup, hospital records, online retail). Groups recommend and defend a service model choice with written justification.
+4:00
+Lab
+Explore PaaS and SaaS from the console (45 min) — Learners locate one IaaS, one PaaS, and one SaaS offering in their AWS/Azure console. Document: service name, pricing model, typical use case. Submit as Lab 1b.
+4:45
+Discussion
+Shared responsibility matrix wrap-up (15 min) — Facilitator draws the on-premises to IaaS to PaaS to SaaS responsibility shift. Learners annotate which party manages each layer.
+Formative assessment
+Card sort accuracy reviewed by facilitator — discuss top 3 disagreements with class
+Lab 1b: console documentation worksheet submitted to LMS
+Scenario workshop: facilitator observes and records participation quality
+Facilitator notes
+Many learners already use SaaS daily — start there to build confidence before moving to IaaS
+IaaS is the hardest concept at this level — use the 'renting a room you furnish yourself' analogy
+Scenario workshop: encourage debate, there is no single correct answer for most scenarios
+Ensure all learner accounts are working before Lab 1b; troubleshoot early in the session
+Lesson 3: Deployment models & major cloud providers
+Week 2 · Day 1  ·  5 hours
+Learning objectives
+Lesson objectives
+Compare public, private, hybrid, and multi-cloud deployment models
+Identify when each deployment model is appropriate for an organisation
+Describe AWS, Azure, and GCP's core service categories
+Explain data residency and sovereignty in an African and POPIA context
+Navigate AWS and Azure documentation independently
+Resources needed
+Slides: deployment model diagrams (provided in LMS)
+Printed: AWS vs Azure vs GCP feature comparison sheet (1 per learner)
+Internet access: AWS, Azure, GCP free documentation
+Video: 'AWS Africa Cape Town Region' — 3 min (link in LMS)
+Session plan
+Time
+Type
+Activity & description
+0:00
+Discussion
+Warm-up: IaaS/PaaS/SaaS lightning round (20 min) — Facilitator calls a product name, learners raise coloured cards (Blue=IaaS, Green=PaaS, Yellow=SaaS). Discuss disagreements as a class.
+0:20
+Lecture
+Public cloud (40 min) — Shared infrastructure, hyperscaler economics, global regions and availability zones. Why the AWS Cape Town and Azure South Africa North regions matter: latency, data sovereignty, POPIA compliance.
+1:00
+Lecture
+Private cloud (25 min) — On-premises virtualisation (VMware, OpenStack). Use cases: banks, government, hospitals. Cost vs control trade-off. SA government cloud policy overview.
+1:25
+Lecture
+Hybrid and multi-cloud (35 min) — Hybrid: connecting on-premises DC to public cloud. Multi-cloud: using AWS and Azure together. Why SA enterprises increasingly adopt this model. Brief introduction to Azure Arc and AWS Outposts.
+2:00
+Discussion
+Case: Nedbank's hybrid cloud journey (20 min) — Facilitator-led discussion of how a major SA bank uses hybrid cloud. Learners identify the business drivers: regulation, legacy systems, agility requirements.
+2:20
+Break
+15 minutes
+2:35
+Lecture
+Meet the hyperscalers (50 min) — AWS: EC2, S3, RDS, Lambda, IAM; Cape Town region. Azure: VMs, Blob, SQL, Functions, Active Directory; two local SA regions. GCP: Compute Engine, Cloud Storage, BigQuery, Vertex AI; strong in data and AI workloads. Each presented as a service map.
+3:25
+Lab
+Provider exploration challenge (60 min) — Teams of 2 assigned one provider. Task using free documentation: find nearest region to SA, free-tier compute offering, managed database service, and one AI/ML service. Present back in 3 minutes. Submit as Lab 1c.
+4:25
+Discussion
+Choosing a provider (35 min) — There is no universal best provider. Decision matrix: cost, existing skills, regulatory requirements, SA support presence, ecosystem. Learners complete a blank decision matrix for a given scenario.
+Formative assessment
+Provider exploration lab (Lab 1c) submitted — evaluate documentation navigation skill
+Decision matrix worksheet completed and discussed
+Facilitator notes
+Emphasise AWS Cape Town and Azure SA North prominently — local context builds learner motivation
+POPIA is a recurring theme throughout the course — introduce it clearly here, reinforce it in Module 5
+When learners ask 'which provider should I learn?' — answer: both AWS and Azure are valued; this course uses both and the skills transfer
+The provider comparison activity works well with learners presenting to each other — builds presentation confidence early
+Lesson 4: Cloud economics, careers & the African digital future
+Week 2 · Day 2  ·  5 hours
+Learning objectives
+Lesson objectives
+Explain CapEx vs OpEx and the pay-as-you-go cloud model
+Use a cloud pricing calculator to estimate a basic monthly cost
+Identify at least five cloud career roles and their responsibilities
+Map a personal learning pathway through GDA tracks
+Pass the Module 1 formative quiz at 70% or above
+Resources needed
+AWS Pricing Calculator — calculator.aws (internet access required)
+Azure Pricing Calculator — azure.microsoft.com/pricing/calculator
+GDA Career Map handout (provided, printed)
+Module 1 Quiz — 20 questions (paper copies or loaded in LMS)
+Session plan
+Time
+Type
+Activity & description
+0:00
+Lecture
+Cloud economics — CapEx to OpEx (45 min) — Traditional IT: buy servers upfront (CapEx), depreciate over 5 years, over-provision for peak. Cloud: pay per hour, scale instantly (OpEx). Total Cost of Ownership comparison. Pricing models: on-demand, reserved instances, spot/preemptible. Economies of scale explained.
+0:45
+Lab
+Pricing calculator challenge (45 min) — Learners use AWS or Azure Pricing Calculator. Scenario: estimate monthly cost to run a small web server (1 vCPU, 2 GB RAM, 100 GB storage) in Cape Town region. Compare on-demand vs 1-year reserved. Submit as Lab 1d.
+1:30
+Discussion
+The African digital economy (30 min) — Data: Africa's internet economy trajectory. AWS, Azure, and Google all investing in African data centres. SA as a regional technology hub. Optional guest speaker slot: local cloud practitioner via video call (15 min if available).
+2:00
+Lecture
+Cloud career pathways (45 min) — Roles in detail: Cloud Support Technician, Cloud Administrator, Cloud Solutions Architect, DevOps Engineer, Cloud Security Engineer, Cloud Data Engineer. For each: responsibilities, SA salary range (current data), typical certifications, GDA pathway to reach the role.
+2:45
+Break
+15 minutes
+3:00
+Discussion
+My GDA learning pathway (30 min) — Each learner completes a personal pathway map: current starting point, target role, modules and courses needed, estimated time to goal. Shared with facilitator as a mentoring touchpoint document.
+3:30
+Quiz
+Module 1 Formative Quiz (40 min) — 20 multiple-choice questions covering all four lessons. Distribution: cloud definition (3), service models (5), deployment models (4), providers (3), cloud economics (3), careers (2). Minimum pass: 14 out of 20 (70%).
+4:10
+Discussion
+Quiz debrief and Module 2 preview (30 min) — Review quiz answers. Re-teach any question missed by more than 40% of learners. Preview Module 2: Linux Essentials. Assign pre-reading: 'What is Linux?' one-page handout.
+4:40
+Discussion
+Module 1 reflection (20 min) — Learners write 3 sentences: what they can now do, one concept to explore further, one question for Module 2. Collected for facilitator review.
+Formative assessment
+Lab 1d: pricing calculator output submitted and compared with peers
+Module 1 Quiz: 20 questions, 70% pass mark, results recorded in LMS
+Personal pathway map: collected as a mentoring artefact
+Learners scoring below 70% offered a 1:1 catch-up session before Module 2 begins
+Facilitator notes
+Use current salary data from OfferZen or Pnet ZA — refresh figures annually
+The career mapping activity often unlocks significant learner motivation — allow extra time if energy is high
+If quiz results are low across the group (below 60% average), delay Module 2 by one day for consolidation
+Ensure all learner accounts are fully functional before Module 2 begins — Linux labs require working SSH access
+Guest speaker (optional): recruit from GDA alumni, Ginashe Digital clients, or MICT SETA partners
+3.4 Module 1 Quiz — Full Question Bank
+The following 20 questions constitute the Module 1 formative quiz. Facilitators may deliver this on paper or via the LMS. Questions are presented in recommended order (foundational to applied).
+Q1. What does the acronym NIST stand for in the context of cloud computing?
+A) National Institute of Science and Technology
+B) National Institute of Standards and Technology
+C) Network and Infrastructure Solutions Tool
+D) National Internet Services Technology
+Answer: B  (Module 1, Lesson 1 — NIST definition of cloud computing)
+Q2. Which of the following best describes 'digital transformation'?
+A) Scanning paper documents into PDF files
+B) Using a computer instead of a typewriter
+C) Fundamentally rethinking how an organisation uses technology to create value
+D) Moving a company's email to a cloud provider
+Answer: C  (Module 1, Lesson 1 — DX definition)
+Q3. A company moves its paper stock records to an Excel spreadsheet. This is best described as:
+A) Digital transformation
+B) Digitalisation
+C) Digitisation
+D) Cloud migration
+Answer: C  (Module 1, Lesson 1 — digitisation vs digitalisation vs DX)
+Q4. Which cloud service model gives the customer the MOST control over the operating system?
+A) SaaS
+B) PaaS
+C) IaaS
+D) FaaS
+Answer: C  (Module 1, Lesson 2 — IaaS characteristics)
+Q5. Microsoft 365 (formerly Office 365) is best classified as:
+A) IaaS
+B) PaaS
+C) SaaS
+D) On-premises
+Answer: C  (Module 1, Lesson 2 — SaaS classification)
+Q6. An SA fintech startup wants to deploy a web application without managing the underlying server OS. Which model is most appropriate?
+A) Private cloud with bare-metal servers
+B) IaaS
+C) PaaS
+D) On-premises dedicated hardware
+Answer: C  (Module 1, Lesson 2 — PaaS use case)
+Q7. In the shared responsibility model under SaaS, who is responsible for patching the application?
+A) The customer
+B) The cloud provider
+C) The internet service provider
+D) SITA (State Information Technology Agency)
+Answer: B  (Module 1, Lesson 2 — shared responsibility)
+Q8. A South African bank wants full control of its data and is subject to strict Reserve Bank regulations. Which deployment model is most likely appropriate?
+A) Public cloud only
+B) Multi-cloud
+C) Private cloud or hybrid cloud
+D) Community cloud
+Answer: C  (Module 1, Lesson 3 — private/hybrid deployment)
+Q9. What is the primary advantage of a hybrid cloud model?
+A) It is always the cheapest option
+B) It eliminates the need for on-premises infrastructure entirely
+C) It allows organisations to keep sensitive workloads on-premises while using public cloud for other needs
+D) It requires no security configuration
+Answer: C  (Module 1, Lesson 3 — hybrid cloud)
+Q10. Which AWS region is located in South Africa?
+A) af-south-1 (Cape Town)
+B) af-south-2 (Johannesburg)
+C) eu-west-3 (Paris)
+D) me-south-1 (Bahrain)
+Answer: A  (Module 1, Lesson 3 — AWS SA region)
+Q11. Which cloud provider is known for its strength in data analytics and AI services such as BigQuery and Vertex AI?
+A) AWS
+B) Azure
+C) GCP (Google Cloud Platform)
+D) IBM Cloud
+Answer: C  (Module 1, Lesson 3 — GCP strengths)
+Q12. What does POPIA stand for?
+A) Protection of Personal Information Act
+B) Public Online Privacy and Infrastructure Act
+C) Prevention of Personal Information Access
+D) Protection of Public Online Information Act
+Answer: A  (Module 1, Lesson 3 — POPIA, SA context)
+Q13. Traditional IT infrastructure is often described as a CapEx model. What does CapEx mean?
+A) Calculated Application Expense
+B) Capital Expenditure — large upfront investment in assets
+C) Cloud Application Exchange
+D) Capacity Extension Programme
+Answer: B  (Module 1, Lesson 4 — CapEx vs OpEx)
+Q14. A startup wants to avoid large upfront hardware costs and only pay for what it uses each month. Which cloud pricing model suits this best?
+A) Reserved instances (3-year term)
+B) On-demand pricing
+C) Dedicated host
+D) Spot instances for all workloads
+Answer: B  (Module 1, Lesson 4 — pay-as-you-go / on-demand)
+Q15. Which of the following is an example of a cloud pricing saving strategy?
+A) Always using the most powerful instance type
+B) Running servers at 100% capacity 24/7
+C) Purchasing reserved instances for predictable workloads
+D) Ignoring the billing dashboard
+Answer: C  (Module 1, Lesson 4 — reserved instances / cost optimisation)
+Q16. What is the role of a Cloud Solutions Architect?
+A) Writing code for web applications
+B) Designing cloud infrastructure to meet business and technical requirements
+C) Managing helpdesk tickets for end users
+D) Installing operating systems on physical servers
+Answer: B  (Module 1, Lesson 4 — cloud career roles)
+Q17. Which of the following best describes 'resource pooling' as a characteristic of cloud computing?
+A) All users get a dedicated physical server
+B) Cloud resources are shared across many customers but appear private to each
+C) Resources are physically located in one country only
+D) Each customer must request resources 30 days in advance
+Answer: B  (Module 1, Lesson 1 — NIST characteristics)
+Q18. A government department in SA wants to share cloud infrastructure with other government departments only. This describes:
+A) Public cloud
+B) Private cloud
+C) Hybrid cloud
+D) Community cloud
+Answer: D  (Module 1, Lesson 3 — community cloud)
+Q19. Which of the following is NOT one of the five essential characteristics of cloud computing according to NIST?
+A) On-demand self-service
+B) Rapid elasticity
+C) Mandatory 5-year contract
+D) Measured service
+Answer: C  (Module 1, Lesson 1 — NIST definition)
+Q20. A learner wants to become a Cloud Security Engineer in South Africa. What is the most relevant next course after completing Cloud Launchpad at GDA?
+A) AI Fundamentals
+B) Data Literacy
+C) Cloud Practitioner Pro, then Cybersecurity track
+D) Digital Entrepreneurship 101
+Answer: C  (Module 1, Lesson 4 — GDA learning pathways)
+
+--- FOLDER: tmp_GDA_CloudLaunchpad_Phase4_Module2 ---
+GINASHE DIGITAL ACADEMY
+Cloud Computing Track — Foundation Level
+Cloud Launchpad
+Phase 4: Module 2 — Linux Essentials
+NQF Level 3 – 4  ·  Module 2 of 6
+20 Contact Hours  ·  Weeks 3 – 4
+SETA Unit Standards: US 116942 · US 117005
+4 Lessons  ·  4 CLI Lab Exercises  ·  20-Question Quiz
+MICT SETA  ·  QCTO Accreditation Pathway
+Prepared by Ginashe Group — 11 April 2026
+4
+PHASE
+Module 2: Linux Essentials
+Full lesson plan — 4 lessons, 20 hours, Weeks 3–4
+4.1 Module Overview
+Linux is the operating system that powers the cloud. More than 90% of public cloud workloads run on Linux, all major cloud providers offer Linux-based compute instances as their primary offering, and every cloud administrator, DevOps engineer, and solutions architect must be comfortable with the Linux command line. This module transforms learners from cloud consumers to cloud operators — by the end of Week 4, every learner will have a running web server they configured entirely from the command line.
+Module
+Weeks
+Hours
+SETA US
+Module 2 of 6
+Weeks 3 – 4
+20 hours / 4 lessons
+US 116942 · US 117005
+4.2 Lab Environment Setup
+All CLI labs in this module require a live Linux environment. The recommended setup is an Ubuntu 22.04 LTS EC2 t2.micro instance (free tier eligible) per learner provisioned in the AWS af-south-1 (Cape Town) region. The following must be confirmed before Lesson 1 begins:
+Each learner has an active AWS Free Tier account (set up in Module 1)
+EC2 instance is running Ubuntu 22.04 LTS in af-south-1
+Security group allows inbound SSH (port 22) from the class IP range and HTTP (port 80) from anywhere
+Learners can connect via SSH using PuTTY (Windows) or terminal (Mac/Linux)
+Fallback: browser terminal at https://bellard.org/jslinux is tested and working
+A second shared EC2 instance is available for SSH/SCP exercises in Lesson 4
+4.3 Module Learning Outcomes
+On completion of Module 2 learners will be able to:
+Explain the history and philosophy of Linux and its role in cloud infrastructure
+Navigate the Linux file system hierarchy using the command line
+Create, move, copy, and delete files and directories using core shell commands
+Interpret and modify file permissions and ownership using chmod, chown, and octal notation
+Manage software packages using apt (Debian/Ubuntu) and describe yum/dnf for RHEL
+Use text editors (nano and vi) to create and edit configuration files
+Write and execute a basic Bash shell script to automate a repetitive task
+Monitor system processes, memory, and disk using ps, top, df, and free
+Connect to a remote Linux server via SSH and transfer files using SCP
+4.4 Core CLI Command Reference
+The following commands are taught, practised, and assessed in this module. Learners receive this as a printed reference card to keep throughout the course.
+Navigation & file system
+File content & editing
+Permissions & users
+System, packages & remote
+pwd  Print working directory
+cat / less  View file contents
+chmod 755 f  Set permissions (octal)
+apt update  Refresh package index
+ls -la  List all files with permissions
+head / tail  First / last lines of file
+chown user:grp  Change file owner/group
+apt install pkg  Install a package
+cd /path  Change directory
+grep "text" f  Search inside files
+whoami / id  Current user and groups
+ps aux  List all running processes
+mkdir -p dir  Create directory (with parents)
+nano file  Simple terminal text editor
+sudo command  Run as superuser
+top / htop  Real-time process monitor
+rm -rf dir  Remove directory recursively
+vi / vim file  Advanced text editor
+adduser / userdel  Add / remove users
+df -h  Disk space usage
+cp / mv  Copy / move files
+echo "x" >> f  Append text to file
+passwd user  Change user password
+free -m  RAM usage in megabytes
+find / -name  Search for files
+wc -l file  Count lines in file
+groups user  List user's groups
+ssh user@host  Connect to remote server
+4.5 Lesson Plans
+Lesson 1: Linux origins, philosophy & the file system
+Week 3 · Day 1  ·  5 hours
+Lesson objectives
+Explain why Linux dominates cloud and server infrastructure
+Identify major Linux distributions and their use cases
+Describe the Linux file system hierarchy (FHS) structure
+Navigate the file system using pwd, ls, and cd
+Explain the difference between relative and absolute paths
+Resources & environment
+Lab environment: Ubuntu 22.04 LTS on AWS EC2 free tier (t2.micro) — pre-provisioned per learner
+Terminal access: SSH via PuTTY (Windows) or native terminal (Mac/Linux)
+Slides: Linux history timeline and FHS diagram
+Handout: Linux distributions comparison card (one per learner)
+Fallback: browser-based terminal at https://bellard.org/jslinux (test before class)
+Session plan
+Time
+Type
+Activity & description
+0:00
+Discussion
+What runs the internet? (20 min) — Facilitator shows learners that Android (Linux kernel), most web servers (Apache/Nginx on Linux), AWS EC2 instances, and even the Johannesburg Stock Exchange run Linux. Ask: 'How many of you have used Linux today without knowing it?'
+0:20
+Lecture
+A brief history of Linux (30 min) — Unix origins (1969, Bell Labs) → GNU project (Stallman, 1983) → Linux kernel (Linus Torvalds, 1991, a 21-year-old student). Open source philosophy: free, no vendor lock-in — why it matters for African developers. The Linux Foundation today.
+0:50
+Lecture
+Linux distributions landscape (30 min) — Debian family: Ubuntu (most common for learners and cloud), Debian, Kali Linux. Red Hat family: RHEL, CentOS, Fedora. Cloud context: Amazon Linux 2023, Ubuntu on Azure. Which distro for what purpose. This course uses Ubuntu 22.04 LTS.
+1:20
+Demo
+First terminal connection (20 min) — Facilitator live-demos SSH connection to EC2 instance. Shows the shell prompt anatomy: user@hostname:~$. Explains what each part means. Learners observe before attempting themselves.
+1:40
+Lab
+Lab 2a — Connect and explore (30 min) — Each learner SSHs into their lab instance. Tasks: (1) confirm login with whoami, (2) run uname -a and record the kernel version, (3) run uptime, (4) take a screenshot. Facilitator circulates. Common issue: SSH key permissions — document the fix in the lab guide.
+2:10
+Break
+15 minutes
+2:25
+Lecture
+The Linux file system hierarchy (45 min) — Everything is a file in Linux. FHS standard: / (root), /home (user directories), /etc (config files), /var (logs, variable data), /tmp (temporary), /usr (user programs), /bin and /sbin (system binaries), /proc and /sys (virtual kernel interfaces), /dev (devices), /mnt and /media (mount points). Visual diagram shown and discussed.
+3:10
+Lecture
+Navigation commands (30 min) — pwd (where am I?), ls (what is here?), ls -la (full detail including permissions), cd (move around), cd .. (up one level), cd ~ (home directory), cd / (root). Absolute vs relative paths explained with a SA analogy: absolute = full street address including province; relative = 'turn left at the traffic light'.
+3:40
+Lab
+Lab 2a continued — Navigation challenge (60 min) — Learners complete a guided worksheet: navigate to /etc and list contents; navigate to /var/log and list the 5 most recent files; navigate to /proc and read the cpuinfo file; return to home directory. Each step confirmed with a screenshot. Submitted as Lab 2a Part 2.
+4:40
+Wrap-up
+CLI cheat sheet build (20 min) — Learners collaboratively fill in the first section of their personal CLI cheat sheet (provided template). Facilitator reviews; previews Lesson 2 on file operations.
+Formative assessment
+Lab 2a: SSH screenshot and navigation worksheet submitted to LMS
+CLI cheat sheet section 1 completed and reviewed by facilitator
+Facilitator notes
+SSH issues are almost guaranteed in the first lab session — build a 20-minute buffer into setup or pre-provision instances before class
+Browser fallback (jslinux) is essential if AWS access fails — test it personally before every session
+Linus Torvalds was 21 and a student when he wrote Linux — this detail lands well with young SA learners
+Emphasise: /etc is pronounced 'et-see', not 'forward-slash-et-cee' — correct this early to build professional vocabulary
+Lesson 2: File operations, text editing & the shell
+Week 3 · Day 2  ·  5 hours
+Lesson objectives
+Create, copy, move, and delete files and directories
+View and search file contents using cat, less, grep, and pipe
+Edit files using nano and understand basic vi/vim modes
+Use I/O redirection (>, >>, <) and pipes (|)
+Use wildcards and tab completion effectively
+Resources & environment
+Same Ubuntu EC2 lab instance from Lesson 1
+Lab worksheet: file operations challenge (printed and available in LMS)
+Nano quick-reference card (provided — laminated if possible)
+Vi/vim survival cheat sheet (1 page, provided)
+Session plan
+Time
+Type
+Activity & description
+0:00
+Review
+Navigation speed drill (20 min) — Facilitator calls out directory names; learners race to navigate there and confirm with pwd. Top 3 fastest recognised. Reviews any outstanding Lab 2a issues.
+0:20
+Lecture
+File and directory operations (40 min) — touch (create empty file), mkdir / mkdir -p (create directory with parents), cp (copy), mv (move or rename), rm (remove), rm -rf (remove recursively — use with extreme caution). Wildcards: *, ?, [abc]. Tab completion demo. Common mistakes and recovery steps.
+1:00
+Lab
+Lab 2b Part 1 — File system construction (40 min) — Learners build a directory structure from a specification: /home/ubuntu/gda-project/{logs,config,scripts,data}. Create 3 placeholder files in each directory. Copy the config directory to /tmp. Rename the logs directory to archive. Remove the data directory. Confirm final structure with ls -R. Screenshot submitted.
+1:40
+Lecture
+Viewing and searching file contents (35 min) — cat (print whole file), less (page through), head -n (first N lines), tail -n (last N lines), tail -f (follow live updates — great for log monitoring). grep 'pattern' file — basic search. grep -r (recursive search). Pipe ( | ): chain commands together. Example: grep 'error' /var/log/syslog | tail -20.
+2:15
+Break
+15 minutes
+2:30
+Lecture
+I/O redirection (25 min) — stdout (> overwrite, >> append), stderr (2>), stdin (<). Practical examples: echo 'Hello GDA' > hello.txt; cat /etc/passwd > users.txt; ls -la >> audit.log. Why this matters in cloud: writing logs, building config files, scripting automation.
+2:55
+Demo
+Nano live walkthrough (20 min) — Open, write, save (Ctrl+O), exit (Ctrl+X), search (Ctrl+W). Facilitator creates /home/ubuntu/gda-project/config/app.conf with 5 key=value pairs live. Learners follow along on their own instances.
+3:15
+Demo
+Vi/vim — survival skills (30 min) — Three modes: normal, insert (press i), command (press :). Open a file, enter insert mode, type text, return to normal mode, save (:w), quit (:q), force quit (:q!). The well-known joke about how to exit vim is used deliberately to normalise the learning curve.
+3:45
+Lab
+Lab 2b Part 2 — Edit and search challenge (60 min) — Tasks: (1) use nano to create a welcome message file, (2) use grep to find all lines containing 'ubuntu' in /etc/passwd, (3) redirect the output of df -h to disk-report.txt, (4) use tail -f on /var/log/syslog for 60 seconds and capture 10 lines. Submit Lab 2b via LMS.
+4:45
+Debrief
+Pipes and redirection patterns (15 min) — Learners share the most useful one-liner discovered during lab. Facilitator adds 3 bonus power commands: sort, uniq, wc -l.
+Formative assessment
+Lab 2b: file structure screenshot and search/edit tasks submitted to LMS
+Facilitator checks vi/vim exit — any learner still stuck gets 1:1 support
+Facilitator notes
+rm -rf deserves a dedicated safety warning — consider a live demo of an accidental deletion and the lesson it teaches
+Tab completion transforms the learning experience — enforce it as a habit from this lesson onwards
+Vim panic is common and can be made humorous — lean into it, the lesson becomes memorable
+The pipe concept is often a lightbulb moment for learners — give it extra time and use multiple real examples
+Lesson 3: Permissions, users & package management
+Week 4 · Day 1  ·  5 hours
+Lesson objectives
+Read and interpret the Linux permissions string (rwxr-xr--)
+Modify permissions using chmod with symbolic and octal notation
+Change file ownership with chown and group with chgrp
+Create users and groups and manage sudo access
+Install, update, and remove packages using apt
+Explain the difference between apt and yum/dnf for RHEL-based systems
+Resources & environment
+Same Ubuntu EC2 lab instance
+Handout: permissions reference card (rwx grid and octal table, printed)
+Lab worksheet: user and permissions scenario (printed)
+Slides: chmod octal notation visual (3-bit binary explanation)
+Port 80 must be open in the EC2 security group before class — pre-configure this
+Session plan
+Time
+Type
+Activity & description
+0:00
+Discussion
+Why permissions matter (20 min) — Real breach scenario: a misconfigured S3 bucket (world-readable) exposed 500,000 SA patient records. The root cause is traced back to the Linux permission model. Sets the security stakes for the entire lesson.
+0:20
+Lecture
+Reading the permissions string (45 min) — Anatomy of ls -la output. File type indicator (-/d/l). Three triads: owner, group, other. r=4, w=2, x=1. Worked examples: rwxr-xr-- = 754. Common patterns: 755 (executable script), 644 (config file), 600 (private SSH key), 777 (dangerous — never use on a server). Sticky bit and setuid briefly introduced.
+1:05
+Lecture
+chmod, chown, and chgrp (30 min) — chmod u+x script.sh (symbolic), chmod 644 file.txt (octal). chown ubuntu:devteam file.txt. chgrp developers /var/app. Sudo: running commands as root. The /etc/sudoers file and the sudo group. NEVER use chmod 777 on production systems.
+1:35
+Lab
+Lab 2c Part 1 — Permissions clinic (40 min) — Scenario: learners are the sysadmin for a fictional SA fintech startup. Tasks: create a file with sensitive data (permissions 600); create a shared team directory writable only by the app group (770); create a public-facing script (755); intentionally break permissions on a test file then fix them. Submit screenshot of ls -la output.
+2:15
+Break
+15 minutes
+2:30
+Lecture
+Users and groups (35 min) — adduser username, userdel -r username, passwd username, usermod -aG groupname user. /etc/passwd and /etc/shadow explained — never store plain text passwords. id, whoami, and groups commands. Creating a service account with no login shell for an application — a common cloud and DevOps practice.
+3:05
+Lecture
+Package management with apt (35 min) — apt update (refresh package index), apt upgrade (apply available updates), apt install package, apt remove, apt purge, apt search term, apt show package. The /etc/apt/sources.list file. Why keeping systems updated is a critical security practice. Brief comparison with yum/dnf for Red Hat-based distributions.
+3:40
+Lab
+Lab 2c Part 2 — User management and package install (60 min) — Tasks: (1) create a new user named webadmin and add to the sudo group, (2) set a password and test sudo access, (3) install the nginx web server via apt, (4) verify nginx is running with systemctl status nginx, (5) access the default nginx page via the EC2 public IP in a browser. Submit Lab 2c — this is the first running service deployment of the course.
+4:40
+Debrief
+Cloud security connection (20 min) — Facilitator connects lesson concepts to Module 5 preview: least privilege principle, service accounts, and patch management. 'Everything you just did is what a cloud sysadmin does every day.'
+Formative assessment
+Lab 2c: permissions screenshots and nginx running confirmation submitted to LMS
+User creation verified: facilitator SSHs as webadmin to confirm access works correctly
+Facilitator notes
+The data breach story sets a serious and motivating tone — use it, it makes the permissions lesson memorable
+Octal notation is confusing at first — use the 3-bit binary analogy: r=100(binary)=4, w=010=2, x=001=1
+Lab 2c Part 2 ending with nginx visible in a browser is a major motivational milestone — celebrate it with the class
+Port 80 must be pre-opened in the EC2 security group before class — if this is missed, the lab cannot complete
+Lesson 4: Bash scripting, system monitoring & SSH
+Week 4 · Day 2  ·  5 hours
+Lesson objectives
+Write a Bash script with variables, conditionals, and loops
+Make scripts executable and schedule them with cron
+Monitor CPU, memory, disk, and processes in real time
+Connect to remote servers using SSH key pairs (passwordless)
+Transfer files between servers using SCP and rsync
+Pass the Module 2 formative quiz at 70% or above
+Resources & environment
+Same Ubuntu EC2 lab instance
+A second EC2 instance or shared class instance for SSH/SCP exercises
+Module 2 Quiz — 20 questions (LMS or printed)
+Bash scripting reference card (one per learner, provided)
+Session plan
+Time
+Type
+Activity & description
+0:00
+Lecture
+Introduction to Bash scripting (40 min) — What is a shell script and why automate? The shebang line (#!/bin/bash). Variables: NAME='Ubuntu'. echo and read (user input). Conditionals: if/then/else/fi. Loops: for and while. Exit codes: $? where 0 = success. Practical cloud use cases: startup scripts, backup jobs, automated health checks.
+0:40
+Demo
+Write a health-check script live (30 min) — Facilitator writes from scratch: a script that checks disk usage (df -h), memory (free -m), and running process count (ps aux | wc -l), then prints a summary report. Learners follow along on their own instances. chmod +x and run it together.
+1:10
+Lab
+Lab 2d Part 1 — Write your own automation script (50 min) — Learners write a backup script that: (1) creates a timestamped directory in /tmp/backups/, (2) copies /home/ubuntu/gda-project into it, (3) prints 'Backup complete: [timestamp]' to a log file. Must complete with exit code 0. Peer review: swap scripts with a classmate and run each other's. Submit Lab 2d-1.
+2:00
+Lecture
+Cron jobs — scheduling automation (20 min) — crontab -e to edit. Cron syntax: minute hour day month weekday. Examples: daily backup at 2am (0 2 * * *), hourly log rotation (0 * * * *). Why cron matters in cloud operations: certificate renewal, database backups, scheduled health checks.
+2:20
+Break
+15 minutes
+2:35
+Lecture
+System monitoring commands (30 min) — top (real-time CPU and memory), htop (improved version — install via apt), ps aux (all running processes), kill / killall (terminate a process by PID or name), df -h (disk space), du -sh * (directory sizes), free -m (RAM in megabytes), uptime and load average interpretation. Scenario: diagnosing a high-load server.
+3:05
+Lecture
+SSH key pairs and secure remote access (30 min) — Public and private key cryptography in plain language using the padlock analogy. ssh-keygen to generate a key pair. The ~/.ssh/authorized_keys file. SSH config file (~/.ssh/config) for server aliases. Disabling password authentication as a security best practice. SSH tunnels briefly mentioned for context.
+3:35
+Lab
+Lab 2d Part 2 — SSH key setup and SCP file transfer (30 min) — Tasks: (1) generate an SSH key pair on the lab instance, (2) copy the public key to the second shared instance using ssh-copy-id, (3) SSH into the second instance without a password, (4) SCP the backup script to the second instance, (5) verify the script runs on the remote server. Submit Lab 2d-2.
+4:05
+Quiz
+Module 2 Formative Quiz (30 min) — 20 multiple-choice questions covering all four lessons. Distribution: Linux history and distributions (3), file system and navigation (4), file operations and text editing (4), permissions and users (5), scripting and monitoring (4). Minimum pass: 14 out of 20 (70%).
+4:35
+Debrief
+Module review and Module 3 preview (25 min) — Review quiz answers and re-teach any question missed by more than 40% of the class. Assign pre-reading: 'What is an IP address?' one-page handout. Preview: 'You can now control a Linux server from the command line. Next, you will connect it to a network and the internet.'
+Formative assessment
+Lab 2d-1: backup script submitted and peer-reviewed — facilitator checks exit codes
+Lab 2d-2: SSH passwordless login and SCP file transfer confirmed
+Module 2 Quiz: 20 questions, 70% pass mark, results recorded in LMS
+Learners below 70% offered a 1:1 catch-up session before Module 3 begins
+Facilitator notes
+The live scripting demo is the most impactful moment of the module — type slowly, explain every line, and expect questions
+Peer script review is intentional: reading someone else's code is a foundational professional skill
+SSH key setup is a hard prerequisite for Module 4 cloud labs — ensure every learner succeeds before leaving this session
+If time is short, trim the cron section to a conceptual overview and protect lab time for SSH keys and SCP
+4.6 Module 2 Quiz — Full Question Bank (20 Questions)
+The following 20 questions constitute the Module 2 formative quiz. Administer on paper or via the LMS. Minimum pass mark: 14/20 (70%). Questions progress from foundational recall to applied problem-solving.
+Q1.  Which company maintains the Linux kernel today?
+A) Microsoft
+B) Apple
+C) The Linux Foundation
+D) Red Hat
+Answer: C    (Linux history — The Linux Foundation stewards the kernel)
+Q2.  What does the shebang line #!/bin/bash tell the operating system?
+A) That the file is read-only
+B) That bash should be used to interpret the script
+C) That the file is encrypted
+D) That sudo is required
+Answer: B    (Lesson 4 — Bash scripting, shebang line)
+Q3.  Which command shows your current directory?
+A) ls
+B) dir
+C) pwd
+D) cd
+Answer: C    (Lesson 1 — navigation: pwd)
+Q4.  What does ls -la display that ls does not?
+A) Only directories
+B) Hidden files, permissions, ownership, and sizes
+C) Files in reverse order
+D) Only files modified today
+Answer: B    (Lesson 1 — ls flags)
+Q5.  Which directory in the Linux FHS stores system-wide configuration files?
+A) /home
+B) /var
+C) /etc
+D) /usr
+Answer: C    (Lesson 1 — FHS: /etc)
+Q6.  What is the correct command to create the directory structure /app/logs/archive in a single command?
+A) mkdir /app/logs/archive
+B) mkdir -p /app/logs/archive
+C) touch /app/logs/archive
+D) cd /app && mkdir logs
+Answer: B    (Lesson 2 — mkdir -p)
+Q7.  A learner runs rm -rf /home/ubuntu/project by mistake. What is the most likely outcome?
+A) The command will ask for confirmation before deleting
+B) Only empty directories are removed
+C) The entire project directory and all its contents are permanently deleted
+D) Files are moved to the recycle bin
+Answer: C    (Lesson 2 — rm -rf danger)
+Q8.  What does the pipe character ( | ) do in a Linux command?
+A) Saves output to a file
+B) Sends the output of one command as input to another
+C) Runs two commands simultaneously
+D) Appends output to an existing file
+Answer: B    (Lesson 2 — pipes)
+Q9.  Which command lets you follow a log file in real time as new entries are written?
+A) cat -f file
+B) less +F file
+C) tail -f file
+D) head -r file
+Answer: C    (Lesson 2 — tail -f)
+Q10.  What does the permissions string rwxr-x--- mean?
+A) Owner: read/write/execute; Group: read/execute; Others: no access
+B) Owner: read only; Group: execute; Others: read/write
+C) Everyone has full access
+D) Owner: read/write; Group: read; Others: execute
+Answer: A    (Lesson 3 — reading permissions string)
+Q11.  A private SSH key should have which permissions to be accepted by SSH?
+A) 777
+B) 755
+C) 644
+D) 600
+Answer: D    (Lesson 3 — chmod 600 for private key security)
+Q12.  What is the octal value for permissions rw-r--r-- (a typical config file)?
+A) 755
+B) 644
+C) 600
+D) 700
+Answer: B    (Lesson 3 — octal notation)
+Q13.  Which command installs a software package on an Ubuntu server?
+A) yum install nginx
+B) apt-get add nginx
+C) apt install nginx
+D) install nginx --ubuntu
+Answer: C    (Lesson 3 — apt package management)
+Q14.  What does sudo do?
+A) Switches to a different user permanently
+B) Runs a command with root (superuser) privileges
+C) Shows which user is logged in
+D) Lists available users on the system
+Answer: B    (Lesson 3 — sudo)
+Q15.  Which file contains the list of all user accounts on a Linux system?
+A) /etc/shadow
+B) /etc/groups
+C) /etc/passwd
+D) /home/users
+Answer: C    (Lesson 3 — /etc/passwd)
+Q16.  What is the first line of a valid Bash script?
+A) #start/bash
+B) #!/bin/bash
+C) //bash
+D) @bash
+Answer: B    (Lesson 4 — shebang line)
+Q17.  What exit code indicates a command completed successfully in Linux?
+A) 1
+B) -1
+C) 0
+D) 255
+Answer: C    (Lesson 4 — exit codes)
+Q18.  Which command shows real-time CPU and memory usage for all running processes?
+A) ps
+B) df
+C) free
+D) top
+Answer: D    (Lesson 4 — top command)
+Q19.  What is the purpose of the ~/.ssh/authorized_keys file?
+A) It stores the server's private key
+B) It lists public keys that are allowed to log in without a password
+C) It contains the SSH server configuration
+D) It logs all SSH connection attempts
+Answer: B    (Lesson 4 — SSH key-based authentication)
+Q20.  A learner wants to copy a script named backup.sh from their local server to a remote server at IP 10.0.0.5 into the /home/ubuntu/ directory. Which command is correct?
+A) ssh ubuntu@10.0.0.5 backup.sh /home/ubuntu/
+B) cp backup.sh ubuntu@10.0.0.5:/home/ubuntu/
+C) scp backup.sh ubuntu@10.0.0.5:/home/ubuntu/
+D) rsync ubuntu@10.0.0.5 backup.sh
+Answer: C    (Lesson 4 — SCP file transfer)
+
+--- FOLDER: tmp_GDA_CloudLaunchpad_Phase5_Module3 ---
+GINASHE DIGITAL ACADEMY
+Cloud Computing Track — Foundation Level
+Cloud Launchpad
+Phase 5: Module 3 — Networking Fundamentals
+NQF Level 4  ·  Module 3 of 6
+20 Contact Hours  ·  Weeks 5 – 6
+SETA Unit Standards: US 114076 · US 259604
+4 Lessons  ·  4 Lab Exercises  ·  20-Question Quiz  ·  VPC Build Lab
+MICT SETA  ·  QCTO Accreditation Pathway
+Prepared by Ginashe Group — 12 April 2026
+5
+PHASE
+Module 3: Networking Fundamentals
+Full lesson plan — 4 lessons, 20 hours, Weeks 5–6
+5.1 Module Overview
+Networking is the connective tissue of the cloud. Every cloud service, every API call, every SSH connection, and every web request travels over a network governed by the protocols and principles in this module. Without networking knowledge, a cloud practitioner can deploy a server but cannot connect it to anything. By the end of this module, every learner will have designed, built, and troubleshot a real AWS VPC — applying IP addressing, routing, firewall rules, and DNS concepts in a live cloud environment.
+Module
+Weeks
+Hours
+SETA US
+Module 3 of 6
+Weeks 5 – 6
+20 hours / 4 lessons
+US 114076 · US 259604
+5.2 Module Learning Outcomes
+On completion of Module 3 learners will be able to:
+Explain the OSI and TCP/IP models and map real protocols to each layer
+Calculate valid host ranges, network addresses, and broadcast addresses using CIDR subnetting
+Describe how DNS resolves domain names to IP addresses and troubleshoot with nslookup and dig
+Explain DHCP's role in automatic IP assignment and identify its four-step handshake (DORA)
+Describe how routers forward packets using routing tables and distinguish static from dynamic routing
+Configure basic firewall rules using iptables and ufw on a Linux server
+Explain NAT, PAT, and VPN concepts and identify their use cases in cloud environments
+Design a basic AWS VPC with public and private subnets, an internet gateway, and security groups
+Use networking diagnostic tools — ping, traceroute, netstat, nmap, and Wireshark — to troubleshoot connectivity
+5.3 OSI Model — Full Layer Reference
+The following table maps all 7 OSI layers to their TCP/IP equivalents, key protocols, and primary functions. Learners receive this as a laminated reference card to keep throughout the Cloud Launchpad course.
+Layer
+Key Protocols
+Function
+TCP/IP Equivalent
+7 — Application
+HTTP, HTTPS, FTP, SMTP, DNS, SSH
+End-user services and protocols
+Application
+6 — Presentation
+SSL/TLS, JPEG, ASCII, MPEG
+Data encoding, encryption, compression
+Application
+5 — Session
+NetBIOS, RPC, PPTP
+Session establishment and management
+Application
+4 — Transport
+TCP, UDP
+End-to-end delivery, ports, reliability
+Transport
+3 — Network
+IP, ICMP, ARP, routing
+Logical addressing and path selection
+Internet
+2 — Data Link
+Ethernet, Wi-Fi (802.11), MAC
+Physical addressing, frame delivery
+Network Access
+1 — Physical
+Cat6, fibre optic, Wi-Fi signals
+Bits on the wire — cables and signals
+Network Access
+5.4 CIDR Subnet Reference Table
+The following table covers the most commonly used CIDR prefix lengths in cloud networking. Learners use this reference during the subnetting workshop in Lesson 2 and throughout the VPC design labs.
+CIDR
+Subnet Mask
+Usable Hosts
+Common Use
+/8
+255.0.0.0
+16,777,214
+10.0.0.0/8 — Class A private
+/12
+255.240.0.0
+1,048,574
+172.16.0.0/12 — Class B private
+/16
+255.255.0.0
+65,534
+172.16.0.0/16 — typical VPC CIDR
+/20
+255.255.240.0
+4,094
+Default AWS VPC subnet size
+/24
+255.255.255.0
+254
+Standard subnet — 1 per AZ
+/25
+255.255.255.128
+126
+Splitting a /24 into two halves
+/26
+255.255.255.192
+62
+Smaller subnet — 4 per /24
+/27
+255.255.255.224
+30
+30 hosts — small service subnet
+/28
+255.255.255.240
+14
+14 hosts — tiny subnet
+/30
+255.255.255.252
+2
+Point-to-point link — 2 hosts only
+/32
+255.255.255.255
+1 (host route)
+Single host — used in SG rules
+5.5 Lesson Plans
+Lesson 1: OSI model, TCP/IP & how data moves across a network
+Week 5 · Day 1  ·  5 hours
+Lesson objectives
+Name and describe all 7 OSI layers with a real protocol example per layer
+Compare OSI and TCP/IP models and map layers between them
+Explain the TCP three-way handshake (SYN, SYN-ACK, ACK)
+Distinguish TCP from UDP and select the right protocol for a given use case
+Use ping and traceroute to test basic network connectivity
+Resources & environment
+Lab: Ubuntu EC2 instance from Module 2 (still running in AWS)
+Slides: OSI model visual and TCP/IP comparison diagram
+Handout: OSI layer reference card — laminated, learners keep for the course
+Wireshark installed on facilitator laptop for live packet capture demo
+Printed: TCP handshake sequence worksheet (one per learner)
+Session plan
+Time
+Type
+Activity & description
+0:00
+Discussion
+What happens when you type a URL? (20 min) — Learners guess aloud what happens between typing www.sars.gov.za and seeing the tax return page. Facilitator builds a rough map on the whiteboard. This becomes the thread that the rest of the lesson answers, layer by layer.
+0:20
+Lecture
+The OSI model — why 7 layers? (50 min) — Each layer explained with a SA analogy: Physical = the N1 highway (the road itself); Data Link = vehicle number plates (MAC addresses identifying each device on the local road); Network = GPS routing (IP addressing, finding the best path across the country); Transport = a courier company's tracking system (TCP/UDP guarantees on delivery); Session = maintaining an active phone call connection; Presentation = a bilingual secretary translating and encrypting messages; Application = the actual conversation (HTTP, email, DNS). Real protocols mapped to every layer.
+1:10
+Lecture
+TCP/IP model and the protocol suite (30 min) — Four layers of TCP/IP vs seven of OSI. How they map across. IP at Layer 3: logical addressing, best-effort delivery. TCP at Layer 4: connection-oriented, reliable, ordered delivery. UDP at Layer 4: connectionless, fast, tolerates some packet loss. Real-world decisions: video streaming uses UDP because live is better than perfect; file transfer uses TCP because every single byte must arrive.
+1:40
+Lecture
+The TCP three-way handshake (30 min) — SYN (client says hello) → SYN-ACK (server acknowledges and replies) → ACK (client confirms). Why this matters: security context (SYN flood denial-of-service attacks), cloud context (load balancer health checks that depend on completed handshakes). TCP vs UDP decision matrix for cloud architects introduced.
+2:10
+Break
+15 minutes
+2:25
+Demo
+Wireshark live packet capture (30 min) — Facilitator opens Wireshark on their laptop, browses to a website, and shows learners the raw TCP handshake, DNS queries, and HTTP traffic visible in the packet capture. Identifies each OSI layer in a real captured packet. Learners observe — no Wireshark installation is required on EC2 instances for this session.
+2:55
+Lab
+Lab 3a — Ping, traceroute, and netstat (65 min) — From their EC2 instances learners: (1) ping google.com and count hops from AWS Cape Town; (2) run traceroute to 8.8.8.8 and map each hop; (3) ping a classmate's EC2 private IP within the same VPC; (4) run netstat -tulnp and identify which ports are listening; (5) install and run nmap on localhost. Record all output and annotate: which OSI layer does each tool primarily operate at? Submit Lab 3a.
+4:00
+Workshop
+OSI layer card sort (40 min) — Printed cards with 21 items (protocols, tools, devices, error types). Learners sort items into the correct OSI layer. Teams compare results and debate differences. Facilitator reveals answers and explains the 3 most commonly confused items in detail.
+4:40
+Wrap-up
+URL revisited (20 min) — Return explicitly to the opening question. Learners now fill in the whiteboard map with the correct layers, protocols, and handshakes. Closing statement: 'You now understand what happens when you type a URL — all 7 layers of it.'
+Formative assessment
+Lab 3a: ping, traceroute, and netstat output with OSI layer annotations submitted to LMS
+OSI card sort accuracy reviewed — top 3 disputed cards discussed with the class
+Facilitator notes
+The SA highway analogy for the OSI model resonates strongly with learners — build on it consistently for every layer
+Wireshark installation on EC2 instances is unnecessary for this lesson — screen sharing the facilitator laptop is more effective and faster
+The URL opening question is a powerful framing device — return to it explicitly at the end to create a sense of completion
+Allow traceroute to run fully to completion — seeing AWS Cape Town hops routing to international destinations is visually motivating
+Lesson 2: IP addressing, subnetting & CIDR notation
+Week 5 · Day 2  ·  5 hours
+Lesson objectives
+Distinguish IPv4 from IPv6 and explain why IPv6 was developed
+Identify public vs private IP address ranges (RFC 1918)
+Convert between binary and dotted-decimal IP notation
+Calculate subnet mask, network address, broadcast address, and valid host range from a given CIDR block
+Apply subnetting skills to design a small network for a SA business scenario
+Resources & environment
+Slides: IPv4 address class diagram and CIDR prefix table
+Printed: subnetting worksheet — 6 practice problems of increasing difficulty (one per learner)
+Handout: CIDR cheat sheet (/8 to /30 quick reference — printed)
+Online subnet calculator for answer checking: subnet.tools
+EC2 lab instances for ip addr and ip route commands
+Session plan
+Time
+Type
+Activity & description
+0:00
+Review
+OSI speed round (15 min) — Facilitator names a protocol or networking tool; learners call out the correct OSI layer. Fast pace, high energy. Quickly addresses any remaining gaps from Lesson 1.
+0:15
+Lecture
+IPv4 — the 32-bit address (40 min) — Four octets in dotted-decimal notation. 2 to the power of 32 equals approximately 4.3 billion addresses — a supply almost completely exhausted. Address classes A, B, C as historical context. Private ranges per RFC 1918: 10.0.0.0/8, 172.16.0.0/12, and 192.168.0.0/16 — used inside cloud VPCs and home networks. Loopback: 127.0.0.1. APIPA 169.254.x.x — what it means when a server has this address (DHCP has failed). Special addresses: 0.0.0.0 (any interface) and 255.255.255.255 (broadcast all).
+0:55
+Lecture
+Binary arithmetic and subnet masks (45 min) — Dotted-decimal to binary conversion practised step by step. Subnet mask defines the boundary between network and host portions. CIDR notation: /24 = 256 total addresses, /25 = 128, /26 = 64, /27 = 32. Formula: usable hosts = 2 to the power of (32 minus prefix length), then subtract 2 for network and broadcast addresses. Network address: all host bits set to 0. Broadcast address: all host bits set to 1. Worked example in full: 192.168.10.0/26 — network address 192.168.10.0, broadcast .63, valid hosts .1 through .62 (62 usable hosts).
+1:40
+Workshop
+Subnetting practice — 6 problems (50 min) — Learners work through printed worksheet individually, then compare answers with a partner. Problems progress from /24 (straightforward) to /27 (more challenging). Facilitator circulates and assists. Top 3 common mistakes reviewed with the class. Online calculator used only after learners have attempted each problem manually.
+2:30
+Break
+15 minutes
+2:45
+Lecture
+IPv6 — the 128-bit future (25 min) — Why IPv6 was developed: IPv4 address exhaustion, explosive IoT growth, Africa's mobile-first internet connectivity patterns. 128-bit hexadecimal notation example: 2001:db8::1. Dual-stack operation (running both IPv4 and IPv6 simultaneously). AWS Cape Town supports IPv6. IPv6 is not the primary focus of this course but learners must be able to recognise an IPv6 address.
+3:10
+Lecture
+DNS and DHCP (35 min) — DNS hierarchy: root servers → TLD (.co.za, .com) → authoritative nameserver → client cache. DNS record types: A (maps name to IPv4), AAAA (IPv6), CNAME (alias), MX (mail routing), TXT (SPF records, domain verification). TTL — why cached DNS can cause problems during cloud migrations or IP changes. .co.za domain context for South African businesses. DHCP DORA handshake: Discover, Offer, Request, Acknowledge — four steps to automatic IP assignment.
+3:45
+Lab
+Lab 3b — IP addressing and DNS (60 min) — From EC2 instances: (1) run ip addr show and identify the private IP address and CIDR prefix; (2) run ip route to see the default gateway; (3) manually calculate the network address, broadcast address, and number of usable hosts for the EC2 subnet; (4) use nslookup sars.gov.za to trace DNS resolution to a South African government domain; (5) use dig google.com and identify the TTL, the A record value, and the authoritative name server; (6) compare public IP via curl ifconfig.me with the private IP. Submit Lab 3b with handwritten annotations.
+4:45
+Debrief
+Subnetting in the cloud (15 min) — Facilitator shows a real AWS VPC subnet design: a 10.0.0.0/16 VPC divided into /24 subnets per availability zone. Closing statement: 'Every subnet you will design in AWS from Module 4 onwards uses exactly the skills you practised today.'
+Formative assessment
+Subnetting worksheet: 6 problems marked — expected 5 out of 6 correct before advancing to next lesson
+Lab 3b: IP addressing and DNS output with annotations submitted to LMS
+Facilitator notes
+Subnetting is reliably the hardest concept in this module — allocate extra time and draw the binary bit breakdown on the board for every worked example
+The APIPA address 169.254.x.x is a powerful cloud diagnostic clue that learners will actually use in their careers — emphasise it clearly
+The connection between today's subnetting practice and tomorrow's AWS VPC build is critical for learner motivation — make this link explicit
+Learners who still struggle after 6 practice problems: pair them with a peer who grasped the concept quickly during Lab 3b
+Lesson 3: Routing, firewalls, NAT & VPN
+Week 6 · Day 1  ·  5 hours
+Lesson objectives
+Explain how routers use routing tables to forward packets hop by hop
+Distinguish static from dynamic routing at a conceptual level (RIP, OSPF, BGP)
+Configure basic allow and deny rules using ufw on an Ubuntu server
+Explain how NAT and PAT allow private IP addresses to reach the internet
+Describe VPN types — site-to-site and client VPN — and their cloud use cases
+Relate all concepts to AWS VPC internet gateways, NAT gateways, and security groups
+Resources & environment
+EC2 lab instance with ufw available (sudo apt install ufw if not already present)
+Slides: routing table diagram and NAT translation table diagram
+Handout: ufw command quick-reference card (one per learner)
+AWS console access for VPC routing table live demo
+Printed: firewall rule design scenario worksheet
+Session plan
+Time
+Type
+Activity & description
+0:00
+Discussion
+How does a packet know where to go? (20 min) — Learners attempt to trace a packet's journey from a Cape Town server to a client in Lagos, Nigeria. What decisions are made at each hop? Who makes them? This surfaces the need for routing tables and introduces the lesson's central question.
+0:20
+Lecture
+Routing fundamentals (45 min) — Routers operate at OSI Layer 3. Routing table anatomy: destination network, subnet mask, next hop, outgoing interface, and metric. The default route (0.0.0.0/0) as the exit route of last resort. Static routing: manually configured, predictable, no protocol overhead — commonly used in small networks and cloud subnet configurations. Dynamic routing protocols at a conceptual level: RIP (distance-vector, counts hops), OSPF (link-state, calculates shortest path), BGP (the internet's backbone protocol — AWS uses BGP for Site-to-Site VPN connections and AWS Direct Connect).
+1:05
+Lecture
+Firewalls — packet filtering and stateful inspection (40 min) — Three generations of firewalls: packet-filtering (Layer 3 and 4 — checks source/destination IP and port), stateful inspection (tracks the state of each connection, allows established traffic back in), application-layer firewalls (Layer 7 — understands HTTP, DNS, and application content). Default-deny philosophy: deny all inbound traffic by default and permit only what is explicitly needed. AWS Security Groups as stateful firewalls. AWS Network ACLs as stateless packet filters — the key difference and when each is used.
+1:45
+Lab
+Lab 3c Part 1 — Configure ufw on Ubuntu (40 min) — Tasks: (1) enable ufw; (2) set default policy to deny all incoming; (3) allow SSH on port 22 from a specific IP address only; (4) allow HTTP on port 80 from any source; (5) explicitly deny port 8080; (6) verify rules with ufw status verbose; (7) test: confirm nginx is reachable on port 80 from a browser but port 8080 is correctly blocked. Submit Lab 3c-1 screenshot.
+2:25
+Break
+15 minutes
+2:40
+Lecture
+NAT and PAT (30 min) — Network Address Translation as the practical solution to IPv4 exhaustion. Static NAT: maps one private IP to one public IP (one-to-one). PAT (Port Address Translation): many private IP addresses share a single public IP address by using different port numbers — this is exactly what your home router and an AWS NAT Gateway do. The translation table explained. Why cloud VMs are assigned private IP addresses but are reachable from the internet via Elastic IPs, public subnets, or load balancers.
+3:10
+Lecture
+VPN fundamentals (30 min) — VPNs create encrypted tunnels over untrusted public networks. Two primary types: Site-to-Site VPN (connects two networks — for example a Johannesburg office to an AWS Cape Town VPC over the internet using IPSec); Client VPN (a remote worker connects their laptop securely to a corporate network). SSL/TLS VPN versus IPSec VPN — use cases for each. AWS Site-to-Site VPN Gateway and AWS Direct Connect briefly introduced as enterprise connectivity options.
+3:40
+Demo
+AWS VPC routing table live walkthrough (30 min) — Facilitator opens the AWS console and demonstrates: a VPC route table showing the 10.0.0.0/16 local route and the 0.0.0.0/0 route pointing to the Internet Gateway. A private subnet route table with 0.0.0.0/0 pointing to a NAT Gateway. Security group inbound and outbound rules. Learners follow in their own consoles simultaneously. Closing statement: 'This is everything from the last two lessons — running live in AWS.'
+4:10
+Workshop
+Firewall rule design scenario (35 min) — Learners receive a written brief: a three-tier web application with a public-facing web server tier, a middle application server tier, and a back-end database tier. Task: design the complete set of firewall rules allowing only the necessary traffic between tiers and from the internet. Groups present their rule sets. Facilitator highlights the least-privilege design principle.
+4:45
+Wrap-up
+Networking stack review (15 min) — Quick whiteboard summary tracing a complete request: from a user's browser in Durban to an AWS EC2 instance in Cape Town. Every concept from the module is touched: DNS resolution, IP addressing, routing, NAT, firewall, and TCP handshake.
+Formative assessment
+Lab 3c-1: ufw configuration screenshot and port blocking test results submitted to LMS
+Firewall design scenario: peer-reviewed rule sets assessed for least-privilege compliance by the facilitator
+Facilitator notes
+The AWS VPC demo is the payoff moment of this lesson — ensure stable internet access and have console pre-authenticated before class
+PAT is frequently confused with NAT — use the post office analogy: NAT is a dedicated PO Box for one person; PAT is one PO Box with numbered slots that serves an entire building
+The three-tier firewall design scenario intentionally has no single correct answer — productive debate between groups is the learning objective
+Briefly mention BGP by name — learners will encounter it when studying AWS Direct Connect and global routing later in the course
+Lesson 4: Cloud networking — designing a VPC & module wrap-up
+Week 6 · Day 2  ·  5 hours
+Lesson objectives
+Explain the key components of an AWS VPC: subnets, internet gateway, route tables, security groups, and NACLs
+Design a VPC with public and private subnets across two availability zones on paper before building
+Deploy and configure a complete VPC from scratch using the AWS console
+Troubleshoot a cloud network connectivity fault using the OSI bottom-up methodology
+Pass the Module 3 formative quiz at 70% or above
+Resources & environment
+AWS console access — learner free-tier accounts
+Slides: VPC architecture diagram showing 2-AZ public and private subnet design
+Lab worksheet: VPC build guide — step-by-step with screenshots (printed)
+Module 3 Quiz — 20 questions (LMS or printed)
+IMPORTANT — cost note: do NOT create a NAT Gateway in this lab (hourly charge applies). Use only the free Internet Gateway.
+Session plan
+Time
+Type
+Activity & description
+0:00
+Lecture
+AWS VPC architecture deep dive (45 min) — VPC: your private, logically isolated network inside AWS. CIDR block selection for VPCs (10.0.0.0/16 recommended for learning — 65,534 usable addresses). Subnets: a public subnet has a route to the Internet Gateway (reachable from the internet); a private subnet routes to a NAT Gateway or has no internet route. Internet Gateway: the door to and from the public internet. Route tables: one per subnet type, not one per subnet. Security Groups: stateful, applied at the instance level — think of them as a firewall around each server. NACLs: stateless, applied at the subnet level — check every packet individually in both directions. Availability Zones for high availability and redundancy. Elastic IPs for static public addressing.
+0:45
+Workshop
+Design your VPC on paper before touching the console (30 min) — Each learner draws their VPC design: a 10.0.0.0/16 VPC in af-south-1 (Cape Town). Two availability zones: af-south-1a and af-south-1b. One public subnet per AZ using /24 CIDR. One private subnet per AZ using /24 CIDR. Internet Gateway attached. Separate route tables for public and private subnets. Facilitator reviews all designs before the lab begins — common mistakes corrected on paper first, not in the console.
+1:15
+Lab
+Lab 3d — Build a VPC from scratch in the AWS console (90 min) — Step-by-step guided build: (1) create a VPC with CIDR 10.0.0.0/16 in af-south-1; (2) create 4 subnets — 10.0.1.0/24 and 10.0.2.0/24 as public, 10.0.11.0/24 and 10.0.12.0/24 as private, each in a different AZ; (3) create an Internet Gateway and attach it to the VPC; (4) create a public route table with a 0.0.0.0/0 route pointing to the IGW, then associate it with both public subnets; (5) create a security group allowing SSH from your IP and HTTP from 0.0.0.0/0; (6) launch an EC2 instance into one public subnet with the new security group; (7) confirm successful SSH access from your laptop. Submit Lab 3d: VPC architecture screenshot plus SSH connection confirmation.
+2:45
+Break
+15 minutes
+3:00
+Lecture
+Network troubleshooting methodology (30 min) — The OSI bottom-up diagnostic approach: start at Layer 1 (is the network interface up?), move to Layer 3 (can I ping the default gateway?), test Layer 4 (is the target port open?), test Layer 7 (is the application responding correctly?). Cloud-specific troubleshooting checklist: verify security group inbound rules, check NACL inbound and outbound rules, confirm route table has the correct routes, verify the Internet Gateway is attached, confirm the subnet has auto-assign public IP enabled for public subnets. The 5 most common VPC connectivity mistakes and how to diagnose each.
+3:30
+Workshop
+Break-fix scenario (30 min) — Facilitator pre-breaks a shared demo VPC with two intentional faults (a misconfigured route table missing the IGW route and an incorrect security group rule blocking SSH). Learners work in pairs to diagnose both faults and restore connectivity using the OSI troubleshooting methodology. The first pair to resolve both faults and explain the root cause of each wins. This exercise directly mirrors real cloud support and cloud engineering interview scenarios.
+4:00
+Quiz
+Module 3 Formative Quiz (30 min) — 20 multiple-choice questions across all four lessons. Distribution: OSI and TCP/IP models (4), IP addressing and subnetting (5), DNS and DHCP (3), routing and firewalls (4), VPC and cloud networking (4). Minimum pass mark: 14 out of 20 (70%).
+4:30
+Debrief
+Quiz review and Module 4 preview (30 min) — Review the answers to any question missed by more than 40% of learners and re-teach those concepts. Preview Module 4: 'You now have a running Linux server inside a custom VPC that you designed and built from scratch. In Module 4 you will add enterprise-grade compute, managed storage, databases, and identity and access management — that is Cloud Infrastructure.'
+Formative assessment
+Lab 3d: VPC architecture screenshot and EC2 SSH connection confirmation submitted to LMS
+Break-fix scenario: root cause explanation for both faults assessed verbally by facilitator
+Module 3 Quiz: 20 questions, 70% pass mark, results recorded in LMS
+Learners below 70% offered a 1:1 catch-up session before Module 4 begins
+Facilitator notes
+The VPC build lab is the most complex hands-on exercise so far in the course — allocate the full 90 minutes and circulate constantly to prevent learners getting stuck silently
+CRITICAL cost warning: remind learners clearly and repeatedly not to create a NAT Gateway during this lab — it incurs an hourly charge even when no traffic flows
+The break-fix scenario closely mirrors real cloud support interviews at AWS, Microsoft, and local SA cloud service providers — position it explicitly as career preparation
+After this module every learner has: a Linux server they can control from the CLI, inside a VPC they designed and built — this is the complete foundation for Module 4
+5.6 Module 3 Quiz — Full Question Bank (20 Questions)
+The following 20 questions constitute the Module 3 formative quiz. Administer on paper or via the LMS. Minimum pass mark: 14 out of 20 (70%). Questions are ordered from foundational recall to applied scenario-based reasoning.
+Q1.  At which OSI layer does IP addressing and path selection occur?
+A) Layer 2 — Data Link
+B) Layer 3 — Network
+C) Layer 4 — Transport
+D) Layer 5 — Session
+Answer: B    (Lesson 1 — OSI Layer 3 (Network))
+Q2.  Which protocol guarantees ordered, reliable delivery of data?
+A) UDP
+B) ICMP
+C) TCP
+D) DNS
+Answer: C    (Lesson 1 — TCP vs UDP)
+Q3.  What are the three steps of the TCP three-way handshake in the correct order?
+A) ACK, SYN, SYN-ACK
+B) SYN, ACK, SYN-ACK
+C) SYN, SYN-ACK, ACK
+D) SYN-ACK, SYN, ACK
+Answer: C    (Lesson 1 — TCP handshake)
+Q4.  A live sports video stream uses UDP rather than TCP. Why?
+A) UDP encrypts data automatically
+B) TCP is not supported on mobile networks
+C) A slightly dropped frame is acceptable but delay is not
+D) UDP is more expensive and therefore higher quality
+Answer: C    (Lesson 1 — TCP vs UDP use case)
+Q5.  Which private IP range is defined by RFC 1918 and commonly used as a VPC CIDR block?
+A) 172.32.0.0/12
+B) 10.0.0.0/8
+C) 192.0.2.0/24
+D) 203.0.113.0/24
+Answer: B    (Lesson 2 — RFC 1918 private ranges)
+Q6.  A server has been assigned the IP address 169.254.10.5. What does this indicate?
+A) The server has a valid static IP
+B) DHCP has failed and the server self-assigned an APIPA address
+C) The server is in a private cloud subnet
+D) The server is using IPv6
+Answer: B    (Lesson 2 — APIPA 169.254.x.x)
+Q7.  Using the CIDR block 10.0.1.0/26, what is the maximum number of usable host addresses?
+A) 126
+B) 64
+C) 62
+D) 30
+Answer: C    (Lesson 2 — CIDR subnetting: 2^(32-26) - 2 = 62)
+Q8.  For the subnet 192.168.5.0/28, what is the broadcast address?
+A) 192.168.5.255
+B) 192.168.5.15
+C) 192.168.5.16
+D) 192.168.5.14
+Answer: B    (Lesson 2 — broadcast address: /28 = 16 addresses, last = .15)
+Q9.  Which DNS record type maps a domain name to an IPv4 address?
+A) CNAME
+B) MX
+C) TXT
+D) A
+Answer: D    (Lesson 2 — DNS A record)
+Q10.  What does TTL mean in the context of DNS?
+A) Total Transfer Limit — maximum file size that DNS can resolve
+B) Time to Live — how long a DNS record is cached before being refreshed
+C) Transfer Timing Level — the speed of DNS resolution
+D) Terminal Type Lookup — the protocol used by DNS
+Answer: B    (Lesson 2 — DNS TTL)
+Q11.  A router receives a packet destined for 172.16.5.10 and has no specific route for this network. Which route entry will it use?
+A) 172.16.0.0/16 if present, otherwise it drops the packet
+B) The default route 0.0.0.0/0 as the exit of last resort
+C) The loopback route 127.0.0.0/8
+D) It broadcasts to all connected networks
+Answer: B    (Lesson 3 — default route 0.0.0.0/0)
+Q12.  Which routing protocol is used on the global internet and by AWS for VPN and Direct Connect connections?
+A) RIP
+B) OSPF
+C) BGP
+D) EIGRP
+Answer: C    (Lesson 3 — BGP as the internet routing protocol)
+Q13.  What is the key difference between a stateful firewall and a stateless firewall?
+A) Stateful firewalls are faster
+B) A stateful firewall tracks connection state and automatically allows return traffic; stateless checks every packet independently
+C) Stateless firewalls support IPv6; stateful firewalls do not
+D) There is no practical difference
+Answer: B    (Lesson 3 — stateful vs stateless firewalls)
+Q14.  PAT (Port Address Translation) allows many private IP addresses to share one public IP address. How does it distinguish between different internal hosts?
+A) By using different VLANs
+B) By using unique port numbers in the translation table
+C) By assigning a separate public IP per session
+D) By using MAC addresses
+Answer: B    (Lesson 3 — PAT port-based translation)
+Q15.  An AWS security group is best described as:
+A) A stateless packet filter applied at the subnet level
+B) A network-layer router used between subnets
+C) A stateful firewall applied at the EC2 instance level
+D) A DNS firewall blocking malicious domain queries
+Answer: C    (Lesson 3 — AWS security groups as stateful instance-level firewalls)
+Q16.  What is the purpose of an Internet Gateway in an AWS VPC?
+A) To allow private subnets to reach the internet via NAT
+B) To connect two VPCs using private routing
+C) To route traffic between availability zones within a region
+D) To allow resources in public subnets to communicate directly with the internet
+Answer: D    (Lesson 4 — AWS Internet Gateway function)
+Q17.  In an AWS VPC, which component controls traffic at the subnet level and is stateless?
+A) Security Group
+B) Network ACL (NACL)
+C) Internet Gateway
+D) Elastic IP
+Answer: B    (Lesson 4 — AWS NACL as stateless subnet-level filter)
+Q18.  A learner creates a public subnet in AWS but their EC2 instance cannot be reached from the internet. Using OSI bottom-up troubleshooting, what should they check FIRST?
+A) Whether the application is running on the instance
+B) Whether the DNS name resolves correctly
+C) Whether the subnet has a route to the Internet Gateway and the security group allows the traffic
+D) Whether the instance has enough CPU to handle connections
+Answer: C    (Lesson 4 — VPC troubleshooting methodology)
+Q19.  Which CIDR block is recommended for a learning VPC in AWS to provide sufficient address space across multiple subnets?
+A) 10.0.0.0/24
+B) 192.168.1.0/28
+C) 10.0.0.0/16
+D) 172.31.0.0/8
+Answer: C    (Lesson 4 — VPC design: 10.0.0.0/16)
+Q20.  During the DHCP DORA process, what does the 'O' stand for and what does it represent?
+A) Origin — the server recording the client's MAC address in its lease table
+B) Offer — the DHCP server proposing an available IP address to the client
+C) Ownership — the client claiming the IP address permanently
+D) Override — the server overwriting an existing lease for the same MAC address
+Answer: B    (Lesson 2 — DHCP DORA: Discover, Offer, Request, Acknowledge)
+
+--- FOLDER: tmp_GDA_CloudLaunchpad_Phase6_Module4 ---
+GINASHE DIGITAL ACADEMY
+Cloud Computing Track — Foundation Level
+Cloud Launchpad
+Phase 6: Module 4 — Cloud Infrastructure
+NQF Level 4  ·  Module 4 of 6
+25 Contact Hours  ·  Weeks 7 – 8  ·  5 Lessons
+SETA Unit Standards: US 116928 · US 259606
+Compute · Storage · Databases · IAM · Billing · 2-Tier App Deployment
+MICT SETA  ·  QCTO Accreditation Pathway
+Prepared by Ginashe Group — 12 April 2026
+6
+PHASE
+Module 4: Cloud Infrastructure
+Full lesson plan — 5 lessons, 25 hours, Weeks 7–8
+6.1 Module Overview
+This is the largest and most hands-on module in Cloud Launchpad. It assembles every skill from the previous three modules into a complete, running cloud application. By the end of Week 8, every learner will have deployed a 2-tier web application — a public-facing EC2 web server connected to a private RDS database — secured with IAM roles and monitored with a cost budget alert. This is production-pattern cloud architecture at the foundational level.
+Module
+Weeks
+Hours
+Lessons
+SETA US
+Module 4 of 6
+Weeks 7 – 8
+25 hours
+5 lessons
+US 116928 · US 259606
+6.2 AWS and Azure Services Covered — Cross-Provider Reference
+This module teaches cloud infrastructure concepts using AWS as the primary platform while mapping every service to its Azure equivalent. Learners leave with transferable skills for both hyperscalers.
+Category
+AWS Service
+Azure Equivalent
+Description
+Compute
+Amazon EC2
+Azure Virtual Machines
+Virtual servers with full OS control
+Compute — PaaS
+AWS Elastic Beanstalk
+Azure App Service
+Managed app hosting without server config
+Object Storage
+Amazon S3
+Azure Blob Storage
+Unlimited object storage, HTTP access
+Block Storage
+Amazon EBS
+Azure Managed Disks
+Persistent disk volumes for VMs
+File Storage
+Amazon EFS
+Azure Files
+Shared NFS/SMB file systems
+Relational DB
+Amazon RDS
+Azure SQL Database / Azure DB for MySQL
+Managed SQL databases
+NoSQL DB
+Amazon DynamoDB
+Azure Cosmos DB
+Serverless key-value / document store
+IAM
+AWS IAM
+Azure Active Directory / Entra ID
+Identity, access control, policies
+Billing
+AWS Cost Explorer
+Azure Cost Management
+Spend analysis and budget alerts
+CLI
+AWS CLI (aws)
+Azure CLI (az)
+Command-line management of cloud resources
+6.3 Module Learning Outcomes
+On completion of Module 4 learners will be able to:
+Select an appropriate EC2/VM instance type for a given workload and explain the compute, memory, and storage trade-offs
+Launch, configure, connect to, and terminate an EC2 instance using both the AWS console and the AWS CLI
+Explain the three primary cloud storage types (object, block, file) and select the right type for a given use case
+Create and manage an S3 bucket including permissions, versioning, lifecycle rules, and static website hosting
+Deploy a managed relational database (RDS MySQL or PostgreSQL) and connect to it securely from an EC2 instance
+Apply IAM best practices: root account protection, MFA, least-privilege policies, roles versus users, and service accounts
+Create and attach IAM policies to users and roles using both the console and JSON policy documents
+Read and interpret a cloud billing dashboard and set up a cost budget alert
+Deploy a complete 2-tier web application (EC2 web server + RDS database) inside the Module 3 VPC
+Use the AWS CLI to perform core infrastructure operations: describe, create, and terminate resources from the command line
+6.4 Pre-Module Checklist
+Before Lesson 1 begins, confirm the following for every learner:
+Module 3 VPC is still present in AWS (public and private subnets, Internet Gateway, route tables, security groups)
+AWS free-tier account is active and not approaching resource limits
+Billing and Cost Management access is enabled for IAM users in the root account settings
+Authenticator app (Google Authenticator or Authy) is installed on the learner's smartphone for MFA setup in Lesson 4
+RDS free tier confirmed: db.t3.micro, 20 GB storage maximum — enforce at every lesson
+Lab cleanup guide distributed: learners must delete RDS instances and detached EBS volumes after each lab to avoid charges
+6.5 Lesson Plans
+Lesson 1: Cloud compute — EC2, instance types & the AWS CLI
+Week 7 · Day 1  ·  5 hours
+Lesson objectives
+Explain the EC2 service model and its place in cloud infrastructure
+Compare EC2 instance families and select the right type for a workload
+Launch an EC2 instance into the Module 3 VPC using the AWS console
+Install and configure the AWS CLI and run core EC2 commands
+Describe instance lifecycle states and the three primary pricing models
+Resources & environment
+AWS console — learner free-tier accounts
+Module 3 VPC (reuse from previous module — do not recreate)
+Slides: EC2 instance type family diagram with real-world use cases
+Handout: AWS CLI cheat sheet — EC2 and core service commands (printed, one per learner)
+Note: create a dedicated IAM user with EC2/S3 access for CLI labs — never the root account
+Session plan
+Time
+Type
+Activity & description
+0:00
+Discussion
+The virtual machine revolution (20 min) — Before EC2 launched in 2006, a startup buying servers waited 6–8 weeks for delivery and setup. EC2 reduced this to 60 seconds. Facilitator asks learners: 'What SA business problem could you solve if you could deploy infrastructure in minutes, not months?' Captures 5–8 responses on the whiteboard — these become seeds for the Module 6 capstone project.
+0:20
+Lecture
+EC2 fundamentals (50 min) — What is a virtual machine and how hypervisors work (Xen, AWS Nitro). AMIs: pre-baked OS images including Amazon Linux, Ubuntu, Windows, and custom marketplace images. Instance type naming decoded: t3.micro (T=burstable family, 3=generation, micro=size). Instance families: T and M (general purpose), C (compute-optimised for web servers and batch), R (memory-optimised for databases and caches), I and D (storage-optimised), G and P (GPU for ML and video rendering). Free tier: t2.micro or t3.micro (750 hours per month). Instance lifecycle: pending, running, stopping, stopped, terminated. SSH key pairs for secure access.
+1:10
+Lecture
+Pricing models (25 min) — On-demand: pay by the second with no commitment, highest per-unit cost, best for unpredictable workloads. Reserved Instances: 1 or 3-year commitment with up to 72% savings over on-demand — right for stable baseline workloads. Savings Plans: more flexible commitment than RIs. Spot Instances: up to 90% discount but can be interrupted with 2 minutes notice — right for batch processing, fault-tolerant workloads, and data transformation jobs. SA context: wrong pricing model selection is the most common cause of unexpectedly high cloud bills.
+1:35
+Demo
+Launch an EC2 instance via the console (25 min) — Facilitator walks through the full launch wizard live: select Ubuntu 22.04 AMI, choose t2.micro, place in the Module 3 VPC public subnet, assign existing security group allowing SSH and HTTP, create or select existing key pair. Launch. Wait for status 'running'. Connect via SSH. All performed live with learners observing before attempting themselves.
+2:00
+Break
+15 minutes
+2:15
+Lecture
+The AWS CLI (30 min) — Why CLI over the console: automation, scripting, reproducibility, CI/CD integration. Installation: sudo apt install awscli on Ubuntu. Configuration: aws configure — enter access key ID, secret access key, default region af-south-1, output format json. Core EC2 CLI commands: aws ec2 describe-instances, run-instances, stop-instances, terminate-instances. The --query flag to filter JSON output. The --dry-run flag for safety testing. jq for JSON parsing.
+2:45
+Lab
+Lab 4a — EC2 via console and CLI (90 min) — Part 1 (45 min): launch an EC2 t2.micro into the Module 3 VPC public subnet using the console. Connect via SSH. Run uname -a, df -h, and free -m. Record the instance ID and public IP. Part 2 (45 min): install and configure the AWS CLI on the instance using a pre-created lab IAM user's credentials. Run aws ec2 describe-instances and use the --query flag to display only InstanceId, State.Name, and PublicIpAddress. Stop the instance via CLI. Confirm the state change. Restart via CLI. Submit Lab 4a: console screenshot plus CLI command output.
+4:15
+Discussion
+Auto Scaling and Load Balancing intro (30 min) — The problem: a single EC2 instance is a single point of failure. Auto Scaling Groups: define minimum, maximum, and desired capacity; scale in and out based on CPU utilisation or custom CloudWatch metrics. Application Load Balancer: distributes incoming traffic across multiple instances in multiple AZs. Brief console tour showing the concepts without a lab task. Preview: the capstone project in Module 6 will deploy behind a load balancer.
+4:45
+Wrap-up
+Azure VM equivalence (15 min) — Learners map every EC2 concept to Azure: VM sizes and families, Azure Marketplace images, the Azure CLI (az vm create), Azure pricing calculator. Documented in learner notes as a cross-provider comparison reference.
+Formative assessment
+Lab 4a: EC2 console launch screenshot plus CLI describe, stop, and start output submitted to LMS
+AWS CLI configured and tested on at least one EC2 instance per learner before Lesson 2
+Facilitator notes
+IAM access keys for the CLI lab: use a dedicated lab IAM user — never the root account credentials
+Terminate versus stop: emphasise this distinction clearly and repeatedly — terminated instances cannot be recovered and their data is lost
+Capture the business problem responses from the opening discussion on a flipchart — they feed directly into capstone project selection in Module 6
+Free tier enforcement: t2.micro only — remind learners at every lab session
+Lesson 2: Cloud storage — S3, EBS, EFS & storage classes
+Week 7 · Day 2  ·  5 hours
+Lesson objectives
+Distinguish object, block, and file storage and match each to its AWS cloud service
+Create and configure an S3 bucket with versioning, public access controls, and a lifecycle policy
+Host a static website on S3 and access it via a public URL
+Attach an EBS volume to an EC2 instance, format it, and mount it persistently using fstab
+Explain S3 storage classes and select the appropriate class for a cost and access pattern scenario
+Resources & environment
+AWS console — learner free-tier accounts
+EC2 instance from Lab 4a (still running)
+Slides: storage type comparison diagram and S3 storage class tier diagram
+Simple HTML index.html file for static website hosting exercise (provided in LMS)
+Handout: S3 storage classes quick-reference card (printed, one per learner)
+CLEANUP NOTE: delete EBS volumes after lab — they incur charges even when not attached to an instance
+Session plan
+Time
+Type
+Activity & description
+0:00
+Lecture
+Three cloud storage types (35 min) — Object storage (Amazon S3): flat namespace with globally unique keys, unlimited scale, accessed via HTTP REST API — ideal for images, backups, static websites, data lakes, and log archives. Block storage (Amazon EBS): raw disk volumes formatted with a file system, attached to a single EC2 instance, low latency — ideal for OS root volumes, databases, and applications requiring direct disk access. File storage (Amazon EFS): a shared NFS file system that multiple EC2 instances can mount simultaneously — ideal for CMS platforms, shared configuration, and horizontally scaled applications. SA analogy: object storage = a public library where anyone can borrow but books don't change; block storage = your personal external hard drive; file storage = a shared network drive at the office that the whole team accesses.
+0:35
+Lecture
+Amazon S3 deep dive (40 min) — Buckets: logical containers with globally unique, DNS-compliant names. Objects: files stored with a key (path) and metadata. Maximum object size: 5 TB (multipart upload required above 5 GB). Durability: 99.999999999% (eleven nines) — meaning AWS loses one object per 10 billion stored per year. Versioning: every PUT creates a new version; DELETE adds a delete marker without destroying previous versions. Bucket policies versus ACLs versus Block Public Access. S3 storage classes: Standard (frequently accessed), Intelligent-Tiering (unknown or changing access patterns), Standard-IA (infrequent access), One Zone-IA, Glacier Instant Retrieval, Glacier Flexible Retrieval, Glacier Deep Archive (lowest cost at approximately R0.004/GB/month — suitable for long-term POPIA-mandated record retention). Lifecycle rules: automatically transition objects between classes based on age.
+1:15
+Lab
+Lab 4b Part 1 — S3 bucket and static website (60 min) — Tasks: (1) create an S3 bucket named gda-[learner-name]-lab in af-south-1; (2) enable versioning on the bucket; (3) upload three files including the provided index.html; (4) enable static website hosting and set index.html as the index document; (5) set a bucket policy allowing s3:GetObject for all principals on all objects; (6) access the static website via the S3 website endpoint URL in a browser; (7) update index.html with new content, re-upload, confirm the updated version is live; (8) view the previous version in the console. Submit Lab 4b-1: website URL accessible in browser plus versioning screenshot.
+2:15
+Break
+15 minutes
+2:30
+Lecture
+Amazon EBS — block storage for EC2 (30 min) — EBS volume types: gp3 (general purpose SSD, the default — balances price and performance), io2 Block Express (provisioned IOPS SSD for I/O-intensive databases), st1 (throughput-optimised HDD for big data sequential reads), sc1 (cold HDD for infrequently accessed data). EBS Snapshots: point-in-time backups stored durably in S3, used for AMI creation and cross-region disaster recovery. Encryption at rest using AWS KMS. EBS versus instance store volumes: instance store is physically attached to the host and is ephemeral — data is permanently lost when the instance is stopped or terminated. Azure equivalent: Azure Managed Disks (Standard SSD, Premium SSD, Ultra Disk).
+3:00
+Lab
+Lab 4b Part 2 — Attach and mount an EBS volume (60 min) — Tasks: (1) create a 10 GB gp3 EBS volume in the same Availability Zone as the EC2 instance; (2) attach the volume to the instance via the console; (3) SSH into the instance and list block devices with lsblk; (4) format the volume: sudo mkfs.ext4 /dev/xvdf; (5) create a mount point: sudo mkdir /data; (6) mount the volume: sudo mount /dev/xvdf /data; (7) add an entry to /etc/fstab for automatic remount on reboot (use UUID obtained from blkid); (8) write a test file to /data; (9) unmount and detach, then reattach and remount — confirm the test file survived. Submit Lab 4b-2: lsblk output showing mounted volume plus test file confirmation.
+4:00
+Lecture
+S3 lifecycle policies and cost optimisation (30 min) — Real-world policy example: transition objects to Standard-IA after 30 days, to Glacier Flexible Retrieval after 90 days, and delete after 365 days. S3 Object Lock for WORM (Write Once Read Many) compliance — applicable to regulated industries under POPIA and FSCA regulations in SA. S3 Replication: same-region replication for compliance and cross-region replication for disaster recovery. Cost comparison: S3 Standard at approximately R0.10/GB/month versus Glacier Deep Archive at R0.004/GB/month — a 96% cost reduction for archived data.
+4:30
+Debrief
+Storage decision matrix (30 min) — Groups given 5 SA business scenarios: a hospital storing X-ray images, a bank archiving 7-year transaction records, a web server needing its OS disk, a content platform sharing media files across 10 servers, and a startup hosting a static marketing website. Groups select object/block/file, AWS service, and storage class for each. Facilitator reveals and explains the recommended choice for each scenario.
+Formative assessment
+Lab 4b-1: S3 bucket URL accessible in browser plus versioning screenshot submitted to LMS
+Lab 4b-2: mounted EBS volume with persistent test file confirmed — UUID-based fstab entry verified
+Storage decision matrix: 5 scenarios completed and peer-reviewed
+Facilitator notes
+Block Public Access is enabled by default on all new S3 buckets — learners must deliberately disable it for the static website lab; teach the security implication while doing so
+fstab errors can prevent a VM from booting — provide the exact fstab entry string format in the printed lab guide and insist learners use the UUID rather than the device name
+The POPIA and Glacier connection is commercially significant in SA — data retention obligations map directly to a specific and highly cost-effective storage class
+CLEANUP: delete all EBS volumes after Lab 4b-2 — they incur charges even when not attached to any instance
+Lesson 3: Managed databases — RDS, DynamoDB & connecting to EC2
+Week 8 · Day 1  ·  5 hours
+Lesson objectives
+Compare managed versus self-hosted databases on a cloud VM and evaluate the trade-offs
+Deploy an RDS MySQL instance in the private subnet of the Module 3 VPC
+Connect securely from an EC2 instance to RDS using the mysql CLI client
+Create a database and table and perform basic SQL CRUD operations with SA-relevant data
+Explain RDS Multi-AZ, read replicas, automated backups, and point-in-time restore
+Describe DynamoDB as a NoSQL alternative and explain its key-value and document data model
+Resources & environment
+AWS console plus Module 3 VPC (private subnet required for RDS placement)
+RDS free tier: db.t3.micro, MySQL 8.0, 20 GB gp2 storage — enforce strictly
+EC2 instance from previous lessons for connecting to RDS (stays in public subnet)
+Slides: RDS architecture diagram showing Multi-AZ standby and read replica deployment
+SQL reference card: basic DDL and DML commands including CREATE, INSERT, SELECT, UPDATE, DELETE (printed)
+CRITICAL: delete RDS instances after the lab session — they accrue charges even when stopped after 7 days on free tier
+Session plan
+Time
+Type
+Activity & description
+0:00
+Discussion
+Self-hosted versus managed database (20 min) — On a VM: the team installs MySQL, patches the engine, manages automated backups, handles failover, monitors disk space and IOPS, and responds to database alerts at 3am. With RDS: AWS handles all of that — the team writes queries and application code. Total cost of ownership comparison including staff time. When a self-hosted database still makes sense: highly customised database configurations, niche engines not supported by RDS, or extreme scale where managed service pricing exceeds self-hosted costs.
+0:20
+Lecture
+Amazon RDS fundamentals (45 min) — Supported engines: MySQL, PostgreSQL, MariaDB, Oracle Database, Microsoft SQL Server, and Amazon Aurora (AWS's proprietary MySQL and PostgreSQL-compatible engine with 5x MySQL performance). DB instance classes: db.t3.micro (free tier), db.t3.small, db.m5 (production). Storage: gp2 and gp3 SSD for general use, io1 provisioned IOPS for I/O-intensive workloads. Multi-AZ deployment: synchronous standby replica in a second Availability Zone with automatic failover in approximately 60 seconds — the production high-availability configuration. Read replicas: asynchronous copies for read scaling, can be promoted to standalone instances, support cross-region replication. Automated backups: configurable 1 to 35 day retention window with point-in-time restore to any second within the window. Manual snapshots retained until explicitly deleted. Maintenance windows for OS and engine patching.
+1:05
+Demo
+Launch RDS in the console (30 min) — Facilitator creates a Standard Create RDS instance live: engine MySQL 8.0, Free Tier template (which disables Multi-AZ and enhanced monitoring automatically), db.t3.micro, 20 GB gp2, no public accessibility, placed in the Module 3 VPC using a new DB subnet group covering both private subnets, master username and password set. Provisioning takes 5–7 minutes — facilitator uses this time to explain what AWS is provisioning behind the scenes.
+1:35
+Lab
+Lab 4c Part 1 — Deploy RDS MySQL in the private subnet (50 min) — Learners replicate the demo: deploy RDS MySQL 8.0 in the private subnet of their Module 3 VPC. Create a dedicated security group allowing inbound traffic on port 3306 from the EC2 instance security group ID only — not from 0.0.0.0/0. Wait for the RDS instance status to reach 'Available'. Record the RDS endpoint hostname. Submit Lab 4c-1: RDS console screenshot showing Available status and the endpoint.
+2:25
+Break
+15 minutes
+2:40
+Lab
+Lab 4c Part 2 — Connect EC2 to RDS and run SQL operations (70 min) — From the EC2 instance: (1) sudo apt install mysql-client; (2) mysql -h [RDS endpoint] -u admin -p and enter the master password; (3) CREATE DATABASE gdashop;; (4) USE gdashop;; (5) CREATE TABLE products (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(100), price DECIMAL(10,2), stock INT);; (6) INSERT INTO products five rows using SA-relevant product data such as biltong, boerewors, rooibos tea, koeksister, and chakalaka; (7) SELECT all products; (8) UPDATE the price of one product; (9) DELETE one product; (10) SELECT again to confirm the change. Verify that data persists after disconnecting and reconnecting to RDS. Submit Lab 4c-2: screenshot of the full SQL terminal session.
+3:50
+Lecture
+DynamoDB and NoSQL fundamentals (40 min) — Relational databases (RDS) enforce a rigid schema with tables, rows, columns, and foreign key relationships — excellent for structured transactional data. NoSQL databases (DynamoDB) use flexible schema with tables containing items (equivalent to rows) and attributes (equivalent to columns) where each item can have different attributes. DynamoDB: fully serverless, key-value and document model, single-digit millisecond latency at any scale, no patching or capacity planning. Partition key (required) and sort key (optional) define the primary key. When to use DynamoDB over RDS: session state management, shopping cart data, IoT device telemetry, gaming leaderboards, and any workload with unpredictable or extremely high traffic spikes. Pricing: on-demand capacity mode (pay per request) or provisioned capacity mode (pre-allocate read and write units). Azure equivalent: Azure Cosmos DB.
+4:30
+Debrief
+Database selection exercise (30 min) — Five SA-context scenarios presented: an e-commerce platform tracking orders and invoices (structured, relational); a healthcare records system managing patient history (structured, relational, regulated); a ride-hailing app storing active session tokens (high-volume, flexible schema, millisecond response needed); a bank's core transaction ledger (ACID compliance mandatory, relational); and an IoT smart meter platform ingesting 10 million readings per day (high throughput, flexible schema, NoSQL). Groups choose RDS or DynamoDB and justify each decision. Common misconceptions addressed by the facilitator.
+Formative assessment
+Lab 4c-1: RDS instance showing Available status and endpoint — screenshot submitted to LMS
+Lab 4c-2: SQL terminal session showing CREATE, INSERT, SELECT, UPDATE, and DELETE operations submitted
+Database selection exercise: peer-reviewed choices assessed for correct justification
+Facilitator notes
+RDS takes 5–10 minutes to provision — plan for this and use the time productively as a teaching moment rather than dead waiting time
+Port 3306 security group rule: must reference the EC2 security group ID as the source, not an IP address range — teach this security pattern explicitly as it prevents direct internet exposure of the database
+Using SA product data in the SQL lab (biltong, boerewors, rooibos) makes the exercise culturally relevant and memorable for learners
+CRITICAL: all learners must delete their RDS instances at the end of this session — a db.t3.micro stopped instance resumes billing after 7 days
+Lesson 4: Identity & Access Management — IAM, policies & MFA
+Week 8 · Day 2  ·  5 hours
+Lesson objectives
+Explain why IAM is the first and most critical security control in any AWS account
+Distinguish IAM users, groups, roles, and policies and explain when to use each entity type
+Apply the principle of least privilege when designing IAM permission policies
+Create IAM users, groups, and attach both AWS managed and custom JSON policies
+Enable and configure MFA on the root account and on IAM users
+Assign IAM roles to EC2 instances to enable secure access to AWS services without using static access keys
+Resources & environment
+AWS console — learner accounts (root account access required for the MFA setup step in this lesson)
+Authenticator app installed on each learner's smartphone before class: Google Authenticator or Authy (free)
+Slides: IAM entity relationship diagram showing users, groups, roles, and policies
+Printed: IAM policy JSON reference card with syntax and common action patterns
+Lab worksheet: IAM policy design scenarios for the workshop exercise
+Session plan
+Time
+Type
+Activity & description
+0:00
+Discussion
+The Capital One cloud breach — IAM misconfiguration (20 min) — In 2019 a misconfigured IAM role on an EC2 instance allowed an attacker to query the AWS instance metadata service and obtain temporary credentials with excessive privileges. The attacker exfiltrated over 100 million customer records. Capital One paid an $80 million regulatory fine and faced significant reputational damage. The root cause was a single IAM role with broader permissions than necessary. This sets the tone: IAM is not optional configuration — it is the foundation of all cloud security.
+0:20
+Lecture
+IAM entities and the AWS permission model (50 min) — Root account: omnipotent access to everything in the account; must never be used for daily work; must be locked down with MFA immediately after account creation. IAM users: human identities with long-term username, password, and optional access keys. IAM groups: attach policies to groups and add users to groups — never attach policies directly to individual users at scale. IAM roles: temporary credential providers assumed by services, EC2 instances, Lambda functions, or federated users — no long-term access keys, credentials auto-rotate. Policies: JSON documents defining Allow or Deny actions on specific resources. Policy types: AWS managed policies (maintained by AWS, updated automatically), customer managed policies (you write and maintain), and inline policies (embedded directly in one entity, not reusable). Policy evaluation logic: explicit Deny always overrides any Allow — even if multiple Allow policies apply.
+1:10
+Lecture
+IAM policy JSON anatomy (30 min) — Structure: Version (always 2012-10-17), Statement (array of permission blocks), Effect (Allow or Deny), Principal (who the policy applies to — not used in identity policies), Action (list of API actions such as s3:GetObject or ec2:DescribeInstances), Resource (the ARN of the resource the action applies to), and Condition (optional additional constraints such as IP range or MFA requirement). Wildcard actions using asterisk — when acceptable (read-only wildcard on a tightly scoped resource) and when dangerous (Action: * on Resource: *). ARN format: arn:aws:s3:::bucket-name/* for all objects in a specific bucket. The principle of least privilege in practice: start with no permissions and add only what is explicitly needed for the specific task.
+1:40
+Lab
+Lab 4d Part 1 — IAM users, groups, and custom policies (50 min) — Tasks: (1) enable MFA on the root account using the authenticator app on the learner's smartphone; (2) create an IAM user named dev-user with console and programmatic access; (3) create an IAM group named developers and attach the AWS managed AmazonEC2ReadOnlyAccess policy; (4) add dev-user to the developers group; (5) log in as dev-user in an incognito window — confirm the ability to describe EC2 instances but the inability to launch a new one; (6) write a custom JSON policy granting s3:ListBucket and s3:GetObject on the specific lab S3 bucket only; (7) attach the custom policy to dev-user and test access by listing the bucket contents using the AWS CLI. Submit Lab 4d-1.
+2:30
+Break
+15 minutes
+2:45
+Lecture
+IAM roles for EC2 and the service account pattern (35 min) — The fundamental problem with access keys on EC2 instances: if an attacker gains SSH access, they find the keys in ~/.aws/credentials and can use them from anywhere in the world indefinitely. The solution: IAM instance profiles. An EC2 instance profile attaches a role to an instance — the AWS SDK automatically retrieves temporary credentials from the instance metadata service (169.254.169.254) and rotates them every hour without any action required. Best practice summary: never store AWS access keys in application code, environment variables, or EC2 instances. AWS STS (Security Token Service) generates the temporary credentials. Cross-account role assumption for multi-account architectures. Role trust policies define who can assume a role; permission policies define what the role can do.
+3:20
+Lab
+Lab 4d Part 2 — IAM role for EC2 with S3 access (60 min) — Tasks: (1) create a new IAM role with AWS service EC2 as the trusted entity type; (2) attach the AmazonS3ReadOnlyAccess managed policy; (3) assign the role to the lab EC2 instance using Actions > Security > Modify IAM Role in the console; (4) SSH into the instance; (5) run aws s3 ls — confirm it lists the bucket without any configured access keys; (6) attempt aws s3api delete-bucket — confirm it is denied by the read-only policy; (7) create a new custom policy adding s3:PutObject to the role; (8) test uploading a file from the instance to S3 using the AWS CLI. Submit Lab 4d-2: CLI output showing successful S3 list and upload without access keys.
+4:20
+Workshop
+IAM policy design challenge (25 min) — Groups given three scenarios: (a) a Lambda function that needs to write items to a specific DynamoDB table and read objects from a specific S3 bucket; (b) a junior developer who should be able to view all EC2 instances in the console but must not be able to start, stop, or terminate any instance; (c) a third-party security auditor who needs read-only access to CloudTrail logs in a specific S3 bucket for a 90-day audit engagement. Each group writes the minimal JSON policy for their scenario. Peer review with facilitator highlighting any over-permissive designs.
+4:45
+Wrap-up
+IAM best practices checklist (15 min) — The definitive list: lock the root account immediately, enable MFA on every user, never create access keys for root, use roles for service-to-service access not users, assign permissions to groups not individuals, rotate access keys every 90 days, use AWS Access Analyzer to detect overly permissive policies, enable AWS CloudTrail to audit all API calls. Learners add this checklist to their Portfolio of Evidence.
+Formative assessment
+Lab 4d-1: MFA enabled on root account screenshot plus custom S3 policy attached and tested as dev-user
+Lab 4d-2: CLI output showing EC2 role accessing S3 without access keys configured — submitted to LMS
+IAM policy design: at least 2 of 3 group scenarios assessed as adhering to least-privilege principle
+Facilitator notes
+The Capital One breach is a viscerally effective teaching tool — it demonstrates that IAM misconfiguration causes consequences at scale, not just in theory
+MFA setup on smartphones requires 10 minutes of class time — some learners will need help finding and installing the authenticator app, build this buffer in
+The access-keys-on-EC2 anti-pattern is extremely common in the SA cloud industry right now — drilling this lesson is a genuine career service to every learner
+Explicit Deny always wins: demonstrate this live with a policy that simultaneously Allows and Denies the same action — the result surprises most learners and makes the rule unforgettable
+Lesson 5: Cloud billing, cost management & the 2-tier deployment
+Week 8 · Day 3  ·  5 hours
+Lesson objectives
+Read and interpret the AWS Cost Explorer and billing dashboard with confidence
+Set up a cost budget with an email alert at a defined monthly spend threshold
+Identify the top five cloud cost optimisation techniques applicable at learner level
+Deploy a complete 2-tier web application: EC2 web server connected to RDS database inside the Module 3 VPC
+Pass the Module 4 formative quiz at 70% or above
+Resources & environment
+AWS console — Billing and Cost Management access must be enabled for IAM users in root account settings before class
+Module 3 VPC with public and private subnets (must be intact)
+Lab deployment guide: 2-tier architecture build checklist (printed, one per learner)
+Simple PHP or Node.js web application connecting to MySQL — provided in LMS as a zip file
+Module 4 Quiz — 20 questions (LMS or printed)
+NOTE: enable Billing and Cost Management for IAM users in Account Settings before this lesson
+Session plan
+Time
+Type
+Activity & description
+0:00
+Lecture
+AWS billing model and Cost Explorer (40 min) — AWS billing dimensions: services used, regions deployed in, resource tags, and linked account IDs. Cost Explorer: visualise spend by service, by day, by region, and by tag. Forecasting based on usage trends. Saved reports. AWS Budgets: set a fixed monthly spend threshold with SNS email alerts at 80% and 100% of the budget — every learner must have one active. AWS Trusted Advisor: checks for underutilised resources, security gaps, and performance improvements — the cost optimisation checks are available on free tier. Compute Optimizer: analyses EC2 usage patterns and recommends right-sizing. SA context for learners: a single NAT Gateway running idle with no traffic costs approximately R800 per month — budget alerts are the first line of defence against surprise bills.
+0:40
+Lab
+Lab 4e Part 1 — Billing dashboard and budget alert (30 min) — Tasks: (1) navigate to AWS Billing and Cost Management, open Cost Explorer, identify the top three services by spend in the current month; (2) create a Monthly Cost Budget with a $10 USD limit; (3) configure two alert thresholds: 80% of budget (email notification when forecast or actual spend reaches $8) and 100% of budget ($10); (4) enter the learner's email address as the notification recipient; (5) screenshot the completed budget configuration. Submit Lab 4e-1. Debrief: every learner must have an active budget alert for the remainder of the Cloud Launchpad course.
+1:10
+Lecture
+Cloud cost optimisation strategies (30 min) — Right-sizing: do not over-provision instances; use Compute Optimizer recommendations. Reserved Instances and Savings Plans for predictable baseline workloads. Spot Instances for fault-tolerant batch jobs. S3 lifecycle policies to automatically move ageing data to cheaper storage tiers. Delete unused EBS volumes, unused Elastic IPs (billed at $0.005/hour when not associated with a running instance), and old snapshots. Scheduled instance shutdown for development and test environments on evenings and weekends using EventBridge and Systems Manager. Resource tagging strategy: tag every resource with Project, Environment, and Owner — cost allocation reports become actionable. FinOps as a professional discipline.
+1:40
+Break
+15 minutes
+1:55
+Lab
+Lab 4e Part 2 — Full 2-tier deployment: EC2 web server and RDS database (90 min) — The capstone exercise of Module 4. Learners build a production-pattern 2-tier architecture inside their Module 3 VPC: (1) launch EC2 t2.micro in the public subnet; assign the IAM role with S3 read access from Lab 4d; (2) SSH in and install nginx and PHP (or Node.js per the provided app); (3) redeploy RDS MySQL db.t3.micro in the private subnet with the security group allowing port 3306 from the EC2 security group only; (4) SCP the provided application files to /var/www/html on the EC2 instance; (5) update the application configuration file with the RDS endpoint, username, and password; (6) access the running web application via the EC2 public IP in a browser; (7) the application must display data read from the RDS gdashop database and allow new rows to be inserted; (8) configure the app to store uploaded images in the S3 bucket using the EC2 IAM role credentials. Submit Lab 4e-2: screenshot of the working web application URL plus a hand-drawn architecture diagram.
+3:25
+Quiz
+Module 4 Formative Quiz (30 min) — 20 multiple-choice questions across all five lessons. Distribution: compute and EC2 (4), storage (4), databases (4), IAM (5), billing and cost management (3). Minimum pass mark: 14 out of 20 (70%).
+3:55
+Debrief
+Quiz review and Module 5 preview (35 min) — Review answers to any question missed by more than 40% of learners and re-teach those concepts. Module 5 preview: 'Your 2-tier application is now running in production-pattern cloud infrastructure. But it is completely unsecured. In Module 5 — Cloud Security — we will lock down everything you just built: encrypt data at rest and in transit, apply the shared responsibility model, enforce POPIA compliance, and harden the network.' Assign pre-reading: AWS Shared Responsibility Model one-page handout.
+4:30
+Wrap-up
+Architecture diagram peer review (30 min) — Learners exchange their hand-drawn 2-tier architecture diagrams with a partner. The reviewer checks: is the VPC boundary shown? Are public and private subnets correctly labelled? Is the EC2 instance in the public subnet and the RDS in the private subnet? Is the Internet Gateway present? Are security groups indicated? Is S3 shown outside the VPC (it is a global service not inside the VPC)? Corrected and annotated diagrams are added to each learner's Portfolio of Evidence.
+Formative assessment
+Lab 4e-1: AWS budget alert configured with dual thresholds — screenshot submitted to LMS
+Lab 4e-2: running 2-tier web application accessible via browser URL — screenshot submitted; hand-drawn architecture diagram added to Portfolio of Evidence
+Module 4 Quiz: 20 questions, 70% pass mark, results recorded in LMS
+Learners scoring below 70% offered a 1:1 catch-up session before Module 5 begins
+Facilitator notes
+The 2-tier deployment is the most complex hands-on lab in the entire course to this point — pair learners who are struggling with stronger peers and protect the full 90-minute allocation
+Billing and Cost Management must be explicitly enabled for IAM users by the root account holder before this lesson — test this in your own account the day before
+The hand-drawn architecture diagram is a deliberate low-technology exercise: it forces conceptual clarity and architectural thinking before any diagramming tool is introduced
+CLEANUP CHECKLIST after Lab 4e-2: delete the RDS instance, delete detached EBS volumes, empty and delete the S3 bucket if no longer needed, stop (not terminate) the EC2 instance for reuse in Module 5
+6.6 Module 4 Quiz — Full Question Bank (20 Questions)
+The following 20 questions constitute the Module 4 formative quiz. Administer via the LMS or on paper. Minimum pass mark: 14 out of 20 (70%). Questions progress from foundational recall through applied architecture and decision-making scenarios.
+Q1.  Which EC2 instance family is optimised for memory-intensive workloads such as large in-memory databases and real-time big data analytics?
+A) C family (compute optimised)
+B) T family (burstable general purpose)
+C) R family (memory optimised)
+D) I family (storage optimised)
+Answer: C    (Lesson 1 — EC2 instance families)
+Q2.  What is an Amazon Machine Image (AMI)?
+A) A snapshot of an EBS volume taken at a specific point in time
+B) A pre-configured template containing the OS, application server, and applications needed to launch an EC2 instance
+C) An AWS-managed container image stored in ECR
+D) A billing configuration file for EC2 pricing
+Answer: B    (Lesson 1 — AMI definition)
+Q3.  A development team runs compute workloads only during business hours Monday to Friday. Which EC2 pricing model would most reduce costs?
+A) Reserved Instances — 3-year term
+B) On-demand with automated scheduled stop/start using EventBridge
+C) Dedicated Hosts
+D) Spot Instances
+Answer: B    (Lesson 1 — EC2 pricing models and cost optimisation)
+Q4.  Which AWS CLI command lists all EC2 instances in the configured region?
+A) aws ec2 list-instances
+B) aws ec2 get-instances
+C) aws ec2 describe-instances
+D) aws compute show-instances
+Answer: C    (Lesson 1 — AWS CLI commands)
+Q5.  What type of cloud storage is Amazon S3?
+A) Block storage
+B) File storage
+C) Object storage
+D) Network-attached storage
+Answer: C    (Lesson 2 — storage types)
+Q6.  An application requires a shared file system that multiple EC2 instances across two Availability Zones can mount simultaneously using NFS. Which AWS service is the correct choice?
+A) Amazon S3
+B) Amazon EBS
+C) Amazon EFS
+D) AWS Storage Gateway
+Answer: C    (Lesson 2 — EFS for shared multi-instance NFS)
+Q7.  What does S3 'versioning' enable?
+A) It splits large objects into multiple parts for faster upload
+B) It keeps all previous versions of every object so deleted or overwritten objects can be restored
+C) It creates read replicas of S3 objects in multiple regions automatically
+D) It restricts write access to objects after a defined retention period
+Answer: B    (Lesson 2 — S3 versioning)
+Q8.  A fintech company must retain transaction logs for 7 years to comply with FSCA regulations. They are never accessed after 90 days. Which S3 storage class minimises cost for the 90-day-to-7-year retention period?
+A) S3 Standard
+B) S3 Intelligent-Tiering
+C) S3 Glacier Deep Archive
+D) S3 One Zone-IA
+Answer: C    (Lesson 2 — S3 Glacier Deep Archive for long-term compliance storage)
+Q9.  What happens to data stored on an EC2 instance store volume when the instance is stopped or terminated?
+A) The data is automatically backed up to S3
+B) The data persists and is available when the instance restarts
+C) The data is permanently lost — instance store is ephemeral storage
+D) The data is moved to an EBS volume automatically
+Answer: C    (Lesson 2 — EBS vs instance store: ephemeral nature)
+Q10.  Which RDS feature creates a synchronous standby replica in a second Availability Zone and provides automatic failover in approximately 60 seconds?
+A) Read Replica
+B) Multi-AZ deployment
+C) Automated Backup
+D) Cross-Region Replication
+Answer: B    (Lesson 3 — RDS Multi-AZ for high availability)
+Q11.  A developer wants to connect to an RDS MySQL instance from an EC2 instance. Which tool should they install on the EC2 instance?
+A) mysql-server
+B) pgAdmin
+C) mysql-client
+D) rds-connect
+Answer: C    (Lesson 3 — connecting to RDS using mysql-client)
+Q12.  Which AWS database service is most appropriate for storing mobile application session tokens that require single-digit millisecond read latency and need to scale automatically to millions of requests per second?
+A) Amazon RDS for MySQL
+B) Amazon Redshift
+C) Amazon DynamoDB
+D) Amazon ElastiCache for Redis
+Answer: C    (Lesson 3 — DynamoDB for high-throughput low-latency NoSQL)
+Q13.  What is the IAM principle of least privilege?
+A) Granting every user AdministratorAccess to avoid permission errors
+B) Granting users only the minimum permissions required to perform their specific job function
+C) Using IAM groups instead of individual user policies
+D) Requiring MFA for all API calls regardless of action
+Answer: B    (Lesson 4 — IAM least privilege principle)
+Q14.  An EC2 instance needs to write objects to an S3 bucket. What is the most secure method to provide these credentials?
+A) Store the AWS access key and secret key in a .env file on the EC2 instance
+B) Hard-code the credentials in the application source code
+C) Attach an IAM role to the EC2 instance with the required S3 permissions — no access keys needed
+D) Use the root account access keys for maximum permissions
+Answer: C    (Lesson 4 — IAM roles for EC2 instead of access keys)
+Q15.  In an IAM policy, if one policy statement explicitly Denies an action and another statement explicitly Allows the same action, what is the result?
+A) The Allow takes precedence because it was evaluated last
+B) The Deny takes precedence — an explicit Deny always overrides any Allow
+C) The result depends on which policy was attached first
+D) The conflict causes an error and neither policy applies
+Answer: B    (Lesson 4 — IAM policy evaluation: explicit Deny wins)
+Q16.  Which IAM entity type issues temporary credentials, is assumed by AWS services or applications, and does not require long-term access keys?
+A) IAM user
+B) IAM group
+C) IAM role
+D) IAM policy
+Answer: C    (Lesson 4 — IAM roles as temporary credential providers)
+Q17.  What AWS tool analyses historical EC2 usage patterns and recommends right-sizing to reduce costs?
+A) AWS Trusted Advisor
+B) AWS Compute Optimizer
+C) AWS Cost Explorer
+D) AWS Budgets
+Answer: B    (Lesson 5 — AWS Compute Optimizer for right-sizing)
+Q18.  An unattached Elastic IP address in AWS (not associated with any running EC2 instance) incurs a charge. Why does AWS charge for unattached Elastic IPs?
+A) To discourage IP hoarding and encourage efficient use of the limited IPv4 address space
+B) Because Elastic IPs use dedicated physical hardware
+C) Elastic IPs are always free regardless of attachment status
+D) AWS charges only if the IP was previously used by a terminated instance
+Answer: A    (Lesson 5 — Elastic IP billing and IPv4 conservation)
+Q19.  In a 2-tier web application deployed on AWS, which placement correctly follows security best practices?
+A) Both EC2 web server and RDS database in the public subnet
+B) EC2 web server in the public subnet; RDS database in the private subnet with no direct internet access
+C) Both EC2 and RDS in the private subnet with no internet access
+D) RDS in the public subnet so developers can connect directly from their laptops
+Answer: B    (Lesson 5 — 2-tier architecture: public EC2 and private RDS)
+Q20.  A learner creates an AWS Budget with a $10 monthly limit and sets alerts at 80% and 100%. At what spend amounts will email notifications be triggered?
+A) At $8 and $10
+B) At $80 and $100
+C) At $0.80 and $1.00
+D) Only at $10 — the 80% threshold triggers a warning but sends no email
+Answer: A    (Lesson 5 — AWS Budgets threshold alert configuration)
+
+--- FOLDER: tmp_GDA_CloudLaunchpad_Phase7_Module5 ---
+GINASHE DIGITAL ACADEMY
+Cloud Computing Track — Foundation Level
+Cloud Launchpad
+Phase 7: Module 5 — Cloud Security
+NQF Level 4  ·  Module 5 of 6
+15 Contact Hours  ·  Weeks 9 – 10  ·  3 Lessons
+SETA Unit Standards: US 116935 · US 259605
+Shared Responsibility · Encryption · POPIA · CloudTrail · Incident Response
+MICT SETA  ·  QCTO Accreditation Pathway
+Prepared by Ginashe Group — 12 April 2026
+7
+PHASE
+Module 5: Cloud Security
+Full lesson plan — 3 lessons, 15 hours, Weeks 9–10
+7.1 Module Overview
+Module 5 locks down the 2-tier application built in Module 4. Security is not a separate concern bolted on after deployment — it is designed in from the first line of architecture. This module gives learners the vocabulary, technical controls, and regulatory knowledge to operate cloud infrastructure responsibly in South Africa, where POPIA obligations apply to any organisation processing personal information. By the end of Week 10, learners will have encrypted their data, hardened their network, enabled audit logging, and produced a professional security hardening report.
+Module
+Weeks
+Hours
+Lessons
+SETA US
+Module 5 of 6
+Weeks 9 – 10
+15 hours
+3 lessons
+US 116935 · US 259605
+7.2 Module Learning Outcomes
+On completion of Module 5 learners will be able to:
+Apply the AWS Shared Responsibility Model to define what AWS secures versus what the customer secures across IaaS, PaaS, and SaaS
+Enable and configure encryption at rest on S3 objects, EBS volumes, and RDS instances using AWS KMS
+Enforce encryption in transit by configuring HTTPS using ACM certificates and an Application Load Balancer
+Apply network security controls — security groups, NACLs, and VPC Flow Logs — to the Module 4 2-tier application
+Enable AWS CloudTrail and interpret a CloudTrail log entry to identify who performed an action, when, and from where
+Configure basic AWS Config rules to detect and flag non-compliant resource configurations
+Map the 8 POPIA conditions to specific AWS security controls and explain the obligations of cloud users under South African law
+Describe the 6 phases of a cloud security incident response lifecycle and apply them to a simulated breach scenario
+Conduct a security posture review using the AWS Well-Architected Security Pillar and produce a professional hardening report
+7.3 POPIA — 8 Conditions Mapped to AWS Security Controls
+South Africa's Protection of Personal Information Act (POPIA) came into full effect on 1 July 2021. The following table maps each of the 8 POPIA conditions to the specific AWS controls that support compliance. Learners receive this as a printed reference card.
+#
+Condition
+POPIA Requirement
+AWS Controls
+1
+Accountability
+An appointed Information Officer must ensure POPIA compliance across all data processing activities
+AWS CloudTrail (audit log of all actions) + AWS Config (enforce compliance rules) + AWS Organizations Service Control Policies
+2
+Processing limitation
+Collect only the minimum personal information necessary; process only for stated purposes; retain only as long as needed
+IAM least-privilege policies restrict access to PII; S3 lifecycle policies enforce retention limits; DynamoDB TTL auto-expires records
+3
+Purpose specification
+Personal information must be collected for a specific, explicitly defined, and lawful purpose communicated to the data subject
+Data classification tags on AWS resources; S3 bucket naming conventions by data type; documented data flow diagrams
+4
+Further processing limitation
+Further use of personal information must be compatible with the original collection purpose or subject to new consent
+S3 bucket policies restrict which services and accounts can read PII data; resource-based policies on DynamoDB tables
+5
+Information quality
+Personal information must be complete, accurate, and kept up to date; data subjects must be able to correct inaccurate information
+RDS automated backups and Multi-AZ ensure data integrity; application-layer validation; audit logs of data modifications
+6
+Openness
+Organisations must maintain a PAIA manual and notify data subjects about data collection purposes and the identity of the responsible party
+Privacy policy hosted on S3 static website; documented architecture for auditor review; ACM for HTTPS delivery of privacy notices
+7
+Security safeguards
+Implement reasonable technical and organisational measures to protect personal information from loss, damage, or unauthorised access
+KMS encryption at rest (S3, EBS, RDS); TLS 1.2+ in transit; MFA on all IAM accounts; security groups restricting access; VPC Flow Logs; GuardDuty threat detection
+8
+Data subject participation
+Data subjects have the right to request access to, correction of, and deletion of their personal information
+Application-level user data export and delete features; RDS point-in-time restore for correction; S3 Object expiration for deletion
+Penalty for non-compliance: up to R10 million fine or 10 years imprisonment for responsible parties. Breach notification must be submitted to the Information Regulator within 72 hours of discovery.
+7.4 Lesson Plans
+Lesson 1: Shared responsibility, encryption & POPIA
+Week 9 · Day 1  ·  5 hours
+Lesson objectives
+Apply the Shared Responsibility Model across IaaS, PaaS, and SaaS service models
+Enable S3 server-side encryption using SSE-S3 and SSE-KMS with a customer-managed KMS key
+Enable EBS volume encryption and understand that RDS encryption must be configured at creation time
+Explain symmetric versus asymmetric encryption and how TLS certificate chains protect data in transit
+Map the 8 POPIA conditions to specific AWS security controls
+Resources & environment
+AWS console — learner accounts (Module 4 S3 bucket and EC2 instance still running)
+Slides: Shared Responsibility Model diagram per service type (IaaS, PaaS, SaaS)
+Handout: POPIA 8 conditions to AWS controls mapping card (printed, one per learner)
+Printed: encryption decision tree worksheet
+Note: KMS CMKs cost $1 per month — remind learners to schedule deletion after the course
+Session plan
+Time
+Type
+Activity & description
+0:00
+Discussion
+The 2017 Equifax breach — whose responsibility? (20 min) — Equifax failed to patch a known critical vulnerability in Apache Struts running on their own application servers, which happened to be hosted on AWS. AWS's physical infrastructure and hypervisor were completely unaffected. Attackers exploited the unpatched application and exfiltrated 147 million customer records over 76 days. The regulatory fine was $575 million. The lesson: AWS secures the cloud — you are responsible for everything inside it. This single breach defines the Shared Responsibility Model for the rest of the lesson.
+0:20
+Lecture
+The AWS Shared Responsibility Model (45 min) — AWS is responsible FOR the cloud: physical data centres including the Cape Town af-south-1 facility, networking hardware, hypervisor software, and managed service software such as RDS engine patches. The customer is responsible IN the cloud: EC2 operating system patching and updates, application code vulnerabilities, data classification and encryption configuration, IAM policy correctness, VPC network access rules, and firewall configuration. How the responsibility boundary shifts per service model: IaaS (EC2) — customer manages the most; PaaS (RDS, Elastic Beanstalk) — AWS manages more of the stack; SaaS (S3, DynamoDB) — AWS manages almost all infrastructure layers. A memorable reframe: the S in AWS does not stand for Security.
+1:05
+Lecture
+Encryption fundamentals and AWS KMS (40 min) — Symmetric encryption: the same key both encrypts and decrypts (AES-256 — the standard for data at rest). Asymmetric encryption: a public key encrypts, only the corresponding private key decrypts (RSA — used in TLS handshakes and digital signatures). Encryption at rest protects data when it is stored on a disk or in an object store from physical media theft or unauthorised storage-level access. Encryption in transit protects data as it travels across a network from eavesdropping and man-in-the-middle attacks (TLS 1.2 and 1.3). AWS Key Management Service: a managed service for creating and controlling encryption keys. Customer Master Keys (CMKs): either AWS-managed (free, managed by AWS) or customer-managed ($1/month, full key policy control). KMS integrates natively with S3, EBS, RDS, Secrets Manager, CloudTrail, and Lambda.
+1:45
+Lab
+Lab 5a — Enable encryption on S3 and EBS (60 min) — Tasks: (1) on the Module 4 S3 bucket, enable default server-side encryption using SSE-S3 (AES-256 — free); verify new uploads show AES-256 encryption in object properties; (2) create a customer-managed KMS CMK in af-south-1 with the alias gda-lab-key; (3) change the S3 bucket default encryption to SSE-KMS using the new CMK; upload a test file and confirm it shows the KMS key ARN in object properties; (4) in EC2, create a new 5 GB gp3 EBS volume with the encryption checkbox enabled, selecting the gda-lab-key CMK; (5) written task: would an unencrypted S3 bucket containing customer PII violate POPIA Condition 7 (Security safeguards)? Write a 3-sentence justification with reference to the specific POPIA condition and the relevant AWS control. Submit Lab 5a.
+2:45
+Break
+15 minutes
+3:00
+Lecture
+POPIA and cloud data in South Africa (50 min) — POPIA came into full effect on 1 July 2021 and applies to any organisation, public or private, that processes the personal information of South African residents. Personal information includes names, ID numbers, email addresses, location data, biometric data, and any information that can identify a living person. The 8 conditions in detail: Accountability (appoint an Information Officer, maintain records of processing activities — CloudTrail provides the audit trail); Processing limitation (collect only what is necessary, IAM least privilege restricts access to PII data stores); Purpose specification (data classification tags on AWS resources document the intended purpose); Further processing limitation (S3 bucket policies prevent unauthorised secondary use); Information quality (RDS automated backups maintain data integrity); Openness (privacy policy hosted on S3, architecture documentation for regulators); Security safeguards (KMS encryption, TLS 1.2+, MFA, security groups, VPC Flow Logs — the technical implementation pillar of POPIA); Data subject participation (application-level features for data access, correction, and deletion requests). Penalties: up to R10 million fine or 10 years imprisonment. Breach notification to the Information Regulator required within 72 hours.
+3:50
+Workshop
+POPIA compliance audit of the 2-tier application (50 min) — Using the Module 4 2-tier application architecture, learners perform a structured POPIA compliance review. For each of the 8 conditions: is the current architecture compliant? If not, what specific AWS control would bring it into compliance and what is the estimated implementation effort (Low, Medium, or High)? Groups are assigned two conditions each and present their findings. The facilitator consolidates all findings into a shared compliance gap register on a whiteboard — a professional deliverable format that mirrors real information security governance work.
+4:40
+Wrap-up
+Encryption decisions flowchart (20 min) — Learners complete a printed decision tree: given a data type (PII such as SA ID numbers, financial transaction records, public marketing content, application log files), choose: should it be encrypted at rest? Which AWS encryption service and storage class? Should it be encrypted in transit? Which protocol and port? The facilitator reviews the most commonly incorrect entries and explains the reasoning.
+Formative assessment
+Lab 5a: SSE-KMS encrypted S3 bucket screenshot, KMS CMK created, encrypted EBS volume confirmed, and written POPIA Condition 7 justification — all submitted to LMS
+POPIA compliance gap register: each group's assigned conditions reviewed and consolidated by facilitator
+Facilitator notes
+The Equifax breach is the most effective teaching tool for the Shared Responsibility Model — it demonstrates with financial consequences that AWS being secure does not mean the customer's workload is secure
+POPIA is a legal obligation for SA-based organisations, not a best practice — frame it consistently as a compliance and legal risk matter throughout the lesson
+KMS CMKs cost $1 per month — remind learners to schedule their deletion after the course ends to avoid ongoing charges
+RDS encryption can only be enabled at instance creation time — it cannot be applied to an existing unencrypted RDS instance; this is a critical gotcha in production cloud migrations that learners will encounter in their careers
+Lesson 2: Network security, CloudTrail & AWS Config
+Week 9 · Day 2  ·  5 hours
+Lesson objectives
+Harden security groups on the Module 4 2-tier application to follow the least-privilege principle
+Enable and interpret VPC Flow Logs to identify network traffic patterns and suspicious activity
+Enable AWS CloudTrail and read a CloudTrail event log entry in detail
+Enable an AWS Config managed rule to detect and flag non-compliant security group configurations
+Understand how HTTPS is enforced using ACM certificates and an Application Load Balancer
+Resources & environment
+Module 4 VPC and 2-tier application — EC2 and RDS must be running
+AWS Certificate Manager (ACM) — free for certificates used with ALBs
+CloudWatch Logs for VPC Flow Log output destination
+Slides: VPC Flow Log field diagram with field descriptions
+Printed: CloudTrail log event anatomy worksheet (one per learner)
+Note: start Flow Logs at the beginning of class — they take 5–10 minutes to begin appearing
+Session plan
+Time
+Type
+Activity & description
+0:00
+Lecture
+Security group hardening — from wide-open to least privilege (30 min) — The most common cloud misconfiguration: port 22 (SSH) open to 0.0.0.0/0, exposing the server to the entire internet. Within minutes of an EC2 instance launching with this configuration, automated scanners (including Shodan) detect it and begin brute-force attempts. Best practices: restrict SSH inbound to a specific management IP address or CIDR range, or use a bastion host in a separate management subnet; never allow 0.0.0.0/0 on database ports under any circumstances; use security group chaining — the RDS security group references the EC2 security group ID as its source rather than an IP address. Principle of deny-by-default: start with no access and explicitly add only what is required.
+0:30
+Lab
+Lab 5b Part 1 — Security group hardening (40 min) — Tasks: (1) review the current inbound and outbound rules on the Module 4 EC2 security group and identify any overly permissive rules (document each finding); (2) restrict SSH inbound on port 22 to the facilitator-specified IP range or the class CIDR only; (3) confirm the RDS security group allows port 3306 inbound from the EC2 security group ID only and not from any IP address range; (4) add an explicit outbound rule to the RDS security group allowing only responses (port 3306) back to the EC2 security group — remove any allow-all outbound rule; (5) test all application functions remain operational after hardening. Submit Lab 5b-1: before and after screenshots of security group rules.
+1:10
+Lecture
+VPC Flow Logs — network visibility and forensics (30 min) — What VPC Flow Logs capture: source IP address, destination IP address, source port, destination port, IP protocol number, number of bytes and packets transferred, start and end timestamp, and most importantly the action field — ACCEPT (traffic was allowed) or REJECT (traffic was blocked by a security group or NACL). What Flow Logs do not capture: packet payload content, DNS query details, DHCP traffic, and Windows licence activation traffic. Primary use cases: security forensics (trace the network path of an attack), compliance evidence (demonstrate access controls are working), cost analysis (identify unexpected data transfer between services), and capacity planning. Logs are stored in Amazon CloudWatch Logs or an S3 bucket. Log field format explained field by field with a real example entry.
+1:40
+Lecture
+AWS CloudTrail — the control plane audit log (35 min) — CloudTrail records every API call made against your AWS account regardless of whether it was made via the console, CLI, SDK, or a third-party tool. Each event record contains: who called it (IAM user ARN, role ARN, or root), what action was performed (CreateInstance, DeleteBucket, ModifySecurityGroup), on which resource (full ARN), when it occurred (UTC timestamp with millisecond precision), and from where (source IP address and user agent string). Event types: management events (all control plane actions such as creating or deleting resources — included free in the first trail) and data events (S3 object-level reads and writes, Lambda invocations — charged separately). Trail configuration options: single-region or all-regions, log file delivery to S3 with optional SNS notification, CloudWatch Logs integration for real-time metric filters and alarms. Log File Integrity Validation: SHA-256 hash chain — detects if any log file was modified or deleted after delivery.
+2:15
+Break
+15 minutes
+2:30
+Lab
+Lab 5b Part 2 — Enable CloudTrail, VPC Flow Logs, and AWS Config (70 min) — Tasks: (1) enable a CloudTrail trail logging management events in all regions, delivering logs to the lab S3 bucket; (2) perform three console actions: add a resource tag to the EC2 instance, modify a security group rule, and list S3 bucket objects; (3) retrieve the corresponding CloudTrail events from the console and annotate each field: eventName, userIdentity.arn, sourceIPAddress, eventTime, requestParameters, and responseElements; (4) enable VPC Flow Logs on the Module 4 VPC, delivering logs to CloudWatch Logs with a 1-day retention period; (5) generate traffic by SSH-ing into the EC2 instance and browsing the web application; (6) view the Flow Log entries in CloudWatch and identify at least three ACCEPT entries and two REJECT entries, noting the source and destination for each; (7) navigate to AWS Config, enable the service in af-south-1, and activate the managed rule restricted-ssh which flags security groups that allow SSH from 0.0.0.0/0; (8) view the compliance status — confirm any previously open SSH rules are flagged as NON_COMPLIANT. Submit Lab 5b-2.
+3:40
+Lecture
+Encryption in transit — HTTPS with ACM and Application Load Balancer (35 min) — Why running HTTP is dangerous for any application that handles user credentials, session tokens, or personal information: all data travels in plaintext and can be intercepted by anyone with network access between the client and server. TLS 1.2 and 1.3: the TLS handshake negotiates a cipher suite, exchanges the server certificate, and establishes a session encryption key that is unique to each connection. AWS Certificate Manager: provision free SSL/TLS certificates for use with AWS services including ALBs, CloudFront, and API Gateway. Certificates are automatically renewed before expiry — no manual renewal required. Application Load Balancer TLS termination: the ALB handles the TLS handshake and forwards plain HTTP to the EC2 backend (SSL offloading reduces CPU load on application servers). ALB listener rules: redirect all HTTP (port 80) traffic permanently to HTTPS (port 443). HTTP Strict Transport Security (HSTS) response header prevents protocol downgrade attacks.
+4:15
+Workshop
+Security review — score the 2-tier application (30 min) — Using a printed 15-point security checklist based on the AWS Well-Architected Security Pillar, learners working in pairs score the current state of their Module 4 application. Scoring: Implemented (2 points), Partially implemented (1 point), Not yet implemented (0 points). Maximum score: 30 points. Security rating: 0–10 = Critical gaps requiring immediate remediation; 11–20 = Needs improvement before production; 21–30 = Foundational security baseline achieved. Each pair identifies their top 3 highest-impact remediations — those that would most improve their score for the least implementation effort.
+4:45
+Wrap-up
+AWS security services landscape overview (15 min) — Brief introduction to the broader AWS security ecosystem beyond this module's scope: AWS GuardDuty (continuous threat detection using machine learning on CloudTrail, VPC Flow Logs, and DNS logs), AWS Security Hub (aggregated security findings from multiple services in a single dashboard), AWS WAF (web application firewall for protecting against OWASP Top 10 attacks), AWS Shield Standard (automatic DDoS protection included free for all accounts) and Shield Advanced (enhanced DDoS protection for R3,000+ per month), AWS Macie (uses ML to automatically discover and protect sensitive data including PII in S3 buckets). These are the tools learners will work with in the Cloud Practitioner Pro course.
+Formative assessment
+Lab 5b-1: before and after security group rule screenshots submitted — SSH restriction and RDS port isolation confirmed
+Lab 5b-2: CloudTrail event annotation, Flow Log ACCEPT and REJECT entries, and Config NON_COMPLIANT result submitted to LMS
+Security review checklist: score recorded and added to the learner's Portfolio of Evidence
+Facilitator notes
+The Shodan demonstration — searching for open port 22 on EC2 instances globally — is highly effective at making learners understand the real-world threat model; use it if internet connectivity allows
+CloudTrail management events are free for the first trail; AWS Config rules may incur minimal charges of approximately $0.001 per rule evaluation — flag this to learners
+Enable VPC Flow Logs at the very beginning of class before the lecture starts — they take 5–10 minutes to appear in CloudWatch, so starting them early ensures they are available during the lab
+ACM certificate provisioning requires ownership of a domain name — for this lab, focus on the concept and demonstrate on a shared facilitator domain if available; the full HTTPS configuration is offered as an optional extension for learners who own a domain
+Lesson 3: Incident response, Well-Architected Security & module quiz
+Week 10 · Day 1  ·  5 hours
+Lesson objectives
+Describe the 6 phases of cloud incident response and explain the purpose of each phase
+Apply all 6 incident response phases to an assigned simulated cloud breach scenario
+Use the AWS Well-Architected Security Pillar to conduct a structured security review of an architecture
+Produce a professional Security Hardening Report for the Module 4 2-tier application
+Pass the Module 5 formative quiz at 70% or above
+Resources & environment
+Module 4 application architecture (running or documented)
+Printed: 4 incident response scenario cards — one per group (provided in LMS)
+Printed: AWS Well-Architected Security Pillar checklist — 15 items (one per learner)
+Security hardening report template — 1 page with structured sections (provided in LMS)
+Module 5 Quiz — 20 questions (LMS or printed)
+Session plan
+Time
+Type
+Activity & description
+0:00
+Discussion
+The 2020 SolarWinds supply chain attack (20 min) — Attackers compromised SolarWinds' software build pipeline and inserted malicious code into a legitimate signed software update package for the Orion platform. Approximately 18,000 organisations downloaded and installed the update, including multiple US government agencies and major technology companies. The initial compromise was not detected for months. The incident response effort was vast, complex, and expensive. Key lesson for cloud practitioners: even well-secured organisations with mature security programmes get breached. The question is not whether an incident will occur but whether your organisation is prepared to detect it, contain it, and recover from it effectively. A practised incident response plan reduces both the duration and the damage of any breach.
+0:20
+Lecture
+Cloud incident response — 6 phases in depth (45 min) — Phase 1 Prepare: develop and test IR runbooks before an incident occurs; run AWS GameDays to simulate breach scenarios; create a pre-authorised forensic IAM role with read-only access to all services for use during investigations; maintain an isolated forensic VPC with no internet access for safe analysis; ensure CloudTrail, GuardDuty, and VPC Flow Logs are pre-enabled on all accounts; establish an out-of-band communications plan that does not rely on potentially compromised systems. Phase 2 Identify: detect anomalies via GuardDuty machine learning alerts, CloudTrail unusual activity patterns, VPC Flow Log traffic spikes, billing alerts triggered by unexpected resource provisioning such as cryptomining EC2 instances. Phase 3 Contain: immediately isolate a compromised EC2 instance by replacing its security group with a deny-all rule; revoke or deactivate the associated IAM role or user; take an EBS snapshot of the instance for forensic preservation before any changes; rotate all credentials that may have been exposed. Phase 4 Eradicate: terminate the compromised instance after forensic snapshot; delete malicious IAM users, access keys, or policies created by the attacker; patch or remediate the specific vulnerability that was exploited. Phase 5 Recover: launch a clean replacement instance from a known-good AMI; restore application data from the last verified clean backup; validate integrity by comparing checksums; monitor intensively for recurrence. Phase 6 Lessons Learned: conduct a blameless post-mortem within 5 business days; identify the root cause, contributing factors, and detection gaps; update IR runbooks with findings; implement preventive technical controls to prevent recurrence.
+1:05
+Workshop
+Incident response simulation — 4 scenario cards (75 min) — Groups of 3 learners each receive one scenario card and must apply all 6 IR phases, documenting their proposed response actions for each phase. Scenario A: GuardDuty generates a critical alert at 3am indicating that an EC2 instance is communicating with a known command-and-control IP address on a non-standard port — the instance runs the production web application. Scenario B: CloudTrail shows that an IAM user created 50 new IAM users and attached the AdministratorAccess managed policy to each within a 10-minute window — the legitimate owner of that IAM user is on leave. Scenario C: an AWS Budgets alert fires at 11pm showing the account has already exceeded 500% of the monthly budget; Cost Explorer shows dozens of EC2 instances running in regions the company has never used — classic cryptomining compromise pattern. Scenario D: VPC Flow Logs show thousands of REJECT entries on port 5432 (PostgreSQL) from an unknown external IP over a 6-hour period — a database brute-force or reconnaissance attempt. Each group presents their 6-phase response plan. Facilitator provides structured feedback on missed containment steps and over-escalation.
+2:20
+Break
+15 minutes
+2:35
+Lecture
+AWS Well-Architected Framework — Security Pillar (30 min) — The 6 security design principles: implement a strong identity foundation (least privilege, no long-term credentials for services); enable traceability (CloudTrail, Config, Flow Logs — log everything); apply security at all layers (not just the perimeter — defence in depth); automate security best practices (Config rules, GuardDuty, Security Hub — automate detection and response); protect data in transit and at rest (TLS, KMS — encrypt by default); prepare for security events (IR plan, GameDays, forensic tooling ready before you need it). The 7 security focus areas: Identity and Access Management, Detection, Infrastructure Protection, Data Protection, Incident Response, Application Security, and Governance and Compliance. The AWS Well-Architected Tool: a free service in the console that guides organisations through a formal architecture review and generates a report with improvement recommendations. How the Security Pillar maps to POPIA Condition 7 (Security safeguards) and to ISACA and ISO 27001 frameworks used in South African enterprise security governance.
+3:05
+Lab
+Lab 5c — Security Hardening Report for the 2-tier application (55 min) — Using all findings from Lessons 1 and 2, the Well-Architected Security checklist, and the POPIA compliance gap register, each learner produces a one-page Security Hardening Report for their Module 4 2-tier application. Report structure: (1) Architecture Summary — a brief description of the 2-tier application with security controls listed; (2) Well-Architected Security Assessment — score against each of the 6 Security Pillar principles (implemented, partial, not implemented); (3) Findings Table — at least 5 findings listed with columns for Finding Description, Severity (Critical/High/Medium/Low), Recommended AWS Control, and Implementation Effort (Low/Medium/High); (4) POPIA Compliance Summary — overall compliance status against all 8 conditions with gap items highlighted. This report is added to the learner's Portfolio of Evidence and represents a professional-quality security deliverable.
+4:00
+Quiz
+Module 5 Formative Quiz (30 min) — 20 multiple-choice questions across all three lessons. Distribution: shared responsibility model (3), encryption at rest and in transit (4), POPIA and compliance (4), network security, CloudTrail, and Config (5), incident response (4). Minimum pass mark: 14 out of 20 (70%).
+4:30
+Debrief
+Quiz review and Module 6 preview (30 min) — Review answers to any question missed by more than 40% of learners and re-teach where necessary. Module 6 preview: 'You have now built, deployed, and secured a production-pattern 2-tier cloud application. In Module 6 — the Capstone Project — you will apply everything from all five modules to design, build, and present your own cloud solution for a real South African business scenario. This is the culmination of Cloud Launchpad.' Distribute the Capstone Project Brief and ensure every learner reads it before the next session.
+Formative assessment
+Lab 5c: Security Hardening Report submitted to LMS and added to Portfolio of Evidence — assessed on findings quality and POPIA mapping accuracy
+IR simulation: all 6 phases documented for the assigned scenario, verbal presentation delivered and assessed by facilitator
+Module 5 Quiz: 20 questions, 70% pass mark, results recorded in LMS
+Learners below 70% offered a 1:1 catch-up session before the Capstone begins
+Facilitator notes
+The IR simulation is consistently the highest-energy session of the entire module — allow groups the full presentation time and resist cutting this exercise short even if the quiz runs late
+Scenario C (cryptomining detected via billing alert) resonates particularly strongly because unexpected cost is a concern shared by every cloud learner and practitioner
+The Security Hardening Report is a professional deliverable format — provide coaching on business writing quality, not just technical accuracy; the findings table format mirrors real security assessment reports used by cloud consulting firms in SA
+After this module: remind learners to keep their Module 4 2-tier application running or at minimum document the architecture clearly for use as the baseline in the Module 6 capstone presentation
+7.5 Module 5 Quiz — Full Question Bank (20 Questions)
+The following 20 questions constitute the Module 5 formative quiz. Administer via the LMS or on paper. Minimum pass mark: 14 out of 20 (70%). Questions progress from foundational definitions through applied compliance and incident scenario reasoning.
+Q1.  Under the AWS Shared Responsibility Model, which of the following is AWS's responsibility when a customer runs an EC2 instance?
+A) Patching the guest operating system
+B) Configuring inbound security group rules
+C) Maintaining the physical data centre and hypervisor infrastructure
+D) Encrypting application data stored on EBS volumes
+Answer: C    (Lesson 1 — AWS Shared Responsibility Model: AWS manages physical and hypervisor layer)
+Q2.  A customer stores customer ID numbers (personal information under POPIA) in an S3 bucket with no encryption enabled. Which POPIA condition is most directly violated?
+A) Condition 1 — Accountability
+B) Condition 3 — Purpose specification
+C) Condition 7 — Security safeguards
+D) Condition 8 — Data subject participation
+Answer: C    (Lesson 1 — POPIA Condition 7: security safeguards require technical measures including encryption)
+Q3.  Which AWS service manages encryption keys and integrates with S3, EBS, RDS, and Secrets Manager to provide encryption at rest?
+A) AWS Certificate Manager
+B) AWS Secrets Manager
+C) AWS Key Management Service (KMS)
+D) AWS CloudHSM
+Answer: C    (Lesson 1 — AWS KMS for encryption key management)
+Q4.  What is the key difference between server-side encryption with SSE-S3 and SSE-KMS?
+A) SSE-S3 uses AES-128; SSE-KMS uses AES-256
+B) SSE-KMS uses customer-managed keys giving you key policy control and an audit trail in CloudTrail; SSE-S3 uses AWS-managed keys with no key-level auditing
+C) SSE-S3 is only available in the us-east-1 region
+D) SSE-KMS is free; SSE-S3 costs $0.10 per GB
+Answer: B    (Lesson 1 — SSE-S3 vs SSE-KMS key management and audit differences)
+Q5.  Under POPIA, within how many hours must an organisation notify the Information Regulator after discovering a personal information breach?
+A) 24 hours
+B) 48 hours
+C) 72 hours
+D) 7 days
+Answer: C    (Lesson 1 — POPIA breach notification: 72-hour requirement)
+Q6.  An EC2 instance has a security group rule allowing inbound SSH (port 22) from 0.0.0.0/0. Which AWS Config managed rule would flag this as non-compliant?
+A) vpc-flow-logs-enabled
+B) restricted-ssh
+C) ec2-instance-no-public-ip
+D) s3-bucket-public-access-prohibited
+Answer: B    (Lesson 2 — AWS Config restricted-ssh rule)
+Q7.  VPC Flow Logs record an entry with the action field showing REJECT. What does this indicate?
+A) The EC2 instance rejected the network connection at the application layer
+B) A security group or NACL rule blocked the traffic before it reached the instance
+C) The traffic was encrypted and could not be inspected
+D) The packet was dropped due to network congestion
+Answer: B    (Lesson 2 — VPC Flow Logs: REJECT means a SG or NACL rule blocked the traffic)
+Q8.  Which detail does CloudTrail NOT record in its log entries?
+A) The IAM user or role that performed the action
+B) The source IP address of the API call
+C) The content of data written to S3 objects
+D) The timestamp of when the action occurred
+Answer: C    (Lesson 2 — CloudTrail logs control plane actions, not data payload content)
+Q9.  What is the primary security benefit of using an Application Load Balancer for TLS termination?
+A) It allows the EC2 instance to receive encrypted traffic directly
+B) It offloads the TLS handshake from EC2 instances and enforces HTTPS centrally at the load balancer
+C) It automatically patches the EC2 operating system when new TLS versions are released
+D) It stores the private key on the EC2 instance for maximum security
+Answer: B    (Lesson 2 — ALB TLS termination / SSL offloading)
+Q10.  An ALB listener rule should be configured to redirect all HTTP traffic on port 80 to HTTPS. Why is this important?
+A) Port 80 is blocked by AWS by default and must be redirected
+B) Without the redirect, users accessing the site via HTTP will transmit credentials and session tokens in plaintext
+C) HTTPS is slower and the redirect improves performance
+D) AWS charges extra for traffic on port 80
+Answer: B    (Lesson 2 — HTTP to HTTPS redirect for preventing plaintext credential transmission)
+Q11.  In the context of the AWS Well-Architected Security Pillar, what does the principle 'enable traceability' require?
+A) Publishing your architecture diagram publicly for review
+B) Logging and monitoring all actions and changes to your environment using services such as CloudTrail, Config, and VPC Flow Logs
+C) Enabling X-Ray tracing on all Lambda functions
+D) Using AWS Service Catalog to track all deployed resources
+Answer: B    (Lesson 3 — Well-Architected Security: enable traceability)
+Q12.  During the Contain phase of cloud incident response, what is the recommended first action when an EC2 instance is suspected to be compromised?
+A) Immediately terminate the instance to stop the attacker
+B) Take no action until the cause is confirmed to avoid disrupting legitimate users
+C) Replace the instance security group with a deny-all rule to isolate it, and take an EBS snapshot for forensic preservation
+D) Notify AWS Support and wait for their instructions
+Answer: C    (Lesson 3 — IR Phase 3 Contain: isolate with deny-all SG and preserve forensic snapshot)
+Q13.  What is the purpose of a blameless post-mortem in the Lessons Learned phase of incident response?
+A) To identify which team member made the error so they can be retrained
+B) To focus on systemic process and tooling failures rather than individual blame, enabling honest discussion and genuine improvement
+C) To provide legal documentation for regulatory submission
+D) To calculate the financial impact of the breach for insurance purposes
+Answer: B    (Lesson 3 — IR Phase 6: blameless post-mortem for systemic improvement)
+Q14.  Which AWS service continuously analyses CloudTrail logs, VPC Flow Logs, and DNS logs using machine learning to detect threats such as compromised credentials and cryptocurrency mining?
+A) AWS Config
+B) AWS Security Hub
+C) Amazon Inspector
+D) Amazon GuardDuty
+Answer: D    (Lesson 2/3 — AWS GuardDuty for ML-based threat detection)
+Q15.  A learner finds that their AWS account has been used to launch 200 EC2 instances in regions they have never used, and the monthly bill has reached 50x the normal amount. Which incident response phase are they currently in?
+A) Prepare
+B) Identify
+C) Contain
+D) Recover
+Answer: B    (Lesson 3 — IR Phase 2: Identify — detecting the anomaly via billing alert)
+Q16.  Which of the following is NOT captured by VPC Flow Logs?
+A) Source and destination IP addresses
+B) The TCP or UDP port numbers of the traffic
+C) The actual content or payload of the network packets
+D) Whether the traffic was accepted or rejected by security rules
+Answer: C    (Lesson 2 — VPC Flow Logs: does not capture payload content)
+Q17.  An RDS instance was launched 6 months ago without encryption enabled. A security audit now requires all RDS instances to be encrypted at rest. What is the correct approach?
+A) Enable KMS encryption on the existing RDS instance via the Modify option
+B) RDS encryption cannot be enabled on an existing unencrypted instance; create an encrypted snapshot and restore to a new encrypted instance
+C) Delete and recreate the RDS instance with the same data automatically migrated
+D) Use AWS DataSync to encrypt the existing instance in place
+Answer: B    (Lesson 1 — RDS encryption only at creation: must snapshot and restore to encrypt existing instance)
+Q18.  What does the AWS Certificate Manager (ACM) automatically handle that manual certificate management does not?
+A) ACM certificates are signed by a custom private CA
+B) ACM automatically renews certificates before expiry without any manual intervention
+C) ACM certificates work on any web server regardless of whether it is on AWS
+D) ACM provides wildcard certificates for a one-time fee
+Answer: B    (Lesson 2 — ACM: automatic certificate renewal)
+Q19.  Which POPIA condition requires organisations to notify data subjects about the purpose for which their personal information is being collected?
+A) Condition 1 — Accountability
+B) Condition 2 — Processing limitation
+C) Condition 3 — Purpose specification
+D) Condition 6 — Openness
+Answer: D    (Lesson 1 — POPIA Condition 6: Openness (notify data subjects))
+Q20.  A cloud architect is designing a 3-tier application that handles South African customer banking data. According to the AWS Well-Architected Security Pillar, which approach best represents 'applying security at all layers'?
+A) Placing a single WAF in front of the public-facing web tier and trusting all traffic between tiers
+B) Applying security controls at every tier: WAF for the web tier, security groups between tiers, KMS encryption for the database tier, and CloudTrail for audit logging across all tiers
+C) Using a single master security group that applies to all three tiers for consistency
+D) Delegating security entirely to the ALB, which handles all TLS and access control
+Answer: B    (Lesson 3 — Well-Architected Security: defence in depth across all layers)
+
+--- FOLDER: tmp_GDA_CloudLaunchpad_Phase8_Module6 ---
+GINASHE DIGITAL ACADEMY
+Cloud Computing Track — Foundation Level
+Cloud Launchpad
+Phase 8: Module 6 — Capstone Project
+NQF Level 4  ·  Module 6 of 6  ·  Summative Assessment
+20 Contact Hours  ·  Weeks 11 – 12  ·  4 Phases
+6 SA Business Scenarios  ·  100 Marks  ·  70% Pass Mark
+Individual deployment + group presentation + Portfolio of Evidence
+MICT SETA  ·  QCTO Accreditation Pathway  ·  Integrated PoE
+Prepared by Ginashe Group — 12 April 2026
+8
+PHASE
+Module 6: Capstone Project — Deploy a Cloud Solution
+Full project guide — 4 phases, 20 hours, Weeks 11–12
+8.1 Capstone Overview
+The Capstone Project is the summative assessment of Cloud Launchpad. It requires each learner to independently design, deploy, secure, document, and present a complete cloud solution for a real South African business scenario. Every skill from the preceding five modules converges here: Linux administration, networking and VPC design, cloud infrastructure deployment, IAM and security hardening, POPIA compliance, and cost management. The capstone accounts for 40% of the final Cloud Launchpad mark.
+Module
+Weeks
+Hours
+Phases
+Total Marks
+Module 6 of 6
+Weeks 11 – 12
+20 hours
+4 phases
+100 marks
+8.2 Capstone Learning Outcomes
+On successful completion of the Capstone Project, learners will have demonstrated the ability to:
+Analyse a real South African business scenario and translate business requirements into a cloud architecture design
+Design a secure, cost-aware cloud architecture integrating skills from all five preceding modules
+Deploy the designed architecture on AWS within the free tier and demonstrate it is fully operational
+Apply POPIA-compliant security controls to the deployed solution and produce a professional security hardening report
+Produce a cost estimate using the AWS Pricing Calculator and recommend cost optimisation strategies
+Present the solution to a panel using appropriate technical and business language for a mixed audience
+Compile and submit a complete Portfolio of Evidence demonstrating competency across all six Cloud Launchpad modules
+8.3 Assessment Rubric — 100 Marks
+The capstone is assessed across six components. All components must be submitted and a minimum of 70 out of 100 must be achieved for the learner to be awarded the Cloud Launchpad Certificate of Competence.
+Component
+Marks
+Assessment Criteria
+Evidence Required
+Architecture design
+20
+Correct VPC design (public/private subnets, IGW, route tables); appropriate AWS service selection for the scenario; security controls designed in from the start (not added as an afterthought); cost-aware instance and service choices; clear alignment between architecture decisions and stated business requirements
+Annotated architecture diagram — hand-drawn or produced with a diagramming tool; design rationale document (1 paragraph per major decision)
+Working deployment
+25
+EC2 instance running in the correct subnet and accessible via SSH; database (RDS or DynamoDB) accessible from EC2 only and not from the public internet; S3 bucket configured with correct access controls for the scenario; IAM role attached to EC2 — no access keys on the instance; security groups reflect least-privilege rules; application or service is demonstrably operational
+Console screenshots showing each running resource; live demo during presentation or screen recording (minimum 3 minutes); CLI output showing key configuration details
+Security and POPIA
+15
+Encryption at rest enabled on all data stores (S3, EBS, RDS) using SSE-S3 or KMS; encryption in transit enforced for all connections; POPIA conditions 1–8 explicitly mapped to implemented AWS controls; CloudTrail enabled; IAM least-privilege policy documented and applied; security hardening report produced
+Completed security hardening report (Module 5 format); KMS key or SSE configuration screenshots; CloudTrail trail screenshot; POPIA compliance mapping table
+Cost estimate
+10
+AWS Pricing Calculator used with realistic instance types and sizes (free tier or close to it); monthly cost estimate provided for the designed architecture; at least two cost optimisation recommendations made with projected savings; estimate is presented in South African Rand (ZAR) using the current exchange rate
+AWS Pricing Calculator export (PDF or screenshot); written commentary explaining each cost line item and the optimisation recommendations
+Presentation and defence
+20
+Clear and logical presentation structure (problem, solution, architecture, security, cost, recommendation); language is appropriate for both a technical and a non-technical business audience (explains jargon, uses analogies); scenario business context addressed throughout (not a generic cloud presentation); technical questions from the panel answered accurately and honestly; presentation kept to 15 minutes; Q&A responses are direct and confident
+Live 15-minute presentation to panel; 5-minute panel Q&A; peer evaluation forms completed by classmates
+Portfolio of Evidence
+10
+All required PoE artefacts from Modules 1 through 6 are present and clearly labelled; artefacts are logically organised (by module, chronologically); reflective journal entry of minimum 300 words included; professional formatting (no raw terminal output without annotation, no screenshots without captions); submitted on time
+Complete PoE binder or digital folder submitted at the end of Week 12; reviewed by facilitator against the PoE checklist
+Note: A learner who achieves the overall 70% pass mark but scores below 50% on any single component must complete a supplementary submission for that component before the certificate is issued.
+8.4 Marks Weighting — Capstone in the Context of Cloud Launchpad
+Assessment Component
+Weight
+Description
+Formative module quizzes (Modules 1–5)
+20%
+Five quizzes of 20 questions each, 70% pass mark per quiz
+Practical lab submissions (Labs 1a–5c)
+30%
+Hands-on lab outputs submitted per lesson across all five modules
+Mid-point checkpoint (Modules 2 + 3 combined)
+10%
+Single practical assessment covering Linux and networking combined
+Capstone project (Module 6)
+30%
+Architecture + deployment + security + cost + presentation + PoE
+Portfolio of Evidence compilation
+10%
+Complete PoE submitted at end of Module 6 covering all six modules
+8.5 South African Business Scenario Briefs
+Each learner selects one scenario from the six options below. Scenarios are designed to be achievable within the AWS free tier and to require the full range of Cloud Launchpad skills. The facilitator may assign scenarios to ensure a distribution across the class. Learners may not change their scenario after the facilitator sign-off at the end of Phase 1.
+Scenario 1: Mzansi Eats
+Cape Town, Western Cape  ·  Food delivery / E-commerce
+Client background
+Mzansi Eats is a local food delivery startup serving three townships in Cape Town. Founded in 2023, the business currently operates with a WhatsApp ordering system and manual dispatch — it processes approximately 3,000 orders per week. The founders want to launch a proper web-based ordering platform before their Series A funding round in 8 months. They have a tight budget and need to start with a minimum viable architecture that can scale.
+Technical focus
+EC2 (web server running the app)
+RDS MySQL (order and customer database)
+S3 (menu photo storage)
+IAM role on EC2 for S3 access
+HTTPS enforcement (ALB or self-signed cert)
+Security group: web server public-facing, database private
+Business requirements
+A public-facing web application where customers can browse menus and place orders
+An order database storing customer details, order history, and driver assignments
+An image store for restaurant menu photos
+Basic user authentication (username and password — no OAuth required for this phase)
+Mobile-friendly (responsive HTML — not a native app)
+Must be POPIA-compliant: customer names, addresses, and phone numbers are personal information
+Constraints
+Free tier only — t2.micro EC2, db.t3.micro RDS, 20 GB storage maximum
+POPIA compliance required: customer PII must be encrypted at rest
+No managed container services (ECS, EKS) — raw EC2 only for this assessment
+Scenario 2: Ubuntu Health Clinic
+Soweto, Gauteng  ·  Healthcare / POPIA-sensitive
+Client background
+Ubuntu Health Clinic is a community health clinic in Soweto serving approximately 800 patients per month. The clinic currently uses paper records for patient history and appointment scheduling. A recent POPIA audit found their paper-based system non-compliant and the clinic has been given 6 months to implement a digital records system. The clinic administrator has a limited technical background and needs a simple, secure solution.
+Technical focus
+EC2 (web server and application)
+RDS MySQL (patient and appointment records — encrypted at rest with KMS mandatory)
+IAM roles and strict security groups (no public database access under any circumstances)
+KMS customer-managed key for RDS encryption
+CloudTrail (who accessed patient records and when)
+S3 for appointment summary exports (SSE-KMS encryption)
+Business requirements
+A web-based patient registration form collecting name, SA ID number, date of birth, contact number, and medical aid details
+A database storing patient records and appointment history
+An appointment booking system allowing receptionists to schedule and view appointments
+Basic reporting: number of appointments per week (no advanced analytics required)
+All patient data must be stored in South Africa (af-south-1 region mandatory)
+A documented POPIA compliance statement for the Information Regulator
+Constraints
+CRITICAL: This scenario has the strictest security requirements — RDS encryption with KMS is non-negotiable
+All data must remain in af-south-1 (Cape Town) — no cross-region replication
+Patient SA ID numbers qualify as special personal information under POPIA — treat with maximum care
+Database must never have a public endpoint — violation results in automatic deduction of 10 marks from the security component
+Scenario 3: Joburg PropConnect
+Johannesburg, Gauteng  ·  Property / Media-heavy
+Client background
+PropConnect is a property listing platform connecting estate agents with buyers in Johannesburg. The platform currently runs on a shared hosting provider that is slow, expensive, and frequently down. With 50,000 monthly visitors and 200 active property listings each containing 10–15 high-resolution photographs, the main technical challenges are storage cost, image delivery performance, and uptime. The CTO wants to migrate to AWS before the peak summer property season.
+Technical focus
+EC2 (web application server)
+S3 (photo and media storage with appropriate storage class)
+S3 static website or CloudFront concept (performance discussion even if CloudFront is not deployed due to cost)
+RDS MySQL (listing and agent database)
+S3 lifecycle policy (transition old listing photos after 90 days)
+IAM role for EC2 to write to S3
+Business requirements
+A public-facing property search and listing website
+A media store for high-resolution property photos (average 4 MB per photo, 200 listings, 10–15 photos each)
+A database storing listing details, agent profiles, and buyer enquiry leads
+Fast image loading for South African users (CDN consideration)
+Agent admin portal to upload new listings and photos
+Lead capture form collecting buyer name, email, and phone number (POPIA applies)
+Constraints
+CloudFront distribution is not required (has costs) but must be discussed in the cost estimate and presentation as a recommendation
+S3 storage class selection must be justified based on access frequency of active vs archived listings
+Image upload via the web interface is optional — demonstrating direct S3 upload via CLI is acceptable
+Scenario 4: Kasi Pay
+Braamfontein, Gauteng  ·  Fintech / Security-focused
+Client background
+Kasi Pay is a fintech startup building a REST API for mobile payments targeted at township informal traders. The API processes payment requests from a mobile app and records transactions. The founders are preparing for registration with the Financial Sector Conduct Authority (FSCA) and need to demonstrate strong security and audit controls to regulators. The technical team is small — two developers — and they need infrastructure they can operate without a dedicated DevOps team.
+Technical focus
+EC2 (API server — simulate with a simple Flask or Node.js API returning mock responses)
+RDS PostgreSQL (transaction ledger — Multi-AZ concept discussed even if not deployed on free tier)
+IAM roles — EC2 must access RDS without access keys
+CloudTrail (mandatory — FSCA audit requirement)
+Security groups: API on port 443 public, database on port 5432 from EC2 SG only
+S3 for automated database dump backups via a scheduled cron job
+Business requirements
+A REST API server handling payment transaction requests (simulated — no real payment processing required)
+A transaction ledger database storing all payment records with timestamps
+Complete API audit trail: every request logged with timestamp, source IP, user identity, and response code
+Automated backup of the transaction database (no data loss tolerance)
+API accessible over HTTPS only — HTTP must be rejected
+POPIA compliance for customer financial data
+Constraints
+Multi-AZ RDS deployment is not required (exceeds free tier) but must be recommended and costed in the pricing estimate
+CloudTrail must be enabled — this is a regulatory requirement for the scenario and a marked deliverable
+The presentation must include a section specifically addressing FSCA and POPIA compliance for a financial regulator audience
+Scenario 5: Limpopo Agri-Link
+Polokwane, Limpopo  ·  Agriculture / Data-focused
+Client background
+Agri-Link is a farmer cooperative serving 200 member farms across Limpopo province. The cooperative needs a digital platform to record weekly crop yield data from each farm, display current market prices sourced from the Johannesburg Fresh Produce Market, and manage logistics for transporting produce to markets. Currently everything is tracked in WhatsApp groups and Excel spreadsheets emailed between members. Connectivity is limited — many farms have only 2G data access.
+Technical focus
+EC2 (web application — lightweight, optimised for 2G connections)
+RDS MySQL or DynamoDB (yield records — justify your choice in the presentation)
+S3 (weekly summary CSV exports for download by member farms)
+IAM role on EC2 for S3 access
+Minimal JavaScript (no React or Vue — plain HTML forms)
+Cost estimate must assume free tier with a projection for 200 users
+Business requirements
+A data entry form for farmers to submit weekly yield records (crop type, quantity, quality grade)
+A database storing historical yield data for analysis
+A simple dashboard showing the last 4 weeks of yield data per crop type
+Market price data display (static data is acceptable — manual update by admin)
+Logistics record keeping: which farm, which truck, which market, which date
+Works on slow connections (lightweight HTML, no heavy frameworks)
+Constraints
+The RDS vs DynamoDB choice is a deliberate design decision — the presentation must justify the choice with technical reasoning
+Connectivity optimisation must be addressed in the architecture presentation: image sizes, page weight, no unnecessary assets
+This scenario is ideal for learners interested in the agricultural sector — encourage authentic engagement with the real problem
+Scenario 6: SA EdTech Hub
+Cape Town, Western Cape  ·  Education / Scalability-focused
+Client background
+SA EdTech Hub is an online learning platform providing video lessons, practice quizzes, and tutor support for Grade 10–12 matric learners across South Africa. The platform currently has 10,000 registered learners. During exam preparation periods (August–November), usage spikes to 50,000 concurrent users. The existing platform runs on a single VPS and crashes every exam season. The founder wants to migrate to a cloud architecture that can handle peak traffic without manual intervention.
+Technical focus
+EC2 (web application — discuss Auto Scaling concept even if not implemented)
+RDS MySQL (user accounts, quiz data, progress records)
+S3 (lesson content assets — PDFs, images, downloadable resources)
+Application Load Balancer concept introduced and discussed (implement if time allows)
+IAM role on EC2 for S3
+Cost estimate must include both normal capacity and peak capacity (exam season) scenarios
+Business requirements
+A web application serving lesson content (text and embedded video links — no video hosting required)
+A quiz engine with question banks stored in a database
+User progress tracking (lesson completion, quiz scores)
+A tutor messaging system (simple — learner sends a message, tutor replies)
+Scalability for 50,000 concurrent users during peak exam periods
+Content accessible from anywhere in South Africa with reasonable performance
+Constraints
+Auto Scaling is not required for implementation (exceeds free tier) but is mandatory as a recommendation in the cost estimate and architecture discussion
+The presentation must specifically address the peak traffic challenge and how the recommended architecture solves it
+Video hosting on S3 is not recommended due to egress costs — external embedding (YouTube, Vimeo) should be discussed as the cost-optimal approach
+8.6 Four-Phase Project Plan
+The capstone runs over two weeks and is structured into four distinct phases. Each phase has defined deliverables that must be completed before moving to the next.
+Phase 1 — Briefing and Architecture Design (Week 11, Day 1 — 5 hours)
+Phase 1 objectives
+Select or receive a capstone scenario assignment
+Understand the client brief and extract key technical requirements
+Design a cloud architecture on paper before touching the console
+Submit the architecture design for facilitator sign-off
+Produce an initial cost estimate range using the AWS Pricing Calculator
+Facilitated session plan — 5 hours
+Hours 0–1: Facilitator presents all 6 scenarios with a 10-minute brief on each, highlighting the key technical challenge and POPIA considerations. Learners indicate their first and second scenario preferences. Facilitator assigns scenarios aiming for distribution across the class (no more than 3 learners per scenario in a class of 15).
+Hours 1–3: Independent design time. Each learner draws their architecture on a blank A3 sheet provided. The design must show: VPC boundary, public and private subnets, all AWS services used, security group boundaries, data flow arrows with encryption annotations, and IAM role assignments. Facilitator circulates, asking probing questions: 'Why did you choose RDS over DynamoDB here?' 'Where is your encryption at rest?' 'What happens if this EC2 instance fails?'
+Hours 3–4: Peer review pairs. Each learner presents their design to a partner for 10 minutes. Partner reviews against a 10-point design checklist (VPC correct, subnets correct, encryption present, IAM roles used, cost-conscious choices, POPIA-relevant controls). Feedback recorded in writing.
+Hours 4–5: Facilitator sign-off. Each learner has a 5-minute conversation with the facilitator about their design. Facilitator approves or requires specific changes before the learner may begin building. No learner starts Phase 2 without a signed-off design.
+Phase 1 deliverable: hand-drawn and facilitator-signed architecture diagram, submitted as a PoE artefact.
+Phase 2 — Build and Deploy (Week 11, Days 2–3 — 7 hours)
+Phase 2 objectives
+Deploy the signed-off architecture on AWS using the console and CLI
+Configure all security controls from the design
+Verify all services are running and the application is operational
+Troubleshoot any deployment issues with facilitator support
+Document all deployment steps with screenshots as PoE evidence
+Build sprint structure — 7 hours over 2 days
+This is the most intensive phase. Learners work independently with facilitated support. The facilitator does not solve problems for learners — they ask questions that guide learners to the solution themselves ('What does the error message say? Where would you look in the AWS documentation?'). This develops problem-solving skills that are essential in real cloud roles.
+Day 1 (4 hours): VPC and networking setup, EC2 instance launch and configuration, application deployment. At the 2-hour mark the facilitator does a structured check-in: is the VPC up? Is EC2 running? Is SSH working? Learners who are stuck on the same issue for more than 30 minutes are paired with a peer who has resolved that issue.
+Day 2 (3 hours): Database deployment and connection, S3 configuration, IAM role setup, security hardening, and end-to-end functionality testing. At the 2-hour mark: structured check-in. Does the application read from and write to the database? Are security groups restricted? Is encryption enabled? Remaining time: polishing and capturing screenshots.
+Phase 2 deliverable: screenshots of all running services and a working application, submitted as PoE evidence.
+Phase 3 — Documentation and Portfolio of Evidence (Week 12, Day 1 — 4 hours)
+Phase 3 objectives
+Finalise the architecture diagram (digital or hand-drawn) with all components labelled
+Complete the security hardening report (Module 5 format adapted for the capstone scenario)
+Generate and document the AWS cost estimate with ZAR conversion and optimisation recommendations
+Write a reflective journal entry (minimum 300 words)
+Compile all PoE artefacts from Modules 1–6 into a single organised submission
+Documentation session structure — 4 hours
+Hour 1: Architecture diagram finalisation. Learners refine their hand-drawn diagram or reproduce it digitally using a tool of their choice (draw.io, Lucidchart, PowerPoint, or pen and paper are all acceptable). All components must be labelled with service names and security annotations. Data flow arrows must indicate encryption status.
+Hours 1–2: Security hardening report. Using the Module 5 template, learners document: (1) current security controls implemented in the capstone, (2) POPIA compliance mapping for all 8 conditions, (3) findings table with at least 3 identified gaps and their recommended remediations, (4) Well-Architected Security Pillar assessment score.
+Hour 2–3: Cost estimate. Using the AWS Pricing Calculator, learners build a monthly cost estimate for their deployed architecture. The estimate must be converted to South African Rand using the current exchange rate (the facilitator provides the day's USD/ZAR rate). At least two cost optimisation recommendations must be included with their projected savings.
+Hour 3–4: Reflective journal and PoE compilation. The reflective journal asks learners to answer: What did I learn in Cloud Launchpad that surprised me most? What was the hardest technical concept? What cloud role do I now want to pursue and why? How would I approach this project differently with more time? PoE artefacts from all 6 modules are organised into a logical submission.
+Phase 3 deliverable: complete PoE submission including architecture diagram, security report, cost estimate, and reflective journal.
+Phase 4 — Presentation and Defence (Week 12, Day 2 — 4 hours)
+Phase 4 objectives
+Deliver a 15-minute structured presentation to a 2-person panel
+Answer a 5-minute technical and business question panel Q&A
+Complete peer evaluation forms for classmates
+Receive final marks and facilitator feedback
+Receive the Cloud Launchpad Certificate of Competence
+Presentation day schedule
+Learners present in groups of 4–5 per session. Each presentation is 15 minutes followed by 5 minutes of panel Q&A. The panel consists of the facilitator and one guest — ideally a practising cloud professional sourced from GDA's industry network (an alumnus, a Ginashe Digital client, or an MICT SETA industry partner).
+Required presentation structure — 15 minutes
+Slide 1 (1 min): Introduction — learner name, scenario name, the business problem in one sentence
+Slide 2–3 (2 min): Client background — who is the client, what is the problem, why cloud is the right solution
+Slide 4–5 (3 min): Architecture — the diagram, each service and why it was chosen, data flow explanation
+Slide 6 (2 min): Security and POPIA — encryption, IAM, network security, POPIA conditions met
+Slide 7 (2 min): Cost estimate — monthly cost in ZAR, pricing model choices, top optimisation recommendation
+Slide 8 (2 min): Live demo or screen recording — show the running application
+Slide 9 (3 min): Reflections and recommendations — what you would do next with more time or budget
+Panel Q&A question bank — facilitators choose 3–4 per learner
+Why did you choose RDS (or DynamoDB) for this scenario? What would change your answer?
+Which POPIA condition was hardest to implement technically, and how did you address it?
+If this business grew 10x in users, which part of your architecture would break first and how would you fix it?
+Walk me through how a customer's personal data flows through your system from entry to storage.
+Your current architecture has no backup strategy beyond RDS automated backups. What would you add?
+Why is the database in a private subnet? What would happen if you put it in a public subnet?
+What would this architecture cost at 10x the current scale? Walk me through your estimate.
+Name one thing you would do differently if you were designing this for a real production client.
+How does your architecture comply with POPIA Condition 7 (security safeguards)?
+If you received a GuardDuty alert at 2am for this system, what are the first three things you would do?
+8.7 Portfolio of Evidence — Complete Checklist
+The Portfolio of Evidence is a cumulative record of every learning artefact produced across the six modules of Cloud Launchpad. It provides the evidence base for SETA unit standard sign-off and QCTO qualification credit. The PoE must be submitted at the end of Week 12 alongside the capstone project materials.
+Module
+Topic
+Required PoE Artefacts
+Module 1
+Cloud Foundations
+AWS or Azure free-tier console navigation screenshot; AWS Pricing Calculator output for a web server scenario; personal GDA learning pathway map (career goal and modules needed)
+Module 2
+Linux Essentials
+Linux navigation worksheet (completed, with annotated output); nginx running in browser screenshot; backup automation Bash script (commented); SSH key-pair setup confirmation (ssh without password)
+Module 3
+Networking Fundamentals
+Subnetting worksheet — 6 problems with workings shown; hand-drawn VPC design diagram; EC2 SSH connection confirmation inside the custom-built VPC; CloudTrail event annotation worksheet
+Module 4
+Cloud Infrastructure
+Working 2-tier web application URL screenshot; hand-drawn 2-tier architecture diagram (peer-reviewed and corrected); SQL session screenshot (CREATE, INSERT, SELECT, UPDATE, DELETE); custom IAM policy JSON with test results
+Module 5
+Cloud Security
+POPIA compliance gap register for the Module 4 application; CloudTrail event with all fields annotated; VPC Flow Log entry showing ACCEPT and REJECT; AWS Config NON_COMPLIANT result; security hardening report (Well-Architected format)
+Module 6
+Capstone Project
+Annotated capstone architecture diagram; deployment screenshots for all services; security hardening report for the capstone scenario; AWS Pricing Calculator cost estimate in ZAR; presentation slides; reflective journal (min 300 words)
+8.8 Facilitator Certification Checklist
+Before issuing a Cloud Launchpad Certificate of Competence, the facilitator confirms all of the following:
+All 5 formative module quizzes completed with a minimum of 70% on each
+All practical lab submissions (Labs 1a through 5c) received and reviewed
+Mid-point practical checkpoint (Modules 2+3) completed and passed
+Capstone project: all four phases completed and a minimum of 70 out of 100 marks achieved
+No single capstone component below 50% (or supplementary submission received and passed)
+Complete Portfolio of Evidence submitted, organised, and verified against the PoE checklist above
+Reflective journal included in the PoE (minimum 300 words)
+CloudTrail and budget alert confirmed as enabled on the learner's AWS account
+All AWS resources confirmed deleted or stopped after the course to prevent ongoing charges
+SETA unit standard sign-off forms completed for all 9 applicable unit standards
+Cloud Launchpad — End of Course
+Ginashe Digital Academy  ·  Ginashe Group  ·  Johannesburg, South Africa
+"Making Digital Transformation a Reality — One Learner at a Time"
+

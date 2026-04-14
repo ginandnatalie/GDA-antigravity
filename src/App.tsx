@@ -6,13 +6,15 @@ import { supabase } from './lib/supabase';
 import Navbar from './components/Navbar';
 import { Footer } from './components/Footer';
 import { Modals } from './components/Modals';
-import { AdminDashboard, StudentPortal, StaffActivationView } from './components/Portals';
-import { CourseViewer } from './components/LMS';
 import { ArrowRight } from 'lucide-react';
 
 // Pages
 import Home from './pages/Home';
 import CurriculumPage from './pages/CurriculumPage';
+import LevelFoundationPage from './pages/LevelFoundationPage';
+import LevelAssociatePage from './pages/LevelAssociatePage';
+import LevelProfessionalPage from './pages/LevelProfessionalPage';
+import LevelEnterprisePage from './pages/LevelEnterprisePage';
 import FacultyPage from './pages/FacultyPage';
 import AboutPage from './pages/AboutPage';
 import AdmissionsPage from './pages/AdmissionsPage';
@@ -21,6 +23,7 @@ import NewsPage from './pages/NewsPage';
 import NewsDetailPage from './pages/NewsDetailPage';
 import EventsPage from './pages/EventsPage';
 import VerifyPage from './pages/VerifyPage';
+import PathwaysPage from './pages/PathwaysPage';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -147,8 +150,13 @@ function AppContent() {
           <main className="flex-1">
             <Routes>
               <Route path="/" element={<Home onOpenModal={openModal} editMode={editMode} siteSettings={siteSettings} />} />
+              <Route path="/levels/foundation" element={<LevelFoundationPage onOpenModal={openModal} editMode={editMode} />} />
+              <Route path="/levels/associate" element={<LevelAssociatePage onOpenModal={openModal} editMode={editMode} />} />
+              <Route path="/levels/professional" element={<LevelProfessionalPage onOpenModal={openModal} editMode={editMode} />} />
+              <Route path="/levels/enterprise" element={<LevelEnterprisePage onOpenModal={openModal} editMode={editMode} />} />
+              <Route path="/pathways" element={<PathwaysPage onOpenModal={openModal} editMode={editMode} />} />
               {(!siteSettings || siteSettings.showCurriculum !== false) && (
-                <Route path="/curriculum" element={<CurriculumPage editMode={editMode} />} />
+                <Route path="/curriculum" element={<CurriculumPage onOpenModal={openModal} editMode={editMode} />} />
               )}
               {(!siteSettings || siteSettings.showFaculty !== false) && (
                 <Route path="/faculty" element={<FacultyPage editMode={editMode} />} />
@@ -164,27 +172,23 @@ function AppContent() {
               <Route path="/news/:slug" element={<NewsDetailPage />} />
               <Route path="/events" element={<EventsPage />} />
               <Route path="/verify" element={<VerifyPage />} />
-              <Route path="/activate" element={<StaffActivationView />} />
               
               <Route 
                 path="/admin" 
-                element={isAdmin ? <AdminDashboard /> : <Navigate to="/" />} 
-              />
-              <Route 
-                path="/student-portal" 
-                element={<Navigate to="/portal" replace />} 
+                element={<Navigate to="https://staff.ginashe.academy" replace />} 
               />
               <Route 
                 path="/portal" 
-                element={user ? <StudentPortal onStartCourse={(id) => navigate(`/course/${id}`)} /> : <Navigate to="/" />} 
+                element={<Navigate to="https://portal.ginashe.academy" replace />} 
               />
               <Route 
-                path="/course/:courseId" 
-                element={user ? <CourseViewerWrapper /> : <Navigate to="/" />} 
+                path="/course/*" 
+                element={<Navigate to="https://portal.ginashe.academy" replace />} 
               />
+              <Route path="/activate" element={<Navigate to="https://staff.ginashe.academy" replace />} />
             </Routes>
           </main>
-
+          
           {!isPortal && <Footer onOpenModal={openModal} editMode={editMode} />}
         </>
       )}
@@ -192,11 +196,7 @@ function AppContent() {
   );
 }
 
-function CourseViewerWrapper() {
-  const { courseId } = useParams();
-  const navigate = useNavigate();
-  return <CourseViewer courseId={courseId!} onBack={() => navigate('/portal')} />;
-}
+
 
 export default function App() {
   return (

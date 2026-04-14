@@ -1,11 +1,39 @@
 export const PROGRAMMES = [
-  'Cloud Launchpad (Foundation / SETA)',
-  'Cloud Architecture Residency',
-  'AI & Machine Learning Engineering',
-  'Data Engineering & Analytics',
-  'AI for Business Leaders',
-  'DevSecOps',
-  'Workforce Modernisation Sprint (Enterprise)',
+  // Cloud Track
+  'Cloud Launchpad',
+  'Cloud Practitioner Pro',
+  'Cloud Architect',
+  'Multi-Cloud Enterprise',
+  // AI & ML Track
+  'AI Fundamentals',
+  'ML Essentials',
+  'Applied AI Engineering',
+  'AI Strategy & Enterprise',
+  // Cybersecurity Track
+  'Cyber Essentials',
+  'Ethical Hacking',
+  'Security Operations',
+  'CISO Programme',
+  // Data & Analytics Track
+  'Data Literacy',
+  'Data Analysis & BI',
+  'Data Engineering',
+  'AI-Driven Analytics',
+  // Digital Transformation Track
+  'Digital Literacy for Work',
+  'Process Digitisation',
+  'Digital Transformation Lead',
+  'CDO Programme',
+  // Software & DevOps Track
+  'Code Launchpad',
+  'Full-Stack Development',
+  'DevOps & Cloud-Native',
+  'Platform Engineering',
+  // Digital Business Track
+  'Digital Entrepreneurship 101',
+  'E-Commerce & Marketing',
+  'Digital Business Strategy',
+  'Innovation & Ventures',
   "I'm not sure — I want guidance",
 ];
 

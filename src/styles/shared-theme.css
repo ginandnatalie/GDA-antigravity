@@ -1,0 +1,58 @@
+/* 
+  Ginashe Digital Academy: Institutional Design Constitution
+  Navy & Gold Aesthetic Tokens
+*/
+
+:root {
+  /* Brand Colors */
+  --gold: #f4a21a;
+  --gold-light: #fbbf24;
+  --gold-dim: rgba(244, 162, 26, 0.12);
+  --gold-glow: rgba(244, 162, 26, 0.25);
+  
+  --emerald: #56cfac;
+  --emerald-dim: rgba(86, 207, 172, 0.10);
+  
+  --sky: #4fc3f7;
+  --sky-dim: rgba(79, 195, 247, 0.10);
+
+  /* Naval Backgrounds */
+  --bg: #070a10;
+  --bg2: #0b0e18;
+  --surface: #0f1320;
+  --card: #131726;
+  --card2: #171c2e;
+  
+  /* Borders & Glassmorphism */
+  --border-custom: rgba(255, 255, 255, 0.07);
+  --border2: rgba(255, 255, 255, 0.12);
+  --glass-bg: rgba(255, 255, 255, 0.03);
+  --glass-border: rgba(255, 255, 255, 0.06);
+
+  /* Typography */
+  --text-custom: #e8ecf8;
+  --text-muted: #5a607c;
+  --text-dim: #3a3f58;
+  --text-soft: #8890b0;
+}
+
+/* Institutional Component Classes */
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+}
+
+.gold-gradient {
+  background: linear-gradient(135deg, var(--gold) 0%, #c67d10 100%);
+}
+
+.institutional-border {
+  border: 1px solid var(--border-custom);
+  transition: border-color 0.3s ease;
+}
+
+.institutional-border:hover {
+  border-color: var(--gold-glow);
+}

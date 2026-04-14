@@ -46,7 +46,8 @@ export default function Navbar({ onOpenModal, editMode, setEditMode, siteSetting
 
   // Primary Navigation
   const navItems = [
-    { label: 'Curriculum', path: '/curriculum', hasMega: true },
+    { label: 'Academy Pathways', path: '/pathways', hasMega: true },
+    { label: 'Institutional Matrix', path: '/curriculum', hasMega: true },
     { label: 'Admissions', path: '/admissions', hasMega: true },
     { label: 'Faculty', path: '/faculty', hasMega: false },
     { label: 'Discover', path: '#', hasMega: true },
@@ -80,11 +81,11 @@ export default function Navbar({ onOpenModal, editMode, setEditMode, siteSetting
             <div className="absolute inset-0 bg-gradient-to-tr from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
           </div>
           <div className="flex flex-col">
-            <span className="font-outfit font-black text-[17px] tracking-tight leading-none text-white whitespace-nowrap">
-              Ginashe <span className="text-gold">Digital</span> Academy
+            <span className="font-outfit font-black text-[22px] tracking-tighter leading-[0.8] text-white">
+              Ginashe
             </span>
-            <span className="font-jetbrains text-[8px] tracking-[0.25em] uppercase text-gold/60 mt-0.5">
-              Empowering Excellence
+            <span className="font-outfit font-black text-[12px] tracking-[0.05em] uppercase text-white -mt-0.5">
+              <span className="text-gold">Digital</span> Academy
             </span>
           </div>
         </Link>
@@ -120,20 +121,42 @@ export default function Navbar({ onOpenModal, editMode, setEditMode, siteSetting
                   >
                     <div className="bg-[#0b0e14] border border-white/10 rounded-2xl shadow-[0_40px_80px_rgba(0,0,0,0.6)] overflow-hidden">
                       
-                      {/* Curriculum Mega Menu */}
-                      {item.label === 'Curriculum' && (
+                      {/* Academy Pathways Mega Menu */}
+                      {item.label === 'Academy Pathways' && (
                         <div className="p-5 grid grid-cols-2 gap-4">
                           {[
-                            { title: 'Cloud Engineering', desc: 'Azure, AWS & GCP Specialisation', icon: <Cpu className="w-5 h-5" />, color: 'text-sky', bg: 'bg-sky/5' },
-                            { title: 'AI & Data Science', desc: 'ML, Predictive & Neural Networks', icon: <Zap className="w-5 h-5" />, color: 'text-emerald', bg: 'bg-emerald/5' },
-                            { title: 'Digital Leadership', desc: 'Executive Transformation & Strategy', icon: <Briefcase className="w-5 h-5" />, color: 'text-gold', bg: 'bg-gold/5' },
-                            { title: 'Full-Stack Web', desc: 'Modern Architecture & Frameworks', icon: <Code className="w-5 h-5" />, color: 'text-coral', bg: 'bg-coral/5' }
+                            { title: 'Foundation Core', desc: 'Institutional Entrance & Literacy', icon: <Cpu className="w-5 h-5" />, color: 'text-gold', bg: 'bg-gold/5', path: '/levels/foundation' },
+                            { title: 'Associate Specialist', desc: 'Technical Specialisation Phase', icon: <Zap className="w-5 h-5" />, color: 'text-emerald', bg: 'bg-emerald/5', path: '/levels/associate' },
+                            { title: 'Professional Residency', desc: 'High-Performance Mastery', icon: <Shield className="w-5 h-5" />, color: 'text-sky', bg: 'bg-sky/5', path: '/levels/professional' },
+                            { title: 'Enterprise Fellowship', desc: 'Global Leadership & Governance', icon: <Globe className="w-5 h-5" />, color: 'text-violet', bg: 'bg-violet/5', path: '/levels/enterprise' }
                           ].map((c, i) => (
-                            <Link key={i} to="/curriculum" className="flex items-start gap-4 p-4 rounded-xl hover:bg-white/5 transition-all group/item border border-transparent hover:border-white/5">
+                            <Link key={i} to={c.path} className="flex items-start gap-4 p-4 rounded-xl hover:bg-white/5 transition-all group/item border border-transparent hover:border-white/5">
                               <div className={`p-2.5 rounded-xl ${c.bg} border border-white/5 group-hover/item:scale-110 transition-transform ${c.color}`}>{c.icon}</div>
                               <div>
                                 <div className="font-outfit font-bold text-[14px] text-white group-hover/item:text-gold transition-colors">{c.title}</div>
                                 <div className="text-[11px] text-text-muted leading-relaxed mt-1">{c.desc}</div>
+                              </div>
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+                      
+                      {item.label === 'Institutional Matrix' && (
+                        <div className="p-5 grid grid-cols-2 gap-4">
+                          {[
+                            { title: 'AI & Machine Learning', desc: 'Intelligence & Predictive Systems', indicator: 'Market Critical', icon: <Zap className="w-5 h-5" />, color: 'text-emerald', bg: 'bg-emerald/5' },
+                            { title: 'Cloud Computing', desc: 'Infrastructure & Distributed Systems', indicator: 'Institutional Pillar', icon: <Cpu className="w-5 h-5" />, color: 'text-sky', bg: 'bg-sky/5' },
+                            { title: 'Software & DevOps', desc: 'Engineering Sovereignty & CI/CD', indicator: 'High Growth', icon: <Code className="w-5 h-5" />, color: 'text-coral', bg: 'bg-coral/5' },
+                            { title: 'Digital Transformation', desc: 'Strategy & Institutional Governance', indicator: 'Strategic Leadership', icon: <Briefcase className="w-5 h-5" />, color: 'text-gold', bg: 'bg-gold/5' }
+                          ].map((c, i) => (
+                            <Link key={i} to="/curriculum" className="flex items-start gap-4 p-4 rounded-xl hover:bg-white/5 transition-all group/item border border-transparent hover:border-white/5 relative overflow-hidden">
+                              <div className={`p-2.5 rounded-xl ${c.bg} border border-white/5 group-hover/item:scale-110 transition-transform ${c.color}`}>{c.icon}</div>
+                              <div>
+                                <div className="flex items-center gap-2 mb-1">
+                                  <div className="font-outfit font-bold text-[14px] text-white group-hover/item:text-gold transition-colors">{c.title}</div>
+                                  <span className="font-dm-mono text-[7px] px-1.5 py-0.5 rounded-sm bg-white/5 text-text-muted uppercase tracking-wider">{c.indicator}</span>
+                                </div>
+                                <div className="text-[11px] text-text-muted leading-relaxed">{c.desc}</div>
                               </div>
                             </Link>
                           ))}
@@ -214,10 +237,10 @@ export default function Navbar({ onOpenModal, editMode, setEditMode, siteSetting
           </div>
 
           <div className="flex items-center gap-3">
-            <span className="hidden xl:flex items-center gap-2 font-jetbrains text-[9px] tracking-[0.2em] text-[#22c55e]">
+            <Link to="/contact" className="hidden xl:flex items-center gap-2 font-jetbrains text-[9px] tracking-[0.2em] text-[#22c55e] hover:text-gold transition-colors no-underline">
               <span className="w-1.5 h-1.5 rounded-full bg-[#22c55e] animate-pulse" />
-              GDA_OPERATIONAL
-            </span>
+              CONTACT US
+            </Link>
             
             <button 
               className="lg:hidden p-2 text-white hover:text-gold transition-colors"
@@ -229,17 +252,17 @@ export default function Navbar({ onOpenModal, editMode, setEditMode, siteSetting
         </div>
 
         {/* --- DYNAMIC ACCESS POD (Experimental Menu) --- */}
-        <div className="hidden lg:block absolute bottom-[-36px] right-6 z-[1001]">
+        <div className="hidden lg:block absolute bottom-[-36px] right-0 z-[1001]">
           <motion.div 
             initial={{ y: -10, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             className="flex items-stretch bg-navy border border-gold/30 rounded-full shadow-[0_15px_40px_rgba(0,0,0,0.5),0_0_20px_rgba(244,162,26,0.1)] overflow-hidden h-12"
           >
             {/* Student/Staff Profile Section */}
-            <Link 
-              to={user ? (isAdmin ? '/admin' : '/portal') : '/portal'}
+            <a 
+              href={user ? (isAdmin ? 'https://staff.ginashe.academy' : 'https://portal.ginashe.academy') : 'https://portal.ginashe.academy'}
               onClick={!user ? (e) => { e.preventDefault(); onOpenModal('student'); } : undefined}
-              className="flex items-center gap-3 px-6 hover:bg-white/5 transition-all group border-r border-white/10"
+              className="flex items-center gap-3 px-6 hover:bg-white/5 transition-all group border-r border-white/10 no-underline"
             >
               <div className="w-7 h-7 rounded-lg bg-gold/10 flex items-center justify-center group-hover:bg-gold transition-all">
                 <GraduationCap className="w-4 h-4 text-gold group-hover:text-navy transition-colors" />
@@ -250,15 +273,8 @@ export default function Navbar({ onOpenModal, editMode, setEditMode, siteSetting
                 </span>
                 <span className="text-[7px] font-jetbrains text-text-muted uppercase tracking-widest mt-0.5">Secure_Access</span>
               </div>
-            </Link>
+            </a>
             
-            {/* Quick Community Section */}
-            <div className="hidden xl:flex">
-              <Link to="/alumni" className="px-5 hover:bg-white/5 transition-all flex items-center gap-2 text-white/50 hover:text-gold border-r border-white/10">
-                <Users className="w-3.5 h-3.5" />
-                <span className="text-[9px] font-bold uppercase tracking-wider">Alumni</span>
-              </Link>
-            </div>
 
             {/* High-Impact CTA */}
             <button 
@@ -318,12 +334,28 @@ export default function Navbar({ onOpenModal, editMode, setEditMode, siteSetting
                                 className="overflow-hidden"
                               >
                                 <div className="grid grid-cols-1 gap-3 py-4 pl-2">
-                                  {/* Render Curriculum sub-items */}
-                                  {item.label === 'Curriculum' && [
-                                    { title: 'Cloud Engineering', desc: 'Azure, AWS & GCP', icon: <Cpu className="w-4 h-4" /> },
-                                    { title: 'AI & Data Science', desc: 'ML & Neural Networks', icon: <Zap className="w-4 h-4" /> },
-                                    { title: 'Digital Leadership', desc: 'Executive Strategy', icon: <Briefcase className="w-4 h-4" /> },
-                                    { title: 'Full-Stack Web', desc: 'Modern Frameworks', icon: <Code className="w-4 h-4" /> }
+                                  {/* Render Academy Pathways sub-items */}
+                                  {item.label === 'Academy Pathways' && [
+                                    { title: 'Foundation Core', desc: 'Level 1: Entry', icon: <Cpu className="w-4 h-4" />, path: '/levels/foundation' },
+                                    { title: 'Associate Specialist', desc: 'Level 2: Speciality', icon: <Zap className="w-4 h-4" />, path: '/levels/associate' },
+                                    { title: 'Professional Residency', desc: 'Level 3: Mastery', icon: <Shield className="w-4 h-4" />, path: '/levels/professional' },
+                                    { title: 'Enterprise Fellowship', desc: 'Level 4: Fellowship', icon: <Globe className="w-4 h-4" />, path: '/levels/enterprise' }
+                                  ].map((c, i) => (
+                                    <Link key={i} to={c.path} onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/5">
+                                      <div className="w-10 h-10 rounded-xl bg-gold/10 flex items-center justify-center text-gold">{c.icon}</div>
+                                      <div>
+                                        <div className="font-bold text-sm text-white">{c.title}</div>
+                                        <div className="text-[10px] text-text-muted">{c.desc}</div>
+                                      </div>
+                                    </Link>
+                                  ))}
+
+                                  {/* Render Institutional Matrix sub-items */}
+                                  {item.label === 'Institutional Matrix' && [
+                                    { title: 'AI & Machine Learning', desc: 'Intelligence Systems', icon: <Zap className="w-4 h-4" /> },
+                                    { title: 'Cloud Computing', desc: 'Infrastructure Systems', icon: <Cpu className="w-4 h-4" /> },
+                                    { title: 'Software & DevOps', desc: 'Engineering Sovereignty', icon: <Code className="w-4 h-4" /> },
+                                    { title: 'Digital Transformation', desc: 'Institutional Strategy', icon: <Briefcase className="w-4 h-4" /> }
                                   ].map((c, i) => (
                                     <Link key={i} to="/curriculum" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/5">
                                       <div className="w-10 h-10 rounded-xl bg-gold/10 flex items-center justify-center text-gold">{c.icon}</div>

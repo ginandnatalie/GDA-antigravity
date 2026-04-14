@@ -8,8 +8,10 @@ import {
   BarChart3, BookOpen, CreditCard, User, Settings, Layout, 
   ChevronRight, LogOut, CheckCircle2, Clock, MapPin, Phone, 
   Briefcase, GraduationCap, ArrowRight, ShieldCheck, Mail, Globe,
-  Calendar, Zap, Star, AlertCircle, FileText, Lock, AlertTriangle
+  Calendar, Zap, Star, AlertCircle, FileText, Lock, AlertTriangle,
+  LayoutGrid, List, UserRound, Verified, History, XCircle, Shield
 } from 'lucide-react';
+import { GovernanceMotivationModal } from './GovernanceMotivationModal';
 
 // ─── UTILITY: CSV Export ─────────────────────
 function exportToCSV(data: any[], filename: string) {
@@ -179,6 +181,10 @@ export function AdminDashboard() {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [filter, setFilter] = useState('all');
   const [updatingId, setUpdatingId] = useState<string | null>(null);
+  
+  // ─── GOVERNANCE MOTIVATION STATE ───
+  const [showGovModal, setShowGovModal] = useState(false);
+  const [govAction, setGovAction] = useState<{ name: string; targetId?: string; callback: (data: any) => void } | null>(null);
 
   const isSuperAdmin = profile?.role === 'super_admin' || 
     user?.email === 'academy@ginashe.co.za' || 
@@ -268,24 +274,32 @@ export function AdminDashboard() {
   }
 
   async function handleApproveAlumni(record: any) {
-    const { error } = await supabase
-      .from('alumni_records')
-      .update({ is_approved: true })
-      .eq('id', record.id);
-    if (error) {
-      alert(error.message);
-    } else {
-      await supabase.from('institutional_audit_logs').insert({
-        action: 'INSTITUTIONAL_BLESSING_GRANTED',
-        performed_by: user?.id,
-        target_type: 'alumni_record',
-        target_id: record.id,
-        reason: `Institutional validation completed for ${record.profiles?.first_name} ${record.profiles?.last_name}. Seal finalized.`,
-        new_value: { record_id: record.id, status: 'approved' }
-      });
-      alert('Institutional Blessing Granted!');
-      fetchAlumniApprovals();
-    }
+    setGovAction({
+      name: 'INSTITUTIONAL_BLESSING_GRANT',
+      targetId: record.id,
+      callback: async (govData) => {
+        const { error } = await supabase
+          .from('alumni_records')
+          .update({ is_approved: true })
+          .eq('id', record.id);
+        
+        if (error) {
+          alert(error.message);
+        } else {
+          await supabase.from('institutional_audit_logs').insert({
+            action: 'INSTITUTIONAL_BLESSING_GRANTED',
+            performed_by: user?.id,
+            target_type: 'alumni_record',
+            target_id: record.id,
+            reason: govData.motivation,
+            new_value: { record_id: record.id, status: 'approved', evidence_url: govData.evidenceUrl }
+          });
+          alert('Institutional Blessing Granted!');
+          fetchAlumniApprovals();
+        }
+      }
+    });
+    setShowGovModal(true);
   }
 
   async function handlePasswordReset() {
@@ -323,8 +337,8 @@ export function AdminDashboard() {
     try {
       const { data, error } = await supabase
         .from('courses')
-        .select('*')
-        .order('created_at', { ascending: false });
+        .select('*, curriculum_tracks(*)')
+        .order('nqf_level', { ascending: true });
 
       if (error) throw error;
       setCourses(data || []);
@@ -336,60 +350,65 @@ export function AdminDashboard() {
   }
 
   async function updateStatus(id: string, newStatus: string) {
-    setUpdatingId(id);
-    try {
-      const app = applications.find(a => a.id === id);
-      const historyEntry = {
-        event: `Status changed to ${newStatus}`,
-        timestamp: new Date().toISOString(),
-        by: user?.email || 'admin',
-        details: `Application ${newStatus} by ${user?.email}`
-      };
+    setGovAction({
+      name: `APPLICATION_STATUS_UPDATE_${newStatus.toUpperCase()}`,
+      targetId: id,
+      callback: async (govData) => {
+        setUpdatingId(id);
+        try {
+          const app = applications.find(a => a.id === id);
+          const historyEntry = {
+            event: `Status changed to ${newStatus}`,
+            timestamp: new Date().toISOString(),
+            by: user?.email || 'admin',
+            details: govData.motivation
+          };
 
-      const existingHistory = Array.isArray(app?.history) ? app.history : [];
+          const existingHistory = Array.isArray(app?.history) ? app.history : [];
 
-      const updateData: any = {
-        status: newStatus,
-        reviewed_by: user?.email,
-        reviewed_at: new Date().toISOString(),
-        history: [...existingHistory, historyEntry],
-        updated_at: new Date().toISOString()
-      };
-
-
-
-      const { error } = await supabase
-        .from('applications')
-        .update(updateData)
-        .eq('id', id);
-
-      if (error) throw error;
-      
-      // Send email notification
-      try {
-        await fetch('/api/send-status-email', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            email: app.email,
-            name: app.type === 'individual' ? `${app.first_name} ${app.last_name}` : app.organization_name,
+          const updateData: any = {
             status: newStatus,
-            program: app.program,
-            studentNumber: updateData.student_number
-          })
-        });
-      } catch (emailErr) {
-        console.error('Failed to send email notification:', emailErr);
-      }
+            reviewed_by: user?.email,
+            reviewed_at: new Date().toISOString(),
+            history: [...existingHistory, historyEntry],
+            updated_at: new Date().toISOString()
+          };
 
-      setApplications(applications.map(a => 
-        a.id === id ? { ...a, ...updateData } : a
-      ));
-    } catch (err: any) {
-      alert('Error updating status: ' + err.message);
-    } finally {
-      setUpdatingId(null);
-    }
+          const { error } = await supabase
+            .from('applications')
+            .update(updateData)
+            .eq('id', id);
+
+          if (error) throw error;
+          
+          // Send email notification
+          try {
+            await fetch('/api/send-status-email', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                email: app.email,
+                name: app.type === 'individual' ? `${app.first_name} ${app.last_name}` : app.organization_name,
+                status: newStatus,
+                program: app.program,
+                studentNumber: updateData.student_number
+              })
+            });
+          } catch (emailErr) {
+            console.error('Failed to send email notification:', emailErr);
+          }
+
+          setApplications(applications.map(a => 
+            a.id === id ? { ...a, ...updateData } : a
+          ));
+        } catch (err: any) {
+          alert('Error updating status: ' + err.message);
+        } finally {
+          setUpdatingId(null);
+        }
+      }
+    });
+    setShowGovModal(true);
   }
 
   // ─── BULK ACTIONS ────────────────
@@ -571,6 +590,7 @@ export function AdminDashboard() {
                 { id: 'news', label: 'Content CMS', icon: Layout },
                 { id: 'events', label: 'Events Hub', icon: Calendar },
                 { id: 'governance', label: 'Campus Governance', icon: ShieldCheck, super: true },
+                { id: 'compliance', label: 'Compliance Hub', icon: ShieldCheck, super: true },
                 { id: 'graduation', label: 'Graduation', icon: GraduationCap, super: true },
                 { id: 'audit', label: 'Audit Trail', icon: Lock, super: true },
                 { id: 'settings', label: 'Portal Config', icon: Settings, super: true },
@@ -741,6 +761,8 @@ export function AdminDashboard() {
               />
             ) : activeTab === 'courses' ? (
               <CourseManager courses={courses} onRefresh={fetchCourses} onEditContent={setEditingCourse} />
+            ) : activeTab === 'compliance' ? (
+              <ComplianceDashboard />
             ) : activeTab === 'broadcasts' ? (
               <BroadcastHub />
             ) : activeTab === 'academic' ? (
@@ -1054,7 +1076,7 @@ export function AdminDashboard() {
 function CommunicationLogs() {
   const [logs, setLogs] = useState<any[]>([]);
   const [auditLogs, setAuditLogs] = useState<any[]>([]);
-  const [activeSubTab, setActiveSubTab] = useState<'comms' | 'audit'>('comms');
+  const [activeSubTab, setActiveSubTab] = useState<'audit' | 'comms'>('audit');
 
   useEffect(() => {
     fetchLogs();
@@ -1062,12 +1084,16 @@ function CommunicationLogs() {
   }, []);
 
   async function fetchLogs() {
-    const { data } = await supabase.from('email_logs').select('*').order('created_at', { ascending: false });
-    setLogs(data || []);
+    try {
+      const { data, error } = await supabase.from('email_logs').select('*').order('created_at', { ascending: false });
+      if (!error) setLogs(data || []);
+    } catch (err) {
+      console.error('Error fetching email logs:', err);
+    }
   }
 
   async function fetchAuditLogs() {
-    const { data } = await supabase.from('institutional_audit_logs').select('*').order('timestamp', { ascending: false });
+    const { data } = await supabase.from('governance_audit_logs').select('*').order('created_at', { ascending: false });
     setAuditLogs(data || []);
   }
 
@@ -1075,40 +1101,72 @@ function CommunicationLogs() {
     <div className="space-y-8 animate-fade">
       <div className="flex gap-4 border-b border-border-custom pb-4">
         <button onClick={() => setActiveSubTab('comms')} className={`text-[10px] uppercase tracking-widest font-dm-mono px-4 py-2 rounded-lg ${activeSubTab === 'comms' ? 'bg-gold/10 text-gold' : 'text-text-muted hover:text-text-custom'}`}>Communication History</button>
-        <button onClick={() => setActiveSubTab('audit')} className={`text-[10px] uppercase tracking-widest font-dm-mono px-4 py-2 rounded-lg ${activeSubTab === 'audit' ? 'bg-gold/10 text-gold' : 'text-text-muted hover:text-text-custom'}`}>Institutional Audit Logs</button>
+        <button onClick={() => setActiveSubTab('audit')} className={`text-[10px] uppercase tracking-widest font-dm-mono px-4 py-2 rounded-lg ${activeSubTab === 'audit' ? 'bg-gold/10 text-gold' : 'text-text-muted hover:text-text-custom'}`}>Institutional Governance Logs</button>
       </div>
 
       {activeSubTab === 'comms' ? (
-        <div className="bg-card border border-border-custom rounded-3xl overflow-hidden">
-          <div className="p-8 text-center text-text-dim text-sm italic">Showing historical communication logs...</div>
-        </div>
-      ) : (
-        <div className="bg-card border border-border-custom rounded-3xl overflow-hidden shadow-2xl">
+        <div className="bg-card border border-border-custom rounded-3xl overflow-hidden shadow-xl">
            <table className="w-full text-left border-collapse">
              <thead>
                <tr className="bg-surface/50 border-b border-border-custom">
                  <th className="p-6 text-[10px] uppercase tracking-widest text-text-muted font-dm-mono">Timestamp</th>
-                 <th className="p-6 text-[10px] uppercase tracking-widest text-text-muted font-dm-mono">Action</th>
-                 <th className="p-6 text-[10px] uppercase tracking-widest text-text-muted font-dm-mono">Target</th>
-                 <th className="p-6 text-[10px] uppercase tracking-widest text-text-muted font-dm-mono">Details</th>
+                 <th className="p-6 text-[10px] uppercase tracking-widest text-text-muted font-dm-mono">Recipient</th>
+                 <th className="p-6 text-[10px] uppercase tracking-widest text-text-muted font-dm-mono">Subject</th>
+                 <th className="p-6 text-[10px] uppercase tracking-widest text-text-muted font-dm-mono">Status</th>
                </tr>
              </thead>
              <tbody className="divide-y divide-border-custom">
-               {auditLogs.map(log => (
-                 <tr key={log.id} className="hover:bg-white/2 transition-colors">
-                   <td className="p-6 text-xs text-text-dim font-dm-mono">{new Date(log.timestamp).toLocaleString()}</td>
-                   <td className="p-6">
-                      <span className={`px-2 py-1 rounded text-[9px] font-bold uppercase ${
-                        log.action.includes('BLUR') ? 'bg-coral/10 text-coral' : 'bg-gold/10 text-gold'
-                      }`}>{log.action}</span>
+               {logs.map(log => (
+                 <tr key={log.id} className="hover:bg-white/2 transition-colors text-xs">
+                   <td className="p-6 font-dm-mono text-text-dim">{new Date(log.created_at).toLocaleString()}</td>
+                   <td className="p-6 font-bold text-text-custom">{log.recipient_email}</td>
+                   <td className="p-6 text-text-soft">{log.subject}</td>
+                   <td className="p-6 text-center">
+                     <span className="px-2 py-1 rounded-[4px] text-[9px] font-bold uppercase bg-emerald/10 text-emerald border border-emerald/20">SENT</span>
                    </td>
-                   <td className="p-6 text-xs font-bold text-text-custom">{log.target_type}</td>
-                   <td className="p-6 text-xs text-text-muted italic">{log.reason || 'Standard system event'}</td>
                  </tr>
                ))}
              </tbody>
            </table>
-           {auditLogs.length === 0 && <div className="p-20 text-center text-text-dim text-sm italic">No institutional audit records found.</div>}
+           {logs.length === 0 && <div className="p-20 text-center text-text-dim text-sm italic">No communication records found.</div>}
+        </div>
+      ) : (
+        <div className="bg-card border border-border-custom rounded-3xl overflow-hidden shadow-2xl">
+           <div className="overflow-x-auto">
+             <table className="w-full text-left border-collapse min-w-[800px]">
+               <thead>
+                 <tr className="bg-surface/50 border-b border-border-custom">
+                   <th className="p-6 text-[10px] uppercase tracking-widest text-text-muted font-dm-mono">Timestamp</th>
+                   <th className="p-6 text-[10px] uppercase tracking-widest text-text-muted font-dm-mono">Directive</th>
+                   <th className="p-6 text-[10px] uppercase tracking-widest text-text-muted font-dm-mono">Category</th>
+                   <th className="p-6 text-[10px] uppercase tracking-widest text-text-muted font-dm-mono">Evidence</th>
+                   <th className="p-6 text-[10px] uppercase tracking-widest text-text-muted font-dm-mono">Motivation</th>
+                 </tr>
+               </thead>
+               <tbody className="divide-y divide-border-custom">
+                 {auditLogs.map(log => (
+                   <tr key={log.id} className="hover:bg-white/2 transition-colors">
+                     <td className="p-6 text-xs text-text-dim font-dm-mono">{new Date(log.created_at).toLocaleString()}</td>
+                     <td className="p-6">
+                        <span className="px-2 py-1 rounded text-[9px] font-bold uppercase bg-gold/10 text-gold border border-gold/20">{log.action_type || 'ADMIN_OVERRIDE'}</span>
+                     </td>
+                     <td className="p-6 text-xs font-dm-mono text-text-custom">{log.category}</td>
+                     <td className="p-6">
+                       {log.evidence_url ? (
+                         <a href={log.evidence_url} target="_blank" rel="noreferrer" className="text-sky hover:underline text-[9px] font-dm-mono flex items-center gap-1">
+                           📎 VIEW FILING
+                         </a>
+                       ) : (
+                         <span className="text-text-dim text-[9px] italic">No physical filing</span>
+                       )}
+                     </td>
+                     <td className="p-6 text-xs text-text-muted leading-relaxed max-w-xs">{log.admin_notes}</td>
+                   </tr>
+                 ))}
+               </tbody>
+             </table>
+           </div>
+           {auditLogs.length === 0 && <div className="p-20 text-center text-text-dim text-sm italic">No institutional governance records found.</div>}
         </div>
       )}
     </div>
@@ -1121,7 +1179,18 @@ function InstitutionalUserRegistry() {
   const [users, setUsers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
-  const [roleFilter, setRoleFilter] = useState('all');
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('list');
+  const [activeMainTab, setActiveMainTab] = useState<'students' | 'staff'>('students');
+  const [activeSubTab, setActiveSubTab] = useState('active'); // Default for students
+
+  // Governance Modals State
+  const [governanceUser, setGovernanceUser] = useState<any>(null);
+  const [governanceAction, setGovernanceAction] = useState<any>(null); // { type: string, newStatus: string, newRole: string }
+  const [motivation, setMotivation] = useState('');
+  const [comments, setComments] = useState('');
+  const [evidenceUrl, setEvidenceUrl] = useState('');
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [alumniAcademicRecord, setAlumniAcademicRecord] = useState<any>(null);
 
   const isSuperAdmin = profile?.role === 'super_admin' || 
     user?.email === 'academy@ginashe.co.za' || 
@@ -1139,116 +1208,487 @@ function InstitutionalUserRegistry() {
     { id: 'student', label: 'Student', color: 'text-text-dim', bg: 'bg-surface' },
   ];
 
-  useEffect(() => { fetchUsers(); }, [roleFilter]);
+  const MOTIVATION_CATEGORIES = [
+    'Academic Dishonesty',
+    'Disciplinary',
+    'Financial Default',
+    'Voluntary Deregistration',
+    'Cancellation',
+    'Deferred',
+    'Institutional Override',
+    'Curriculum Completion (Standard)',
+    'Administrative Error Correction',
+    'Force Graduate (Governance Evidence Required)',
+    'Conduct Violation',
+    'Plagiarism',
+    'Financial Suspension',
+    'Legal Compliance'
+  ];
+
+  const STUDENT_LIFECYCLE_TABS = [
+    { id: 'active', label: 'Registered' },
+    { id: 'alumni', label: 'Alumni' },
+    { id: 'suspended', label: 'Suspended' },
+    { id: 'terminated', label: 'Terminated' },
+    { id: 'cancelled', label: 'Cancelled' },
+    { id: 'deferred', label: 'Deferred' }
+  ];
+
+  const STAFF_DEPT_TABS = [
+    { id: 'executive', label: 'Executive' },
+    { id: 'academic', label: 'Academic' },
+    { id: 'support', label: 'Support' },
+    { id: 'operations', label: 'Operations' },
+    { id: 'financial_aid', label: 'Financial Aid' },
+    { id: 'registrar_office', label: 'Registrar Office' },
+    { id: 'it_support', label: 'IT Support' },
+    { id: 'admissions', label: 'Admissions' }
+  ];
+
+  useEffect(() => { fetchUsers(); }, []);
 
   async function fetchUsers() {
     setLoading(true);
-    let query = supabase.from('profiles').select('*');
-    if (roleFilter !== 'all') query = query.eq('role', roleFilter);
-    const { data } = await query.order('last_name', { ascending: true });
+    const { data } = await supabase.from('profiles').select('*').order('last_name', { ascending: true });
     setUsers(data || []);
     setLoading(false);
   }
 
-  async function updateRole(targetUserId: string, newRole: string) {
-    if (!isSuperAdmin) { alert('Access Denied: SuperAdmin Blessing Required'); return; }
-    const { error } = await supabase.from('profiles').update({ role: newRole }).eq('id', targetUserId);
-    if (error) alert(error.message);
-    else {
-      alert('Institutional Hierarchy Updated.');
+  // ─── GOVERNANCE ACTION COMMITS ───
+  async function commitGovernanceAction() {
+    if (!isSuperAdmin) return;
+    if (!motivation) { alert('Protocol Violation: Motivation Category is mandatory.'); return; }
+    setIsProcessing(true);
+
+    try {
+      let finalEvidenceUrl = evidenceUrl;
+
+      // Handle Physical Evidence Upload if file selected
+      const fileInput = document.getElementById('governance-evidence-upload') as HTMLInputElement;
+      const file = fileInput?.files?.[0];
+      
+      if (file) {
+        const fileExt = file.name.split('.').pop();
+        const fileName = `${governanceUser.id}_${Date.now()}.${fileExt}`;
+        const filePath = `evidence/${fileName}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from('governance_evidence')
+          .upload(filePath, file);
+
+        if (uploadError) throw uploadError;
+
+        const { data: { publicUrl } } = supabase.storage
+          .from('governance_evidence')
+          .getPublicUrl(filePath);
+        
+        finalEvidenceUrl = publicUrl;
+      } else if ((motivation === 'Institutional Override' || governanceAction.newStatus === 'alumni' || motivation.includes('Evidence Required')) && !evidenceUrl) {
+         // Check if URL was provided manually or if it was required
+         alert('Protocol Violation: This action requires physical evidence (File or URL).');
+         setIsProcessing(false);
+         return;
+      }
+
+      // 1. Update Target Profile
+      const updateData: any = {};
+      if (governanceAction.newStatus) updateData.account_status = governanceAction.newStatus;
+      if (governanceAction.newRole) updateData.role = governanceAction.newRole;
+      if (governanceAction.newDept) {
+        const currentDepts = governanceUser.departments || [];
+        updateData.departments = Array.from(new Set([...currentDepts, governanceAction.newDept]));
+      }
+
+      const { error: upErr } = await supabase.from('profiles').update(updateData).eq('id', governanceUser.id);
+      if (upErr) throw upErr;
+
+      // 2. Archive to Governance Log
+      const { error: logErr } = await supabase.from('governance_audit_logs').insert({
+        actor_id: user?.id,
+        target_id: governanceUser.id,
+        action_type: governanceAction.type,
+        motivation_category: motivation,
+        admin_comments: comments,
+        evidence_url: finalEvidenceUrl,
+        metadata: { prev_state: governanceUser, action_details: governanceAction }
+      });
+      if (logErr) throw logErr;
+
+      // 3. Post-Action Specifics (Alumni Record)
+      if (governanceAction.newStatus === 'alumni') {
+        const { error: alumniErr } = await supabase.from('alumni_records').insert({
+          user_id: governanceUser.id,
+          graduation_year: new Date().getFullYear(),
+          program: alumniAcademicRecord?.program || 'Verified GDA Program',
+          achievements: 'Institutional Graduation via SuperAdmin Override',
+          governance_reference: finalEvidenceUrl
+        });
+        if (alumniErr) console.warn('Post-Action Warning: Alumni record creation failed', alumniErr);
+      }
+
+      alert(`Administrative Directive Successfully Executed.`);
+      setGovernanceUser(null);
+      setMotivation('');
+      setComments('');
+      setEvidenceUrl('');
       fetchUsers();
-    }
+    } catch (err: any) { alert(`Governance Breach Detected: ${err.message}`); }
+    finally { setIsProcessing(false); }
   }
 
-  const filtered = users.filter(u => 
-    `${u.first_name} ${u.last_name}`.toLowerCase().includes(search.toLowerCase()) ||
-    u.email?.toLowerCase().includes(search.toLowerCase()) ||
-    u.student_number?.toLowerCase().includes(search.toLowerCase())
-  );
+  // ─── ACADEMIC VERIFICATION ───
+  async function triggerAlumniProcess(targetUser: any) {
+    setGovernanceUser(targetUser);
+    setGovernanceAction({ type: 'STATUS_CHANGE', newStatus: 'alumni' });
+    
+    // Fetch academic record for popup
+    const { data: enrollments } = await supabase.from('enrollments').select('*, courses(title)').eq('user_id', targetUser.id);
+    const { data: submissions } = await supabase.from('submissions').select('*').eq('user_id', targetUser.id);
+    
+    setAlumniAcademicRecord({
+      enrollments: enrollments || [],
+      avgGrade: submissions?.length ? (submissions.reduce((acc, curr) => acc + (curr.marks_obtained || 0), 0) / submissions.length).toFixed(1) : 0
+    });
+  }
+
+  const filteredUsers = users.filter(u => {
+    const matchesSearch = `${u.first_name} ${u.last_name}`.toLowerCase().includes(search.toLowerCase()) ||
+                          u.email?.toLowerCase().includes(search.toLowerCase()) ||
+                          u.student_number?.toLowerCase().includes(search.toLowerCase());
+
+    if (activeMainTab === 'students') {
+      return matchesSearch && u.role === 'student' && (u.account_status || 'active') === activeSubTab;
+    } else {
+      // Staff logic: roles other than student
+      const isStaff = u.role !== 'student';
+      if (!isStaff) return false;
+      
+      // Filter by department (Support multi-dept per your request)
+      if (activeSubTab === 'executive') return matchesSearch && (u.role === 'super_admin' || u.role === 'campus_manager' || (u.departments || []).includes('Executive'));
+      if (activeSubTab === 'academic') return matchesSearch && (u.role === 'head_of_department' || u.role?.includes('lecturer') || (u.departments || []).includes('Academic'));
+      if (activeSubTab === 'support') return matchesSearch && (u.role === 'registrar' || u.role === 'bursar' || (u.departments || []).includes('Support'));
+      if (activeSubTab === 'operations') return matchesSearch && (u.departments || []).includes('Operations');
+      if (activeSubTab === 'financial_aid') return matchesSearch && (u.departments || []).includes('Financial Aid');
+      if (activeSubTab === 'registrar_office') return matchesSearch && (u.departments || []).includes('Registrar Office');
+      if (activeSubTab === 'it_support') return matchesSearch && (u.departments || []).includes('IT Support');
+      if (activeSubTab === 'admissions') return matchesSearch && (u.departments || []).includes('Admissions');
+      
+      return matchesSearch;
+    }
+  });
 
   return (
     <div className="space-y-6 animate-fade">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div>
-          <h2 className="font-syne font-black text-2xl tracking-tighter">Global User Registry</h2>
-          <p className="text-[10px] font-dm-mono text-gold uppercase tracking-widest">Master Identity Management</p>
+      {/* ─── PRIMARY REGISTRY NAVIGATION ─── */}
+      <div className="flex items-center justify-between p-1.5 bg-card/50 border border-border-custom rounded-2xl w-fit mb-8">
+        <button 
+          onClick={() => { setActiveMainTab('students'); setActiveSubTab('active'); }}
+          className={`px-8 py-3 rounded-xl text-xs font-dm-mono uppercase transition-all flex items-center gap-3 ${activeMainTab === 'students' ? 'bg-gold text-bg shadow-lg shadow-gold/20 font-bold' : 'text-text-muted hover:text-text-custom'}`}
+        >
+          <UserRound className="w-4 h-4" />
+          STUDENT REGISTRY
+        </button>
+        <button 
+          onClick={() => { setActiveMainTab('staff'); setActiveSubTab('executive'); }}
+          className={`px-8 py-3 rounded-xl text-xs font-dm-mono uppercase transition-all flex items-center gap-3 ${activeMainTab === 'staff' ? 'bg-gold text-bg shadow-lg shadow-gold/20 font-bold' : 'text-text-muted hover:text-text-custom'}`}
+        >
+          <Briefcase className="w-4 h-4" />
+          STAFF LEDGER
+        </button>
+      </div>
+
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+        {/* Secondary Lifecycle/Dept Navigation */}
+        <div className="flex items-center gap-1.5 p-1 bg-surface border border-border-custom rounded-xl overflow-x-auto custom-scrollbar max-w-full">
+          {(activeMainTab === 'students' ? STUDENT_LIFECYCLE_TABS : STAFF_DEPT_TABS).map(tab => (
+            <button 
+              key={tab.id}
+              onClick={() => setActiveSubTab(tab.id)}
+              className={`px-4 py-2 rounded-lg text-[9px] font-dm-mono uppercase whitespace-nowrap transition-all ${activeSubTab === tab.id ? 'bg-white/5 text-gold border border-gold/20' : 'text-text-dim hover:text-white'}`}
+            >
+              {tab.label}
+              {activeMainTab === 'students' && (
+                <span className="ml-2 font-bold opacity-50">{users.filter(u => u.role === 'student' && (u.account_status || 'active') === tab.id).length}</span>
+              )}
+            </button>
+          ))}
         </div>
-        <div className="flex items-center gap-3">
+
+        <div className="flex items-center gap-3 shrink-0">
+          {/* View Toggler */}
+          <div className="flex items-center gap-1 p-1 bg-surface border border-border-custom rounded-xl">
+            <button onClick={() => setViewMode('list')} className={`p-2 rounded-lg transition-all ${viewMode === 'list' ? 'bg-gold text-bg shadow-sm' : 'text-text-dim'}`}>
+              <List size={14} />
+            </button>
+            <button onClick={() => setViewMode('grid')} className={`p-2 rounded-lg transition-all ${viewMode === 'grid' ? 'bg-gold text-bg shadow-sm' : 'text-text-dim'}`}>
+              <LayoutGrid size={14} />
+            </button>
+          </div>
+
           <div className="relative">
             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-text-dim text-xs">🔍</span>
             <input 
-              placeholder="Search Identity..."
-              className="bg-surface border border-border-custom rounded-xl py-2 pl-9 pr-4 text-xs font-dm-mono w-64 focus:border-gold/50 transition-all outline-none"
+              placeholder={`Search ${activeMainTab === 'students' ? 'Student Base' : 'Staff Ledger'}...`}
+              className="bg-surface border border-border-custom rounded-xl py-2 pl-9 pr-4 text-xs font-dm-mono w-48 lg:w-64 focus:border-gold/50 transition-all outline-none"
               value={search}
               onChange={e => setSearch(e.target.value)}
             />
           </div>
-          <select 
-            className="bg-surface border border-border-custom rounded-xl py-2 px-4 text-xs font-dm-mono uppercase"
-            value={roleFilter}
-            onChange={e => setRoleFilter(e.target.value)}
-          >
-            <option value="all">Every Position</option>
-            {INSTITUTIONAL_ROLES.map(r => <option key={r.id} value={r.id}>{r.label}</option>)}
-          </select>
         </div>
       </div>
 
-      <div className="bg-[#0a0d14] border border-gold/10 rounded-2xl overflow-hidden shadow-2xl relative isolate">
-        <div className="absolute inset-0 bg-gold/[0.01] pointer-events-none" />
-        <div className="overflow-x-auto custom-scrollbar">
-          <table className="w-full text-left">
-            <thead>
-              <tr className="bg-surface/50 border-b border-gold/10 text-gold text-[9px] uppercase font-dm-mono tracking-[0.2em]">
-                <th className="p-4">Identity / Number</th>
-                <th className="p-4">Governance Role</th>
-                <th className="p-4">Assigned Campus</th>
-                <th className="p-4 text-right">Records Architecture</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gold/5">
-              {filtered.map(u => (
-                <tr key={u.id} className="hover:bg-gold/5 transition-colors group">
-                  <td className="p-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-surface border border-gold/10 flex items-center justify-center font-black text-[10px] text-gold">
-                        {u.first_name?.[0]}{u.last_name?.[0]}
-                      </div>
-                      <div>
-                        <div className="font-bold text-sm text-text-soft">{u.first_name} {u.last_name}</div>
-                        <div className="text-[10px] text-text-dim font-dm-mono lowercase">{u.email}</div>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="p-4">
-                    <div className="flex items-center gap-2">
-                      <span className={`px-2 py-0.5 rounded text-[9px] font-black uppercase tracking-tighter border ${
-                        INSTITUTIONAL_ROLES.find(r => r.id === (u.role || 'student'))?.bg || 'bg-surface'
-                      } ${INSTITUTIONAL_ROLES.find(r => r.id === (u.role || 'student'))?.color || 'text-text-dim'}`}>
-                        {u.role || 'student'}
-                      </span>
-                    </div>
-                  </td>
-                  <td className="p-4">
-                    <div className="text-[10px] font-dm-mono text-text-dim uppercase tracking-widest">{u.campus_id ? 'Authenticated Branch' : 'Remote Access'}</div>
-                  </td>
-                  <td className="p-4 text-right">
-                    {isSuperAdmin && (
-                      <select 
-                        className="bg-bg border border-gold/20 rounded-lg py-1 px-2 text-[10px] font-dm-mono focus:border-gold transition-all outline-none"
-                        value={u.role || 'student'}
-                        onChange={(e) => updateRole(u.id, e.target.value)}
-                      >
-                        {INSTITUTIONAL_ROLES.map(r => <option key={r.id} value={r.id}>{r.label}</option>)}
-                      </select>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+      {loading ? (
+        <div className="py-40 flex flex-col items-center justify-center opacity-50">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gold" />
+          <p className="mt-6 text-xs font-dm-mono uppercase tracking-[0.2em]">Synchronizing Records Vault...</p>
         </div>
-      </div>
+      ) : viewMode === 'list' ? (
+        <div className="bg-[#0a0d14] border border-gold/10 rounded-2xl overflow-hidden shadow-2xl relative isolate">
+          <div className="overflow-x-auto custom-scrollbar">
+            <table className="w-full text-left">
+              <thead>
+                <tr className="bg-surface/50 border-b border-gold/10 text-gold text-[9px] uppercase font-dm-mono tracking-[0.2em]">
+                  <th className="p-4">Identity Verification</th>
+                  <th className="p-4">Governance Role</th>
+                  <th className="p-4">Institutional Presence</th>
+                  <th className="p-4 text-right">Operational Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gold/5">
+                {filteredUsers.map(u => (
+                  <tr key={u.id} className={`hover:bg-gold/5 transition-colors group ${u.account_status === 'suspended' ? 'opacity-60 grayscale' : ''}`}>
+                    <td className="p-4">
+                      <div className="flex items-center gap-3">
+                        {u.avatar_url ? (
+                          <img src={u.avatar_url} className="w-9 h-9 rounded-xl object-cover border border-gold/10 shadow-lg" alt="" />
+                        ) : (
+                          <div className="w-9 h-9 rounded-xl bg-surface border border-gold/10 flex items-center justify-center font-black text-xs text-gold">
+                            {u.first_name?.[0]}{u.last_name?.[0]}
+                          </div>
+                        )}
+                        <div>
+                          <div className="font-bold text-sm text-text-soft flex items-center gap-2">
+                             {u.first_name} {u.last_name}
+                             {u.account_status === 'suspended' && <XCircle className="w-3 h-3 text-coral" />}
+                          </div>
+                          <div className="text-[10px] text-text-dim font-dm-mono lowercase">{u.email}</div>
+                          <div className="text-[9px] font-dm-mono text-gold mt-0.5">{u.student_number || 'STAFF-ID: '+u.id.slice(0,6).toUpperCase()}</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="p-4">
+                      <div className="flex flex-wrap gap-1">
+                        <span className={`px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-tighter border ${
+                          INSTITUTIONAL_ROLES.find(r => r.id === (u.role || 'student'))?.bg || 'bg-surface'
+                        } ${INSTITUTIONAL_ROLES.find(r => r.id === (u.role || 'student'))?.color || 'text-text-dim'}`}>
+                          {u.role || 'student'}
+                        </span>
+                        {(u.departments || []).map((d: string) => (
+                           <span key={d} className="px-2 py-0.5 rounded-full text-[8px] font-bold uppercase bg-white/5 border border-white/10 text-white/50">{d}</span>
+                        ))}
+                      </div>
+                    </td>
+                    <td className="p-4">
+                      <div className="flex flex-col">
+                        <div className="text-[10px] font-dm-mono text-text-dim uppercase tracking-widest">{u.campus_id ? 'Branch Authenticated' : 'Remote Access'}</div>
+                        <div className="text-[8px] text-text-dim font-dm-mono uppercase mt-1">Joined: {new Date(u.created_at).toLocaleDateString()}</div>
+                      </div>
+                    </td>
+                    <td className="p-4 text-right">
+                      <div className="flex items-center justify-end gap-2">
+                         {isSuperAdmin && (
+                           <>
+                             {activeMainTab === 'students' && (u.account_status || 'active') === 'active' && (
+                               <button 
+                                 onClick={() => triggerAlumniProcess(u)}
+                                 className="p-2 bg-emerald/10 text-emerald border border-emerald/20 rounded-lg hover:bg-emerald hover:text-bg transition-all"
+                                 title="Process Graduation"
+                               >
+                                 <Verified size={14} />
+                               </button>
+                             )}
+                             <button 
+                               onClick={() => { setGovernanceUser(u); setGovernanceAction({ type: 'STATUS_CHANGE', newStatus: u.account_status === 'suspended' ? 'active' : 'suspended' }); }}
+                               className={`p-2 border rounded-lg transition-all ${u.account_status === 'suspended' ? 'bg-gold/10 text-gold border-gold/20' : 'bg-coral/10 text-coral border-coral/20 hover:bg-coral hover:text-white'}`}
+                               title={u.account_status === 'suspended' ? 'Reactivate Hub' : 'Suspend Access'}
+                             >
+                               <History size={14} />
+                             </button>
+                             <select 
+                               className="bg-surface border border-gold/10 rounded-lg py-1.5 px-2 text-[10px] font-dm-mono focus:border-gold transition-all outline-none"
+                               value={u.role || 'student'}
+                               onChange={(e) => {
+                                 setGovernanceUser(u);
+                                 setGovernanceAction({ type: 'ROLE_UPDATE', newRole: e.target.value });
+                               }}
+                             >
+                               {INSTITUTIONAL_ROLES.map(r => <option key={r.id} value={r.id}>{r.label}</option>)}
+                             </select>
+                           </>
+                         )}
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {filteredUsers.map(u => (
+            <div key={u.id} className={`bg-card border border-border-custom rounded-3xl p-6 relative overflow-hidden group hover:border-gold/30 transition-all ${u.account_status === 'suspended' ? 'opacity-60 grayscale' : ''}`}>
+               {u.account_status === 'suspended' && <div className="absolute top-4 right-4 text-coral text-[8px] font-black uppercase tracking-widest bg-coral/10 px-2 py-0.5 rounded border border-coral/20">Access Locked</div>}
+               <div className="flex items-center gap-4 mb-6">
+                 {u.avatar_url ? (
+                   <img src={u.avatar_url} className="w-14 h-14 rounded-2xl object-cover border border-gold/10 shadow-xl" alt="" />
+                 ) : (
+                   <div className="w-14 h-14 rounded-2xl bg-surface border border-gold/10 flex items-center justify-center font-black text-lg text-gold shadow-inner">
+                     {u.first_name?.[0]}{u.last_name?.[0]}
+                   </div>
+                 )}
+                 <div className="overflow-hidden">
+                   <h3 className="font-syne font-black text-base text-text-soft truncate leading-tight uppercase">{u.first_name} <br/> {u.last_name}</h3>
+                   <p className="text-[10px] font-dm-mono text-gold mt-1 truncate">{u.student_number || 'GDA-ADMIN-'+u.id.slice(0,4).toUpperCase()}</p>
+                 </div>
+               </div>
+
+               <div className="space-y-4">
+                 <div className="flex flex-wrap gap-1.5 min-h-[44px]">
+                    <span className={`px-2 py-1 rounded-md text-[8px] font-black uppercase tracking-tighter border shadow-sm ${
+                      INSTITUTIONAL_ROLES.find(r => r.id === (u.role || 'student'))?.bg || 'bg-surface'
+                    } ${INSTITUTIONAL_ROLES.find(r => r.id === (u.role || 'student'))?.color || 'text-text-dim'}`}>
+                      {u.role || 'student'}
+                    </span>
+                    {(u.departments || []).map((d: string) => (
+                       <span key={d} className="px-2 py-1 rounded-md text-[8px] font-bold uppercase bg-white/5 border border-white/10 text-white/50">{d}</span>
+                    ))}
+                 </div>
+
+                 <div className="pt-4 border-t border-gold/5 flex items-center justify-between">
+                    <div className="flex flex-col">
+                       <span className="text-[8px] font-dm-mono uppercase text-text-dim">Branch Presence</span>
+                       <span className="text-[10px] text-text-soft font-bold uppercase tracking-widest">{u.campus_id ? 'Authenticated' : 'Remote'}</span>
+                    </div>
+                    {isSuperAdmin && (
+                      <button 
+                        onClick={() => { setGovernanceUser(u); setGovernanceAction({ type: 'STATUS_CHANGE', newStatus: u.account_status === 'suspended' ? 'active' : 'suspended' }); }}
+                        className="text-[9px] font-dm-mono text-coral hover:text-gold transition-colors underline underline-offset-4"
+                      >
+                        LOCK ACCOUNT
+                      </button>
+                    )}
+                 </div>
+               </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* ─── GOVERNANCE MOTIVATION MODAL ─── */}
+      {governanceUser && governanceAction && (
+        <div className="fixed inset-0 z-[4000] bg-bg/95 backdrop-blur-md flex items-center justify-center p-6 animate-fade">
+          <div className="bg-card border border-gold/20 rounded-[2.5rem] w-full max-w-lg overflow-hidden shadow-[0_0_100px_rgba(212,175,55,0.1)] flex flex-col items-center p-12 relative">
+            <button onClick={() => { setGovernanceUser(null); setAlumniAcademicRecord(null); }} className="absolute top-8 right-8 text-text-dim hover:text-white transition-colors">✕</button>
+
+            <div className="w-20 h-20 bg-gold/10 rounded-3xl flex items-center justify-center mb-8 shadow-inner border border-gold/20">
+               <ShieldCheck className="w-10 h-10 text-gold" />
+            </div>
+
+            <h2 className="font-syne font-black text-3xl mb-2 tracking-tighter text-center uppercase">Institutional Directive</h2>
+            <p className="text-text-muted text-xs text-center mb-10 max-w-sm">Every administrative command requires a motivational seal for institutional accountability. Please archive your reasoning.</p>
+
+            {/* ALUMNI ACADEMIC RECORD HUB */}
+            {alumniAcademicRecord && (
+              <div className="w-full bg-surface border border-gold/10 rounded-2xl p-6 mb-8 text-center animate-fadeUp">
+                <span className="text-[9px] font-dm-mono text-gold uppercase tracking-[0.3em] mb-4 block underline">ACADEMIC VERIFICATION HUB</span>
+                <div className="grid grid-cols-2 gap-4 mb-4">
+                  <div className="p-3 bg-card border border-gold/5 rounded-xl">
+                    <div className="text-[8px] text-text-dim uppercase mb-1">Modules Passed</div>
+                    <div className="text-xl font-syne font-black text-gold">{alumniAcademicRecord.enrollments.length}</div>
+                  </div>
+                  <div className="p-3 bg-card border border-gold/5 rounded-xl">
+                    <div className="text-[8px] text-text-dim uppercase mb-1">Mean Marks (%)</div>
+                    <div className="text-xl font-syne font-black text-gold">{alumniAcademicRecord.avgGrade}%</div>
+                  </div>
+                </div>
+                {alumniAcademicRecord.enrollments.length === 0 && (
+                  <div className="p-2 bg-coral/10 text-coral text-[9px] font-bold rounded border border-coral/20 uppercase">
+                    Warning: No Academic Activity Detected. SuperAdmin Override Required.
+                  </div>
+                )}
+              </div>
+            )}
+
+            <div className="w-full space-y-6">
+              <div className="space-y-2">
+                <label className="text-[10px] font-dm-mono uppercase text-text-dim tracking-widest pl-1">Protocol Motivation</label>
+                <select 
+                  className="w-full bg-bg border border-border-custom rounded-xl p-4 text-xs font-dm-mono uppercase focus:border-gold transition-all outline-none cursor-pointer"
+                  value={motivation}
+                  onChange={e => setMotivation(e.target.value)}
+                >
+                  <option value="">Select Official Reasoning...</option>
+                  {MOTIVATION_CATEGORIES.map(m => <option key={m} value={m}>{m}</option>)}
+                </select>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-[10px] font-dm-mono uppercase text-text-dim tracking-widest pl-1">Executive Commentary</label>
+                <textarea 
+                  className="w-full bg-bg border border-border-custom rounded-xl p-4 text-xs h-32 focus:border-gold transition-all outline-none resize-none" 
+                  placeholder="Elaborate on the institutional necessity of this decision..."
+                  value={comments}
+                  onChange={e => setComments(e.target.value)}
+                />
+              </div>
+
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-dm-mono uppercase text-text-dim tracking-widest pl-1">
+                    Physical Evidence (Direct Upload)
+                  </label>
+                  <input 
+                    id="governance-evidence-upload"
+                    type="file"
+                    className="w-full bg-bg border border-border-custom rounded-xl p-4 text-[10px] font-dm-mono"
+                    accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
+                  />
+                </div>
+
+                <div className="relative">
+                  <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-border-custom" /></div>
+                  <div className="relative flex justify-center text-[8px] uppercase font-dm-mono"><span className="bg-card px-2 text-text-dim">OR Manual URL</span></div>
+                </div>
+
+                <div className="space-y-2">
+                  <input 
+                    type="url"
+                    className="w-full bg-bg border border-border-custom rounded-xl p-4 text-xs font-dm-mono focus:border-gold transition-all outline-none" 
+                    placeholder="External Evidence URL..." 
+                    value={evidenceUrl}
+                    onChange={e => setEvidenceUrl(e.target.value)}
+                  />
+                </div>
+                {(motivation === 'Institutional Override' || governanceAction.newStatus === 'alumni' || (motivation && motivation.includes('Evidence Required'))) && (
+                  <p className="text-[8px] text-coral uppercase pl-1 font-bold animate-pulse">
+                    PROTOCOL WARNING: High-compliance action requires evidence upload or URL.
+                  </p>
+                )}
+              </div>
+
+              <button 
+                onClick={commitGovernanceAction}
+                disabled={isProcessing}
+                className={`w-full btn btn-gold py-5 font-black text-sm uppercase tracking-widest flex items-center justify-center gap-3 ${isProcessing ? 'opacity-50 cursor-not-allowed' : ''}`}
+              >
+                {isProcessing ? 'COMMITTING ARCHIVE...' : 'COMMIT DIRECTIVE'}
+                <ShieldCheck className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -1752,6 +2192,150 @@ function AttendanceHub({ courses }: { courses: any[] }) {
   );
 }
 
+// ─── COMPLIANCE DASHBOARD (SUPERADMIN ONLY) ──
+function ComplianceDashboard() {
+  const [settings, setSettings] = useState<any>({
+    seta_accreditation_no: '',
+    qcto_reference_no: '',
+    dhet_registration_status: 'PRACTITIONER_ONLY',
+    compliance_expiry_date: '',
+    governance_notes: ''
+  });
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    fetchCompliance();
+  }, []);
+
+  async function fetchCompliance() {
+    try {
+      const { data } = await supabase.from('school_settings').select('*');
+      const mapped: any = {};
+      data?.forEach(s => mapped[s.key] = s.value);
+      setSettings(prev => ({ ...prev, ...mapped }));
+    } catch (err) {
+      console.error('Compliance sync failed:', err);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleSave() {
+    setSaving(true);
+    try {
+      const updates = Object.entries(settings).map(([key, value]) => ({
+        key,
+        value,
+        updated_at: new Date().toISOString()
+      }));
+
+      const { error } = await supabase.from('school_settings').upsert(updates, { onConflict: 'key' });
+      if (error) throw error;
+      alert('Institutional Compliance Registry Updated.');
+    } catch (err: any) {
+      alert('Protocol Error: ' + err.message);
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  if (loading) return <div className="p-20 text-center animate-pulse text-gold font-dm-mono text-xs uppercase tracking-widest">Synchronizing Compliance Registry...</div>;
+
+  return (
+    <div className="space-y-8 animate-fade">
+      <div className="bg-coral/10 border border-coral/30 rounded-2xl p-6 flex items-start gap-4">
+        <AlertTriangle className="w-6 h-6 text-coral shrink-0" />
+        <div>
+          <h4 className="font-syne font-black text-coral uppercase text-sm tracking-tight">Regulatory Silence Protocol Active</h4>
+          <p className="text-[11px] text-text-soft leading-relaxed mt-1">
+            Data within this hub is strictly for institutional governance and audit readiness. 
+            <span className="font-black text-white ml-1">NEVER EXPOSE THESE DETAILS ON PUBLIC INTERFACES</span> until official SAQA/MICT validation is concluded.
+          </p>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="bg-card border border-border-custom rounded-[2.5rem] p-10 relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-gold/5 rounded-full -mr-16 -mt-16 blur-2xl" />
+          <h3 className="font-syne font-bold text-xl mb-8 flex items-center gap-3">
+             <ShieldCheck className="w-5 h-5 text-gold" />
+             Accreditation Registry
+          </h3>
+
+          <div className="space-y-6">
+            <div className="space-y-2">
+              <label className="text-[10px] font-dm-mono uppercase text-text-dim tracking-widest pl-1">SETA Accreditation ID</label>
+              <input 
+                className="w-full bg-bg border border-border-custom rounded-xl p-4 text-xs font-dm-mono focus:border-gold outline-none transition-all" 
+                value={settings.seta_accreditation_no}
+                onChange={e => setSettings({...settings, seta_accreditation_no: e.target.value})}
+                placeholder="Institutional ID..."
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-[10px] font-dm-mono uppercase text-text-dim tracking-widest pl-1">QCTO Reference Number</label>
+              <input 
+                className="w-full bg-bg border border-border-custom rounded-xl p-4 text-xs font-dm-mono focus:border-gold outline-none transition-all" 
+                value={settings.qcto_reference_no}
+                onChange={e => setSettings({...settings, qcto_reference_no: e.target.value})}
+                placeholder="QCTO Reference..."
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-[10px] font-dm-mono uppercase text-text-dim tracking-widest pl-1">DHET Registration Status</label>
+              <select 
+                className="w-full bg-bg border border-border-custom rounded-xl p-4 text-xs font-dm-mono uppercase focus:border-gold outline-none cursor-pointer"
+                value={settings.dhet_registration_status}
+                onChange={e => setSettings({...settings, dhet_registration_status: e.target.value})}
+              >
+                <option value="PROVISIONAL">Provisional Approval</option>
+                <option value="ACTIVE">Fully Registered</option>
+                <option value="PRACTITIONER_ONLY">Practitioner-Led (Industry Alignment)</option>
+                <option value="PENDING">Application In Progress</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-card border border-border-custom rounded-[2.5rem] p-10">
+          <h3 className="font-syne font-bold text-xl mb-8 flex items-center gap-3">
+             <Clock className="w-5 h-5 text-gold" />
+             Governance Calendar
+          </h3>
+          <div className="space-y-6">
+             <div className="space-y-2">
+              <label className="text-[10px] font-dm-mono uppercase text-text-dim tracking-widest pl-1">Audit Renewal Date</label>
+              <input 
+                type="date"
+                className="w-full bg-bg border border-border-custom rounded-xl p-4 text-xs font-dm-mono focus:border-gold outline-none" 
+                value={settings.compliance_expiry_date}
+                onChange={e => setSettings({...settings, compliance_expiry_date: e.target.value})}
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-[10px] font-dm-mono uppercase text-text-dim tracking-widest pl-1">Executive Compliance Notes</label>
+              <textarea 
+                className="w-full bg-bg border border-border-custom rounded-xl p-4 text-xs h-32 focus:border-gold outline-none resize-none" 
+                placeholder="Internal commentary regarding accreditation milestones..."
+                value={settings.governance_notes}
+                onChange={e => setSettings({...settings, governance_notes: e.target.value})}
+              />
+            </div>
+            <button 
+              onClick={handleSave}
+              disabled={saving}
+              className={`w-full btn btn-gold py-4 font-black uppercase tracking-widest text-[10px] ${saving ? 'opacity-50' : ''}`}
+            >
+              {saving ? 'UPDATING REGISTRY...' : 'COMMIT COMPLIANCE RECORD'}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ─── INSTITUTIONAL RESOURCE VAULT ───────────
 function InstitutionalResourceVault() {
   const complianceFiles = [
@@ -1977,7 +2561,14 @@ function StudentVault({ documents, onUpload }: { documents: any[], onUpload: (ty
 
 function CourseManager({ courses, onRefresh, onEditContent }: { courses: any[], onRefresh: () => void, onEditContent: (course: any) => void }) {
   const [isAdding, setIsAdding] = useState(false);
-  const [newCourse, setNewCourse] = useState({ title: '', description: '', slug: '', thumbnail_url: '📘' });
+  const [newCourse, setNewCourse] = useState<any>({ title: '', description: '', slug: '', thumbnail_url: '📘', nqf_level: 4, progression_level: 'Foundation', track_id: '' });
+  const [tracks, setTracks] = useState<any[]>([]);
+  const { profile } = useAuth();
+  const isSuperAdmin = profile?.role === 'super_admin';
+
+  useEffect(() => {
+    supabase.from('curriculum_tracks').select('*').then(({ data }) => setTracks(data || []));
+  }, []);
 
   async function handleAddCourse(e: React.FormEvent) {
     e.preventDefault();
@@ -1985,56 +2576,133 @@ function CourseManager({ courses, onRefresh, onEditContent }: { courses: any[], 
       const { error } = await supabase.from('courses').insert([newCourse]);
       if (error) throw error;
       setIsAdding(false);
-      setNewCourse({ title: '', description: '', slug: '', thumbnail_url: '📘' });
       onRefresh();
-    } catch (err: any) { alert('Error adding course: ' + err.message); }
+    } catch (err: any) { alert('Protocol Violation: ' + err.message); }
   }
 
+  // Grouping logic
+  const groupedCourses = courses.reduce((acc: any, course) => {
+    const trackName = course.curriculum_tracks?.name || 'Unassigned Track';
+    if (!acc[trackName]) acc[trackName] = { 
+      theme: course.curriculum_tracks?.color_theme || 'blue',
+      courses: [] 
+    };
+    acc[trackName].courses.push(course);
+    return acc;
+  }, {});
+
+  const THEME_MAP: any = {
+    blue: 'border-sky/20 bg-sky/5 text-sky',
+    purple: 'border-purple/20 bg-purple/5 text-purple',
+    coral: 'border-coral/20 bg-coral/5 text-coral',
+    amber: 'border-amber/20 bg-amber/5 text-amber',
+    emerald: 'border-emerald/20 bg-emerald/5 text-emerald',
+    green: 'border-green/20 bg-green/5 text-green',
+    rose: 'border-rose/20 bg-rose/5 text-rose',
+  };
+
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h2 className="font-syne font-bold text-xl">Manage Courses</h2>
-        <div className="flex gap-2">
-          <button onClick={() => exportToCSV(courses, 'gda-courses')} className="btn btn-outline btn-sm">📤 Export</button>
-          <button onClick={() => setIsAdding(!isAdding)} className="btn btn-gold btn-sm">{isAdding ? 'Cancel' : '+ Create New Course'}</button>
+    <div className="space-y-12 animate-fade">
+      <div className="flex justify-between items-end border-b border-gold/10 pb-8">
+        <div>
+          <h2 className="font-syne font-black text-3xl uppercase tracking-tighter text-gold">Curriculum Map</h2>
+          <p className="text-text-muted text-[10px] font-dm-mono uppercase tracking-[0.3em] mt-2">7 Learning Tracks • 28 Master Courses • Phase 1 Architecture</p>
+        </div>
+        <div className="flex gap-3">
+          <button onClick={() => setIsAdding(!isAdding)} className="btn btn-gold btn-sm h-12 px-6">
+            {isAdding ? 'Close Archive' : '+ Provision Course'}
+          </button>
         </div>
       </div>
 
       {isAdding && (
-        <form onSubmit={handleAddCourse} className="bg-card border border-border-custom rounded-xl p-6 space-y-4 max-w-2xl">
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block font-dm-mono text-[10px] uppercase text-text-muted mb-1">Course Title</label>
-              <input required className="w-full bg-surface border border-border-custom rounded-md p-2 text-sm" value={newCourse.title} onChange={e => setNewCourse({ ...newCourse, title: e.target.value, slug: e.target.value.toLowerCase().replace(/ /g, '-') })} />
+        <form onSubmit={handleAddCourse} className="bg-card border border-gold/20 rounded-3xl p-8 space-y-6 max-w-4xl animate-fadeDown shadow-2xl relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-gold/5 rounded-full -mr-32 -mt-32 blur-3xl pointer-events-none" />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="md:col-span-2">
+              <label className="block font-dm-mono text-[9px] uppercase text-text-muted mb-2 font-bold tracking-widest pl-1">Educational Track</label>
+              <select required className="w-full bg-surface border border-border-custom rounded-xl p-4 text-xs font-bold focus:border-gold transition-all outline-none" 
+                value={newCourse.track_id} onChange={e => setNewCourse({ ...newCourse, track_id: e.target.value })}>
+                <option value="">Select Institutional Track...</option>
+                {tracks.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
+              </select>
             </div>
             <div>
-              <label className="block font-dm-mono text-[10px] uppercase text-text-muted mb-1">Slug (URL)</label>
-              <input required className="w-full bg-surface border border-border-custom rounded-md p-2 text-sm" value={newCourse.slug} onChange={e => setNewCourse({ ...newCourse, slug: e.target.value })} />
+              <label className="block font-dm-mono text-[9px] uppercase text-text-muted mb-2 font-bold tracking-widest pl-1">Enrollment Icon</label>
+              <input maxLength={2} className="w-full bg-surface border border-border-custom rounded-xl p-4 text-center text-xl focus:border-gold transition-all outline-none" 
+                value={newCourse.thumbnail_url} onChange={e => setNewCourse({ ...newCourse, thumbnail_url: e.target.value })} />
             </div>
           </div>
-          <div>
-            <label className="block font-dm-mono text-[10px] uppercase text-text-muted mb-1">Description</label>
-            <textarea required className="w-full bg-surface border border-border-custom rounded-md p-2 text-sm h-24" value={newCourse.description} onChange={e => setNewCourse({ ...newCourse, description: e.target.value })} />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+             <div>
+                <label className="block font-dm-mono text-[9px] uppercase text-text-muted mb-2 font-bold tracking-widest pl-1">Course Title</label>
+                <input required className="w-full bg-surface border border-border-custom rounded-xl p-4 text-xs font-bold focus:border-gold transition-all outline-none" 
+                  value={newCourse.title} onChange={e => setNewCourse({ ...newCourse, title: e.target.value, slug: e.target.value.toLowerCase().replace(/ /g, '-') })} />
+             </div>
+             <div>
+                <label className="block font-dm-mono text-[9px] uppercase text-text-muted mb-2 font-bold tracking-widest pl-1">NQF Level Verification</label>
+                <select className="w-full bg-surface border border-border-custom rounded-xl p-4 text-xs font-bold focus:border-gold transition-all outline-none"
+                  value={newCourse.nqf_level} onChange={e => setNewCourse({ ...newCourse, nqf_level: parseInt(e.target.value) })}>
+                  {[3,4,5,6,7,8].map(l => <option key={l} value={l}>NQF Level {l}</option>)}
+                </select>
+             </div>
           </div>
-          <button type="submit" className="btn btn-gold w-full">Save Course</button>
+          <button type="submit" className="btn btn-gold w-full py-5 font-black text-sm tracking-[0.2em] uppercase">Commit to Academy Map</button>
         </form>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {courses.map(course => (
-          <div key={course.id} className="bg-card border border-border-custom rounded-xl p-6 hover:border-gold/30 transition-all group">
-            <div className="flex justify-between items-start mb-4">
-              <div className="w-12 h-12 bg-surface rounded-lg flex items-center justify-center text-2xl">{course.thumbnail_url}</div>
-            </div>
-            <h3 className="font-syne font-bold text-lg mb-2">{course.title}</h3>
-            <p className="text-[12px] text-text-muted line-clamp-2 mb-4">{course.description}</p>
-            <div className="flex justify-between items-center pt-4 border-t border-border-custom">
-              <span className="font-dm-mono text-[9px] uppercase tracking-widest text-text-dim">/courses/{course.slug}</span>
-              <button onClick={() => onEditContent(course)} className="text-gold text-[11px] font-bold hover:underline">Manage Content →</button>
-            </div>
-          </div>
-        ))}
-      </div>
+      {Object.entries(groupedCourses).map(([trackName, data]: [string, any]) => (
+        <div key={trackName} className="space-y-6">
+           <div className={`flex items-center gap-4 py-2 px-6 rounded-2xl border w-fit ${THEME_MAP[data.theme] || THEME_MAP.blue}`}>
+              <ShieldCheck className="w-4 h-4" />
+              <h3 className="font-syne font-black text-xs uppercase tracking-[0.3em]">{trackName}</h3>
+           </div>
+           
+           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+             {data.courses.sort((a:any, b:any) => a.nqf_level - b.nqf_level).map((course: any) => (
+               <div key={course.id} className="bg-card border border-border-custom rounded-3xl p-6 hover:border-gold/30 transition-all group flex flex-col h-full relative overflow-hidden isolate">
+                  <div className={`absolute top-0 right-0 w-32 h-32 opacity-5 rounded-full -mr-16 -mt-16 blur-3xl pointer-events-none bg-current ${THEME_MAP[data.theme]?.split(' ')[2]}`} />
+                  
+                  <div className="flex justify-between items-start mb-6">
+                    <div className="w-12 h-12 bg-surface border border-gold/10 rounded-2xl flex items-center justify-center text-2xl shadow-inner">{course.thumbnail_url}</div>
+                    <span className="text-[8px] font-dm-mono font-black border border-gold/20 text-gold px-2 py-0.5 rounded uppercase tracking-tighter">NQF L{course.nqf_level}</span>
+                  </div>
+
+                  <div className="flex-1">
+                    <h4 className="font-syne font-black text-base mb-1 text-text-soft leading-tight uppercase line-clamp-2">{course.title}</h4>
+                    <span className="text-[9px] font-dm-mono text-gold/60 uppercase tracking-widest block mb-4">{course.progression_level}</span>
+                    <p className="text-[11px] text-text-muted line-clamp-3 leading-relaxed">{course.description}</p>
+                  </div>
+
+                  <div className="mt-8 pt-6 border-t border-gold/5 flex items-center justify-between">
+                    <div className="flex gap-1.5">
+                       {isSuperAdmin && (
+                         <button 
+                           onClick={() => {
+                             const saqa = prompt('Administrative Override: Enter SAQA/MICT ID Mapping', course.accreditation_meta?.saqa_id || '');
+                             if (saqa !== null) {
+                               supabase.from('courses').update({ 
+                                 accreditation_meta: { ...course.accreditation_meta, saqa_id: saqa } 
+                               }).eq('id', course.id).then(() => onRefresh());
+                             }
+                           }}
+                           className="w-8 h-8 rounded-lg bg-surface border border-border-custom flex items-center justify-center text-text-dim hover:text-gold transition-all"
+                           title="Regulatory Compliance Settings"
+                         >
+                           <ShieldCheck size={12} />
+                         </button>
+                       )}
+                    </div>
+                    <button onClick={() => onEditContent(course)} className="text-gold text-[10px] font-black uppercase tracking-tighter hover:underline flex items-center gap-1 group/btn">
+                      ARCHITECT 
+                      <ChevronRight size={12} className="group-hover/btn:translate-x-1 transition-transform" />
+                    </button>
+                  </div>
+               </div>
+             ))}
+           </div>
+        </div>
+      ))}
     </div>
   );
 }

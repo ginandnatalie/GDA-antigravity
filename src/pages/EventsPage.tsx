@@ -55,7 +55,7 @@ export default function EventsPage() {
         .select('*')
         .eq('is_published', true)
         .order('event_date', { ascending: true });
-      
+
       if (error) {
         if (error.code === 'PGRST116' || error.message?.includes('not found')) {
           setEvents(MOCK_EVENTS);
@@ -88,7 +88,7 @@ export default function EventsPage() {
       const { error } = await supabase
         .from('event_registrations')
         .insert(registration);
-      
+
       if (error) throw error;
       setRegistrationSuccess(true);
     } catch (err: any) {
@@ -121,7 +121,7 @@ export default function EventsPage() {
             </p>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
@@ -163,8 +163,8 @@ export default function EventsPage() {
           >
             <div className="grid md:grid-cols-[350px_1fr] lg:grid-cols-[450px_1fr]">
               <div className="relative aspect-video md:aspect-auto overflow-hidden">
-                <img 
-                  src={event.image_url} 
+                <img
+                  src={event.image_url}
                   alt={event.title}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />
@@ -193,7 +193,7 @@ export default function EventsPage() {
                 <h2 className="font-syne font-extrabold text-2xl md:text-3xl mb-4 group-hover:text-gold transition-colors">
                   {event.title}
                 </h2>
-                
+
                 <p className="text-text-muted text-base mb-8 max-w-2xl leading-relaxed">
                   {event.description}
                 </p>
@@ -203,7 +203,7 @@ export default function EventsPage() {
                     <MapPin size={18} className="text-gold" />
                     {event.location}
                   </div>
-                  <button 
+                  <button
                     onClick={() => setSelectedEvent(event)}
                     className="btn btn-gold px-8 py-4 ml-auto flex items-center gap-2 group/btn"
                   >
@@ -227,14 +227,14 @@ export default function EventsPage() {
               className="absolute inset-0 bg-bg/90 backdrop-blur-xl"
               onClick={() => { setSelectedEvent(null); setRegistrationSuccess(false); }}
             />
-            
+
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               className="relative w-full max-w-lg bg-surface border border-border-custom rounded-[2.5rem] p-8 md:p-12 shadow-2xl overflow-hidden"
             >
-              <button 
+              <button
                 onClick={() => { setSelectedEvent(null); setRegistrationSuccess(false); }}
                 className="absolute top-8 right-8 text-text-dim hover:text-gold transition-colors"
                 title="Close"
@@ -251,7 +251,7 @@ export default function EventsPage() {
                   <p className="text-text-muted leading-relaxed mb-8">
                     We've reserved your spot for <strong>{selectedEvent.title}</strong>. A confirmation email with access details will be sent to your inbox shortly.
                   </p>
-                  <button 
+                  <button
                     onClick={() => { setSelectedEvent(null); setRegistrationSuccess(false); }}
                     className="btn btn-emerald w-full py-4"
                   >
@@ -263,7 +263,7 @@ export default function EventsPage() {
                   <div className="mb-8">
                     <div className="font-dm-mono text-[9px] tracking-[0.2em] uppercase text-gold mb-2">Event Registration</div>
                     <h3 className="font-syne font-bold text-2xl text-text-custom leading-tight">
-                      Confirm your attendance for <br/>
+                      Confirm your attendance for <br />
                       <span className="text-gold italic">"{selectedEvent.title}"</span>
                     </h3>
                   </div>
@@ -271,37 +271,37 @@ export default function EventsPage() {
                   <form className="space-y-4" onSubmit={handleRegister}>
                     <div className="space-y-1.5">
                       <label className="font-dm-mono text-[9px] tracking-widest uppercase text-text-dim ml-1">Full Name</label>
-                      <input 
+                      <input
                         name="name"
-                        type="text" 
-                        placeholder="John Doe" 
+                        type="text"
+                        placeholder="John Doe"
                         required
                         className="w-full bg-bg border border-border-custom rounded-xl px-5 py-3.5 focus:border-gold outline-none transition-all text-sm"
                       />
                     </div>
                     <div className="space-y-1.5">
                       <label className="font-dm-mono text-[9px] tracking-widest uppercase text-text-dim ml-1">Work/Student Email</label>
-                      <input 
+                      <input
                         name="email"
-                        type="email" 
-                        placeholder="john@example.com" 
+                        type="email"
+                        placeholder="john@example.com"
                         required
                         className="w-full bg-bg border border-border-custom rounded-xl px-5 py-3.5 focus:border-gold outline-none transition-all text-sm"
                       />
                     </div>
                     <div className="space-y-1.5">
                       <label className="font-dm-mono text-[9px] tracking-widest uppercase text-text-dim ml-1">Phone Number</label>
-                      <input 
+                      <input
                         name="phone"
-                        type="tel" 
-                        placeholder="+27 00 000 0000" 
+                        type="tel"
+                        placeholder="+27 00 000 0000"
                         required
                         className="w-full bg-bg border border-border-custom rounded-xl px-5 py-3.5 focus:border-gold outline-none transition-all text-sm"
                       />
                     </div>
-                    
-                    <button 
-                      type="submit" 
+
+                    <button
+                      type="submit"
                       disabled={formLoading}
                       className="btn btn-gold w-full py-5 rounded-xl mt-6 text-sm flex items-center justify-center gap-2"
                     >
@@ -311,7 +311,7 @@ export default function EventsPage() {
                         <>Reserve my spot <ArrowRight size={18} /></>
                       )}
                     </button>
-                    
+
                     <p className="text-[10px] text-text-dim text-center mt-6">
                       By registering, you agree to receive event reminders and communications from Ginashe Digital Academy.
                     </p>
