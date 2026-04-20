@@ -15,7 +15,7 @@ function WhySection() {
   const reasons = [
     { icon: '🎯', title: 'Industry-Designed Curriculum', desc: 'Every module is co-built with hiring managers from leading tech firms — so you learn what the global market actually needs.' },
     { icon: '👨‍🏫', title: 'Practitioner-Led Teaching', desc: 'No career academics. Our instructors are active Cloud Architects, ML Engineers, and CTOs who bring real production problems into the classroom.' },
-    { icon: '🤝', title: 'Strategic Industry Bridging', desc: 'Our Career Services team doesn\'t just wait for graduation. We align our curriculum with active hiring cycles at partner firms to ensure our candidates are priority-listed.' },
+    { icon: '🤝', title: 'Strategic Industry Bridging', desc: 'Our Career Services team doesn\'t just wait for graduation. We align our curriculum with active technical hiring cycles across our institutional network to ensure our candidates are priority-listed.' },
     { icon: '🌍', title: 'Built for Africa', desc: 'From cloud engineering to digital transformation, everything is contextualised for the African digital economy.' },
     { icon: '💰', title: 'Flexible Funding', desc: 'Instalment plans, employer-sponsored, or self-funded — we have a path for every budget. No one is turned away for financial reasons alone.' },
     { icon: '🔄', title: 'Lifetime Alumni Access', desc: 'Graduate once, belong forever. Access updated coursework, alumni networking, job boards, and mentorship for life.' },

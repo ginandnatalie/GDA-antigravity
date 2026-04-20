@@ -4,7 +4,7 @@ import { CheckCircle2, Info, Landmark, CreditCard, Clock } from 'lucide-react';
 export function Requirements() {
   const navigate = useNavigate();
   const criteria = [
-    { title: 'Academic Qualification', desc: 'Grade 12 (Matric) certificate or equivalent NQF Level 4 qualification.', mandatory: true },
+    { title: 'Academic Qualification', desc: 'Grade 12 (Matric) certificate or equivalent industry-standard prerequisite.', mandatory: true },
     { title: 'English Proficiency', desc: 'Ability to read, write and communicate effectively in English for technical documentation.', mandatory: true },
     { title: 'Digital Literacy', desc: 'Basic computer skills (email, web browsing, file management). Coding experience is NOT required for Launchpad.', mandatory: false },
     { title: 'Hardware Requirements', desc: 'A modern laptop (i5 processor, 8GB RAM minimum) and stable internet connection.', mandatory: true }
@@ -113,7 +113,7 @@ export function TuitionFees() {
         <div className="mt-16 flex flex-col md:flex-row items-center justify-center gap-10">
           <div className="flex items-center gap-3">
             <Landmark className="text-brand w-5 h-5" />
-            <span className="text-[12px] text-text-soft">SETA Accredited Vendor</span>
+            <span className="text-[12px] text-text-soft">Institutional Mastery Provider</span>
           </div>
           <div className="flex items-center gap-3">
             <CreditCard className="text-brand w-5 h-5" />

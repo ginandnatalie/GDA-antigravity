@@ -134,10 +134,10 @@ export function Footer({ onOpenModal, editMode }: { onOpenModal: (id: string) =>
           <Link to="/" className="inline-block no-underline shrink-0 mb-6 group">
             <Logo />
           </Link>
-          <p className="text-[12px] text-text-muted leading-[1.7] max-w-[260px]">Africa's premier institution for cloud computing, artificial intelligence, and digital transformation. MICT SETA accredited. Johannesburg, South Africa.</p>
+          <p className="text-[12px] text-text-muted leading-[1.7] max-w-[260px]">Africa's definitive practitioner-led institution for cloud engineering and digital transformation. Johannesburg, South Africa.</p>
           <div className="flex gap-2.5 mt-4.5 flex-wrap">
-            <span className="chip chip-em"><span className="w-1.25 h-1.25 rounded-full bg-emerald shrink-0"></span> MICT SETA Accredited</span>
-            <span className="chip chip-brand"><span className="w-1.25 h-1.25 rounded-full bg-brand shrink-0"></span> DHET Aligned</span>
+            <span className="chip chip-em"><span className="w-1.25 h-1.25 rounded-full bg-emerald shrink-0"></span> Practitioner Led</span>
+            <span className="chip chip-brand"><span className="w-1.25 h-1.25 rounded-full bg-brand shrink-0"></span> Industry Aligned</span>
           </div>
         </div>
 

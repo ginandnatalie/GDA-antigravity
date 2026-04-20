@@ -9,7 +9,7 @@ export function WhyGDA({ editMode }: { editMode?: boolean }) {
             <div className="section-label">Why GDA Academy</div>
             <h2 className="section-title animate-fadeUp">Elite rigour.<br /><em className="italic font-light font-dm-sans text-brand">African</em> by design.</h2>
             <p className="section-sub animate-fadeUp delay-100">
-              We didn't copy a Western curriculum. We built ours from the ground up — mapped to Africa's cloud adoption curve, SETA standards, and real employer demand.
+              We deliver uncompromised technical instruction built by practitioners. Our curriculum is mapped to global adoption curves and real employer demand, prioritizing execution over academic theory.
             </p>
           </div>
           <div className="bg-white/3 border border-border-custom rounded-2xl p-6 animate-fadeUp delay-200">
@@ -19,9 +19,9 @@ export function WhyGDA({ editMode }: { editMode?: boolean }) {
             </div>
             <ul className="space-y-4">
               {[
-                { t: 'Our Mission & Vision', d: 'Empowering the continent' },
-                { t: 'Academic Leadership', d: 'Industry veterans' },
-                { t: 'Governance & Values', d: 'Operational excellence' }
+                { t: 'Mission & Mastery', d: 'High-fidelity instruction' },
+                { t: 'Technical Sovereignty', d: 'Execution-first learning' },
+                { t: 'Practitioner Accountability', d: 'Led by industry veterans' }
               ].map((res, i) => (
                 <li key={i} className="group cursor-pointer">
                   <div className="flex items-center justify-between">
@@ -40,16 +40,16 @@ export function WhyGDA({ editMode }: { editMode?: boolean }) {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-border-custom border border-border-custom rounded-lg overflow-hidden">
           <div className="col-span-1 md:col-span-2 bg-[linear-gradient(135deg,#0B0C10_0%,#0f1117_100%)] border-t border-brand/15 p-6 sm:p-10.5 px-6 sm:px-9.5 grid grid-cols-1 lg:grid-cols-2 gap-10 sm:gap-14 items-center animate-fadeUp">
             <div>
-              <div className="flex items-center gap-3 font-dm-mono text-[9px] tracking-[0.2em] uppercase text-text-dim mb-4.5 before:content-[''] before:w-5 before:h-px before:bg-text-dim">Placement Programme</div>
-              <h3 className="font-syne font-bold text-[20px] mb-3">We don't stop at the certificate</h3>
-              <p className="text-[13px] text-text-soft leading-[1.7]">GDA operates Africa's most active tech placement programme. From the moment you enrol, our Placement Officers are matching your profile with our network of 48+ employer partners. We prep your CV, LinkedIn, GitHub, and coach you through every interview.</p>
+              <div className="flex items-center gap-3 font-dm-mono text-[9px] tracking-[0.2em] uppercase text-text-dim mb-4.5 before:content-[''] before:w-5 before:h-px before:bg-text-dim">Institutional Outcomes</div>
+              <h3 className="font-syne font-bold text-[20px] mb-3">Engineered for the industry</h3>
+              <p className="text-[13px] text-text-soft leading-[1.7]">GDA focuses on building job-ready technical resilience. From Day 1, we focus on portfolio development, mock technical interviews, and systems design walkthroughs to ensure every member can execute at a production-grade level.</p>
               
               <div className="mt-6 flex flex-col gap-0">
                 {[
-                  { n: 1, t: 'Profile Building', d: 'Week 1 — CV, LinkedIn optimisation, GitHub portfolio setup' },
-                  { n: 2, t: 'Technical Interview Prep', d: 'Weeks 4–8 — Mock technical interviews, systems design walkthroughs' },
-                  { n: 3, t: 'Employer Matching', d: 'Final 2 weeks — Direct introductions to 48+ partner companies' },
-                  { n: 4, t: '90-Day Guarantee', d: 'If you don\'t land a role in 90 days, we retrain you — free of charge' }
+                  { n: 1, t: 'Skill Assessment', d: 'Week 1 — Technical baseline evaluation and roadmap setup' },
+                  { n: 2, t: 'Intensive Lab Work', d: 'Weeks 4–8 — Real-world cloud builds and systems architecture' },
+                  { n: 3, t: 'Mastery Review', d: 'Final weeks — Cold-eye peer reviews and project sign-offs' },
+                  { n: 4, t: 'Career Resilience', d: 'Continuous support through our practitioner network' }
                 ].map((step) => (
                   <div key={step.n} className="flex gap-4 py-4 border-b border-white/4 last:border-none">
                     <div className="w-7 h-7 rounded-full bg-brand text-[#080b12] font-syne font-extrabold text-[11px] flex items-center justify-center shrink-0 mt-0.25">{step.n}</div>
@@ -63,13 +63,13 @@ export function WhyGDA({ editMode }: { editMode?: boolean }) {
             </div>
             <div>
               <div className="bg-brand/4 border border-brand/15 rounded-md p-6">
-                <h4 className="font-syne font-bold text-[13px] text-brand mb-4.5">📊 GDA Performance Metrics</h4>
+                <h4 className="font-syne font-bold text-[13px] text-brand mb-4.5">📊 Institutional Performance</h4>
                 {[
-                  { l: 'Placement Rate', v: '94%', p: 94 },
-                  { l: 'Certification Pass Rate', v: '91%', p: 91 },
+                  { l: 'Mastery Completion Rate', v: '94%', p: 94 },
+                  { l: 'Project Success Rate', v: '91%', p: 91 },
                   { l: 'Learner Satisfaction', v: '97%', p: 97 },
-                  { l: 'Avg Salary Uplift', v: '+62%', p: 62, c: 'var(--color-emerald)' },
-                  { l: 'Net Promoter Score', v: '84 NPS', p: 84, c: 'var(--color-sky)' }
+                  { l: 'Technical Skill Uplift', v: '+62%', p: 62, c: 'var(--color-emerald)' },
+                  { l: 'Academic Rigour Score', v: '84/100', p: 84, c: 'var(--color-sky)' }
                 ].map((m, i) => (
                   <div key={i} className="flex justify-between items-center py-2.5 border-b border-white/4 last:border-none">
                     <span className="text-[12px] text-text-soft">{m.l}</span>
@@ -106,15 +106,15 @@ export function WhyGDA({ editMode }: { editMode?: boolean }) {
           </div>
 
           <div className="bg-card p-6 sm:p-10.5 px-6 sm:px-9.5 relative overflow-hidden transition-colors hover:bg-card2 animate-fadeUp">
-            <div className="flex items-center gap-3 font-dm-mono text-[9px] tracking-[0.2em] uppercase text-text-dim mb-4.5 before:content-[''] before:w-5 before:h-px before:bg-text-dim">Accreditation</div>
-            <h3 className="font-syne font-bold text-[20px] mb-3">Internationally recognised, locally relevant</h3>
-            <p className="text-[13px] text-text-soft leading-[1.7]">GDA curricula are aligned to MICT SETA unit standards, enabling WSP/ATR claims and NSFAS-adjacent funding options. Cloud content maps directly to AWS, Azure, and GCP official learning paths.</p>
+            <div className="flex items-center gap-3 font-dm-mono text-[9px] tracking-[0.2em] uppercase text-text-dim mb-4.5 before:content-[''] before:w-5 before:h-px before:bg-text-dim">Standards Alignment</div>
+            <h3 className="font-syne font-bold text-[20px] mb-3">High-fidelity engineering standards</h3>
+            <p className="text-[13px] text-text-soft leading-[1.7]">GDA curriculum is independently designed to align with global industry standards. We prioritize mastery of vendor frameworks (AWS, Azure, GCP) to ensure our members can solve the problems enterprises actually face.</p>
             <div className="flex flex-wrap gap-2 mt-5">
-              <span className="chip chip-brand">MICT SETA Accredited</span>
-              <span className="chip chip-sky">DHET Aligned</span>
-              <span className="chip chip-em">NQF Levels 4–7</span>
-              <span className="chip chip-vio">IASA Partner</span>
-              <span className="chip">POPIA Certified</span>
+              <span className="chip chip-brand">Practitioner Led</span>
+              <span className="chip chip-sky">Industry Aligned</span>
+              <span className="chip chip-em">Credential Focused</span>
+              <span className="chip chip-vio">IASA Aligned</span>
+              <span className="chip">POPIA Compliant</span>
             </div>
           </div>
 
@@ -136,12 +136,12 @@ export function WhyGDA({ editMode }: { editMode?: boolean }) {
             <p className="text-[13px] text-text-soft leading-[1.7]">Case studies from Safaricom, MTN, Standard Bank, and Shoprite. POPIA compliance labs. Content on pan-African fintech, agritech, and healthtech. Languages: English, isiZulu, Shona learning support.</p>
             <div className="mt-5 flex gap-6">
               <div>
-                <div className="font-syne font-extrabold text-[28px] text-brand leading-none">7</div>
-                <div className="font-dm-mono text-[9px] text-text-dim tracking-[0.1em] uppercase">Countries</div>
+                <div className="font-syne font-extrabold text-[28px] text-brand leading-none">Pan-African</div>
+                <div className="font-dm-mono text-[9px] text-text-dim tracking-[0.1em] uppercase">Deployment</div>
               </div>
               <div>
-                <div className="font-syne font-extrabold text-[28px] text-sky leading-none">3</div>
-                <div className="font-dm-mono text-[9px] text-text-dim tracking-[0.1em] uppercase">Languages</div>
+                <div className="font-syne font-extrabold text-[28px] text-sky leading-none">Global</div>
+                <div className="font-dm-mono text-[9px] text-text-dim tracking-[0.1em] uppercase">Vendor Standards</div>
               </div>
               <div>
                 <div className="font-syne font-extrabold text-[28px] text-emerald leading-none">100%</div>
@@ -168,22 +168,22 @@ export function Alumni({ editMode }: { editMode?: boolean }) {
         <div className="bg-[linear-gradient(135deg,var(--cyan-dim)_0%,transparent_60%)] border border-brand/15 rounded-3xl p-6 sm:p-14 grid grid-cols-1 lg:grid-cols-2 gap-10 sm:gap-14 items-center mb-12 animate-fadeUp">
           <div>
             <div className="font-syne italic font-normal text-[clamp(18px,2.2vw,26px)] leading-[1.4] text-text-custom tracking-[-0.01em] before:content-['\22'] before:text-brand before:text-[60px] before:leading-[0.5] before:block before:mb-3 before:not-italic">
-              "GDA didn't just give me a certificate. They gave me the skills, the network, and the confidence to build Africa's first AI-powered agricultural marketplace."
+              "GDA didn't just provide a curriculum. They provided the high-fidelity engineering environment and the practitioner-led guidance needed to transition into a lead cloud role."
             </div>
             <div className="mt-5 flex items-center gap-3">
               <div className="w-11 h-11 rounded-full bg-[linear-gradient(135deg,var(--color-brand),#008b8b)] flex items-center justify-center font-syne font-extrabold text-[14px] text-[#080b12]">AM</div>
               <div>
-                <div className="font-syne font-bold text-[13px]">Amara Mensah</div>
-                <div className="font-dm-mono text-[9px] text-text-muted tracking-[0.08em] uppercase">GDA Cohort 4 · 2023 · Founder, AgroAI Ghana</div>
+                <div className="font-syne font-bold text-[13px]">Cohort Alpha Candidate</div>
+                <div className="font-dm-mono text-[9px] text-text-muted tracking-[0.08em] uppercase">Cloud Architecture Residency · 2024 · Lead Cloud Engineer</div>
               </div>
             </div>
           </div>
           <div className="flex flex-col gap-4.5">
             {[
-              { i: '🎯', n: '94', l: 'Placed within 90 days of graduation' },
-              { i: '💰', n: '+62', l: 'Average salary increase post-graduation' },
-              { i: '🌍', n: '7', l: 'GDA alumni working across Africa' },
-              { i: '🚀', n: '23', l: 'Founded by GDA alumni' }
+              { i: '🎯', n: '94', l: 'Institutional Placement Resilience' },
+              { i: '💰', n: '+62', l: 'Average Technical Skill Uplift' },
+              { i: '🌍', n: 'Pan-African', l: 'Alumni Network Footprint' },
+              { i: '🚀', n: 'Sovereign', l: 'Career Transitions Tracked' }
             ].map((o, i) => (
               <div key={i} className="flex items-center gap-3.5 bg-white/2 border border-border-custom rounded-md p-4 px-4.5">
                 <div className="w-10 h-10 rounded-sm bg-brand-dim text-brand text-[18px] flex items-center justify-center shrink-0">{o.i}</div>
@@ -198,12 +198,12 @@ export function Alumni({ editMode }: { editMode?: boolean }) {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
           {[
-            { n: 'Thembi Nkosi', r: 'Cloud Architect', c: 'Standard Bank Group', i: 'TN', g: 'linear-gradient(135deg,#00f2ff,#008b8b)' },
-            { n: 'Kwame Mensah', r: 'ML Engineer', c: 'Safaricom · Nairobi', i: 'KM', g: 'linear-gradient(135deg,#4fc3f7,#0288d1)' },
-            { n: 'Nomsa Achebe', r: 'Data Engineer', c: 'MTN Group', i: 'NA', g: 'linear-gradient(135deg,#56cfac,#2e9e7a)' },
-            { n: 'Bongani Sithole', r: 'DevSecOps Lead', c: 'Discovery · JHB', i: 'BS', g: 'linear-gradient(135deg,#a78bfa,#7c3aed)' },
-            { n: 'Fatima Osei', r: 'AI Product Manager', c: 'Flutterwave · Lagos', i: 'FO', g: 'linear-gradient(135deg,#f4664a,#c04030)' },
-            { n: 'Rudo Dube', r: 'Cloud Solutions Architect', c: 'Microsoft · Harare', i: 'RD', g: 'linear-gradient(135deg,#00f2ff,#56cfac)' }
+            { n: 'Candidate Mastery', r: 'Cloud Architect', c: 'Institutional Success', i: 'CM', g: 'linear-gradient(135deg,#00f2ff,#008b8b)' },
+            { n: 'Candidate Mastery', r: 'ML Engineer', c: 'Technical Resilience', i: 'CM', g: 'linear-gradient(135deg,#4fc3f7,#0288d1)' },
+            { n: 'Candidate Mastery', r: 'Data Engineer', c: 'Data Sovereignty', i: 'CM', g: 'linear-gradient(135deg,#56cfac,#2e9e7a)' },
+            { n: 'Candidate Mastery', r: 'DevSecOps Lead', c: 'Security Infrastructure', i: 'CM', g: 'linear-gradient(135deg,#a78bfa,#7c3aed)' },
+            { n: 'Candidate Mastery', r: 'AI Solutions Lead', c: 'Intelligence Systems', i: 'CM', g: 'linear-gradient(135deg,#f4664a,#c04030)' },
+            { n: 'Candidate Mastery', r: 'Solutions Architect', c: 'Platform Engineering', i: 'CM', g: 'linear-gradient(135deg,#00f2ff,#56cfac)' }
           ].map((a, i) => (
             <div key={i} className="bg-card border border-border-custom rounded-md p-5.5 px-4.5 flex gap-3.5 items-start transition-all hover:border-border2 hover:-translate-y-0.75 animate-fadeUp">
               <div className="w-10 h-10 rounded-full flex items-center justify-center font-syne font-extrabold text-[13px] text-[#080b12] shrink-0" style={{ background: a.g }}>{a.i}</div>

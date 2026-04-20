@@ -74,10 +74,10 @@ export function Ecosystem({ onOpenModal, editMode }: { onOpenModal: (id: string)
       <div className="section-inner">
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-10 lg:gap-16 mb-16 items-start">
           <div>
-            <div className="section-label">Partner Ecosystem</div>
-            <h2 className="section-title animate-fadeUp">The network that<br />gets you hired.</h2>
+            <div className="section-label">Curriculum Standards</div>
+            <h2 className="section-title animate-fadeUp">Aligned with global<br />engineering standards.</h2>
             <p className="section-sub animate-fadeUp delay-100">
-              Our employer and technology partnerships aren't logo placements. They're active recruitment pipelines, co-created content, and sponsored learner placements.
+              Our engineering modules are built to align with global adoption standards. We ensure every learner master the same frameworks used by the world's most innovative technology companies.
             </p>
             <button className="btn btn-outline mt-8 animate-fadeUp" onClick={() => onOpenModal('partner')}>Become a Partner</button>
           </div>
@@ -88,9 +88,9 @@ export function Ecosystem({ onOpenModal, editMode }: { onOpenModal: (id: string)
             </div>
             <ul className="space-y-4">
               {[
-                { t: 'Employer Network', d: '48+ companies' },
-                { t: 'Talent Showcase 2026', d: 'Hiring events' },
-                { t: 'Corporate Training', d: 'Workforce modernisation' }
+                { t: 'Industry Standards', d: 'Global alignment' },
+                { t: 'Technical Showcase', d: 'Mastery demonstration' },
+                { t: 'Practitioner Review', d: 'Continuous evaluation' }
               ].map((res, i) => (
                 <li key={i} className="group cursor-pointer">
                   <div className="flex items-center justify-between">
@@ -109,12 +109,12 @@ export function Ecosystem({ onOpenModal, editMode }: { onOpenModal: (id: string)
         <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-14">
           <div className="flex flex-col gap-2.5">
             {[
-              { n: 'Amazon Web Services', p: 'AWS APN Partner · Training & Certification', i: '🟠', t: 'Verified', tc: 'brand' },
-              { n: 'Microsoft Azure', p: 'Microsoft Learning Partner · AI + Cloud Track', i: '🔵', t: 'Verified', tc: 'sky' },
-              { n: 'Google Cloud', p: 'GCP Authorized Training Partner', i: '🟢', t: 'Verified', tc: 'em' },
-              { n: 'MICT SETA', p: 'Accredited Training Provider · NQF 4–7', i: '🏛️', t: 'Gov. Accredited', tc: 'brand' },
-              { n: 'Standard Bank Group', p: 'Employer Partner · Cloud & AI Roles', i: '🏦', t: 'Hiring', tc: '' },
-              { n: 'MTN Group', p: 'Employer Partner · DevOps & Data Roles', i: '📱', t: 'Hiring', tc: '' }
+              { n: 'Amazon Web Services', p: 'Curriculum Standards Alignment · Cloud Track', i: '🟠', t: 'Aligned', tc: 'brand' },
+              { n: 'Microsoft Azure', p: 'Curriculum Standards Alignment · Infrastructure Track', i: '🔵', t: 'Aligned', tc: 'sky' },
+              { n: 'Google Cloud', p: 'Curriculum Standards Alignment · Data Track', i: '🟢', t: 'Aligned', tc: 'em' },
+              { n: 'System Engineering', p: 'Enterprise Infrastructure · NQF Standards Aligned', i: '⚙️', t: 'Standards Aligned', tc: 'brand' },
+              { n: 'Data Engineering', p: 'Intelligence Systems · Practitioner Built', i: '📊', t: 'Practitioner Led', tc: '' },
+              { n: 'Cloud Architecture', p: 'Solutions Mastery · Industry Aligned', i: '🏗️', t: 'Industry Aligned', tc: '' }
             ].map((p, i) => (
               <div key={i} className="bg-card border border-border-custom rounded-md p-4.5 px-5.5 flex items-center gap-3.5 transition-all hover:border-border2 hover:translate-x-1.25 animate-fadeUp">
                 <div className="w-10.5 h-10.5 rounded-sm flex items-center justify-center text-[20px] shrink-0 border border-border-custom bg-white/3">{p.i}</div>
@@ -128,14 +128,14 @@ export function Ecosystem({ onOpenModal, editMode }: { onOpenModal: (id: string)
           </div>
 
           <div className="bg-card border border-border-custom rounded-3xl p-6 sm:p-9.5 animate-fadeUp">
-            <div className="font-syne font-bold text-[18px] mb-2.5">Partner with GDA</div>
-            <div className="text-[13px] text-text-soft leading-[1.65] mb-6.5">Join Africa's most active tech talent pipeline. Whether you're a cloud vendor, employer, government body, or academic institution — we have a partnership model for you.</div>
+            <div className="font-syne font-bold text-[18px] mb-2.5">Institutional Outreach</div>
+            <div className="text-[13px] text-text-soft leading-[1.65] mb-6.5">Ginashe Digital Academy is open to collaboration with technology vendors, research bodies, and academic institutions to further the development of sovereign technical talent in Africa.</div>
             <ul className="list-none flex flex-col gap-3.25">
               {[
-                'Access pre-vetted, job-ready cloud and AI talent before they hit the open market',
-                'Co-brand and co-deliver content aligned to your technology stack',
-                'Sponsor cohort seats and build your employer brand with Gen-Z Africa',
-                'Participate in our annual GDA Tech Showcase and hiring events'
+                'Access job-ready cloud and AI talent trained on high-fidelity industry standards',
+                'Engage with a practitioner-led curriculum focused on real-world execution',
+                'Participate in the development of sovereign technical talent across the continent',
+                'Join our institutional review boards and technical showcase events'
               ].map((b, i) => (
                 <li key={i} className="flex gap-2.5 text-[13px] items-start">
                   <span className="w-1.75 h-1.75 rounded-full bg-brand shrink-0 mt-1.5"></span>
