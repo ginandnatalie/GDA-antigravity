@@ -19,7 +19,7 @@ export default function PathwaysPage({ onOpenModal, editMode }: PathwaysPageProp
       desc: 'The essential entry point for all aspiring digital practitioners. Master the bedrock of infrastructure, networking, and the command line.',
       outcome: 'Technical Readiness & Literacy',
       icon: <Cpu className="w-8 h-8" />,
-      color: 'gold',
+      color: 'brand',
       path: '/levels/foundation',
       features: ['Cloud Fundamentals', 'Linux Mastery', 'Network Architecture', 'Digital PoE Creation']
     },
@@ -62,7 +62,7 @@ export default function PathwaysPage({ onOpenModal, editMode }: PathwaysPageProp
     <div className="bg-bg min-h-screen">
       <PageHero
         label="Academy Roadmap"
-        title={<>Your Journey to <span className="text-gold">Digital Mastery</span> Starts Here.</>}
+        title={<>Your Journey to <span className="text-brand">Digital Mastery</span> Starts Here.</>}
         subtitle="Explore the Ginashe institutional matrix. We've structured our curriculum into four progressive levels of expertise, moving from fundamental literacy to global strategic leadership."
         image="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=2072"
         imageAlt="Digital matrix and networking"
@@ -73,9 +73,9 @@ export default function PathwaysPage({ onOpenModal, editMode }: PathwaysPageProp
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex flex-col md:flex-row gap-16 items-center">
             <div className="flex-1 space-y-8">
-              <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-gold/5 border border-gold/20">
-                <div className="w-2 h-2 rounded-full bg-gold animate-pulse" />
-                <span className="font-dm-mono text-[10px] text-gold uppercase tracking-[0.2em]">Institutional Philosophy</span>
+              <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-brand/5 border border-brand/20">
+                <div className="w-2 h-2 rounded-full bg-brand animate-pulse" />
+                <span className="font-dm-mono text-[10px] text-brand uppercase tracking-[0.2em]">Institutional Philosophy</span>
               </div>
               <h2 className="font-syne font-bold text-4xl md:text-5xl leading-tight">Structured Growth for <br /><span className="text-white/40">Unstructured Times.</span></h2>
               <p className="text-text-soft text-lg leading-relaxed">
@@ -102,10 +102,10 @@ export default function PathwaysPage({ onOpenModal, editMode }: PathwaysPageProp
 
             <div className="flex-1 relative">
               <div className="aspect-square rounded-3xl bg-surface/50 border border-white/5 relative overflow-hidden p-12">
-                <div className="absolute inset-0 bg-gradient-to-br from-gold/5 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-br from-brand/5 to-transparent" />
                 <div className="relative z-10 space-y-12">
                    {[
-                     { icon: <GraduationCap className="w-6 h-6 text-gold" />, title: 'Foundation', status: 'Entry Gateway' },
+                     { icon: <GraduationCap className="w-6 h-6 text-brand" />, title: 'Foundation', status: 'Entry Gateway' },
                      { icon: <Briefcase className="w-6 h-6 text-emerald" />, title: 'Associate', status: 'Career Speciality' },
                      { icon: <Award className="w-6 h-6 text-sky" />, title: 'Professional', status: 'Mastery Phase' },
                      { icon: <Landmark className="w-6 h-6 text-violet" />, title: 'Enterprise', status: 'Strategic Leader' }
@@ -131,7 +131,7 @@ export default function PathwaysPage({ onOpenModal, editMode }: PathwaysPageProp
       <section className="py-24 bg-surface/30 border-t border-b border-white/5">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-20 space-y-4">
-            <span className="font-dm-mono text-[11px] text-gold uppercase tracking-[0.4em]">The Ginashe Matrix v1.5</span>
+            <span className="font-dm-mono text-[11px] text-brand uppercase tracking-[0.4em]">The Ginashe Matrix v1.5</span>
             <h2 className="font-syne font-black text-5xl md:text-6xl text-white tracking-tighter">Academic Levels</h2>
           </div>
 
@@ -145,13 +145,13 @@ export default function PathwaysPage({ onOpenModal, editMode }: PathwaysPageProp
                 viewport={{ once: true }}
                 className="group relative h-full flex flex-col"
               >
-                 <div className="flex-1 bg-navy/80 border border-white/10 rounded-2xl p-8 flex flex-col hover:border-gold/40 transition-all duration-500 overflow-hidden relative">
+                 <div className="flex-1 bg-navy/80 border border-white/10 rounded-2xl p-8 flex flex-col hover:border-brand/40 transition-all duration-500 overflow-hidden relative">
                     <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
                       {lvl.icon}
                     </div>
                     
-                    <div className="font-dm-mono text-[9px] text-gold uppercase tracking-[0.3em] mb-2">{lvl.label}</div>
-                    <h3 className="font-syne font-bold text-2xl text-white mb-4 group-hover:text-gold transition-colors">{lvl.title}</h3>
+                    <div className="font-dm-mono text-[9px] text-brand uppercase tracking-[0.3em] mb-2">{lvl.label}</div>
+                    <h3 className="font-syne font-bold text-2xl text-white mb-4 group-hover:text-brand transition-colors">{lvl.title}</h3>
                     <p className="text-text-soft text-sm leading-relaxed mb-8 flex-1">{lvl.desc}</p>
                     
                     <div className="space-y-3 mb-12">
@@ -169,7 +169,7 @@ export default function PathwaysPage({ onOpenModal, editMode }: PathwaysPageProp
                        
                        <Link
                          to={lvl.path}
-                         className="inline-flex items-center gap-3 text-gold font-bold text-xs uppercase tracking-[0.2em] no-underline hover:translate-x-1 transition-transform"
+                         className="inline-flex items-center gap-3 text-brand font-bold text-xs uppercase tracking-[0.2em] no-underline hover:translate-x-1 transition-transform"
                        >
                          Explore Level <ArrowRight className="w-4 h-4" />
                        </Link>
@@ -190,7 +190,7 @@ export default function PathwaysPage({ onOpenModal, editMode }: PathwaysPageProp
            </p>
            <button 
              onClick={() => window.location.href = '/curriculum'}
-             className="px-10 py-5 bg-navy border border-gold text-gold font-syne font-black uppercase text-xs tracking-[0.3em] rounded-xl hover:bg-gold hover:text-black transition-all shadow-[0_20px_40px_rgba(244,162,26,0.1)]"
+             className="px-10 py-5 bg-navy border border-brand text-brand font-syne font-black uppercase text-xs tracking-[0.3em] rounded-xl hover:bg-brand hover:text-black transition-all shadow-[0_20px_40px_rgba(0,242,255,0.1)]"
            >
              View Full Institutional Matrix
            </button>

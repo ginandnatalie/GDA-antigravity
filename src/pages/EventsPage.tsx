@@ -109,12 +109,12 @@ export default function EventsPage() {
             animate={{ opacity: 1, y: 0 }}
             className="flex flex-col gap-4"
           >
-            <div className="flex items-center gap-2 font-dm-mono text-[10px] tracking-[0.2em] uppercase text-gold">
+            <div className="flex items-center gap-2 font-dm-mono text-[10px] tracking-[0.2em] uppercase text-brand">
               <Sparkles size={14} />
               Events & Webinars
             </div>
             <h1 className="font-syne font-extrabold text-4xl md:text-6xl leading-tight">
-              Connect. <span className="text-gold">Learn.</span> Transform.
+              Connect. <span className="text-brand">Learn.</span> Transform.
             </h1>
             <p className="text-text-muted text-lg leading-relaxed max-w-2xl">
               Join our expert-led sessions to discover how GDA can accelerate your career in the cloud and AI era.
@@ -127,8 +127,8 @@ export default function EventsPage() {
             transition={{ delay: 0.2 }}
             className="bg-white/3 border border-border-custom rounded-2xl p-6"
           >
-            <div className="font-syne font-bold text-[11px] uppercase tracking-widest text-gold mb-4 flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-gold"></span>
+            <div className="font-syne font-bold text-[11px] uppercase tracking-widest text-brand mb-4 flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-brand"></span>
               Event Resources
             </div>
             <ul className="space-y-4">
@@ -140,7 +140,7 @@ export default function EventsPage() {
                 <li key={i} className="group cursor-pointer">
                   <div className="flex items-center justify-between">
                     <div>
-                      <div className="font-syne font-bold text-[13px] group-hover:text-gold transition-colors">{res.t}</div>
+                      <div className="font-syne font-bold text-[13px] group-hover:text-brand transition-colors">{res.t}</div>
                       <div className="text-[10px] text-text-muted">{res.d}</div>
                     </div>
                     <span className="text-text-dim text-xs group-hover:translate-x-1 transition-transform">→</span>
@@ -159,7 +159,7 @@ export default function EventsPage() {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.1 * i }}
-            className="group relative bg-surface border border-border-custom rounded-3xl overflow-hidden hover:border-gold/40 transition-all duration-500 shadow-xl"
+            className="group relative bg-surface border border-border-custom rounded-3xl overflow-hidden hover:border-brand/40 transition-all duration-500 shadow-xl"
           >
             <div className="grid md:grid-cols-[350px_1fr] lg:grid-cols-[450px_1fr]">
               <div className="relative aspect-video md:aspect-auto overflow-hidden">
@@ -169,8 +169,8 @@ export default function EventsPage() {
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />
                 <div className="absolute inset-0 bg-bg/40 group-hover:bg-transparent transition-colors duration-500"></div>
-                <div className="absolute top-6 left-6 flex flex-col items-center justify-center p-3 bg-bg/80 backdrop-blur-md rounded-xl border border-gold/30">
-                  <span className="font-dm-mono text-xl font-bold text-gold">
+                <div className="absolute top-6 left-6 flex flex-col items-center justify-center p-3 bg-bg/80 backdrop-blur-md rounded-xl border border-brand/30">
+                  <span className="font-dm-mono text-xl font-bold text-brand">
                     {new Date(event.event_date).getDate()}
                   </span>
                   <span className="font-dm-mono text-[10px] tracking-widest uppercase text-text-soft">
@@ -181,16 +181,16 @@ export default function EventsPage() {
 
               <div className="p-8 md:p-12 flex flex-col justify-center">
                 <div className="flex flex-wrap items-center gap-4 mb-6">
-                  <span className="px-3 py-1 bg-gold/10 text-gold border border-gold/20 rounded-full font-dm-mono text-[9px] tracking-widest uppercase">
+                  <span className="px-3 py-1 bg-brand/10 text-brand border border-brand/20 rounded-full font-dm-mono text-[9px] tracking-widest uppercase">
                     {event.type}
                   </span>
                   <div className="flex items-center gap-2 text-text-dim text-[11px] font-dm-mono uppercase tracking-wider">
-                    <Clock size={14} className="text-gold" />
+                    <Clock size={14} className="text-brand" />
                     {event.event_time} CAT
                   </div>
                 </div>
 
-                <h2 className="font-syne font-extrabold text-2xl md:text-3xl mb-4 group-hover:text-gold transition-colors">
+                <h2 className="font-syne font-extrabold text-2xl md:text-3xl mb-4 group-hover:text-brand transition-colors">
                   {event.title}
                 </h2>
 
@@ -200,12 +200,12 @@ export default function EventsPage() {
 
                 <div className="flex flex-wrap items-center gap-6 mt-auto">
                   <div className="flex items-center gap-3 text-text-soft text-sm">
-                    <MapPin size={18} className="text-gold" />
+                    <MapPin size={18} className="text-brand" />
                     {event.location}
                   </div>
                   <button
                     onClick={() => setSelectedEvent(event)}
-                    className="btn btn-gold px-8 py-4 ml-auto flex items-center gap-2 group/btn"
+                    className="btn btn-brand px-8 py-4 ml-auto flex items-center gap-2 group/btn"
                   >
                     Register Now <ArrowRight size={16} className="transition-transform group-hover/btn:translate-x-1" />
                   </button>
@@ -236,7 +236,7 @@ export default function EventsPage() {
             >
               <button
                 onClick={() => { setSelectedEvent(null); setRegistrationSuccess(false); }}
-                className="absolute top-8 right-8 text-text-dim hover:text-gold transition-colors"
+                className="absolute top-8 right-8 text-text-dim hover:text-brand transition-colors"
                 title="Close"
               >
                 <X size={24} />
@@ -261,10 +261,10 @@ export default function EventsPage() {
               ) : (
                 <>
                   <div className="mb-8">
-                    <div className="font-dm-mono text-[9px] tracking-[0.2em] uppercase text-gold mb-2">Event Registration</div>
+                    <div className="font-dm-mono text-[9px] tracking-[0.2em] uppercase text-brand mb-2">Event Registration</div>
                     <h3 className="font-syne font-bold text-2xl text-text-custom leading-tight">
                       Confirm your attendance for <br />
-                      <span className="text-gold italic">"{selectedEvent.title}"</span>
+                      <span className="text-brand italic">"{selectedEvent.title}"</span>
                     </h3>
                   </div>
 
@@ -276,7 +276,7 @@ export default function EventsPage() {
                         type="text"
                         placeholder="John Doe"
                         required
-                        className="w-full bg-bg border border-border-custom rounded-xl px-5 py-3.5 focus:border-gold outline-none transition-all text-sm"
+                        className="w-full bg-bg border border-border-custom rounded-xl px-5 py-3.5 focus:border-brand outline-none transition-all text-sm"
                       />
                     </div>
                     <div className="space-y-1.5">
@@ -286,7 +286,7 @@ export default function EventsPage() {
                         type="email"
                         placeholder="john@example.com"
                         required
-                        className="w-full bg-bg border border-border-custom rounded-xl px-5 py-3.5 focus:border-gold outline-none transition-all text-sm"
+                        className="w-full bg-bg border border-border-custom rounded-xl px-5 py-3.5 focus:border-brand outline-none transition-all text-sm"
                       />
                     </div>
                     <div className="space-y-1.5">
@@ -296,14 +296,14 @@ export default function EventsPage() {
                         type="tel"
                         placeholder="+27 00 000 0000"
                         required
-                        className="w-full bg-bg border border-border-custom rounded-xl px-5 py-3.5 focus:border-gold outline-none transition-all text-sm"
+                        className="w-full bg-bg border border-border-custom rounded-xl px-5 py-3.5 focus:border-brand outline-none transition-all text-sm"
                       />
                     </div>
 
                     <button
                       type="submit"
                       disabled={formLoading}
-                      className="btn btn-gold w-full py-5 rounded-xl mt-6 text-sm flex items-center justify-center gap-2"
+                      className="btn btn-brand w-full py-5 rounded-xl mt-6 text-sm flex items-center justify-center gap-2"
                     >
                       {formLoading ? (
                         <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-bg"></div>

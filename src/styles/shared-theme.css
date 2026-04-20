@@ -1,14 +1,15 @@
 /* 
   Ginashe Digital Academy: Institutional Design Constitution
-  Navy & Gold Aesthetic Tokens
 */
 
 :root {
-  /* Brand Colors */
-  --gold: #f4a21a;
-  --gold-light: #fbbf24;
-  --gold-dim: rgba(244, 162, 26, 0.12);
-  --gold-glow: rgba(244, 162, 26, 0.25);
+  /* Brand Colors - Sovereign Cyan (Neon) */
+  --brand: #00f2ff;
+  --brand-light: #33f5ff;
+  --brand-dim: rgba(0, 242, 255, 0.12);
+  --brand-glow: rgba(0, 242, 255, 0.25);
+  
+  /* Global System Tokens */
   
   --emerald: #56cfac;
   --emerald-dim: rgba(86, 207, 172, 0.10);
@@ -16,12 +17,13 @@
   --sky: #4fc3f7;
   --sky-dim: rgba(79, 195, 247, 0.10);
 
-  /* Naval Backgrounds */
-  --bg: #070a10;
-  --bg2: #0b0e18;
-  --surface: #0f1320;
-  --card: #131726;
-  --card2: #171c2e;
+  /* Sovereign Obsidian Backgrounds */
+  --bg: #0B0C10;
+  --bg2: #0f1117;
+  --navy: #0B0C10;
+  --surface: #14171f;
+  --card: #1a1d26;
+  --card2: #1e222d;
   
   /* Borders & Glassmorphism */
   --border-custom: rgba(255, 255, 255, 0.07);
@@ -44,8 +46,8 @@
   border-radius: 16px;
 }
 
-.gold-gradient {
-  background: linear-gradient(135deg, var(--gold) 0%, #c67d10 100%);
+.brand-gradient {
+  background: linear-gradient(135deg, var(--brand) 0%, #008b8b 100%);
 }
 
 .institutional-border {
@@ -54,5 +56,5 @@
 }
 
 .institutional-border:hover {
-  border-color: var(--gold-glow);
+  border-color: var(--brand-glow);
 }

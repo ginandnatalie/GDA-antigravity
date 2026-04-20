@@ -5,7 +5,7 @@ export default function AcademyDashboard() {
   const [isPinging, setIsPinging] = useState(false);
   const [lastPing, setLastPing] = useState<string | null>(null);
   const [feed, setFeed] = useState([
-    { init: 'TN', color: '#f4a21a', name: 'Thembi N.', action: 'passed AWS Solutions Architect', time: '2m ago' },
+    { init: 'TN', color: '#00f2ff', name: 'Thembi N.', action: 'passed AWS Solutions Architect', time: '2m ago' },
     { init: 'KM', color: '#4fc3f7', name: 'Kwame M.', action: 'enrolled in AI/ML Engineering', time: '4m ago' },
     { init: 'NS', color: '#56cfac', name: 'Nomsa S.', action: 'completed Cohort 11 capstone', time: '8m ago' },
     { init: 'BD', color: '#a78bfa', name: 'Bongani D.', action: 'received job offer at Standard Bank', time: '12m ago' },
@@ -34,7 +34,7 @@ export default function AcademyDashboard() {
 
   useEffect(() => {
     const moreFeed = [
-      { init: 'LD', color: '#f4a21a', name: 'Lungelo D.', action: 'achieved Azure Expert cert', time: 'now' },
+      { init: 'LD', color: '#00f2ff', name: 'Lungelo D.', action: 'achieved Azure Expert cert', time: 'now' },
       { init: 'PE', color: '#56cfac', name: 'Priya E.', action: 'hired at Google Africa', time: '1m ago' },
       { init: 'AB', color: '#4fc3f7', name: 'Amara B.', action: 'enrolled in Cloud Launchpad', time: '3m ago' },
     ];
@@ -69,7 +69,7 @@ export default function AcademyDashboard() {
   };
 
   return (
-    <div className="bg-card border border-border-custom rounded-lg overflow-hidden relative before:content-[''] before:absolute before:top-0 before:left-0 before:right-0 before:h-px before:bg-[linear-gradient(90deg,transparent,var(--color-gold),transparent)] before:opacity-50">
+    <div className="bg-card border border-border-custom rounded-lg overflow-hidden relative before:content-[''] before:absolute before:top-0 before:left-0 before:right-0 before:h-px before:bg-[linear-gradient(90deg,transparent,var(--color-brand),transparent)] before:opacity-50">
       <div className="px-6 py-5 border-b border-border-custom flex items-center justify-between">
         <span className="font-dm-mono text-[10px] tracking-[0.15em] uppercase text-text-soft">Academy Live Dashboard</span>
         <span className="flex items-center gap-1.25 font-dm-mono text-[9px] text-[#22c55e] tracking-[0.08em]"><span className="pulse"></span> Live</span>
@@ -77,15 +77,15 @@ export default function AcademyDashboard() {
       <div className="p-6">
         <div className="grid grid-cols-3 gap-px bg-border-custom rounded-sm overflow-hidden mb-5">
           <div className="bg-card2 px-4 py-4.5 text-center">
-            <span className="font-syne font-extrabold text-[26px] tracking-[-0.03em] text-gold block leading-none">{counters.graduates}</span>
+            <span className="font-syne font-extrabold text-[26px] tracking-[-0.03em] text-brand block leading-none">{counters.graduates}</span>
             <span className="font-dm-mono text-[8px] tracking-[0.15em] uppercase text-text-dim mt-1.5 block">Graduates</span>
           </div>
           <div className="bg-card2 px-4 py-4.5 text-center">
-            <span className="font-syne font-extrabold text-[26px] tracking-[-0.03em] text-gold block leading-none">{counters.employers}</span>
+            <span className="font-syne font-extrabold text-[26px] tracking-[-0.03em] text-brand block leading-none">{counters.employers}</span>
             <span className="font-dm-mono text-[8px] tracking-[0.15em] uppercase text-text-dim mt-1.5 block">Employers</span>
           </div>
           <div className="bg-card2 px-4 py-4.5 text-center">
-            <span className="font-syne font-extrabold text-[26px] tracking-[-0.03em] text-gold block leading-none">{counters.programmes}</span>
+            <span className="font-syne font-extrabold text-[26px] tracking-[-0.03em] text-brand block leading-none">{counters.programmes}</span>
             <span className="font-dm-mono text-[8px] tracking-[0.15em] uppercase text-text-dim mt-1.5 block">Programmes</span>
           </div>
         </div>
@@ -111,7 +111,7 @@ export default function AcademyDashboard() {
             <button 
               onClick={handleManualPing}
               disabled={isPinging}
-              className={`font-dm-mono text-[9px] px-2.5 py-1 rounded border border-gold/30 text-gold hover:bg-gold/10 transition-all ${isPinging ? 'opacity-50 cursor-not-allowed' : ''}`}
+              className={`font-dm-mono text-[9px] px-2.5 py-1 rounded border border-brand/30 text-brand hover:bg-brand/10 transition-all ${isPinging ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
               {isPinging ? 'Pinging...' : 'Manual Ping'}
             </button>

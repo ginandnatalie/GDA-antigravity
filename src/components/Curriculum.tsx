@@ -47,8 +47,8 @@ export function Curriculum({ editMode }: { editMode?: boolean }) {
             </p>
           </div>
           <div className="bg-white/3 border border-border-custom rounded-2xl p-6 animate-fadeUp delay-200">
-            <div className="font-syne font-bold text-[11px] uppercase tracking-widest text-gold mb-4 flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-gold"></span>
+            <div className="font-syne font-bold text-[11px] uppercase tracking-widest text-brand mb-4 flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-brand"></span>
               Curriculum Resources
             </div>
             <ul className="space-y-4">
@@ -60,7 +60,7 @@ export function Curriculum({ editMode }: { editMode?: boolean }) {
                 <li key={i} className="group cursor-pointer">
                   <div className="flex items-center justify-between">
                     <div>
-                      <div className="font-syne font-bold text-[13px] group-hover:text-gold transition-colors">{res.t}</div>
+                      <div className="font-syne font-bold text-[13px] group-hover:text-brand transition-colors">{res.t}</div>
                       <div className="text-[10px] text-text-muted">{res.d}</div>
                     </div>
                     <span className="text-text-dim text-xs group-hover:translate-x-1 transition-transform">→</span>
@@ -76,10 +76,10 @@ export function Curriculum({ editMode }: { editMode?: boolean }) {
             {progs.map((p) => (
               <button 
                 key={p.id}
-                className={`flex items-center gap-3 p-3.5 px-4 rounded-md cursor-pointer border-none transition-all text-left shrink-0 lg:shrink-1 ${activeProg === p.id ? 'bg-gold-dim border border-gold/20' : 'bg-transparent hover:bg-white/4'}`}
+                className={`flex items-center gap-3 p-3.5 px-4 rounded-md cursor-pointer border-none transition-all text-left shrink-0 lg:shrink-1 ${activeProg === p.id ? 'bg-brand-dim border border-brand/20' : 'bg-transparent hover:bg-white/4'}`}
                 onClick={() => setActiveProg(p.id)}
               >
-                <div className={`w-8.5 h-8.5 rounded-sm flex items-center justify-center text-[15px] shrink-0 border border-border-custom bg-white/3 ${activeProg === p.id ? 'bg-gold-dim border-gold/30' : ''}`}>
+                <div className={`w-8.5 h-8.5 rounded-sm flex items-center justify-center text-[15px] shrink-0 border border-border-custom bg-white/3 ${activeProg === p.id ? 'bg-brand-dim border-brand/30' : ''}`}>
                   {p.icon}
                 </div>
                 <div>
@@ -93,7 +93,7 @@ export function Curriculum({ editMode }: { editMode?: boolean }) {
           <div className="flex flex-col">
             <div className="p-7 md:p-8 pb-5 border-b border-border-custom flex flex-col md:flex-row items-start justify-between gap-5">
               <div className="max-w-[500px]">
-                <div className="font-dm-mono text-[9px] tracking-[0.15em] uppercase text-gold mb-2">{current.tag}</div>
+                <div className="font-dm-mono text-[9px] tracking-[0.15em] uppercase text-brand mb-2">{current.tag}</div>
                 <h3 className="font-syne font-extrabold text-[20px] mb-1.5">{current.name}</h3>
                 <p className="text-[12px] text-text-soft leading-[1.6]">{current.desc}</p>
               </div>
@@ -114,16 +114,16 @@ export function Curriculum({ editMode }: { editMode?: boolean }) {
                   </div>
                   <div className="flex flex-col gap-1.5">
                     {phase.modules.map((mod) => (
-                      <div key={mod.id} className={`border border-border-custom rounded-md overflow-hidden transition-colors hover:border-border2 ${openModules.includes(mod.id) ? 'border-gold/25' : ''}`}>
+                      <div key={mod.id} className={`border border-border-custom rounded-md overflow-hidden transition-colors hover:border-border2 ${openModules.includes(mod.id) ? 'border-brand/25' : ''}`}>
                         <div 
-                          className={`p-3.5 px-4.5 flex items-center gap-3.5 cursor-pointer bg-white/2 transition-colors hover:bg-white/4 select-none ${openModules.includes(mod.id) ? 'bg-gold/4' : ''}`}
+                          className={`p-3.5 px-4.5 flex items-center gap-3.5 cursor-pointer bg-white/2 transition-colors hover:bg-white/4 select-none ${openModules.includes(mod.id) ? 'bg-brand/4' : ''}`}
                           onClick={() => toggleModule(mod.id)}
                         >
-                          <span className={`font-dm-mono text-[8px] tracking-[0.12em] uppercase px-2 py-0.75 rounded-sm border border-border-custom text-text-dim shrink-0 ${openModules.includes(mod.id) ? 'bg-gold-dim border-gold/20 text-gold' : 'bg-surface'}`}>
+                          <span className={`font-dm-mono text-[8px] tracking-[0.12em] uppercase px-2 py-0.75 rounded-sm border border-border-custom text-text-dim shrink-0 ${openModules.includes(mod.id) ? 'bg-brand-dim border-brand/20 text-brand' : 'bg-surface'}`}>
                             {mod.week}
                           </span>
                           <span className="font-syne font-semibold text-[13px] flex-1">{mod.title}</span>
-                          <span className={`text-[12px] text-text-dim transition-transform duration-250 shrink-0 ${openModules.includes(mod.id) ? 'rotate-90 text-gold' : ''}`}>›</span>
+                          <span className={`text-[12px] text-text-dim transition-transform duration-250 shrink-0 ${openModules.includes(mod.id) ? 'rotate-90 text-brand' : ''}`}>›</span>
                         </div>
                         {openModules.includes(mod.id) && (
                           <div className="p-4.5 px-4.5 pt-0 animate-slideDown">
@@ -148,7 +148,7 @@ export function Curriculum({ editMode }: { editMode?: boolean }) {
             <div className="p-4.5 md:p-8 py-4.5 border-t border-border-custom bg-white/1.5 flex items-center gap-3.5 flex-wrap">
               <span className="font-dm-mono text-[9px] tracking-[0.15em] uppercase text-text-dim whitespace-nowrap">Outcome certifications:</span>
               {current.footerCerts.map((c, i) => (
-                <span key={i} className={`chip ${i === 0 ? 'chip-gold' : i === 1 ? 'chip-sky' : i === 2 ? 'chip-em' : i === 3 ? 'chip-vio' : ''}`}>{c}</span>
+                <span key={i} className={`chip ${i === 0 ? 'chip-brand' : i === 1 ? 'chip-sky' : i === 2 ? 'chip-em' : i === 3 ? 'chip-vio' : ''}`}>{c}</span>
               ))}
             </div>
           </div>

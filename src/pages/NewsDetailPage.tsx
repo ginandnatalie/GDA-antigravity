@@ -74,7 +74,7 @@ export default function NewsDetailPage() {
 
   if (loading) return (
     <div className="min-h-screen flex items-center justify-center">
-      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gold"></div>
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand"></div>
     </div>
   );
 
@@ -89,12 +89,12 @@ export default function NewsDetailPage() {
           animate={{ opacity: 1, x: 0 }}
           className="mb-8"
         >
-          <Link to="/news" className="inline-flex items-center gap-2 text-text-muted hover:text-gold transition-colors font-dm-mono text-[10px] tracking-widest uppercase mb-8 group">
+          <Link to="/news" className="inline-flex items-center gap-2 text-text-muted hover:text-brand transition-colors font-dm-mono text-[10px] tracking-widest uppercase mb-8 group">
             <ArrowLeft size={14} className="transition-transform group-hover:-translate-x-1" /> Back to News
           </Link>
           
           <div className="flex items-center gap-4 mb-6">
-            <span className="px-3 py-1 bg-gold/10 text-gold border border-gold/20 rounded-full font-dm-mono text-[9px] tracking-widest uppercase">
+            <span className="px-3 py-1 bg-brand/10 text-brand border border-brand/20 rounded-full font-dm-mono text-[9px] tracking-widest uppercase">
               {post.category}
             </span>
             <div className="flex items-center gap-2 text-text-dim text-[10px] font-dm-mono uppercase tracking-widest">
@@ -108,7 +108,7 @@ export default function NewsDetailPage() {
 
           <div className="flex flex-wrap items-center gap-8 py-8 border-y border-border-custom">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-surface border border-gold/20 flex items-center justify-center text-gold">
+              <div className="w-10 h-10 rounded-full bg-surface border border-brand/20 flex items-center justify-center text-brand">
                 <User size={20} />
               </div>
               <div>
@@ -118,7 +118,7 @@ export default function NewsDetailPage() {
             </div>
             
             <div className="flex items-center gap-3">
-              <Calendar size={18} className="text-gold" />
+              <Calendar size={18} className="text-brand" />
               <div>
                 <div className="text-[12px] font-bold text-text-custom">{new Date(post.published_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</div>
                 <div className="text-[10px] text-text-dim font-dm-mono uppercase tracking-widest">Published On</div>
@@ -126,9 +126,9 @@ export default function NewsDetailPage() {
             </div>
 
             <div className="flex items-center gap-4 ml-auto">
-              <button className="p-2 rounded-full border border-border-custom hover:border-gold/50 hover:text-gold transition-all"><Twitter size={16} /></button>
-              <button className="p-2 rounded-full border border-border-custom hover:border-gold/50 hover:text-gold transition-all"><Linkedin size={16} /></button>
-              <button className="p-2 rounded-full border border-border-custom hover:border-gold/50 hover:text-gold transition-all"><Share2 size={16} /></button>
+              <button className="p-2 rounded-full border border-border-custom hover:border-brand/50 hover:text-brand transition-all"><Twitter size={16} /></button>
+              <button className="p-2 rounded-full border border-border-custom hover:border-brand/50 hover:text-brand transition-all"><Linkedin size={16} /></button>
+              <button className="p-2 rounded-full border border-border-custom hover:border-brand/50 hover:text-brand transition-all"><Share2 size={16} /></button>
             </div>
           </div>
         </motion.div>
@@ -151,7 +151,7 @@ export default function NewsDetailPage() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
-          className="prose prose-invert prose-gold max-w-none"
+          className="prose prose-invert prose-brand max-w-none"
         >
           <div 
             dangerouslySetInnerHTML={{ __html: post.content }} 
@@ -163,14 +163,14 @@ export default function NewsDetailPage() {
               <Tag size={12} /> Tags:
             </span>
             {['Cloud', 'Innovation', 'South Africa', 'Careers'].map(tag => (
-              <span key={tag} className="px-3 py-1 bg-surface border border-border-custom rounded-md text-[10px] font-dm-mono text-text-muted hover:text-gold transition-colors cursor-pointer">#{tag}</span>
+              <span key={tag} className="px-3 py-1 bg-surface border border-border-custom rounded-md text-[10px] font-dm-mono text-text-muted hover:text-brand transition-colors cursor-pointer">#{tag}</span>
             ))}
           </div>
         </motion.article>
 
         {/* Floating Sidebar (Desktop) */}
         <div className="hidden md:flex flex-col gap-6 sticky top-32 h-fit">
-           <div className="w-px h-24 bg-gradient-to-b from-gold to-transparent mx-auto"></div>
+           <div className="w-px h-24 bg-gradient-to-b from-brand to-transparent mx-auto"></div>
            <span className="font-dm-mono text-[9px] tracking-widest uppercase vertical-text text-text-dim rotate-180">Article Progress</span>
         </div>
       </div>
@@ -178,23 +178,23 @@ export default function NewsDetailPage() {
       {/* Related Posts? */}
       <div className="max-w-7xl mx-auto px-6 mt-32">
         <div className="flex items-center justify-between mb-12">
-          <h2 className="font-syne font-extrabold text-3xl">Continue <span className="text-gold">Reading</span></h2>
-          <Link to="/news" className="text-gold font-dm-mono text-[10px] tracking-widest uppercase flex items-center gap-2 hover:gap-4 transition-all">
+          <h2 className="font-syne font-extrabold text-3xl">Continue <span className="text-brand">Reading</span></h2>
+          <Link to="/news" className="text-brand font-dm-mono text-[10px] tracking-widest uppercase flex items-center gap-2 hover:gap-4 transition-all">
             All Insights <ArrowRight size={16} />
           </Link>
         </div>
         
         <div className="grid md:grid-cols-2 gap-8">
            {MOCK_POSTS.filter(p => p.id !== post.id).slice(0, 2).map((p) => (
-             <Link key={p.id} to={`/news/${p.slug}`} className="group block bg-surface/50 border border-border-custom rounded-3xl p-6 hover:border-gold/30 transition-all">
-                <div className="flex gap-6 items-center">
-                  <img src={p.image_url} className="w-32 h-32 rounded-xl object-cover" />
-                  <div>
-                    <span className="text-gold font-dm-mono text-[9px] tracking-widest uppercase mb-2 block">{p.category}</span>
-                    <h4 className="font-syne font-bold text-lg group-hover:text-gold transition-colors line-clamp-2">{p.title}</h4>
-                  </div>
-                </div>
-             </Link>
+              <Link key={p.id} to={`/news/${p.slug}`} className="group block bg-surface/50 border border-border-custom rounded-3xl p-6 hover:border-brand/30 transition-all">
+                 <div className="flex gap-6 items-center">
+                   <img src={p.image_url} className="w-32 h-32 rounded-xl object-cover" />
+                   <div>
+                     <span className="text-brand font-dm-mono text-[9px] tracking-widest uppercase mb-2 block">{p.category}</span>
+                     <h4 className="font-syne font-bold text-lg group-hover:text-brand transition-colors line-clamp-2">{p.title}</h4>
+                   </div>
+                 </div>
+              </Link>
            ))}
         </div>
       </div>

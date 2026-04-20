@@ -87,7 +87,7 @@ export function TrustBar({ editMode }: { editMode?: boolean }) {
       <div className="max-w-[1280px] mx-auto px-5 sm:px-6 md:px-14 py-4 sm:py-5 flex items-center gap-6 sm:gap-8 md:gap-12 overflow-x-auto scrollbar-hide">
         {editMode ? (
           <input 
-            className="font-dm-mono text-[9px] tracking-[0.2em] uppercase text-gold bg-transparent border-b border-gold/30 outline-none focus:border-gold shrink-0 whitespace-nowrap"
+            className="font-dm-mono text-[9px] tracking-[0.2em] uppercase text-brand bg-transparent border-b border-brand/30 outline-none focus:border-brand shrink-0 whitespace-nowrap"
             value={title}
             onChange={e => setTitle(e.target.value)}
           />
@@ -257,7 +257,7 @@ export function Programs({ onOpenModal, editMode, isHomePage, initialFilterLevel
       duration: '5 Months', meta: 'Professional Track', mode: 'Online / Cohort', certs: 'TensorFlow · SageMaker', price: 'Enquire', price_sub: '/ Professional'
     },
     {
-      id: '4', cat: 'professional', title: 'Software Engineering & Full Stack Dev', accent: 'var(--gold)', num: '04', icon: '💻',
+      id: '4', cat: 'professional', title: 'Software Engineering & Full Stack Dev', accent: 'var(--brand)', num: '04', icon: '💻',
       description: 'Build the applications of tomorrow. Master React, Node.js, and modern DevOps practices to deliver high-performance software.',
       duration: '6 Months', meta: 'Professional Track', mode: 'In-person / Hybrid', certs: 'Full Stack Diploma', price: 'Enquire', price_sub: '/ Professional'
     },
@@ -272,7 +272,7 @@ export function Programs({ onOpenModal, editMode, isHomePage, initialFilterLevel
       duration: '4 Months', meta: 'Foundation Track', mode: 'In-person', certs: 'CCNA · Network+', price: 'Enquire', price_sub: '/ ZAR'
     },
     {
-      id: '7', cat: 'foundation', title: 'Creative Media & UI/UX Design', accent: 'var(--gold)', num: '07', icon: '🎨',
+      id: '7', cat: 'foundation', title: 'Creative Media & UI/UX Design', accent: 'var(--brand)', num: '07', icon: '🎨',
       description: 'Design with purpose. From visual identity to user experience and interface design for global digital products.',
       duration: '3 Months', meta: 'Foundation Track', mode: 'Blended', certs: 'UI/UX Portfolio Cert', price: 'Enquire', price_sub: '/ ZAR'
     }
@@ -316,12 +316,12 @@ export function Programs({ onOpenModal, editMode, isHomePage, initialFilterLevel
       {isHomePage ? (
         <div className="relative w-[100vw] ml-[calc(-50vw+50%)] py-20 bg-surface/10 border-y border-border-custom overflow-hidden">
           {/* Ambient Background Accents */}
-          <div className="absolute top-0 left-1/4 w-96 h-96 bg-gold/5 rounded-full blur-[120px] pointer-events-none" />
+          <div className="absolute top-0 left-1/4 w-96 h-96 bg-brand/5 rounded-full blur-[120px] pointer-events-none" />
           <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-emerald/5 rounded-full blur-[120px] pointer-events-none" />
 
           <div className="max-w-[1400px] mx-auto px-5 sm:px-6 md:px-14 relative z-10">
             <div className="text-center mb-16 max-w-3xl mx-auto">
-              <span className="font-dm-mono text-[10px] text-gold uppercase tracking-[0.2em] mb-4 block">The Flagship Pathway</span>
+              <span className="font-dm-mono text-[10px] text-brand uppercase tracking-[0.2em] mb-4 block">The Flagship Pathway</span>
               <h3 className="text-4xl md:text-5xl font-syne font-bold text-text-custom mb-6 tracking-tight">Journey from Novice to Architect</h3>
               <p className="text-text-soft text-sm md:text-base leading-relaxed">
                 Experience the {tracks[0]} track. Follow the progression line to see how your career will evolve at every step of the Ginashe curriculum—designed with precision for true industry impact.
@@ -331,7 +331,7 @@ export function Programs({ onOpenModal, editMode, isHomePage, initialFilterLevel
             {/* The Timeline Visualization */}
             <div className="relative mt-20 mb-16">
               {/* Connecting Line */}
-              <div className="absolute top-[80px] left-0 w-full h-[2px] bg-gradient-to-r from-surface via-gold/50 to-emerald/50 hidden lg:block" />
+              <div className="absolute top-[80px] left-0 w-full h-[2px] bg-gradient-to-r from-surface via-brand/50 to-emerald/50 hidden lg:block" />
               
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative z-10">
                 {[
@@ -371,26 +371,26 @@ export function Programs({ onOpenModal, editMode, isHomePage, initialFilterLevel
                       onClick={() => navigate(`/levels/${item.lvl.toLowerCase()}`)}
                     >
                       {/* Timeline Node (Dot) */}
-                      <div className="absolute top-[80px] left-1/2 w-4 h-4 rounded-full bg-bg border-2 border-gold -translate-x-1/2 -translate-y-1/2 hidden lg:block group-hover:bg-gold group-hover:scale-150 group-hover:shadow-[0_0_20px_rgba(255,215,0,0.5)] transition-all z-20 duration-300" />
+                      <div className="absolute top-[80px] left-1/2 w-4 h-4 rounded-full bg-bg border-2 border-brand -translate-x-1/2 -translate-y-1/2 hidden lg:block group-hover:bg-brand group-hover:scale-150 group-hover:shadow-[0_0_20px_rgba(0,242,255,0.5)] transition-all z-20 duration-300" />
                       
                       {/* Card */}
-                      <div className="bg-card/40 backdrop-blur-xl border border-border-custom rounded-2xl p-6 lg:mt-6 hover:bg-card hover:border-gold/30 transition-all duration-300 transform group-hover:-translate-y-2 h-[380px] flex flex-col justify-between shadow-lg hover:shadow-gold/5 relative overflow-hidden group">
+                      <div className="bg-card/40 backdrop-blur-xl border border-border-custom rounded-2xl p-6 lg:mt-6 hover:bg-card hover:border-brand/30 transition-all duration-300 transform group-hover:-translate-y-2 h-[380px] flex flex-col justify-between shadow-lg hover:shadow-brand/5 relative overflow-hidden group">
                         {/* Inner Gradient Glow on Hover */}
-                        <div className="absolute inset-0 bg-gradient-to-br from-gold/0 via-transparent to-gold/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                        <div className="absolute inset-0 bg-gradient-to-br from-brand/0 via-transparent to-brand/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                         
                         <div className="relative z-10 flex-1 flex flex-col items-center">
                           <div className="flex justify-center mb-6">
-                            <div className="w-16 h-16 rounded-full bg-surface/50 border border-border-custom flex items-center justify-center text-gold group-hover:scale-110 group-hover:bg-gold/10 transition-all duration-300 relative">
+                            <div className="w-16 h-16 rounded-full bg-surface/50 border border-border-custom flex items-center justify-center text-brand group-hover:scale-110 group-hover:bg-brand/10 transition-all duration-300 relative">
                               <LucideIcon name={item.icon} className="w-8 h-8" />
-                              <div className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-gold text-black flex items-center justify-center font-bold text-[10px] font-dm-mono">
+                              <div className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-brand text-black flex items-center justify-center font-bold text-[10px] font-dm-mono">
                                 {index + 1}
                               </div>
                             </div>
                           </div>
                           
                           <div className="text-center mb-4">
-                            <span className="font-dm-mono text-[9px] text-gold uppercase tracking-[0.2em] mb-2 block">{item.lvl} Level</span>
-                            <h4 className="text-xl font-syne font-extrabold text-text-custom leading-tight group-hover:text-gold transition-colors">{item.title}</h4>
+                            <span className="font-dm-mono text-[9px] text-brand uppercase tracking-[0.2em] mb-2 block">{item.lvl} Level</span>
+                            <h4 className="text-xl font-syne font-extrabold text-text-custom leading-tight group-hover:text-brand transition-colors">{item.title}</h4>
                           </div>
 
                           <p className="text-[11px] text-text-soft leading-relaxed line-clamp-4 mb-6 text-center flex-1">
@@ -402,7 +402,7 @@ export function Programs({ onOpenModal, editMode, isHomePage, initialFilterLevel
                           <div className="font-dm-mono text-[8px] uppercase tracking-wider text-emerald font-bold">
                             {item.tag}
                           </div>
-                          <span className="text-[10px] text-gold flex items-center justify-center gap-1 opacity-80 group-hover:opacity-100 transition-all duration-300 font-bold tracking-widest mt-1">
+                          <span className="text-[10px] text-brand flex items-center justify-center gap-1 opacity-80 group-hover:opacity-100 transition-all duration-300 font-bold tracking-widest mt-1">
                             EXPLORE PATHWAY →
                           </span>
                         </div>
@@ -416,7 +416,7 @@ export function Programs({ onOpenModal, editMode, isHomePage, initialFilterLevel
             <div className="mt-16 text-center">
               <button
                 onClick={() => navigate('/curriculum')}
-                className="bg-gold text-black font-syne font-bold px-8 py-4 rounded hover:bg-white transition-all uppercase tracking-widest text-xs inline-flex items-center gap-3 shadow-[0_0_15px_rgba(255,215,0,0.2)] hover:shadow-[0_0_25px_rgba(255,255,255,0.4)]"
+                className="bg-brand text-black font-syne font-bold px-8 py-4 rounded hover:bg-white transition-all uppercase tracking-widest text-xs inline-flex items-center gap-3 shadow-[0_0_15px_rgba(0,242,255,0.2)] hover:shadow-[0_0_25px_rgba(255,255,255,0.4)]"
               >
                 View Full 28-Course Matrix
                 <LucideIcon name="ArrowRight" className="w-4 h-4" />
@@ -429,10 +429,10 @@ export function Programs({ onOpenModal, editMode, isHomePage, initialFilterLevel
         {/* Header: Title and Horizontal Institutional Command Center */}
         <div className="flex flex-col gap-8 mb-6 px-4">
           <div className="max-w-4xl px-4 md:px-0">
-            <span className="font-dm-mono text-[10px] text-gold uppercase tracking-widest mb-2 block">Institutional Curriculum {initialFilterLevel ? 'Pathway' : 'Matrix'}</span>
+            <span className="font-dm-mono text-[10px] text-brand uppercase tracking-widest mb-2 block">Institutional Curriculum {initialFilterLevel ? 'Pathway' : 'Matrix'}</span>
             <h2 className="font-syne font-extrabold text-4xl mb-3 text-white leading-tight">
               {initialFilterLevel ? `${initialFilterLevel} Specialisation.` : 'Rigorous pathways.'}<br />
-              <span className="text-gold">{initialFilterLevel ? 'Command the stack.' : 'Real-world outcomes.'}</span>
+              <span className="text-brand">{initialFilterLevel ? 'Command the stack.' : 'Real-world outcomes.'}</span>
             </h2>
             <p className="text-text-soft text-base md:text-lg leading-relaxed opacity-80">
               {initialFilterLevel 
@@ -451,7 +451,7 @@ export function Programs({ onOpenModal, editMode, isHomePage, initialFilterLevel
                 <div className="flex flex-wrap gap-2">
                   <button 
                     onClick={() => setActiveLevel('all')}
-                    className={`px-4 py-2 rounded-md text-[9px] font-bold uppercase tracking-[0.2em] transition-all ${activeLevel === 'all' ? 'bg-gold text-black shadow-lg shadow-gold/20' : 'bg-white/5 text-text-dim hover:text-white hover:bg-white/10 border border-white/5'}`}
+                    className={`px-4 py-2 rounded-md text-[9px] font-bold uppercase tracking-[0.2em] transition-all ${activeLevel === 'all' ? 'bg-brand text-black shadow-lg shadow-brand/20' : 'bg-white/5 text-text-dim hover:text-white hover:bg-white/10 border border-white/5'}`}
                   >
                     All
                   </button>
@@ -461,7 +461,7 @@ export function Programs({ onOpenModal, editMode, isHomePage, initialFilterLevel
                       <button 
                         key={lvl}
                         onClick={() => setActiveLevel(lvl.toLowerCase())}
-                        className={`px-4 py-2 rounded-md text-[9px] font-bold uppercase tracking-[0.2em] transition-all flex items-center gap-2 ${activeLevel === lvl.toLowerCase() ? 'bg-gold text-black shadow-lg shadow-gold/20' : 'bg-white/5 text-text-dim hover:text-white hover:bg-white/10 border border-white/5'}`}
+                        className={`px-4 py-2 rounded-md text-[9px] font-bold uppercase tracking-[0.2em] transition-all flex items-center gap-2 ${activeLevel === lvl.toLowerCase() ? 'bg-brand text-black shadow-lg shadow-brand/20' : 'bg-white/5 text-text-dim hover:text-white hover:bg-white/10 border border-white/5'}`}
                       >
                         <span>{emoji}</span>
                         {lvl}
@@ -475,9 +475,9 @@ export function Programs({ onOpenModal, editMode, isHomePage, initialFilterLevel
               <div className="flex items-center gap-4 bg-black/20 p-2 rounded-xl border border-white/5 shadow-inner">
                 <button 
                   onClick={() => setViewMode('grid')}
-                  className={`flex items-center gap-2 font-dm-mono text-[9px] uppercase tracking-widest transition-all ${viewMode === 'grid' ? 'text-gold' : 'text-text-dim hover:text-white opacity-50'}`}
+                  className={`flex items-center gap-2 font-dm-mono text-[9px] uppercase tracking-widest transition-all ${viewMode === 'grid' ? 'text-brand' : 'text-text-dim hover:text-white opacity-50'}`}
                 >
-                  <div className={`w-9 h-9 rounded border flex items-center justify-center ${viewMode === 'grid' ? 'border-gold bg-gold/10' : 'border-white/10'}`}>
+                  <div className={`w-9 h-9 rounded border flex items-center justify-center ${viewMode === 'grid' ? 'border-brand bg-brand/10' : 'border-white/10'}`}>
                     <LayoutGrid className="w-4 h-4" />
                   </div>
                   <span className="font-bold">Grid</span>
@@ -485,9 +485,9 @@ export function Programs({ onOpenModal, editMode, isHomePage, initialFilterLevel
 
                 <button 
                   onClick={() => setViewMode('matrix')}
-                  className={`flex items-center gap-2 font-dm-mono text-[9px] uppercase tracking-widest transition-all ${viewMode === 'matrix' ? 'text-gold' : 'text-text-dim hover:text-white opacity-50'}`}
+                  className={`flex items-center gap-2 font-dm-mono text-[9px] uppercase tracking-widest transition-all ${viewMode === 'matrix' ? 'text-brand' : 'text-text-dim hover:text-white opacity-50'}`}
                 >
-                  <div className={`w-9 h-9 rounded border flex items-center justify-center ${viewMode === 'matrix' ? 'border-gold bg-gold/10' : 'border-white/10'}`}>
+                  <div className={`w-9 h-9 rounded border flex items-center justify-center ${viewMode === 'matrix' ? 'border-brand bg-brand/10' : 'border-white/10'}`}>
                     <TableProperties className="w-4 h-4" />
                   </div>
                   <span className="font-bold">Matrix</span>
@@ -495,9 +495,9 @@ export function Programs({ onOpenModal, editMode, isHomePage, initialFilterLevel
 
                 <button 
                   onClick={() => setViewMode('accordion')}
-                  className={`flex items-center gap-2 font-dm-mono text-[9px] uppercase tracking-widest transition-all ${viewMode === 'accordion' ? 'text-gold' : 'text-text-dim hover:text-white opacity-50'}`}
+                  className={`flex items-center gap-2 font-dm-mono text-[9px] uppercase tracking-widest transition-all ${viewMode === 'accordion' ? 'text-brand' : 'text-text-dim hover:text-white opacity-50'}`}
                 >
-                  <div className={`w-9 h-9 rounded border flex items-center justify-center ${viewMode === 'accordion' ? 'border-gold bg-gold/10' : 'border-white/10'}`}>
+                  <div className={`w-9 h-9 rounded border flex items-center justify-center ${viewMode === 'accordion' ? 'border-brand bg-brand/10' : 'border-white/10'}`}>
                     <ListOrdered className="w-4 h-4" />
                   </div>
                   <span className="font-bold">Syllabus</span>
@@ -512,26 +512,26 @@ export function Programs({ onOpenModal, editMode, isHomePage, initialFilterLevel
           <div className="px-4 mt-2 pb-4 border-b border-white/5 transition-opacity opacity-100">
              <div className="flex items-center gap-4 mb-2">
                <span className="font-dm-mono text-[7px] text-white/20 uppercase tracking-[0.4em] whitespace-nowrap">Specialisation Track Matrix</span>
-               <div className="h-[1px] flex-1 bg-gradient-to-r from-white/10 to-transparent"></div>
+               <div className="h-[1px] flex-1 bg-gradient-to-r from-white/10 to-transparent" />
              </div>
              <div className="flex flex-wrap gap-2 lg:gap-3">
-               <button 
-                 onClick={() => setActiveTrack('all')}
-                 className={`px-4 py-2 rounded-md border font-dm-mono text-[9px] uppercase tracking-wider transition-all ${activeTrack === 'all' ? 'bg-gold/10 text-gold border-gold/40 shadow-[0_0_15px_rgba(255,215,0,0.05)]' : 'bg-white/[0.02] border-white/5 text-text-dim hover:border-white/10'}`}
-               >
-                 Universal
-               </button>
-               {tracks.map(track => (
-                 <button 
-                   key={track}
-                   onClick={() => setActiveTrack(track)}
-                   className={`px-4 py-2 rounded-md border font-dm-mono text-[9px] uppercase tracking-wider transition-all ${activeTrack === track ? 'bg-gold/10 text-gold border-gold/40 shadow-[0_0_15px_rgba(255,215,0,0.05)]' : 'bg-white/[0.02] border-white/5 text-text-dim hover:border-white/10'}`}
-                 >
-                   {track}
-                 </button>
-               ))}
-             </div>
-          </div>
+                <button 
+                  onClick={() => setActiveTrack('all')}
+                  className={`px-4 py-2 rounded-md border font-dm-mono text-[9px] uppercase tracking-wider transition-all ${activeTrack === 'all' ? 'bg-brand/10 text-brand border-brand/40 shadow-[0_0_15px_rgba(0,242,255,0.05)]' : 'bg-white/[0.02] border-white/5 text-text-dim hover:border-white/10'}`}
+                >
+                  Universal
+                </button>
+                {tracks.map(track => (
+                  <button 
+                    key={track}
+                    onClick={() => setActiveTrack(track)}
+                    className={`px-4 py-2 rounded-md border font-dm-mono text-[9px] uppercase tracking-wider transition-all ${activeTrack === track ? 'bg-brand/10 text-brand border-brand/40 shadow-[0_0_15px_rgba(0,242,255,0.05)]' : 'bg-white/[0.02] border-white/5 text-text-dim hover:border-white/10'}`}
+                  >
+                    {track}
+                  </button>
+                ))}
+              </div>
+           </div>
         )}
 
         {/* Edit Button for Admin */}
@@ -539,7 +539,7 @@ export function Programs({ onOpenModal, editMode, isHomePage, initialFilterLevel
           <div className="flex justify-end mb-6 px-4">
             <button 
               onClick={() => setIsAdding(true)}
-              className="bg-gold text-black font-syne font-bold px-8 py-4 rounded-lg hover:bg-white transition-all flex items-center gap-3 shadow-[0_0_20px_rgba(255,215,0,0.2)]"
+              className="bg-brand text-black font-syne font-bold px-8 py-4 rounded-lg hover:bg-white transition-all flex items-center gap-3 shadow-[0_0_20px_rgba(0,242,255,0.2)]"
             >
               <LucideIcon name="Rocket" className="w-5 h-5" />
               <span>Inject New Curriculum Module</span>
@@ -559,7 +559,7 @@ export function Programs({ onOpenModal, editMode, isHomePage, initialFilterLevel
                    {/* Track Header */}
                    <div className="flex items-center gap-6 py-6 border-b border-white/5">
                      <div className="flex flex-col">
-                       <span className="font-dm-mono text-[9px] text-gold uppercase tracking-[0.4em] mb-1">Track Dimension</span>
+                       <span className="font-dm-mono text-[9px] text-brand uppercase tracking-[0.4em] mb-1">Track Dimension</span>
                        <h3 className="font-syne font-extrabold text-2xl text-white uppercase tracking-tight">{trackName}</h3>
                      </div>
                      <div className="flex-1 h-px bg-gradient-to-r from-white/10 via-white/5 to-transparent"></div>
@@ -582,8 +582,8 @@ export function Programs({ onOpenModal, editMode, isHomePage, initialFilterLevel
                           onClick={() => isFaint ? handleFaintClick() : isCurrentLevelPage ? onOpenModal(program.id) : setExpandedProgram(expandedProgram === program.id ? null : program.id)}
                           className={`
                             group rounded-3xl border transition-all duration-700 overflow-hidden relative
-                            ${expandedProgram === program.id ? 'bg-[#0A0C10] border-gold/40 shadow-[0_30px_100px_rgba(0,0,0,0.8)]' : 'bg-white/[0.02] border-white/5 hover:border-white/20 hover:bg-white/[0.04]'}
-                            ${isCurrentLevelPage && isCurrentProgram ? 'scale-[1.03] border-gold/40 bg-gold/[0.03] shadow-[0_0_50px_rgba(255,215,0,0.15)] ring-1 ring-gold/20' : ''}
+                            ${expandedProgram === program.id ? 'bg-bg border-brand/40 shadow-[0_30px_100px_rgba(0,0,0,0.8)]' : 'bg-white/[0.02] border-white/5 hover:border-white/20 hover:bg-white/[0.04]'}
+                            ${isCurrentLevelPage && isCurrentProgram ? 'scale-[1.03] border-brand/40 bg-brand/[0.03] shadow-[0_0_50px_rgba(0,242,255,0.15)] ring-1 ring-brand/20' : ''}
                             ${isCurrentLevelPage && isFaint ? 'opacity-25 grayscale blur-[1.2px] hover:opacity-100 hover:grayscale-0 hover:blur-0 hover:scale-[1.02] hover:z-20 transition-all cursor-pointer' : 'cursor-pointer'}
                           `}
                         >
@@ -594,7 +594,7 @@ export function Programs({ onOpenModal, editMode, isHomePage, initialFilterLevel
                               whileHover={{ opacity: 1, y: 0 }}
                               className="absolute inset-x-4 top-4 z-50 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity"
                             >
-                              <div className="bg-gold p-3 rounded-xl shadow-2xl border border-white/20 flex items-center gap-3">
+                              <div className="bg-brand p-3 rounded-xl shadow-2xl border border-white/20 flex items-center gap-3">
                                 <div className="w-8 h-8 rounded-full bg-black/20 flex items-center justify-center">
                                   <LucideIcon name="ShieldAlert" className="text-black w-4 h-4" />
                                 </div>
@@ -610,9 +610,9 @@ export function Programs({ onOpenModal, editMode, isHomePage, initialFilterLevel
                             <motion.div 
                               initial={{ opacity: 0, scale: 0.95 }}
                               whileHover={{ opacity: 1, scale: 1 }}
-                              className="absolute inset-x-4 bottom-4 z-50 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity flex flex-col gap-2 p-4 bg-black/95 border border-gold/30 rounded-xl backdrop-blur-xl shadow-2xl"
+                              className="absolute inset-x-4 bottom-4 z-50 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity flex flex-col gap-2 p-4 bg-black/95 border border-brand/30 rounded-xl backdrop-blur-xl shadow-2xl"
                             >
-                              <div className="font-dm-mono text-[8px] text-gold uppercase tracking-widest border-b border-gold/20 pb-1 mb-1">Intelligence Insights</div>
+                              <div className="font-dm-mono text-[8px] text-brand uppercase tracking-widest border-b border-brand/20 pb-1 mb-1">Intelligence Insights</div>
                               <div className="grid grid-cols-2 gap-4">
                                 <div className="flex flex-col">
                                   <span className="text-[7px] text-white/40 uppercase">Avg. Entry</span>
@@ -631,20 +631,20 @@ export function Programs({ onOpenModal, editMode, isHomePage, initialFilterLevel
                             className={`p-4 md:p-6 flex flex-col justify-between gap-6 relative ${isCurrentLevelPage ? 'min-h-[280px] text-center items-center' : 'md:flex-row items-start md:items-center'}`}
                           >
                             {/* Hover Glow Background */}
-                            <div className="absolute inset-0 bg-gradient-to-r from-gold/0 to-gold/[0.02] opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                            <div className="absolute inset-0 bg-gradient-to-r from-brand/0 to-brand/[0.02] opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
 
                             <div className={`flex items-center gap-6 relative z-10 ${isCurrentLevelPage ? 'flex-col' : 'flex-1'}`}>
-                              <div className={`w-16 h-16 rounded-xl bg-black/60 border border-white/10 flex items-center justify-center text-3xl group-hover:scale-110 group-hover:border-gold/30 transition-all duration-500 shadow-2xl relative overflow-hidden ${isCurrentLevelPage ? 'mx-auto' : ''}`}>
+                              <div className={`w-16 h-16 rounded-xl bg-black/60 border border-white/10 flex items-center justify-center text-3xl group-hover:scale-110 group-hover:border-brand/30 transition-all duration-500 shadow-2xl relative overflow-hidden ${isCurrentLevelPage ? 'mx-auto' : ''}`}>
                                 <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-50" />
                                 <LucideIcon name={program.icon} className="w-8 h-8 relative z-10" />
                               </div>
                               <div className={isCurrentLevelPage ? 'mt-2' : ''}>
                                 <div className={`flex items-center gap-3 mb-2 ${isCurrentLevelPage ? 'justify-center' : ''}`}>
-                                  <span className="px-2 py-0.5 rounded bg-gold/10 border border-gold/20 font-dm-mono text-[8px] text-gold uppercase tracking-widest">{program.level || 'Professional'} Level</span>
+                                  <span className="px-2 py-0.5 rounded bg-brand/10 border border-brand/20 font-dm-mono text-[8px] text-brand uppercase tracking-widest">{program.level || 'Professional'} Level</span>
                                   <span className="w-1 h-1 rounded-full bg-white/10"></span>
                                   <span className="font-dm-mono text-[9px] text-text-soft uppercase tracking-[0.2em]">{program.duration} intensive</span>
                                 </div>
-                                <h4 className={`font-syne font-extrabold text-xl text-white group-hover:text-gold transition-colors tracking-tight ${isCurrentLevelPage ? 'text-2xl' : 'md:text-2xl'}`}>{program.title}</h4>
+                                <h4 className={`font-syne font-extrabold text-xl text-white group-hover:text-brand transition-colors tracking-tight ${isCurrentLevelPage ? 'text-2xl' : 'md:text-2xl'}`}>{program.title}</h4>
                               </div>
                             </div>
 
@@ -653,7 +653,7 @@ export function Programs({ onOpenModal, editMode, isHomePage, initialFilterLevel
                                 <span className="font-dm-mono text-[8px] text-white/20 uppercase tracking-[0.4em] mb-1">Primary Credential</span>
                                 <span className="text-[10px] text-white font-bold uppercase tracking-wider bg-white/5 px-3 py-1.5 rounded-lg border border-white/5">{program.certs?.split('·')[0] || 'GDA Cert'}</span>
                               </div>
-                              <div className={`w-12 h-12 rounded-full border flex items-center justify-center transition-all duration-700 ${expandedProgram === program.id ? 'rotate-180 bg-gold border-transparent shadow-[0_0_30px_rgba(255,215,0,0.3)]' : 'border-white/10 group-hover:border-white/30 group-hover:bg-white/5'} ${isCurrentLevelPage ? 'mx-auto' : ''}`}>
+                              <div className={`w-12 h-12 rounded-full border flex items-center justify-center transition-all duration-700 ${expandedProgram === program.id ? 'rotate-180 bg-brand border-transparent shadow-[0_0_30px_rgba(0,242,255,0.3)]' : 'border-white/10 group-hover:border-white/30 group-hover:bg-white/5'} ${isCurrentLevelPage ? 'mx-auto' : ''}`}>
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className={expandedProgram === program.id ? 'text-black' : 'text-white'}>
                                   <path d="M6 9L12 15L18 9" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
                                 </svg>
@@ -672,7 +672,7 @@ export function Programs({ onOpenModal, editMode, isHomePage, initialFilterLevel
                                 {/* Left: Program Overview */}
                                 <div className="lg:col-span-4 space-y-6">
                                   <div>
-                                    <span className="font-dm-mono text-[9px] text-gold uppercase tracking-[0.4em] mb-2 block">Institutional Resonance</span>
+                                    <span className="font-dm-mono text-[9px] text-brand uppercase tracking-[0.4em] mb-2 block">Institutional Resonance</span>
                                     <p className="text-text-soft text-sm leading-relaxed opacity-90">{program.description}</p>
                                   </div>
                                   
@@ -684,7 +684,7 @@ export function Programs({ onOpenModal, editMode, isHomePage, initialFilterLevel
                                        </div>
                                        <div className="flex flex-col items-end">
                                          <span className="font-dm-mono text-[8px] text-white/20 uppercase tracking-widest mb-1">Mapping</span>
-                                         <span className="text-xs font-bold text-gold">{program.nqf_level || 'Credit-Ready'}</span>
+                                         <span className="text-xs font-bold text-brand">{program.nqf_level || 'Credit-Ready'}</span>
                                        </div>
                                     </div>
                                   </div>
@@ -692,7 +692,7 @@ export function Programs({ onOpenModal, editMode, isHomePage, initialFilterLevel
                                   <div className="flex flex-col gap-3 pt-4">
                                     <button 
                                       onClick={() => onOpenModal('apply')}
-                                      className="w-full py-4 bg-gold text-black font-syne font-black uppercase text-[10px] tracking-[0.3em] rounded-xl hover:bg-white transition-all shadow-[0_20px_40px_rgba(255,215,0,0.15)] active:scale-95"
+                                      className="w-full py-4 bg-brand text-black font-syne font-black uppercase text-[10px] tracking-[0.3em] rounded-xl hover:bg-white transition-all shadow-[0_20px_40px_rgba(0,242,255,0.15)] active:scale-95"
                                     >
                                       Secure My Admission
                                     </button>
@@ -711,7 +711,7 @@ export function Programs({ onOpenModal, editMode, isHomePage, initialFilterLevel
                                        <>
                                          <div className="flex items-center justify-between border-b border-white/5 pb-4">
                                            <div className="flex items-center gap-3">
-                                              <div className="w-1.5 h-1.5 rounded-full bg-gold animate-pulse" />
+                                              <div className="w-1.5 h-1.5 rounded-full bg-brand animate-pulse" />
                                               <span className="font-dm-mono text-[9px] text-white uppercase tracking-[0.5em]">Advanced Syllabus Matrix</span>
                                            </div>
                                            <span className="font-dm-mono text-[9px] text-white/40 uppercase tracking-widest">{programModules.length || 8} Logical Modules</span>
@@ -720,9 +720,9 @@ export function Programs({ onOpenModal, editMode, isHomePage, initialFilterLevel
                                          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                                            {programModules.length > 0 ? (
                                               programModules.map((mod, idx) => (
-                                                <div key={mod.id} className="group/mod p-2.5 rounded-lg bg-white/[0.01] border border-white/5 hover:border-gold/30 hover:bg-white/[0.03] transition-all flex flex-col gap-1.5">
+                                                <div key={mod.id} className="group/mod p-2.5 rounded-lg bg-white/[0.01] border border-white/5 hover:border-brand/30 hover:bg-white/[0.03] transition-all flex flex-col gap-1.5">
                                                   <div className="flex items-center justify-between">
-                                                    <div className="w-6 h-6 rounded-md bg-black/60 border border-white/10 flex items-center justify-center font-dm-mono text-[9px] text-gold/60 group-hover/mod:text-gold transition-colors">
+                                                    <div className="w-6 h-6 rounded-md bg-black/60 border border-white/10 flex items-center justify-center font-dm-mono text-[9px] text-brand/60 group-hover/mod:text-brand transition-colors">
                                                       {idx + 1}
                                                     </div>
                                                     <div className="px-1.5 py-0.5 rounded-full bg-emerald/10 border border-emerald/20 font-dm-mono text-[6px] text-emerald uppercase tracking-widest">
@@ -730,7 +730,7 @@ export function Programs({ onOpenModal, editMode, isHomePage, initialFilterLevel
                                                     </div>
                                                   </div>
                                                   <div>
-                                                    <h5 className="font-syne font-bold text-white text-[13px] tracking-tight leading-tight group-hover/mod:text-gold transition-colors">{mod.title}</h5>
+                                                    <h5 className="font-syne font-bold text-white text-[13px] tracking-tight leading-tight group-hover/mod:text-brand transition-colors">{mod.title}</h5>
                                                   </div>
                                                 </div>
                                               ))
@@ -752,20 +752,20 @@ export function Programs({ onOpenModal, editMode, isHomePage, initialFilterLevel
                                    })()}
 
                                   {/* Curriculum Meta */}
-                                  <div className="p-4 rounded-xl bg-gold/[0.02] border border-gold/10 flex flex-col md:flex-row items-center justify-between gap-4">
+                                  <div className="p-4 rounded-xl bg-brand/[0.02] border border-brand/10 flex flex-col md:flex-row items-center justify-between gap-4">
                                      <div className="flex items-center gap-3">
-                                       <LucideIcon name="Shield" className="text-gold w-4 h-4" />
+                                       <LucideIcon name="Shield" className="text-brand w-4 h-4" />
                                        <span className="text-[10px] text-text-soft uppercase tracking-[0.2em] font-bold">Institutional Quality Framework Integrated</span>
                                      </div>
                                      <div className="flex items-center gap-2">
                                        <div className="w-1.5 h-1.5 rounded-full bg-emerald shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
                                        <span className="text-[9px] text-text-muted font-dm-mono uppercase tracking-widest">System Ready</span>
                                      </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </motion.div>
-                          )}
+                                     </div>
+                                   </div>
+                                 </div>
+                               </motion.div>
+                            )}
                         </div>
                         );
                      })}
@@ -779,12 +779,12 @@ export function Programs({ onOpenModal, editMode, isHomePage, initialFilterLevel
           <div className="relative w-[100vw] ml-[calc(-50vw+50%)] pb-12 overflow-x-auto scrollbar-hide bg-black/20 border-t border-b border-white/10 px-4 md:px-0">
             <div className="min-w-[1240px] max-w-7xl mx-auto bg-navy border-x border-white/10 shadow-2xl relative">
               <div className="grid grid-cols-[220px_repeat(4,1fr)] border-b border-white/10 bg-black/40 sticky top-0 z-30">
-                <div className="pl-8 p-3 font-dm-mono text-[9px] uppercase text-gold/60 tracking-[0.3em] border-r border-white/10 flex items-center bg-navy sticky left-0 z-40 shadow-[4px_0_10px_rgba(0,0,0,0.3)]">Tracks</div>
+                <div className="pl-8 p-3 font-dm-mono text-[9px] uppercase text-brand/60 tracking-[0.3em] border-r border-white/10 flex items-center bg-navy sticky left-0 z-40 shadow-[4px_0_10px_rgba(0,0,0,0.3)]">Tracks</div>
                 {levels.map(lvl => (
                   <div key={lvl} className="p-3 text-center border-r border-border-custom last:border-r-0 flex items-center justify-center">
                     <button 
                       onClick={() => navigate(`/levels/${lvl.toLowerCase()}`)}
-                      className="font-syne font-bold text-[11px] text-text-custom hover:text-gold hover:scale-110 transition-all cursor-pointer inline-block"
+                      className="font-syne font-bold text-[11px] text-text-custom hover:text-brand hover:scale-110 transition-all cursor-pointer inline-block"
                     >
                       {lvl} Level
                     </button>
@@ -811,20 +811,20 @@ export function Programs({ onOpenModal, editMode, isHomePage, initialFilterLevel
                           <>
                             <div>
                               <div className="flex items-center justify-between mb-1">
-                                <div className="font-dm-mono text-[7px] text-gold uppercase tracking-tighter">
+                                <div className="font-dm-mono text-[7px] text-brand uppercase tracking-tighter">
                                   {sanitizeAccreditation(prog.nqf_level || 'Institutional Credit')}
                                 </div>
                                 {prog.nqf_level && (
-                                  <div className="w-1 h-1 rounded-full bg-gold/20 border border-gold/40" />
+                                  <div className="w-1 h-1 rounded-full bg-brand/20 border border-brand/40" />
                                 )}
                               </div>
-                              <div className="font-syne font-bold text-[12px] text-text-custom leading-tight group-hover:text-gold transition-colors">{prog.title}</div>
+                              <div className="font-syne font-bold text-[12px] text-text-custom leading-tight group-hover:text-brand transition-colors">{prog.title}</div>
                               <div className="text-[9px] text-text-dim mt-1.5 line-clamp-2 leading-relaxed opacity-60">
                                 {sanitizeAccreditation(prog.description)}
                               </div>
                             </div>
                             <div className="flex items-center justify-between mt-2">
-                              <span className="text-gold opacity-60 group-hover:opacity-100 transition-opacity">
+                              <span className="text-brand opacity-60 group-hover:opacity-100 transition-opacity">
                                 <LucideIcon name={prog.icon} className="w-4 h-4" />
                               </span>
                               <span className="font-dm-mono text-[8px] text-text-muted group-hover:text-text-soft transition-colors tracking-widest">VIEW →</span>
@@ -852,25 +852,25 @@ export function Programs({ onOpenModal, editMode, isHomePage, initialFilterLevel
                   key={prog.id} 
                   className="bg-bg p-8 flex flex-col min-h-[480px] group relative hover:bg-card transition-all duration-500"
                 >
-                  <div className="absolute top-8 right-8 font-syne font-black text-[80px] leading-none pointer-events-none tracking-tighter text-white/[0.03] group-hover:text-gold/[0.05] transition-colors">{prog.num}</div>
+                  <div className="absolute top-8 right-8 font-syne font-black text-[80px] leading-none pointer-events-none tracking-tighter text-white/[0.03] group-hover:text-brand/[0.05] transition-colors">{prog.num}</div>
                   
                   <div className="flex items-center justify-between mb-8">
-                    <div className="w-12 h-12 rounded-xl bg-gold/5 border border-gold/10 flex items-center justify-center text-gold group-hover:bg-gold/10 group-hover:border-gold/20 transition-all">
+                    <div className="w-12 h-12 rounded-xl bg-brand/5 border border-brand/10 flex items-center justify-center text-brand group-hover:bg-brand/10 group-hover:border-brand/20 transition-all">
                       <LucideIcon name={prog.icon} className="w-6 h-6" />
                     </div>
-                    <div className="font-dm-mono text-[9px] tracking-[0.2em] uppercase text-gold/60">{prog.cat}</div>
+                    <div className="font-dm-mono text-[9px] tracking-[0.2em] uppercase text-brand/60">{prog.cat}</div>
                   </div>
 
                   <div className="mb-6">
                     <div className="flex items-center gap-2 mb-2">
-                       <div className="font-dm-mono text-[8px] text-gold uppercase tracking-[0.2em]">
+                       <div className="font-dm-mono text-[8px] text-brand uppercase tracking-[0.2em]">
                         {sanitizeAccreditation(prog.nqf_level || 'Institutional Credit')}
                       </div>
                       {prog.nqf_level && (
-                        <div className="w-1.5 h-1.5 rounded-full bg-gold/20 border border-gold/30" title="Governance Logged" />
+                        <div className="w-1.5 h-1.5 rounded-full bg-brand/20 border border-brand/30" title="Governance Logged" />
                       )}
                     </div>
-                    <h3 className="font-syne font-bold text-2xl mb-4 group-hover:text-gold transition-colors">{prog.title}</h3>
+                    <h3 className="font-syne font-bold text-2xl mb-4 group-hover:text-brand transition-colors">{prog.title}</h3>
                     <p className="text-[14px] text-text-soft leading-relaxed line-clamp-4">{sanitizeAccreditation(prog.description)}</p>
                   </div>
 
@@ -890,7 +890,7 @@ export function Programs({ onOpenModal, editMode, isHomePage, initialFilterLevel
                        <div className="font-syne font-bold text-sm">Apply for 2026</div>
                        <button 
                         onClick={() => onOpenModal(prog.id)}
-                        className="w-10 h-10 rounded-full border border-border-custom flex items-center justify-center hover:bg-gold hover:border-gold hover:text-black transition-all group/btn"
+                        className="w-10 h-10 rounded-full border border-border-custom flex items-center justify-center hover:bg-brand hover:border-brand hover:text-black transition-all group/btn"
                       >
                          <ArrowRight className="w-4 h-4" />
                       </button>
@@ -922,9 +922,9 @@ export function Programs({ onOpenModal, editMode, isHomePage, initialFilterLevel
                   return (
                     <div key={track} className="relative">
                       <div className="flex items-center gap-4 mb-12">
-                        <div className="h-[1px] w-12 bg-gold/30" />
+                        <div className="h-[1px] w-12 bg-brand/30" />
                         <h3 className="font-syne font-bold text-xl uppercase tracking-tighter text-white">
-                          {track} <span className="text-gold/40 ml-2 font-dm-mono text-sm tracking-widest">({trackPrograms.length})</span>
+                          {track} <span className="text-brand/40 ml-2 font-dm-mono text-sm tracking-widest">({trackPrograms.length})</span>
                         </h3>
                         <div className="h-[1px] flex-1 bg-gradient-to-r from-white/10 to-transparent" />
                       </div>
@@ -944,7 +944,7 @@ export function Programs({ onOpenModal, editMode, isHomePage, initialFilterLevel
                             className={`
                               border rounded-2xl p-6 transition-all duration-500 group cursor-pointer relative overflow-hidden
                               ${isCurrentLevel 
-                                ? 'bg-gold/10 border-gold/60 scale-105 shadow-[0_0_30px_rgba(255,215,0,0.1)] z-10' 
+                                ? 'bg-brand/10 border-brand/60 scale-105 shadow-[0_0_30px_rgba(0,242,255,0.1)] z-10' 
                                 : 'bg-white/3 border-white/10 shadow-none'
                               }
                               ${isFaint 
@@ -958,18 +958,18 @@ export function Programs({ onOpenModal, editMode, isHomePage, initialFilterLevel
                             </div>
                             
                             <div className="flex items-center gap-3 mb-4">
-                              <span className="w-8 h-8 rounded-lg bg-gold/10 text-gold flex items-center justify-center font-bold text-xs">{prog.num}</span>
-                              <span className="font-dm-mono text-[9px] text-gold/60 uppercase tracking-[0.2em]">{prog.level}</span>
+                              <span className="w-8 h-8 rounded-lg bg-brand/10 text-brand flex items-center justify-center font-bold text-xs">{prog.num}</span>
+                              <span className="font-dm-mono text-[9px] text-brand/60 uppercase tracking-[0.2em]">{prog.level}</span>
                             </div>
 
-                            <h4 className="font-syne font-bold text-lg mb-3 text-white group-hover:text-gold transition-colors leading-tight">{prog.title}</h4>
+                            <h4 className="font-syne font-bold text-lg mb-3 text-white group-hover:text-brand transition-colors leading-tight">{prog.title}</h4>
                             <p className="text-text-dim text-[12px] leading-relaxed line-clamp-3 mb-6">
                               {sanitizeAccreditation(prog.description)}
                             </p>
 
                             <div className="pt-4 border-t border-white/5 flex items-center justify-between">
                                <span className="font-dm-mono text-[9px] text-text-dim uppercase tracking-widest">{prog.duration || '12-24 Weeks'}</span>
-                               <span className="font-syne font-bold text-[9px] text-gold uppercase tracking-[0.2em] opacity-0 group-hover:opacity-100 transition-opacity">Explore Intel →</span>
+                               <span className="font-syne font-bold text-[9px] text-brand uppercase tracking-[0.2em] opacity-0 group-hover:opacity-100 transition-opacity">Explore Intel →</span>
                             </div>
                           </motion.div>
                           );

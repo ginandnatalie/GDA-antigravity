@@ -50,8 +50,8 @@ export default function ContactPage({ onOpenModal, editMode }: ContactPageProps)
             <div className="flex flex-col gap-4">
               <div className="bg-card border border-border-custom rounded-xl p-5 md:p-6">
                 <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-lg bg-gold-dim border border-gold/20 flex items-center justify-center shrink-0">
-                    <MapPin size={18} className="text-gold" />
+                  <div className="w-10 h-10 rounded-lg bg-brand/10 border border-brand/20 flex items-center justify-center shrink-0">
+                    <MapPin size={18} className="text-brand" />
                   </div>
                   <div>
                     <h3 className="font-syne font-bold text-[14px] mb-1">Campus Address</h3>
@@ -67,7 +67,7 @@ export default function ContactPage({ onOpenModal, editMode }: ContactPageProps)
                   </div>
                   <div>
                     <h3 className="font-syne font-bold text-[14px] mb-1">Email</h3>
-                    <a href="mailto:academy@ginashe.co.za" className="text-[13px] text-gold no-underline hover:underline">academy@ginashe.co.za</a>
+                    <a href="mailto:academy@ginashe.co.za" className="text-[13px] text-brand no-underline hover:underline">academy@ginashe.co.za</a>
                     <p className="text-[12px] text-text-muted mt-0.5">We respond within 2 business days</p>
                   </div>
                 </div>
@@ -101,7 +101,7 @@ export default function ContactPage({ onOpenModal, editMode }: ContactPageProps)
               <div className="grid grid-cols-2 gap-4 mt-2">
                 <button 
                   onClick={() => onOpenModal('apply')}
-                  className="btn btn-gold w-full justify-center text-[10px]"
+                  className="btn btn-brand w-full justify-center text-[10px]"
                 >
                   Apply Now
                 </button>
@@ -146,7 +146,7 @@ export default function ContactPage({ onOpenModal, editMode }: ContactPageProps)
                         required
                         value={form.name}
                         onChange={e => setForm({...form, name: e.target.value})}
-                        className="bg-surface border border-border-custom rounded-lg px-4 py-3 text-[14px] text-text-custom outline-none focus:border-gold/40 transition-colors placeholder:text-text-dim"
+                        className="bg-surface border border-border-custom rounded-lg px-4 py-3 text-[14px] text-text-custom outline-none focus:border-brand/40 transition-colors placeholder:text-text-dim"
                         placeholder="Your full name"
                       />
                     </div>
@@ -157,7 +157,7 @@ export default function ContactPage({ onOpenModal, editMode }: ContactPageProps)
                         required
                         value={form.email}
                         onChange={e => setForm({...form, email: e.target.value})}
-                        className="bg-surface border border-border-custom rounded-lg px-4 py-3 text-[14px] text-text-custom outline-none focus:border-gold/40 transition-colors placeholder:text-text-dim"
+                        className="bg-surface border border-border-custom rounded-lg px-4 py-3 text-[14px] text-text-custom outline-none focus:border-brand/40 transition-colors placeholder:text-text-dim"
                         placeholder="name@email.com"
                       />
                     </div>
@@ -169,7 +169,7 @@ export default function ContactPage({ onOpenModal, editMode }: ContactPageProps)
                       required
                       value={form.subject}
                       onChange={e => setForm({...form, subject: e.target.value})}
-                      className="bg-surface border border-border-custom rounded-lg px-4 py-3 text-[14px] text-text-custom outline-none focus:border-gold/40 transition-colors"
+                      className="bg-surface border border-border-custom rounded-lg px-4 py-3 text-[14px] text-text-custom outline-none focus:border-brand/40 transition-colors"
                     >
                       <option value="">Select a topic</option>
                       <option value="Admissions Enquiry">Admissions Enquiry</option>
@@ -189,7 +189,7 @@ export default function ContactPage({ onOpenModal, editMode }: ContactPageProps)
                       value={form.message}
                       onChange={e => setForm({...form, message: e.target.value})}
                       rows={5}
-                      className="bg-surface border border-border-custom rounded-lg px-4 py-3 text-[14px] text-text-custom outline-none focus:border-gold/40 transition-colors resize-none placeholder:text-text-dim"
+                      className="bg-surface border border-border-custom rounded-lg px-4 py-3 text-[14px] text-text-custom outline-none focus:border-brand/40 transition-colors resize-none placeholder:text-text-dim"
                       placeholder="Tell us how we can help..."
                     />
                   </div>
@@ -197,7 +197,7 @@ export default function ContactPage({ onOpenModal, editMode }: ContactPageProps)
                   <button 
                     type="submit" 
                     disabled={sending}
-                    className="btn btn-gold btn-lg w-full justify-center mt-2 disabled:opacity-50"
+                    className="btn btn-brand btn-lg w-full justify-center mt-2 disabled:opacity-50"
                   >
                     {sending ? 'Sending...' : 'Send Message'}
                     <Send size={14} />

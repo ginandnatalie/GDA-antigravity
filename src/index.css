@@ -5,10 +5,20 @@
   --font-inter: "Inter", sans-serif;
   --font-jetbrains: "JetBrains Mono", monospace;
 
-  --color-gold: var(--gold);
-  --color-gold-light: var(--gold-light);
-  --color-gold-dim: var(--gold-dim);
-  --color-gold-glow: var(--gold-glow);
+  /* Sovereign Cyan - Brand Identity Core */
+  --color-brand: var(--cyan);
+  --color-brand-light: var(--cyan-light);
+  --color-brand-dim: var(--cyan-dim);
+  --color-brand-glow: var(--cyan-glow);
+  
+  /* Global Aesthetic Tokens - Consolidated */
+  --color-sky: var(--sky);
+  --color-sky-dim: var(--sky-dim);
+  --color-emerald: var(--emerald);
+  --color-emerald-dim: var(--emerald-dim);
+  --color-coral: var(--coral);
+  --color-violet: var(--violet);
+
   --color-sky: var(--sky);
   --color-sky-dim: var(--sky-dim);
   --color-emerald: var(--emerald);
@@ -23,7 +33,7 @@
   --color-card2: var(--card2);
   --color-border-custom: var(--border-custom);
   --color-border2: var(--border2);
-  --color-navy: #070a10;
+  --color-navy: #0B0C10;
 
   --color-text-custom: var(--text-custom);
   --color-text-muted: var(--text-muted);
@@ -43,11 +53,15 @@
     --r-lg: 16px;
     --r-xl: 24px;
 
-    /* Dark Mode (Default) */
-    --gold: #f4a21a;
-    --gold-light: #fbbf24;
-    --gold-dim: rgba(244, 162, 26, 0.12);
-    --gold-glow: rgba(244, 162, 26, 0.25);
+    /* Apex Sovereign: Cyan System */
+    --cyan: #00f2ff;
+    --cyan-light: #33f5ff;
+    --cyan-dim: rgba(0, 242, 255, 0.12);
+    --cyan-glow: rgba(0, 242, 255, 0.25);
+    --cyan-rgb: 0, 242, 255;
+
+    /* Global System Tokens */
+    
     --sky: #4fc3f7;
     --sky-dim: rgba(79, 195, 247, 0.10);
     --emerald: #56cfac;
@@ -55,11 +69,13 @@
     --coral: #f4664a;
     --violet: #a78bfa;
 
-    --bg: #070a10;
-    --bg2: #0b0e18;
-    --surface: #0f1320;
-    --card: #131726;
-    --card2: #171c2e;
+    /* Sovereign Obsidian Backgrounds */
+    --bg: #0B0C10;
+    --bg2: #0f1117;
+    --surface: #14171f;
+    --card: #1a1d26;
+    --card2: #1e222d;
+    
     --border-custom: rgba(255, 255, 255, 0.07);
     --border2: rgba(255, 255, 255, 0.12);
 
@@ -82,17 +98,17 @@
     --border-custom: rgba(0, 0, 0, 0.08);
     --border2: rgba(0, 0, 0, 0.12);
 
-    --text-custom: #0f172a;
+    --text-custom: #0B0C10;
     --text-muted: #64748b;
     --text-dim: #94a3b8;
     --text-soft: #475569;
-    --text-stroke: rgba(15, 23, 42, 0.15);
-    --glass-bg: rgba(15, 23, 42, 0.03);
-    --glass-border: rgba(15, 23, 42, 0.06);
-    --glass-text: rgba(15, 23, 42, 0.03);
+    --text-stroke: rgba(11, 12, 16, 0.15);
+    --glass-bg: rgba(11, 12, 16, 0.03);
+    --glass-border: rgba(11, 12, 16, 0.06);
+    --glass-text: rgba(11, 12, 16, 0.03);
 
-    --gold-dim: rgba(244, 162, 26, 0.08);
-    --gold-glow: rgba(244, 162, 26, 0.15);
+    --cyan-dim: rgba(0, 242, 255, 0.08);
+    --cyan-glow: rgba(0, 242, 255, 0.15);
     --sky-dim: rgba(79, 195, 247, 0.08);
     --emerald-dim: rgba(86, 207, 172, 0.08);
   }
@@ -129,22 +145,22 @@
     content: '';
     position: fixed; inset: 0; z-index: 0; pointer-events: none;
     background-image:
-      linear-gradient(rgba(244,162,26,0.018) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(244,162,26,0.018) 1px, transparent 1px);
+      linear-gradient(rgba(0,242,255,0.018) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,242,255,0.018) 1px, transparent 1px);
     background-size: 64px 64px;
   }
 
   html.light body::after {
     background-image:
-      linear-gradient(rgba(244,162,26,0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(244,162,26,0.03) 1px, transparent 1px);
+      linear-gradient(rgba(0,242,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,242,255,0.03) 1px, transparent 1px);
   }
 
-  ::selection { background: var(--color-gold-dim); color: var(--color-gold); }
+  ::selection { background: var(--color-brand-dim); color: var(--color-brand); }
 
   ::-webkit-scrollbar { width: 4px; }
   ::-webkit-scrollbar-track { background: var(--color-bg); }
-  ::-webkit-scrollbar-thumb { background: rgba(244,162,26,0.3); border-radius: 2px; }
+  ::-webkit-scrollbar-thumb { background: rgba(0,242,255,0.3); border-radius: 2px; }
 }
 
 @layer components {
@@ -152,7 +168,7 @@
     font-family: 'JetBrains Mono', monospace;
     font-size: 10px; font-weight: 500;
     letter-spacing: 0.15em; text-transform: uppercase;
-    color: var(--color-gold);
+    color: var(--color-brand);
   }
 
   .t-display {
@@ -190,16 +206,28 @@
   }
   .btn:hover::before { transform: translateX(0); }
 
-  .btn-gold {
-    background: var(--color-gold); color: #080b12;
+  .btn-brand {
+    background: var(--color-brand); color: #080b12;
+    box-shadow: 0 0 0 rgba(0,242,255,0);
   }
-  .btn-gold:hover { background: var(--color-gold-light); transform: translateY(-2px); box-shadow: 0 12px 32px rgba(244,162,26,0.3); }
+  .btn-brand:hover { 
+    background: var(--color-brand-light); 
+    transform: translateY(-2px); 
+    box-shadow: 0 12px 32px rgba(0,242,255,0.25); 
+  }
+
+  /* Legacy Aliases - Purged */
 
   .btn-outline {
     background: transparent; color: var(--color-text-custom);
     border: 1px solid var(--color-border2);
   }
-  .btn-outline:hover { border-color: rgba(244,162,26,0.4); color: var(--color-gold); transform: translateY(-2px); }
+  .btn-outline:hover { 
+    border-color: rgba(0,242,255,0.4); 
+    color: var(--color-brand); 
+    transform: translateY(-2px);
+    box-shadow: 0 0 20px rgba(0,242,255,0.1);
+  }
 
   .btn-ghost {
     background: rgba(255,255,255,0.04); color: var(--color-text-soft);
@@ -238,12 +266,12 @@
   .section-label {
     font-family: 'JetBrains Mono', monospace; font-size: 10px;
     letter-spacing: 0.25em; text-transform: uppercase;
-    color: var(--color-gold); margin-bottom: 12px;
+    color: var(--color-brand); margin-bottom: 12px;
     display: flex; align-items: center; gap: 12px;
   }
 
   .section-label::before {
-    content: ''; width: 24px; height: 1px; background: var(--color-gold);
+    content: ''; width: 24px; height: 1px; background: var(--color-brand);
   }
 
   .section-title {
@@ -271,7 +299,7 @@
     background: rgba(255,255,255,0.02);
   }
 
-  .chip-gold { color: var(--color-gold); border-color: rgba(244,162,26,0.25); background: var(--color-gold-dim); }
+  .chip-brand { color: var(--color-brand); border-color: var(--color-brand-glow); background: var(--color-brand-dim); }
   .chip-sky  { color: var(--color-sky);  border-color: rgba(79,195,247,0.25);  background: var(--color-sky-dim); }
   .chip-em   { color: var(--color-emerald); border-color: rgba(86,207,172,0.25); background: var(--color-emerald-dim); }
   .chip-vio  { color: var(--color-violet); border-color: rgba(167,139,250,0.25); background: rgba(167,139,250,0.08); }

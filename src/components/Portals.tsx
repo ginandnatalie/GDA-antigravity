@@ -43,8 +43,8 @@ function exportToJSON(data: any[], filename: string) {
 function AIMatchBadge({ score }: { score: number }) {
   if (score === undefined || score === null) return null;
   const percentage = Math.round(score * 100);
-  const color = percentage >= 80 ? 'text-emerald' : percentage >= 60 ? 'text-gold' : 'text-text-muted';
-  const bg = percentage >= 80 ? 'bg-emerald/10' : percentage >= 60 ? 'bg-gold/10' : 'bg-white/5';
+  const color = percentage >= 80 ? 'text-emerald' : percentage >= 60 ? 'text-brand' : 'text-text-muted';
+  const bg = percentage >= 80 ? 'bg-emerald/10' : percentage >= 60 ? 'bg-brand/10' : 'bg-white/5';
 
   return (
     <div className={`px-2.5 py-1 rounded-lg ${bg} ${color} border border-current/10 flex items-center gap-2 group transition-all`}>
@@ -57,7 +57,7 @@ function AIMatchBadge({ score }: { score: number }) {
 // ─── ADMIN: Overview Stats ──────────────────────
 function OverviewStats({ applications, courses }: { applications: any[], courses: any[] }) {
   const stats = [
-    { label: 'Total Applications', value: applications.length, icon: FileText, color: 'text-gold', bg: 'bg-gold/10' },
+    { label: 'Total Applications', value: applications.length, icon: FileText, color: 'text-brand', bg: 'bg-brand/10' },
     { label: 'Pending Review', value: applications.filter(a => !a.status || a.status === 'pending').length, icon: Clock, color: 'text-sky', bg: 'bg-sky/10' },
     { label: 'Approved Students', value: applications.filter(a => a.status === 'approved' || a.status === 'enrolled').length, icon: ShieldCheck, color: 'text-emerald', bg: 'bg-emerald/10' },
     { label: 'Total Courses', value: courses.length, icon: BookOpen, color: 'text-purple', bg: 'bg-purple/10' },
@@ -66,15 +66,15 @@ function OverviewStats({ applications, courses }: { applications: any[], courses
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6 animate-fadeUp">
       {stats.map((s, i) => (
-        <div key={i} className="bg-[#0a0d14] border border-gold/10 rounded-2xl p-5 hover:border-gold/30 transition-all duration-300 group relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-16 h-16 bg-gold/2 rounded-full -mr-8 -mt-8 blur-2xl" />
+        <div key={i} className="bg-[#0a0d14] border border-brand/10 rounded-2xl p-5 hover:border-brand/30 transition-all duration-300 group relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-16 h-16 bg-brand/2 rounded-full -mr-8 -mt-8 blur-2xl" />
           <div className="flex items-center gap-3 mb-3">
-            <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${s.bg} ${s.color} border border-gold/5`}>
+            <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${s.bg} ${s.color} border border-brand/5`}>
               <s.icon className="w-4 h-4" />
             </div>
             <div className="flex-1" />
             <div className="w-6 h-6 rounded-lg bg-surface border border-border-custom flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-              <ArrowRight className="w-2.5 h-2.5 text-gold" />
+              <ArrowRight className="w-2.5 h-2.5 text-brand" />
             </div>
           </div>
           <div className="font-syne font-black text-3xl mb-0.5 tracking-tighter">{s.value}</div>
@@ -91,7 +91,7 @@ function ApplicationTable({ apps, onUpdate, onSelect, isLoading, filters }: any)
 
   return (
     <div className="bg-card border border-border-custom rounded-3xl overflow-hidden animate-fadeUp shadow-2xl relative isolate">
-      <div className="absolute inset-0 bg-gold/2 pointer-events-none" />
+      <div className="absolute inset-0 bg-brand/2 pointer-events-none" />
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse">
           <thead>
@@ -109,7 +109,7 @@ function ApplicationTable({ apps, onUpdate, onSelect, isLoading, filters }: any)
             ) : apps.map((app: any) => (
               <tr 
                 key={app.id} 
-                className="border-b border-border-custom/50 hover:bg-gold/[0.03] transition-colors group cursor-pointer"
+                className="border-b border-border-custom/50 hover:bg-brand/[0.03] transition-colors group cursor-pointer"
                 onClick={() => onSelect(app)}
               >
                 <td className="p-3.5">
@@ -118,14 +118,14 @@ function ApplicationTable({ apps, onUpdate, onSelect, isLoading, filters }: any)
                       {app.first_name?.[0] || app.organization_name?.[0]}
                     </div>
                     <div>
-                      <div className="font-syne font-bold text-sm group-hover:text-gold transition-colors">{app.type === 'individual' ? `${app.first_name} ${app.last_name}` : app.organization_name}</div>
+                      <div className="font-syne font-bold text-sm group-hover:text-brand transition-colors">{app.type === 'individual' ? `${app.first_name} ${app.last_name}` : app.organization_name}</div>
                       <div className="text-[11px] text-text-dim font-dm-mono lowercase">{app.email}</div>
                     </div>
                   </div>
                 </td>
                 <td className="p-5">
                   <div className="text-[12px] font-semibold text-text-custom">{app.program || 'N/A'}</div>
-                  {app.organization_name && <div className="text-[9px] text-gold/60 border border-gold/10 px-1.5 py-0.5 rounded inline-block uppercase tracking-tighter mt-1">{app.organization_name}</div>}
+                  {app.organization_name && <div className="text-[9px] text-brand/60 border border-brand/10 px-1.5 py-0.5 rounded inline-block uppercase tracking-tighter mt-1">{app.organization_name}</div>}
                 </td>
                 <td className="p-5">
                   <div className="text-[11px] text-text-soft font-dm-mono">{new Date(app.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</div>
@@ -135,13 +135,13 @@ function ApplicationTable({ apps, onUpdate, onSelect, isLoading, filters }: any)
                   <span className={`px-3 py-1 rounded-full text-[9px] font-dm-mono uppercase border tracking-widest ${
                     app.status === 'approved' ? 'bg-emerald-dim text-emerald border-emerald/20' :
                     app.status === 'rejected' ? 'bg-coral-dim text-coral border-coral/20' :
-                    'bg-gold-dim text-gold border-gold/20'
+                    'bg-brand-dim text-brand border-brand/20'
                   }`}>
                     {app.status || 'pending'}
                   </span>
                 </td>
                 <td className="p-5 text-right">
-                  <button className="p-2 bg-surface hover:bg-gold hover:text-bg border border-border-custom rounded-xl transition-all shadow-sm">
+                  <button className="p-2 bg-surface hover:bg-brand hover:text-bg border border-border-custom rounded-xl transition-all shadow-sm">
                     <ArrowRight className="w-4 h-4" />
                   </button>
                 </td>
@@ -544,7 +544,7 @@ export function AdminDashboard() {
           {/* Collapse Toggle Button (Desktop Only) */}
           <button 
             onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
-            className="absolute -right-3 top-20 w-6 h-6 bg-gold text-bg rounded-full hidden lg:flex items-center justify-center shadow-lg z-30 hover:scale-110 transition-transform"
+            className="absolute -right-3 top-20 w-6 h-6 bg-brand text-bg rounded-full hidden lg:flex items-center justify-center shadow-lg z-30 hover:scale-110 transition-transform"
           >
             {isSidebarCollapsed ? <ChevronRight size={14} /> : <ChevronRight size={14} className="rotate-180" />}
           </button>
@@ -557,7 +557,7 @@ export function AdminDashboard() {
                    await supabase.auth.signOut();
                    window.location.href = '/';
                 }}
-                className={`w-full flex items-center rounded-xl bg-gold/10 border border-gold/30 text-gold hover:bg-gold hover:text-bg transition-all font-bold text-[10px] uppercase tracking-tighter ${isSidebarCollapsed ? 'justify-center p-3' : 'px-4 py-3 gap-2.5'}`}
+                className={`w-full flex items-center rounded-xl bg-brand/10 border border-brand/30 text-brand hover:bg-brand hover:text-bg transition-all font-bold text-[10px] uppercase tracking-tighter ${isSidebarCollapsed ? 'justify-center p-3' : 'px-4 py-3 gap-2.5'}`}
               >
                 <Globe className="w-4 h-4 shrink-0" />
                 {!isSidebarCollapsed && <span className="whitespace-nowrap">Main Website →</span>}
@@ -565,11 +565,11 @@ export function AdminDashboard() {
             </div>
 
             <div className={`mb-8 flex items-center overflow-hidden transition-all duration-200 ${isSidebarCollapsed ? 'lg:justify-center' : 'px-2 justify-start gap-2.5'}`}>
-              <div className="w-9 h-9 rounded-xl bg-gold text-bg flex items-center justify-center font-black shadow-lg shadow-gold/20 shrink-0">G</div>
+              <div className="w-9 h-9 rounded-xl bg-brand text-bg flex items-center justify-center font-black shadow-lg shadow-brand/20 shrink-0">G</div>
               {(!isSidebarCollapsed || isMobileMenuOpen) && (
                 <div className="flex flex-col animate-fade">
                   <h2 className="font-syne font-extrabold text-lg tracking-tighter whitespace-nowrap leading-none">ADMIN HUB</h2>
-                  <span className="text-[7px] font-dm-mono text-gold tracking-widest uppercase opacity-70">Institutional Control</span>
+                  <span className="text-[7px] font-dm-mono text-brand tracking-widest uppercase opacity-70">Institutional Control</span>
                 </div>
               )}
             </div>
@@ -601,7 +601,7 @@ export function AdminDashboard() {
                   title={(isSidebarCollapsed && !isMobileMenuOpen) ? item.label : ''}
                   className={`w-full flex items-center rounded-xl font-dm-mono text-[11px] uppercase tracking-widest transition-all duration-200 group ${
                     activeTab === item.id 
-                      ? 'bg-gold text-bg font-bold shadow-lg shadow-gold/20' 
+                      ? 'bg-brand text-bg font-bold shadow-lg shadow-brand/20' 
                       : 'text-text-muted hover:text-text-custom hover:bg-white/5'
                   } ${(isSidebarCollapsed && !isMobileMenuOpen) ? 'lg:justify-center p-3' : 'px-4 py-3 gap-3'}`}
                 >
@@ -615,7 +615,7 @@ export function AdminDashboard() {
               <button 
                 onClick={() => setShowCommandPalette(true)} 
                 title={(isSidebarCollapsed && !isMobileMenuOpen) ? 'Quick Search' : ''}
-                className={`w-full flex items-center rounded-xl bg-surface border border-border-custom text-text-muted hover:text-gold transition-all font-dm-mono text-[10px] uppercase tracking-widest ${(isSidebarCollapsed && !isMobileMenuOpen) ? 'lg:justify-center p-3' : 'px-4 py-3 gap-3'}`}
+                className={`w-full flex items-center rounded-xl bg-surface border border-border-custom text-text-muted hover:text-brand transition-all font-dm-mono text-[10px] uppercase tracking-widest ${(isSidebarCollapsed && !isMobileMenuOpen) ? 'lg:justify-center p-3' : 'px-4 py-3 gap-3'}`}
               >
                 <span className="text-sm shrink-0 text-center">🔍</span>
                 {(!isSidebarCollapsed || isMobileMenuOpen) && <span className="whitespace-nowrap animate-fade">Quick Search [K]</span>}
@@ -623,7 +623,7 @@ export function AdminDashboard() {
               <button 
                 onClick={handlePasswordReset} 
                 title={(isSidebarCollapsed && !isMobileMenuOpen) ? 'Security' : ''}
-                className={`w-full flex items-center rounded-xl text-text-muted hover:text-gold hover:bg-gold/5 transition-all font-dm-mono text-[11px] uppercase tracking-widest ${(isSidebarCollapsed && !isMobileMenuOpen) ? 'lg:justify-center p-3' : 'px-4 py-3 gap-3'}`}
+                className={`w-full flex items-center rounded-xl text-text-muted hover:text-brand hover:bg-brand/5 transition-all font-dm-mono text-[11px] uppercase tracking-widest ${(isSidebarCollapsed && !isMobileMenuOpen) ? 'lg:justify-center p-3' : 'px-4 py-3 gap-3'}`}
               >
                 <Lock className="w-4 h-4 shrink-0" /> 
                 {(!isSidebarCollapsed || isMobileMenuOpen) && <span className="whitespace-nowrap animate-fade">Secure Reset</span>}
@@ -657,7 +657,7 @@ export function AdminDashboard() {
             {/* Mobile Menu Toggle */}
             <button 
               onClick={() => setIsMobileMenuOpen(true)}
-              className="lg:hidden p-3 bg-surface border border-border-custom rounded-2xl text-gold"
+              className="lg:hidden p-3 bg-surface border border-border-custom rounded-2xl text-brand"
             >
               <Layout className="w-5 h-5" />
             </button>
@@ -676,7 +676,7 @@ export function AdminDashboard() {
             <div className="relative">
               <button 
                 onClick={() => setShowNotifications(!showNotifications)}
-                className={`p-3 rounded-2xl border transition-all ${notifications.length > 0 ? 'bg-gold/10 border-gold/30 text-gold animate-pulse' : 'bg-surface/50 border-border-custom text-text-muted hover:text-gold'}`}
+                className={`p-3 rounded-2xl border transition-all ${notifications.length > 0 ? 'bg-brand/10 border-brand/30 text-brand animate-pulse' : 'bg-surface/50 border-border-custom text-text-muted hover:text-brand'}`}
               >
                 <Zap className="w-4 h-4" />
                 {notifications.length > 0 && (
@@ -700,7 +700,7 @@ export function AdminDashboard() {
                            if (n.link) setActiveTab('courses'); // Redirect to courses for inquiries
                         }}>
                            <div className="flex items-center gap-2 mb-1">
-                              <span className="w-1.5 h-1.5 rounded-full bg-gold" />
+                              <span className="w-1.5 h-1.5 rounded-full bg-brand" />
                               <span className="text-[11px] font-bold">{n.title}</span>
                            </div>
                            <p className="text-[10px] text-text-soft leading-relaxed">{n.message}</p>
@@ -721,7 +721,7 @@ export function AdminDashboard() {
               <select 
                 value={selectedCampus} 
                 onChange={(e) => setSelectedCampus(e.target.value)}
-                className="bg-transparent border-none text-[10px] font-dm-mono uppercase focus:ring-0 cursor-pointer text-gold pr-8"
+                className="bg-transparent border-none text-[10px] font-dm-mono uppercase focus:ring-0 cursor-pointer text-brand pr-8"
               >
                 <option value="all">All Campuses</option>
                 {campuses.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
@@ -742,8 +742,8 @@ export function AdminDashboard() {
           {loading && activeTab !== 'overview' && (
             <div className="absolute inset-0 z-50 flex items-center justify-center bg-bg/50 backdrop-blur-sm rounded-3xl min-h-[400px]">
                <div className="text-center">
-                 <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-gold mx-auto mb-4"></div>
-                 <p className="font-dm-mono text-[10px] uppercase text-gold">Synchronizing Database...</p>
+                 <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-brand mx-auto mb-4"></div>
+                 <p className="font-dm-mono text-[10px] uppercase text-brand">Synchronizing Database...</p>
                </div>
             </div>
           )}
@@ -831,7 +831,7 @@ export function AdminDashboard() {
                                  (document.getElementById('ac-title') as HTMLInputElement).value = '';
                                }
                             }}
-                            className="btn btn-gold px-12 py-4"
+                            className="btn btn-brand px-12 py-4"
                           >💾 Save Academic Item</button>
                        </div>
                     </div>
@@ -870,7 +870,7 @@ export function AdminDashboard() {
                                     if (error) alert(error.message);
                                     else fetchGovernance();
                                  }}
-                                 className={`w-12 h-6 rounded-full relative transition-colors ${governanceSettings[opt.key] === 'true' ? 'bg-gold' : 'bg-surface border border-border-custom'}`}
+                                 className={`w-12 h-6 rounded-full relative transition-colors ${governanceSettings[opt.key] === 'true' ? 'bg-brand' : 'bg-surface border border-border-custom'}`}
                                >
                                   <div className={`absolute top-1 w-4 h-4 rounded-full bg-white transition-all ${governanceSettings[opt.key] === 'true' ? 'left-7' : 'left-1'}`} />
                                </button>
@@ -878,9 +878,9 @@ export function AdminDashboard() {
                           ))}
                        </div>
                     </div>
-                    <div className="bg-navy border border-gold/10 rounded-3xl p-10 flex flex-col justify-between">
+                    <div className="bg-navy border border-brand/10 rounded-3xl p-10 flex flex-col justify-between">
                        <div>
-                          <h3 className="font-syne font-bold text-2xl mb-2 text-gold">DHET Compliance Hub</h3>
+                          <h3 className="font-syne font-bold text-2xl mb-2 text-brand">DHET Compliance Hub</h3>
                           <p className="text-sm text-text-soft leading-relaxed mb-6">Access immutable records required for SACE, SAQA, and Department audits. No records can be deleted from this portal.</p>
                        </div>
                        <div className="space-y-4">
@@ -888,7 +888,7 @@ export function AdminDashboard() {
                              <span className="text-xs uppercase tracking-widest font-dm-mono">View Audit Trails</span>
                              <ShieldCheck className="w-4 h-4" />
                           </button>
-                          <button className="w-full btn btn-gold py-4 flex items-center justify-between px-6">
+                          <button className="w-full btn btn-brand py-4 flex items-center justify-between px-6">
                              <span className="text-xs text-bg uppercase tracking-widest font-bold">Generate Annual Report</span>
                              <BarChart3 className="w-4 h-4 text-bg" />
                           </button>
@@ -930,7 +930,7 @@ export function AdminDashboard() {
             
             <div className="mb-6">
               <div className="flex items-center justify-between mb-2">
-                <span className="font-dm-mono text-[10px] uppercase tracking-widest text-gold">{selectedApp.type} Application</span>
+                <span className="font-dm-mono text-[10px] uppercase tracking-widest text-brand">{selectedApp.type} Application</span>
                 <AIMatchBadge score={selectedApp.ai_match_score} />
               </div>
               <h2 className="font-syne font-extrabold text-2xl">
@@ -938,7 +938,7 @@ export function AdminDashboard() {
               </h2>
               <p className="text-text-muted text-sm">{selectedApp.email}</p>
               {selectedApp.student_number && (
-                <p className="text-gold font-dm-mono text-sm mt-1">{selectedApp.student_number}</p>
+                <p className="text-brand font-dm-mono text-sm mt-1">{selectedApp.student_number}</p>
               )}
             </div>
 
@@ -1005,7 +1005,7 @@ export function AdminDashboard() {
                 <>
                   <div>
                     <label className="block font-dm-mono text-[9px] uppercase text-text-dim mb-1">Program</label>
-                    <p className="text-sm font-semibold text-gold">{selectedApp.program}</p>
+                    <p className="text-sm font-semibold text-brand">{selectedApp.program}</p>
                   </div>
                   <div>
                     <label className="block font-dm-mono text-[9px] uppercase text-text-dim mb-1">Highest Qualification</label>
@@ -1046,7 +1046,7 @@ export function AdminDashboard() {
                   <div className="space-y-2">
                     {selectedApp.history.map((h: any, i: number) => (
                       <div key={i} className="flex gap-3 items-start text-[11px]">
-                        <div className="w-1.5 h-1.5 rounded-full bg-gold mt-1.5 shrink-0"></div>
+                        <div className="w-1.5 h-1.5 rounded-full bg-brand mt-1.5 shrink-0"></div>
                         <div>
                           <span className="font-semibold">{h.event}</span>
                           <span className="text-text-muted ml-2">{new Date(h.timestamp).toLocaleString()}</span>
@@ -1062,7 +1062,7 @@ export function AdminDashboard() {
                 {selectedApp.cv_url && (
                   <a href={selectedApp.cv_url} target="_blank" rel="noreferrer" className="btn btn-outline btn-sm flex-1 justify-center">Download CV</a>
                 )}
-                <a href={`mailto:${selectedApp.email}`} className="btn btn-gold btn-sm flex-1 justify-center">Email Applicant</a>
+                <a href={`mailto:${selectedApp.email}`} className="btn btn-brand btn-sm flex-1 justify-center">Email Applicant</a>
               </div>
             </div>
           </div>
@@ -1100,8 +1100,8 @@ function CommunicationLogs() {
   return (
     <div className="space-y-8 animate-fade">
       <div className="flex gap-4 border-b border-border-custom pb-4">
-        <button onClick={() => setActiveSubTab('comms')} className={`text-[10px] uppercase tracking-widest font-dm-mono px-4 py-2 rounded-lg ${activeSubTab === 'comms' ? 'bg-gold/10 text-gold' : 'text-text-muted hover:text-text-custom'}`}>Communication History</button>
-        <button onClick={() => setActiveSubTab('audit')} className={`text-[10px] uppercase tracking-widest font-dm-mono px-4 py-2 rounded-lg ${activeSubTab === 'audit' ? 'bg-gold/10 text-gold' : 'text-text-muted hover:text-text-custom'}`}>Institutional Governance Logs</button>
+        <button onClick={() => setActiveSubTab('comms')} className={`text-[10px] uppercase tracking-widest font-dm-mono px-4 py-2 rounded-lg ${activeSubTab === 'comms' ? 'bg-brand/10 text-brand' : 'text-text-muted hover:text-text-custom'}`}>Communication History</button>
+        <button onClick={() => setActiveSubTab('audit')} className={`text-[10px] uppercase tracking-widest font-dm-mono px-4 py-2 rounded-lg ${activeSubTab === 'audit' ? 'bg-brand/10 text-brand' : 'text-text-muted hover:text-text-custom'}`}>Institutional Governance Logs</button>
       </div>
 
       {activeSubTab === 'comms' ? (
@@ -1148,7 +1148,7 @@ function CommunicationLogs() {
                    <tr key={log.id} className="hover:bg-white/2 transition-colors">
                      <td className="p-6 text-xs text-text-dim font-dm-mono">{new Date(log.created_at).toLocaleString()}</td>
                      <td className="p-6">
-                        <span className="px-2 py-1 rounded text-[9px] font-bold uppercase bg-gold/10 text-gold border border-gold/20">{log.action_type || 'ADMIN_OVERRIDE'}</span>
+                        <span className="px-2 py-1 rounded text-[9px] font-bold uppercase bg-brand/10 text-brand border border-brand/20">{log.action_type || 'ADMIN_OVERRIDE'}</span>
                      </td>
                      <td className="p-6 text-xs font-dm-mono text-text-custom">{log.category}</td>
                      <td className="p-6">
@@ -1198,7 +1198,7 @@ function InstitutionalUserRegistry() {
     user?.email === 'george@ginashe.co.za';
 
   const INSTITUTIONAL_ROLES = [
-    { id: 'super_admin', label: 'Super Admin', color: 'text-gold', bg: 'bg-gold/10' },
+    { id: 'super_admin', label: 'Super Admin', color: 'text-brand', bg: 'bg-brand/10' },
     { id: 'campus_manager', label: 'Campus Manager', color: 'text-sky', bg: 'bg-sky/10' },
     { id: 'head_of_department', label: 'HOD', color: 'text-purple', bg: 'bg-purple/10' },
     { id: 'lecturer_senior', label: 'Senior Lecturer', color: 'text-emerald', bg: 'bg-emerald/10' },
@@ -1383,14 +1383,14 @@ function InstitutionalUserRegistry() {
       <div className="flex items-center justify-between p-1.5 bg-card/50 border border-border-custom rounded-2xl w-fit mb-8">
         <button 
           onClick={() => { setActiveMainTab('students'); setActiveSubTab('active'); }}
-          className={`px-8 py-3 rounded-xl text-xs font-dm-mono uppercase transition-all flex items-center gap-3 ${activeMainTab === 'students' ? 'bg-gold text-bg shadow-lg shadow-gold/20 font-bold' : 'text-text-muted hover:text-text-custom'}`}
+          className={`px-8 py-3 rounded-xl text-xs font-dm-mono uppercase transition-all flex items-center gap-3 ${activeMainTab === 'students' ? 'bg-brand text-bg shadow-lg shadow-brand/20 font-bold' : 'text-text-muted hover:text-text-custom'}`}
         >
           <UserRound className="w-4 h-4" />
           STUDENT REGISTRY
         </button>
         <button 
           onClick={() => { setActiveMainTab('staff'); setActiveSubTab('executive'); }}
-          className={`px-8 py-3 rounded-xl text-xs font-dm-mono uppercase transition-all flex items-center gap-3 ${activeMainTab === 'staff' ? 'bg-gold text-bg shadow-lg shadow-gold/20 font-bold' : 'text-text-muted hover:text-text-custom'}`}
+          className={`px-8 py-3 rounded-xl text-xs font-dm-mono uppercase transition-all flex items-center gap-3 ${activeMainTab === 'staff' ? 'bg-brand text-bg shadow-lg shadow-brand/20 font-bold' : 'text-text-muted hover:text-text-custom'}`}
         >
           <Briefcase className="w-4 h-4" />
           STAFF LEDGER
@@ -1404,7 +1404,7 @@ function InstitutionalUserRegistry() {
             <button 
               key={tab.id}
               onClick={() => setActiveSubTab(tab.id)}
-              className={`px-4 py-2 rounded-lg text-[9px] font-dm-mono uppercase whitespace-nowrap transition-all ${activeSubTab === tab.id ? 'bg-white/5 text-gold border border-gold/20' : 'text-text-dim hover:text-white'}`}
+              className={`px-4 py-2 rounded-lg text-[9px] font-dm-mono uppercase whitespace-nowrap transition-all ${activeSubTab === tab.id ? 'bg-white/5 text-brand border border-brand/20' : 'text-text-dim hover:text-white'}`}
             >
               {tab.label}
               {activeMainTab === 'students' && (
@@ -1417,10 +1417,10 @@ function InstitutionalUserRegistry() {
         <div className="flex items-center gap-3 shrink-0">
           {/* View Toggler */}
           <div className="flex items-center gap-1 p-1 bg-surface border border-border-custom rounded-xl">
-            <button onClick={() => setViewMode('list')} className={`p-2 rounded-lg transition-all ${viewMode === 'list' ? 'bg-gold text-bg shadow-sm' : 'text-text-dim'}`}>
+            <button onClick={() => setViewMode('list')} className={`p-2 rounded-lg transition-all ${viewMode === 'list' ? 'bg-brand text-bg shadow-sm' : 'text-text-dim'}`}>
               <List size={14} />
             </button>
-            <button onClick={() => setViewMode('grid')} className={`p-2 rounded-lg transition-all ${viewMode === 'grid' ? 'bg-gold text-bg shadow-sm' : 'text-text-dim'}`}>
+            <button onClick={() => setViewMode('grid')} className={`p-2 rounded-lg transition-all ${viewMode === 'grid' ? 'bg-brand text-bg shadow-sm' : 'text-text-dim'}`}>
               <LayoutGrid size={14} />
             </button>
           </div>
@@ -1429,7 +1429,7 @@ function InstitutionalUserRegistry() {
             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-text-dim text-xs">🔍</span>
             <input 
               placeholder={`Search ${activeMainTab === 'students' ? 'Student Base' : 'Staff Ledger'}...`}
-              className="bg-surface border border-border-custom rounded-xl py-2 pl-9 pr-4 text-xs font-dm-mono w-48 lg:w-64 focus:border-gold/50 transition-all outline-none"
+              className="bg-surface border border-border-custom rounded-xl py-2 pl-9 pr-4 text-xs font-dm-mono w-48 lg:w-64 focus:border-brand/50 transition-all outline-none"
               value={search}
               onChange={e => setSearch(e.target.value)}
             />
@@ -1439,30 +1439,30 @@ function InstitutionalUserRegistry() {
 
       {loading ? (
         <div className="py-40 flex flex-col items-center justify-center opacity-50">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gold" />
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand" />
           <p className="mt-6 text-xs font-dm-mono uppercase tracking-[0.2em]">Synchronizing Records Vault...</p>
         </div>
       ) : viewMode === 'list' ? (
-        <div className="bg-[#0a0d14] border border-gold/10 rounded-2xl overflow-hidden shadow-2xl relative isolate">
+        <div className="bg-[#0a0d14] border border-brand/10 rounded-2xl overflow-hidden shadow-2xl relative isolate">
           <div className="overflow-x-auto custom-scrollbar">
             <table className="w-full text-left">
               <thead>
-                <tr className="bg-surface/50 border-b border-gold/10 text-gold text-[9px] uppercase font-dm-mono tracking-[0.2em]">
+                <tr className="bg-surface/50 border-b border-brand/10 text-brand text-[9px] uppercase font-dm-mono tracking-[0.2em]">
                   <th className="p-4">Identity Verification</th>
                   <th className="p-4">Governance Role</th>
                   <th className="p-4">Institutional Presence</th>
                   <th className="p-4 text-right">Operational Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gold/5">
+              <tbody className="divide-y divide-brand/5">
                 {filteredUsers.map(u => (
-                  <tr key={u.id} className={`hover:bg-gold/5 transition-colors group ${u.account_status === 'suspended' ? 'opacity-60 grayscale' : ''}`}>
+                  <tr key={u.id} className={`hover:bg-brand/5 transition-colors group ${u.account_status === 'suspended' ? 'opacity-60 grayscale' : ''}`}>
                     <td className="p-4">
                       <div className="flex items-center gap-3">
                         {u.avatar_url ? (
-                          <img src={u.avatar_url} className="w-9 h-9 rounded-xl object-cover border border-gold/10 shadow-lg" alt="" />
+                          <img src={u.avatar_url} className="w-9 h-9 rounded-xl object-cover border border-brand/10 shadow-lg" alt="" />
                         ) : (
-                          <div className="w-9 h-9 rounded-xl bg-surface border border-gold/10 flex items-center justify-center font-black text-xs text-gold">
+                          <div className="w-9 h-9 rounded-xl bg-surface border border-brand/10 flex items-center justify-center font-black text-xs text-brand">
                             {u.first_name?.[0]}{u.last_name?.[0]}
                           </div>
                         )}
@@ -1472,7 +1472,7 @@ function InstitutionalUserRegistry() {
                              {u.account_status === 'suspended' && <XCircle className="w-3 h-3 text-coral" />}
                           </div>
                           <div className="text-[10px] text-text-dim font-dm-mono lowercase">{u.email}</div>
-                          <div className="text-[9px] font-dm-mono text-gold mt-0.5">{u.student_number || 'STAFF-ID: '+u.id.slice(0,6).toUpperCase()}</div>
+                          <div className="text-[9px] font-dm-mono text-brand mt-0.5">{u.student_number || 'STAFF-ID: '+u.id.slice(0,6).toUpperCase()}</div>
                         </div>
                       </div>
                     </td>
@@ -1509,13 +1509,13 @@ function InstitutionalUserRegistry() {
                              )}
                              <button 
                                onClick={() => { setGovernanceUser(u); setGovernanceAction({ type: 'STATUS_CHANGE', newStatus: u.account_status === 'suspended' ? 'active' : 'suspended' }); }}
-                               className={`p-2 border rounded-lg transition-all ${u.account_status === 'suspended' ? 'bg-gold/10 text-gold border-gold/20' : 'bg-coral/10 text-coral border-coral/20 hover:bg-coral hover:text-white'}`}
+                               className={`p-2 border rounded-lg transition-all ${u.account_status === 'suspended' ? 'bg-brand/10 text-brand border-brand/20' : 'bg-coral/10 text-coral border-coral/20 hover:bg-coral hover:text-white'}`}
                                title={u.account_status === 'suspended' ? 'Reactivate Hub' : 'Suspend Access'}
                              >
                                <History size={14} />
                              </button>
                              <select 
-                               className="bg-surface border border-gold/10 rounded-lg py-1.5 px-2 text-[10px] font-dm-mono focus:border-gold transition-all outline-none"
+                               className="bg-surface border border-brand/10 rounded-lg py-1.5 px-2 text-[10px] font-dm-mono focus:border-brand transition-all outline-none"
                                value={u.role || 'student'}
                                onChange={(e) => {
                                  setGovernanceUser(u);
@@ -1537,19 +1537,19 @@ function InstitutionalUserRegistry() {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {filteredUsers.map(u => (
-            <div key={u.id} className={`bg-card border border-border-custom rounded-3xl p-6 relative overflow-hidden group hover:border-gold/30 transition-all ${u.account_status === 'suspended' ? 'opacity-60 grayscale' : ''}`}>
+            <div key={u.id} className={`bg-card border border-border-custom rounded-3xl p-6 relative overflow-hidden group hover:border-brand/30 transition-all ${u.account_status === 'suspended' ? 'opacity-60 grayscale' : ''}`}>
                {u.account_status === 'suspended' && <div className="absolute top-4 right-4 text-coral text-[8px] font-black uppercase tracking-widest bg-coral/10 px-2 py-0.5 rounded border border-coral/20">Access Locked</div>}
                <div className="flex items-center gap-4 mb-6">
                  {u.avatar_url ? (
-                   <img src={u.avatar_url} className="w-14 h-14 rounded-2xl object-cover border border-gold/10 shadow-xl" alt="" />
+                   <img src={u.avatar_url} className="w-14 h-14 rounded-2xl object-cover border border-brand/10 shadow-xl" alt="" />
                  ) : (
-                   <div className="w-14 h-14 rounded-2xl bg-surface border border-gold/10 flex items-center justify-center font-black text-lg text-gold shadow-inner">
+                   <div className="w-14 h-14 rounded-2xl bg-surface border border-brand/10 flex items-center justify-center font-black text-lg text-brand shadow-inner">
                      {u.first_name?.[0]}{u.last_name?.[0]}
                    </div>
                  )}
                  <div className="overflow-hidden">
                    <h3 className="font-syne font-black text-base text-text-soft truncate leading-tight uppercase">{u.first_name} <br/> {u.last_name}</h3>
-                   <p className="text-[10px] font-dm-mono text-gold mt-1 truncate">{u.student_number || 'GDA-ADMIN-'+u.id.slice(0,4).toUpperCase()}</p>
+                   <p className="text-[10px] font-dm-mono text-brand mt-1 truncate">{u.student_number || 'GDA-ADMIN-'+u.id.slice(0,4).toUpperCase()}</p>
                  </div>
                </div>
 
@@ -1565,7 +1565,7 @@ function InstitutionalUserRegistry() {
                     ))}
                  </div>
 
-                 <div className="pt-4 border-t border-gold/5 flex items-center justify-between">
+                 <div className="pt-4 border-t border-brand/5 flex items-center justify-between">
                     <div className="flex flex-col">
                        <span className="text-[8px] font-dm-mono uppercase text-text-dim">Branch Presence</span>
                        <span className="text-[10px] text-text-soft font-bold uppercase tracking-widest">{u.campus_id ? 'Authenticated' : 'Remote'}</span>
@@ -1573,7 +1573,7 @@ function InstitutionalUserRegistry() {
                     {isSuperAdmin && (
                       <button 
                         onClick={() => { setGovernanceUser(u); setGovernanceAction({ type: 'STATUS_CHANGE', newStatus: u.account_status === 'suspended' ? 'active' : 'suspended' }); }}
-                        className="text-[9px] font-dm-mono text-coral hover:text-gold transition-colors underline underline-offset-4"
+                        className="text-[9px] font-dm-mono text-coral hover:text-brand transition-colors underline underline-offset-4"
                       >
                         LOCK ACCOUNT
                       </button>
@@ -1588,11 +1588,11 @@ function InstitutionalUserRegistry() {
       {/* ─── GOVERNANCE MOTIVATION MODAL ─── */}
       {governanceUser && governanceAction && (
         <div className="fixed inset-0 z-[4000] bg-bg/95 backdrop-blur-md flex items-center justify-center p-6 animate-fade">
-          <div className="bg-card border border-gold/20 rounded-[2.5rem] w-full max-w-lg overflow-hidden shadow-[0_0_100px_rgba(212,175,55,0.1)] flex flex-col items-center p-12 relative">
+          <div className="bg-card border border-brand/20 rounded-[2.5rem] w-full max-w-lg overflow-hidden shadow-[0_0_100px_rgba(212,175,55,0.1)] flex flex-col items-center p-12 relative">
             <button onClick={() => { setGovernanceUser(null); setAlumniAcademicRecord(null); }} className="absolute top-8 right-8 text-text-dim hover:text-white transition-colors">✕</button>
 
-            <div className="w-20 h-20 bg-gold/10 rounded-3xl flex items-center justify-center mb-8 shadow-inner border border-gold/20">
-               <ShieldCheck className="w-10 h-10 text-gold" />
+            <div className="w-20 h-20 bg-brand/10 rounded-3xl flex items-center justify-center mb-8 shadow-inner border border-brand/20">
+               <ShieldCheck className="w-10 h-10 text-brand" />
             </div>
 
             <h2 className="font-syne font-black text-3xl mb-2 tracking-tighter text-center uppercase">Institutional Directive</h2>
@@ -1600,16 +1600,16 @@ function InstitutionalUserRegistry() {
 
             {/* ALUMNI ACADEMIC RECORD HUB */}
             {alumniAcademicRecord && (
-              <div className="w-full bg-surface border border-gold/10 rounded-2xl p-6 mb-8 text-center animate-fadeUp">
-                <span className="text-[9px] font-dm-mono text-gold uppercase tracking-[0.3em] mb-4 block underline">ACADEMIC VERIFICATION HUB</span>
+              <div className="w-full bg-surface border border-brand/10 rounded-2xl p-6 mb-8 text-center animate-fadeUp">
+                <span className="text-[9px] font-dm-mono text-brand uppercase tracking-[0.3em] mb-4 block underline">ACADEMIC VERIFICATION HUB</span>
                 <div className="grid grid-cols-2 gap-4 mb-4">
-                  <div className="p-3 bg-card border border-gold/5 rounded-xl">
+                  <div className="p-3 bg-card border border-brand/5 rounded-xl">
                     <div className="text-[8px] text-text-dim uppercase mb-1">Modules Passed</div>
-                    <div className="text-xl font-syne font-black text-gold">{alumniAcademicRecord.enrollments.length}</div>
+                    <div className="text-xl font-syne font-black text-brand">{alumniAcademicRecord.enrollments.length}</div>
                   </div>
-                  <div className="p-3 bg-card border border-gold/5 rounded-xl">
+                  <div className="p-3 bg-card border border-brand/5 rounded-xl">
                     <div className="text-[8px] text-text-dim uppercase mb-1">Mean Marks (%)</div>
-                    <div className="text-xl font-syne font-black text-gold">{alumniAcademicRecord.avgGrade}%</div>
+                    <div className="text-xl font-syne font-black text-brand">{alumniAcademicRecord.avgGrade}%</div>
                   </div>
                 </div>
                 {alumniAcademicRecord.enrollments.length === 0 && (
@@ -1624,7 +1624,7 @@ function InstitutionalUserRegistry() {
               <div className="space-y-2">
                 <label className="text-[10px] font-dm-mono uppercase text-text-dim tracking-widest pl-1">Protocol Motivation</label>
                 <select 
-                  className="w-full bg-bg border border-border-custom rounded-xl p-4 text-xs font-dm-mono uppercase focus:border-gold transition-all outline-none cursor-pointer"
+                  className="w-full bg-bg border border-border-custom rounded-xl p-4 text-xs font-dm-mono uppercase focus:border-brand transition-all outline-none cursor-pointer"
                   value={motivation}
                   onChange={e => setMotivation(e.target.value)}
                 >
@@ -1636,7 +1636,7 @@ function InstitutionalUserRegistry() {
               <div className="space-y-2">
                 <label className="text-[10px] font-dm-mono uppercase text-text-dim tracking-widest pl-1">Executive Commentary</label>
                 <textarea 
-                  className="w-full bg-bg border border-border-custom rounded-xl p-4 text-xs h-32 focus:border-gold transition-all outline-none resize-none" 
+                  className="w-full bg-bg border border-border-custom rounded-xl p-4 text-xs h-32 focus:border-brand transition-all outline-none resize-none" 
                   placeholder="Elaborate on the institutional necessity of this decision..."
                   value={comments}
                   onChange={e => setComments(e.target.value)}
@@ -1664,7 +1664,7 @@ function InstitutionalUserRegistry() {
                 <div className="space-y-2">
                   <input 
                     type="url"
-                    className="w-full bg-bg border border-border-custom rounded-xl p-4 text-xs font-dm-mono focus:border-gold transition-all outline-none" 
+                    className="w-full bg-bg border border-border-custom rounded-xl p-4 text-xs font-dm-mono focus:border-brand transition-all outline-none" 
                     placeholder="External Evidence URL..." 
                     value={evidenceUrl}
                     onChange={e => setEvidenceUrl(e.target.value)}
@@ -1680,7 +1680,7 @@ function InstitutionalUserRegistry() {
               <button 
                 onClick={commitGovernanceAction}
                 disabled={isProcessing}
-                className={`w-full btn btn-gold py-5 font-black text-sm uppercase tracking-widest flex items-center justify-center gap-3 ${isProcessing ? 'opacity-50 cursor-not-allowed' : ''}`}
+                className={`w-full btn btn-brand py-5 font-black text-sm uppercase tracking-widest flex items-center justify-center gap-3 ${isProcessing ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
                 {isProcessing ? 'COMMITTING ARCHIVE...' : 'COMMIT DIRECTIVE'}
                 <ShieldCheck className="w-4 h-4" />
@@ -1733,7 +1733,7 @@ function BroadcastHub() {
   return (
     <div className="space-y-8 animate-fade">
       <div className="bg-card border border-border-custom rounded-3xl p-10 relative overflow-hidden isolate">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-gold/5 rounded-full -mr-32 -mt-32 blur-[100px]" />
+        <div className="absolute top-0 right-0 w-64 h-64 bg-brand/5 rounded-full -mr-32 -mt-32 blur-[100px]" />
         
         <h3 className="font-syne font-black text-3xl mb-2 tracking-tighter">Broadcast Command Center</h3>
         <p className="text-xs text-text-muted mb-8 max-w-xl">Dispatch institutional directives, emergency alerts, and curriculum updates across the academy ecosystem.</p>
@@ -1743,7 +1743,7 @@ function BroadcastHub() {
             <div className="space-y-2">
               <label className="text-[10px] font-dm-mono uppercase text-text-dim tracking-widest">Protocol Title</label>
               <input 
-                className="w-full bg-bg border border-border-custom rounded-xl p-4 text-sm focus:border-gold transition-all outline-none" 
+                className="w-full bg-bg border border-border-custom rounded-xl p-4 text-sm focus:border-brand transition-all outline-none" 
                 placeholder="Institutional Directive #772..." 
                 value={title}
                 onChange={e => setTitle(e.target.value)}
@@ -1752,7 +1752,7 @@ function BroadcastHub() {
             <div className="space-y-2">
               <label className="text-[10px] font-dm-mono uppercase text-text-dim tracking-widest">Dispatch Priority</label>
               <select 
-                className="w-full bg-bg border border-border-custom rounded-xl p-4 text-sm appearance-none focus:border-gold transition-all outline-none cursor-pointer"
+                className="w-full bg-bg border border-border-custom rounded-xl p-4 text-sm appearance-none focus:border-brand transition-all outline-none cursor-pointer"
                 value={type}
                 onChange={e => setType(e.target.value as any)}
               >
@@ -1766,7 +1766,7 @@ function BroadcastHub() {
           <div className="space-y-2">
             <label className="text-[10px] font-dm-mono uppercase text-text-dim tracking-widest">Bulletin Content</label>
             <textarea 
-              className="w-full bg-bg border border-border-custom rounded-xl p-4 text-sm h-48 focus:border-gold transition-all outline-none resize-none custom-scrollbar" 
+              className="w-full bg-bg border border-border-custom rounded-xl p-4 text-sm h-48 focus:border-brand transition-all outline-none resize-none custom-scrollbar" 
               placeholder="Explicit details regarding the institutional update..."
               value={content}
               onChange={e => setContent(e.target.value)}
@@ -1777,7 +1777,7 @@ function BroadcastHub() {
             <button 
               onClick={handleBroadcast}
               disabled={isSending}
-              className={`btn btn-gold px-12 py-4 flex items-center gap-3 group ${isSending ? 'opacity-50 cursor-not-allowed' : ''}`}
+              className={`btn btn-brand px-12 py-4 flex items-center gap-3 group ${isSending ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
               <Zap className={`w-4 h-4 ${type === 'urgent' ? 'animate-pulse fill-bg' : ''}`} />
               {isSending ? 'DISPATCHING...' : 'DISPATCH DIRECTIVE'}
@@ -1815,7 +1815,7 @@ function StaffManagement() {
     } catch (err: any) { alert('Error updating role: ' + err.message); }
   }
 
-  if (loading) return <div className="flex justify-center py-20"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gold"></div></div>;
+  if (loading) return <div className="flex justify-center py-20"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand"></div></div>;
 
   return (
     <div className="space-y-6">
@@ -1823,7 +1823,7 @@ function StaffManagement() {
         <h2 className="font-syne font-bold text-xl">Staff & Roles</h2>
         <div className="flex gap-2">
           <button onClick={() => exportToCSV(staff, 'gda-staff')} className="btn btn-outline btn-sm">📤 Export</button>
-          <button onClick={() => setIsAdding(!isAdding)} className="btn btn-gold btn-sm">{isAdding ? 'Cancel' : '+ Add Staff'}</button>
+          <button onClick={() => setIsAdding(!isAdding)} className="btn btn-brand btn-sm">{isAdding ? 'Cancel' : '+ Add Staff'}</button>
         </div>
       </div>
 
@@ -1841,7 +1841,7 @@ function StaffManagement() {
               const { data: u } = await supabase.from('profiles').select('id').eq('email', newStaff.email).single();
               if (u) { handleUpdateRole(u.id, newStaff.role); setIsAdding(false); }
               else { alert('User not found. They must sign up first.'); }
-            }} className="btn btn-gold">Assign Role</button>
+            }} className="btn btn-brand">Assign Role</button>
           </div>
         </div>
       )}
@@ -1863,7 +1863,7 @@ function StaffManagement() {
                   <div className="text-[10px] text-text-muted">{m.email}</div>
                 </td>
                 <td className="p-4">
-                  <span className={`px-2 py-0.5 rounded-full text-[9px] font-dm-mono uppercase border ${m.role === 'super_admin' ? 'border-gold/20 text-gold bg-gold-dim' : 'border-sky/20 text-sky bg-sky-dim'}`}>{m.role}</span>
+                  <span className={`px-2 py-0.5 rounded-full text-[9px] font-dm-mono uppercase border ${m.role === 'super_admin' ? 'border-brand/20 text-brand bg-brand-dim' : 'border-sky/20 text-sky bg-sky-dim'}`}>{m.role}</span>
                 </td>
                 <td className="p-4">
                   <select className="bg-surface border border-border-custom rounded p-1 text-[11px]" value={m.role} onChange={(e) => handleUpdateRole(m.id, e.target.value)}>
@@ -1921,14 +1921,14 @@ function SiteSettings() {
     finally { setSaving(false); }
   }
 
-  if (loading) return <div className="flex justify-center py-20"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gold"></div></div>;
+  if (loading) return <div className="flex justify-center py-20"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand"></div></div>;
 
   return (
     <div className="space-y-8">
       <div className="bg-card border border-border-custom rounded-xl p-6">
         <div className="flex justify-between items-center mb-6">
           <h2 className="font-syne font-bold text-xl">Global Site Settings</h2>
-          <button onClick={handleSave} disabled={saving} className={`btn btn-gold btn-sm ${saving ? 'opacity-50' : ''}`}>
+          <button onClick={handleSave} disabled={saving} className={`btn btn-brand btn-sm ${saving ? 'opacity-50' : ''}`}>
             {saving ? 'Saving...' : 'Save All Settings'}
           </button>
         </div>
@@ -1965,11 +1965,11 @@ function SiteSettings() {
                 { id: 'showAbout', label: 'About Page' },
                 { id: 'showAdmissions', label: 'Admissions Page' }
               ].map(page => (
-                <label key={page.id} className="flex items-center justify-between p-3 bg-surface border border-border-custom rounded-md cursor-pointer hover:border-gold/30 transition-all">
+                <label key={page.id} className="flex items-center justify-between p-3 bg-surface border border-border-custom rounded-md cursor-pointer hover:border-brand/30 transition-all">
                   <span className="text-xs font-medium">{page.label}</span>
                   <div className="relative inline-flex items-center cursor-pointer">
                     <input type="checkbox" className="sr-only peer" checked={(settings as any)[page.id]} onChange={e => setSettings({...settings, [page.id]: e.target.checked})} />
-                    <div className="w-9 h-5 bg-bg/50 border border-border-custom peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-text-muted after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-gold peer-checked:after:bg-bg"></div>
+                    <div className="w-9 h-5 bg-bg/50 border border-border-custom peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-text-muted after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-brand peer-checked:after:bg-bg"></div>
                   </div>
                 </label>
               ))}
@@ -1977,7 +1977,7 @@ function SiteSettings() {
           </div>
 
           <div className="pt-4 border-t border-border-custom">
-            <button onClick={handleSave} disabled={saving} className={`btn btn-gold w-full ${saving ? 'opacity-50' : ''}`}>
+            <button onClick={handleSave} disabled={saving} className={`btn btn-brand w-full ${saving ? 'opacity-50' : ''}`}>
               {saving ? 'Saving...' : 'Update Site Content'}
             </button>
           </div>
@@ -2045,7 +2045,7 @@ function TimetableManager({ courses }: { courses: any[] }) {
                 key={cat}
                 onClick={() => setActiveCategory(cat as any)}
                 className={`text-[9px] font-dm-mono uppercase tracking-widest px-3 py-1 rounded-full border transition-all ${
-                  activeCategory === cat ? 'bg-gold text-bg border-gold font-bold' : 'border-white/10 text-text-muted hover:border-gold/30'
+                  activeCategory === cat ? 'bg-brand text-bg border-brand font-bold' : 'border-white/10 text-text-muted hover:border-brand/30'
                 }`}
               >
                 {cat.replace('_', ' ')}s
@@ -2053,19 +2053,19 @@ function TimetableManager({ courses }: { courses: any[] }) {
             ))}
           </div>
         </div>
-        <button onClick={() => setIsAdding(!isAdding)} className="btn btn-gold px-8 py-3 text-[10px] font-black tracking-widest uppercase shadow-xl shadow-gold/10">
+        <button onClick={() => setIsAdding(!isAdding)} className="btn btn-brand px-8 py-3 text-[10px] font-black tracking-widest uppercase shadow-xl shadow-brand/10">
           {isAdding ? 'DISCARD PROTOCOL' : `+ DEPLOY ${activeCategory.toUpperCase()}`}
         </button>
       </div>
 
       {isAdding && (
-        <div className="bg-navy border border-gold/20 rounded-[2.5rem] p-8 animate-fadeDown shadow-2xl relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-gold/5 rounded-full -mr-32 -mt-32 blur-3xl opacity-50" />
+        <div className="bg-navy border border-brand/20 rounded-[2.5rem] p-8 animate-fadeDown shadow-2xl relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-brand/5 rounded-full -mr-32 -mt-32 blur-3xl opacity-50" />
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative z-10">
             <div className="space-y-2">
-              <label className="text-[9px] font-dm-mono text-gold uppercase tracking-[0.2em] px-2">Directive Title</label>
+              <label className="text-[9px] font-dm-mono text-brand uppercase tracking-[0.2em] px-2">Directive Title</label>
               <input 
-                className="w-full bg-bg border border-border-custom rounded-xl p-3 text-sm focus:border-gold outline-none" 
+                className="w-full bg-bg border border-border-custom rounded-xl p-3 text-sm focus:border-brand outline-none" 
                 value={form.title} 
                 onChange={e => setForm({...form, title: e.target.value})} 
                 placeholder="e.g. Module 4 Sync Session"
@@ -2073,7 +2073,7 @@ function TimetableManager({ courses }: { courses: any[] }) {
             </div>
             {(activeCategory === 'subject' || activeCategory === 'exam') && (
               <div className="space-y-2">
-                <label className="text-[9px] font-dm-mono text-gold uppercase tracking-[0.2em] px-2">Target Academic Stream</label>
+                <label className="text-[9px] font-dm-mono text-brand uppercase tracking-[0.2em] px-2">Target Academic Stream</label>
                 <select 
                   className="w-full bg-bg border border-border-custom rounded-xl p-3 text-sm outline-none" 
                   value={form.course_id} 
@@ -2085,7 +2085,7 @@ function TimetableManager({ courses }: { courses: any[] }) {
               </div>
             )}
             <div className="space-y-2">
-              <label className="text-[9px] font-dm-mono text-gold uppercase tracking-[0.2em] px-2">Temporal Point (Start)</label>
+              <label className="text-[9px] font-dm-mono text-brand uppercase tracking-[0.2em] px-2">Temporal Point (Start)</label>
               <input 
                 type="datetime-local"
                 className="w-full bg-bg border border-border-custom rounded-xl p-3 text-sm" 
@@ -2094,7 +2094,7 @@ function TimetableManager({ courses }: { courses: any[] }) {
               />
             </div>
             <div className="space-y-2">
-              <label className="text-[9px] font-dm-mono text-gold uppercase tracking-[0.2em] px-2">Closure Point (End)</label>
+              <label className="text-[9px] font-dm-mono text-brand uppercase tracking-[0.2em] px-2">Closure Point (End)</label>
               <input 
                 type="datetime-local"
                 className="w-full bg-bg border border-border-custom rounded-xl p-3 text-sm" 
@@ -2103,7 +2103,7 @@ function TimetableManager({ courses }: { courses: any[] }) {
               />
             </div>
             <div className="space-y-2">
-              <label className="text-[9px] font-dm-mono text-gold uppercase tracking-[0.2em] px-2">Geographical / Digital Node</label>
+              <label className="text-[9px] font-dm-mono text-brand uppercase tracking-[0.2em] px-2">Geographical / Digital Node</label>
               <input 
                 className="w-full bg-bg border border-border-custom rounded-xl p-3 text-sm" 
                 value={form.location} 
@@ -2112,7 +2112,7 @@ function TimetableManager({ courses }: { courses: any[] }) {
               />
             </div>
             <div className="flex items-end">
-              <button onClick={handleSave} className="w-full btn btn-gold py-3 text-[10px] font-black uppercase tracking-widest">COMMIT TO REGISTER</button>
+              <button onClick={handleSave} className="w-full btn btn-brand py-3 text-[10px] font-black uppercase tracking-widest">COMMIT TO REGISTER</button>
             </div>
           </div>
         </div>
@@ -2121,10 +2121,10 @@ function TimetableManager({ courses }: { courses: any[] }) {
       <div className="bg-card border border-border-custom rounded-3xl overflow-hidden shadow-xl">
         <div className="divide-y divide-white/5">
           {filteredSchedule.map(session => (
-            <div key={session.id} className="p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 hover:bg-gold/[0.02] transition-colors group">
+            <div key={session.id} className="p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 hover:bg-brand/[0.02] transition-colors group">
               <div className="flex items-center gap-6">
                 <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-xl shadow-lg ${
-                  session.category === 'exam' ? 'bg-coral/20 text-coral' : 'bg-gold/20 text-gold'
+                  session.category === 'exam' ? 'bg-coral/20 text-coral' : 'bg-brand/20 text-brand'
                 }`}>
                   {session.category === 'exam' ? '📋' : '📅'}
                 </div>
@@ -2133,7 +2133,7 @@ function TimetableManager({ courses }: { courses: any[] }) {
                   <div className="flex flex-wrap items-center gap-4 text-[9px] font-dm-mono uppercase text-text-dim">
                     <span className="flex items-center gap-1.5"><Clock className="w-3 h-3" /> {new Date(session.start_time).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}</span>
                     {session.location && <span className="flex items-center gap-1.5"><MapPin className="w-3 h-3" /> {session.location}</span>}
-                    {session.courses && <span className="text-gold font-black">&bull; {session.courses.title}</span>}
+                    {session.courses && <span className="text-brand font-black">&bull; {session.courses.title}</span>}
                   </div>
                 </div>
               </div>
@@ -2170,10 +2170,10 @@ function AttendanceHub({ courses }: { courses: any[] }) {
       <div className="flex justify-between items-center">
         <div>
           <h2 className="font-syne font-black text-2xl tracking-tighter">Attendance Registry</h2>
-          <p className="text-[10px] font-dm-mono text-gold uppercase tracking-widest">Institutional Presence Tracking</p>
+          <p className="text-[10px] font-dm-mono text-brand uppercase tracking-widest">Institutional Presence Tracking</p>
         </div>
         <select 
-          className="bg-surface border border-border-custom rounded-xl py-2 px-4 text-xs font-dm-mono uppercase outline-none focus:border-gold"
+          className="bg-surface border border-border-custom rounded-xl py-2 px-4 text-xs font-dm-mono uppercase outline-none focus:border-brand"
           value={selectedCourse}
           onChange={(e) => setSelectedCourse(e.target.value)}
         >
@@ -2182,9 +2182,9 @@ function AttendanceHub({ courses }: { courses: any[] }) {
         </select>
       </div>
 
-      <div className="bg-[#0a0d14] border border-gold/10 rounded-3xl p-20 text-center relative isolate overflow-hidden">
-        <div className="absolute inset-0 bg-gold/[0.02] pointer-events-none" />
-        <CheckCircle2 className="w-12 h-12 text-gold/20 mx-auto mb-6" />
+      <div className="bg-[#0a0d14] border border-brand/10 rounded-3xl p-20 text-center relative isolate overflow-hidden">
+        <div className="absolute inset-0 bg-brand/[0.02] pointer-events-none" />
+        <CheckCircle2 className="w-12 h-12 text-brand/20 mx-auto mb-6" />
         <h3 className="font-syne font-bold text-xl mb-2 text-text-soft">Ready for Protocol</h3>
         <p className="text-xs text-text-muted max-w-sm mx-auto">Select a module above to initiate the digital attendance register. All presence markers are immutable once signed by the facilitator.</p>
       </div>
@@ -2240,7 +2240,7 @@ function ComplianceDashboard() {
     }
   }
 
-  if (loading) return <div className="p-20 text-center animate-pulse text-gold font-dm-mono text-xs uppercase tracking-widest">Synchronizing Compliance Registry...</div>;
+  if (loading) return <div className="p-20 text-center animate-pulse text-brand font-dm-mono text-xs uppercase tracking-widest">Synchronizing Compliance Registry...</div>;
 
   return (
     <div className="space-y-8 animate-fade">
@@ -2257,9 +2257,9 @@ function ComplianceDashboard() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div className="bg-card border border-border-custom rounded-[2.5rem] p-10 relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-gold/5 rounded-full -mr-16 -mt-16 blur-2xl" />
+          <div className="absolute top-0 right-0 w-32 h-32 bg-brand/5 rounded-full -mr-16 -mt-16 blur-2xl" />
           <h3 className="font-syne font-bold text-xl mb-8 flex items-center gap-3">
-             <ShieldCheck className="w-5 h-5 text-gold" />
+             <ShieldCheck className="w-5 h-5 text-brand" />
              Accreditation Registry
           </h3>
 
@@ -2267,7 +2267,7 @@ function ComplianceDashboard() {
             <div className="space-y-2">
               <label className="text-[10px] font-dm-mono uppercase text-text-dim tracking-widest pl-1">SETA Accreditation ID</label>
               <input 
-                className="w-full bg-bg border border-border-custom rounded-xl p-4 text-xs font-dm-mono focus:border-gold outline-none transition-all" 
+                className="w-full bg-bg border border-border-custom rounded-xl p-4 text-xs font-dm-mono focus:border-brand outline-none transition-all" 
                 value={settings.seta_accreditation_no}
                 onChange={e => setSettings({...settings, seta_accreditation_no: e.target.value})}
                 placeholder="Institutional ID..."
@@ -2276,7 +2276,7 @@ function ComplianceDashboard() {
             <div className="space-y-2">
               <label className="text-[10px] font-dm-mono uppercase text-text-dim tracking-widest pl-1">QCTO Reference Number</label>
               <input 
-                className="w-full bg-bg border border-border-custom rounded-xl p-4 text-xs font-dm-mono focus:border-gold outline-none transition-all" 
+                className="w-full bg-bg border border-border-custom rounded-xl p-4 text-xs font-dm-mono focus:border-brand outline-none transition-all" 
                 value={settings.qcto_reference_no}
                 onChange={e => setSettings({...settings, qcto_reference_no: e.target.value})}
                 placeholder="QCTO Reference..."
@@ -2285,7 +2285,7 @@ function ComplianceDashboard() {
             <div className="space-y-2">
               <label className="text-[10px] font-dm-mono uppercase text-text-dim tracking-widest pl-1">DHET Registration Status</label>
               <select 
-                className="w-full bg-bg border border-border-custom rounded-xl p-4 text-xs font-dm-mono uppercase focus:border-gold outline-none cursor-pointer"
+                className="w-full bg-bg border border-border-custom rounded-xl p-4 text-xs font-dm-mono uppercase focus:border-brand outline-none cursor-pointer"
                 value={settings.dhet_registration_status}
                 onChange={e => setSettings({...settings, dhet_registration_status: e.target.value})}
               >
@@ -2300,7 +2300,7 @@ function ComplianceDashboard() {
 
         <div className="bg-card border border-border-custom rounded-[2.5rem] p-10">
           <h3 className="font-syne font-bold text-xl mb-8 flex items-center gap-3">
-             <Clock className="w-5 h-5 text-gold" />
+             <Clock className="w-5 h-5 text-brand" />
              Governance Calendar
           </h3>
           <div className="space-y-6">
@@ -2308,7 +2308,7 @@ function ComplianceDashboard() {
               <label className="text-[10px] font-dm-mono uppercase text-text-dim tracking-widest pl-1">Audit Renewal Date</label>
               <input 
                 type="date"
-                className="w-full bg-bg border border-border-custom rounded-xl p-4 text-xs font-dm-mono focus:border-gold outline-none" 
+                className="w-full bg-bg border border-border-custom rounded-xl p-4 text-xs font-dm-mono focus:border-brand outline-none" 
                 value={settings.compliance_expiry_date}
                 onChange={e => setSettings({...settings, compliance_expiry_date: e.target.value})}
               />
@@ -2316,7 +2316,7 @@ function ComplianceDashboard() {
             <div className="space-y-2">
               <label className="text-[10px] font-dm-mono uppercase text-text-dim tracking-widest pl-1">Executive Compliance Notes</label>
               <textarea 
-                className="w-full bg-bg border border-border-custom rounded-xl p-4 text-xs h-32 focus:border-gold outline-none resize-none" 
+                className="w-full bg-bg border border-border-custom rounded-xl p-4 text-xs h-32 focus:border-brand outline-none resize-none" 
                 placeholder="Internal commentary regarding accreditation milestones..."
                 value={settings.governance_notes}
                 onChange={e => setSettings({...settings, governance_notes: e.target.value})}
@@ -2325,7 +2325,7 @@ function ComplianceDashboard() {
             <button 
               onClick={handleSave}
               disabled={saving}
-              className={`w-full btn btn-gold py-4 font-black uppercase tracking-widest text-[10px] ${saving ? 'opacity-50' : ''}`}
+              className={`w-full btn btn-brand py-4 font-black uppercase tracking-widest text-[10px] ${saving ? 'opacity-50' : ''}`}
             >
               {saving ? 'UPDATING REGISTRY...' : 'COMMIT COMPLIANCE RECORD'}
             </button>
@@ -2350,22 +2350,22 @@ function InstitutionalResourceVault() {
       <div className="flex justify-between items-center gap-4">
         <div>
           <h2 className="font-syne font-black text-2xl tracking-tighter">Institutional Resource Vault</h2>
-          <p className="text-[10px] font-dm-mono text-gold uppercase tracking-widest">Encrypted Compliance Repository</p>
+          <p className="text-[10px] font-dm-mono text-brand uppercase tracking-widest">Encrypted Compliance Repository</p>
         </div>
-        <button className="btn btn-gold btn-sm uppercase tracking-widest font-black text-[9px] px-6">+ DEPOSIT DOCUMENT</button>
+        <button className="btn btn-brand btn-sm uppercase tracking-widest font-black text-[9px] px-6">+ DEPOSIT DOCUMENT</button>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {complianceFiles.map((file, i) => (
-          <div key={i} className="bg-card border border-border-custom rounded-2xl p-5 hover:border-gold/30 transition-all group cursor-pointer relative isolate overflow-hidden">
+          <div key={i} className="bg-card border border-border-custom rounded-2xl p-5 hover:border-brand/30 transition-all group cursor-pointer relative isolate overflow-hidden">
             <div className="absolute top-0 right-0 w-16 h-16 bg-white/2 rounded-full -mr-8 -mt-8 blur-2xl" />
             <div className="flex justify-between items-start mb-4">
-              <div className="p-2.5 bg-surface border border-border-custom rounded-xl text-gold">
+              <div className="p-2.5 bg-surface border border-border-custom rounded-xl text-brand">
                 <FileText className="w-4 h-4" />
               </div>
               <span className="text-[8px] font-dm-mono uppercase text-text-dim px-2 py-0.5 border border-border-custom rounded-full">{file.type}</span>
             </div>
-            <h4 className="font-bold text-sm mb-1 group-hover:text-gold transition-colors truncate">{file.title}</h4>
+            <h4 className="font-bold text-sm mb-1 group-hover:text-brand transition-colors truncate">{file.title}</h4>
             <p className="text-[9px] text-text-dim font-dm-mono uppercase tracking-widest">Stored: {file.date}</p>
           </div>
         ))}
@@ -2384,25 +2384,25 @@ function StudentTimetable() {
       <div className="flex justify-between items-center">
         <div>
           <h2 className="font-syne font-black text-2xl tracking-tighter">My Personal Schedule</h2>
-          <p className="text-[10px] font-dm-mono text-gold uppercase tracking-widest">Active Academic Commitment</p>
+          <p className="text-[10px] font-dm-mono text-brand uppercase tracking-widest">Active Academic Commitment</p>
         </div>
         <button className="btn btn-outline btn-sm text-[9px] font-black uppercase tracking-widest">Download PDF</button>
       </div>
 
-      <div className="bg-[#0a0d14] border border-gold/10 rounded-2xl overflow-hidden shadow-2xl">
-        <div className="grid grid-cols-6 divide-x divide-gold/10 border-b border-gold/10 bg-surface/50">
+      <div className="bg-[#0a0d14] border border-brand/10 rounded-2xl overflow-hidden shadow-2xl">
+        <div className="grid grid-cols-6 divide-x divide-brand/10 border-b border-brand/10 bg-surface/50">
           <div className="p-4 bg-surface" />
-          {days.map(d => <div key={d} className="p-4 text-[10px] font-black text-gold uppercase text-center tracking-widest">{d}</div>)}
+          {days.map(d => <div key={d} className="p-4 text-[10px] font-black text-brand uppercase text-center tracking-widest">{d}</div>)}
         </div>
         {slots.map(time => (
-          <div key={time} className="grid grid-cols-6 divide-x divide-gold/5 bg-transparent group">
+          <div key={time} className="grid grid-cols-6 divide-x divide-brand/5 bg-transparent group">
             <div className="p-4 text-[10px] font-dm-mono text-text-dim text-right bg-surface/20">{time}</div>
             {[1, 2, 3, 4, 5].map(i => (
-              <div key={i} className="p-4 min-h-[100px] hover:bg-gold/[0.02] transition-colors relative isolate">
+              <div key={i} className="p-4 min-h-[100px] hover:bg-brand/[0.02] transition-colors relative isolate">
                 {/* Simulated session */}
                 {i === 1 && time === '08:00' && (
-                  <div className="absolute inset-2 p-2 bg-gold/10 border border-gold/30 rounded-lg animate-fade">
-                    <div className="text-[8px] font-black text-gold uppercase leading-tight mb-1">Cloud Architecture</div>
+                  <div className="absolute inset-2 p-2 bg-brand/10 border border-brand/30 rounded-lg animate-fade">
+                    <div className="text-[8px] font-black text-brand uppercase leading-tight mb-1">Cloud Architecture</div>
                     <div className="text-[7px] text-text-soft font-dm-mono italic uppercase">Room 402 • 08:00 - 10:00</div>
                   </div>
                 )}
@@ -2447,7 +2447,7 @@ function AcademicCalendarView({ schedule, enrollments }: { schedule: any[], enro
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
                 className={`flex items-center gap-2 text-[9px] font-dm-mono uppercase tracking-[0.2em] px-4 py-2 border rounded-xl transition-all ${
-                  activeTab === tab.id ? 'bg-gold text-bg border-gold font-bold shadow-lg shadow-gold/20' : 'border-white/10 text-text-dim hover:border-gold/30'
+                  activeTab === tab.id ? 'bg-brand text-bg border-brand font-bold shadow-lg shadow-brand/20' : 'border-white/10 text-text-dim hover:border-brand/30'
                 }`}
                >
                  <tab.icon className="w-3 h-3" />
@@ -2464,27 +2464,27 @@ function AcademicCalendarView({ schedule, enrollments }: { schedule: any[], enro
       {activeTab === 'term' ? (
         <div className="relative py-10 pl-10">
           {/* Vertical Timeline Track */}
-          <div className="absolute left-6 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-gold/30 to-transparent" />
+          <div className="absolute left-6 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-brand/30 to-transparent" />
           
           <div className="space-y-12">
             {filteredEvents.map((ev, i) => (
               <div key={i} className="relative group animate-fadeRight" style={{ animationDelay: `${i * 100}ms` }}>
                 {/* Timeline Node */}
                 <div className={`absolute -left-[35px] w-4 h-4 rounded-full border-2 border-bg shadow-xl transition-all group-hover:scale-150 ${
-                  ev.category === 'exam' ? 'bg-coral shadow-coral/50' : 'bg-gold shadow-gold/50'
+                  ev.category === 'exam' ? 'bg-coral shadow-coral/50' : 'bg-brand shadow-brand/50'
                 }`} />
                 
-                <div className="bg-card border border-border-custom p-6 rounded-[2rem] hover:border-gold/30 transition-all flex flex-col md:flex-row md:items-center gap-10">
+                <div className="bg-card border border-border-custom p-6 rounded-[2rem] hover:border-brand/30 transition-all flex flex-col md:flex-row md:items-center gap-10">
                    <div className="md:w-32 shrink-0">
-                      <div className="text-lg font-black font-syne text-gold leading-none">{new Date(ev.start_time).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</div>
+                      <div className="text-lg font-black font-syne text-brand leading-none">{new Date(ev.start_time).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</div>
                       <div className="text-[10px] font-dm-mono text-text-dim uppercase tracking-widest mt-1">{new Date(ev.start_time).getFullYear()}</div>
                    </div>
                    <div className="flex-1">
-                      <h4 className="font-syne font-bold text-xl mb-1 group-hover:text-gold transition-colors">{ev.title}</h4>
+                      <h4 className="font-syne font-bold text-xl mb-1 group-hover:text-brand transition-colors">{ev.title}</h4>
                       <p className="text-xs text-text-soft leading-relaxed max-w-xl">{ev.description}</p>
                    </div>
                    <div className="text-right">
-                      {ev.location && <div className="text-[10px] font-dm-mono uppercase text-gold bg-gold/10 px-3 py-1 rounded-full border border-gold/20 inline-flex items-center gap-2"><MapPin className="w-3.5 h-3.5" /> {ev.location}</div>}
+                      {ev.location && <div className="text-[10px] font-dm-mono uppercase text-brand bg-brand/10 px-3 py-1 rounded-full border border-brand/20 inline-flex items-center gap-2"><MapPin className="w-3.5 h-3.5" /> {ev.location}</div>}
                    </div>
                 </div>
               </div>
@@ -2497,29 +2497,29 @@ function AcademicCalendarView({ schedule, enrollments }: { schedule: any[], enro
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredEvents.map((ev, i) => (
-            <div key={i} className={`bg-card border border-border-custom rounded-3xl p-8 relative overflow-hidden group hover:border-gold/50 transition-all animate-fade ${
+            <div key={i} className={`bg-card border border-border-custom rounded-3xl p-8 relative overflow-hidden group hover:border-brand/50 transition-all animate-fade ${
               ev.category === 'exam' ? 'ring-1 ring-coral/20' : ''
             }`}>
               <div className={`absolute top-0 right-0 p-3 rounded-bl-2xl text-[8px] font-black uppercase tracking-widest shadow-inner ${
-                ev.category === 'exam' ? 'bg-coral/20 text-coral border-b border-l border-coral/30' : 'bg-gold/20 text-gold border-b border-l border-gold/30'
+                ev.category === 'exam' ? 'bg-coral/20 text-coral border-b border-l border-coral/30' : 'bg-brand/20 text-brand border-b border-l border-brand/30'
               }`}>{ev.category === 'exam' ? 'IMMUTABLE EXAM' : ev.category.replace('_', ' ')}</div>
               
               <div className="mb-6 flex items-center justify-between">
                 <div className="w-12 h-12 rounded-2xl bg-surface border border-white/5 flex items-center justify-center text-2xl shadow-xl">
-                  {ev.category === 'exam' ? <ShieldCheck className="w-6 h-6 text-coral" /> : <Calendar className="w-6 h-6 text-gold" />}
+                  {ev.category === 'exam' ? <ShieldCheck className="w-6 h-6 text-coral" /> : <Calendar className="w-6 h-6 text-brand" />}
                 </div>
                 <div className="text-right">
                   <div className="text-[12px] font-bold text-text-emphasis">{new Date(ev.start_time).toLocaleDateString('en-GB', { day: 'numeric', month: 'long' })}</div>
-                  <div className="text-[10px] font-dm-mono text-gold uppercase tracking-tighter">{new Date(ev.start_time).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}</div>
+                  <div className="text-[10px] font-dm-mono text-brand uppercase tracking-tighter">{new Date(ev.start_time).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}</div>
                 </div>
               </div>
 
-              <h4 className="font-syne font-extrabold text-xl mb-3 group-hover:text-gold transition-colors">{ev.title}</h4>
+              <h4 className="font-syne font-extrabold text-xl mb-3 group-hover:text-brand transition-colors">{ev.title}</h4>
               <p className="text-xs text-text-muted leading-relaxed mb-6 line-clamp-3">{ev.description || 'Institutional mandate details available upon request.'}</p>
               
               <div className="pt-6 border-t border-white/5 flex items-center justify-between">
                 <span className="text-[9px] font-dm-mono uppercase tracking-[0.2em] text-text-dim">{ev.location || 'GDA_GLOBAL_NODE'}</span>
-                <button className="text-gold hover:underline text-[9px] font-black uppercase tracking-widest">Details →</button>
+                <button className="text-brand hover:underline text-[9px] font-black uppercase tracking-widest">Details →</button>
               </div>
             </div>
           ))}
@@ -2533,12 +2533,12 @@ function AcademicCalendarView({ schedule, enrollments }: { schedule: any[], enro
         </div>
       )}
 
-      <div className="bg-gradient-to-r from-navy to-bg border border-gold/10 rounded-[2.5rem] p-10 flex flex-col lg:flex-row items-center justify-between gap-10">
+      <div className="bg-gradient-to-r from-navy to-bg border border-brand/10 rounded-[2.5rem] p-10 flex flex-col lg:flex-row items-center justify-between gap-10">
          <div className="max-w-xl text-center lg:text-left">
-            <h3 className="font-syne font-bold text-2xl mb-2 text-gold">Institutional Schedule Sync</h3>
+            <h3 className="font-syne font-bold text-2xl mb-2 text-brand">Institutional Schedule Sync</h3>
             <p className="text-xs text-text-muted leading-relaxed uppercase tracking-tighter">Integrate the official Ginashe academic schedule with your personal terminal. Supports Google Calendar, Apple iCal, and MS Outlook via secure iCal Protocol.</p>
          </div>
-         <button className="btn btn-gold px-12 py-4 text-[11px] font-black uppercase tracking-[0.2em] shadow-2xl shadow-gold/20 whitespace-nowrap">DEPLOY ICAL FEED</button>
+         <button className="btn btn-brand px-12 py-4 text-[11px] font-black uppercase tracking-[0.2em] shadow-2xl shadow-brand/20 whitespace-nowrap">DEPLOY ICAL FEED</button>
       </div>
     </div>
   );
@@ -2550,9 +2550,9 @@ function StudentVault({ documents, onUpload }: { documents: any[], onUpload: (ty
       <div className="flex justify-between items-center">
         <div>
           <h2 className="font-syne font-black text-2xl tracking-tighter">My Document Vault</h2>
-          <p className="text-[10px] font-dm-mono text-gold uppercase tracking-widest">Secure Personal Records</p>
+          <p className="text-[10px] font-dm-mono text-brand uppercase tracking-widest">Secure Personal Records</p>
         </div>
-        <button className="btn btn-gold btn-sm uppercase tracking-widest font-black text-[9px] px-6">+ UPLOAD RECORD</button>
+        <button className="btn btn-brand btn-sm uppercase tracking-widest font-black text-[9px] px-6">+ UPLOAD RECORD</button>
       </div>
       <div className="bg-card border border-border-custom rounded-3xl p-20 text-center text-text-dim text-sm italic">No documents uploaded to your secure vault.</div>
     </div>
@@ -2603,25 +2603,25 @@ function CourseManager({ courses, onRefresh, onEditContent }: { courses: any[], 
 
   return (
     <div className="space-y-12 animate-fade">
-      <div className="flex justify-between items-end border-b border-gold/10 pb-8">
+      <div className="flex justify-between items-end border-b border-brand/10 pb-8">
         <div>
-          <h2 className="font-syne font-black text-3xl uppercase tracking-tighter text-gold">Curriculum Map</h2>
+          <h2 className="font-syne font-black text-3xl uppercase tracking-tighter text-brand">Curriculum Map</h2>
           <p className="text-text-muted text-[10px] font-dm-mono uppercase tracking-[0.3em] mt-2">7 Learning Tracks • 28 Master Courses • Phase 1 Architecture</p>
         </div>
         <div className="flex gap-3">
-          <button onClick={() => setIsAdding(!isAdding)} className="btn btn-gold btn-sm h-12 px-6">
+          <button onClick={() => setIsAdding(!isAdding)} className="btn btn-brand btn-sm h-12 px-6">
             {isAdding ? 'Close Archive' : '+ Provision Course'}
           </button>
         </div>
       </div>
 
       {isAdding && (
-        <form onSubmit={handleAddCourse} className="bg-card border border-gold/20 rounded-3xl p-8 space-y-6 max-w-4xl animate-fadeDown shadow-2xl relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-gold/5 rounded-full -mr-32 -mt-32 blur-3xl pointer-events-none" />
+        <form onSubmit={handleAddCourse} className="bg-card border border-brand/20 rounded-3xl p-8 space-y-6 max-w-4xl animate-fadeDown shadow-2xl relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-brand/5 rounded-full -mr-32 -mt-32 blur-3xl pointer-events-none" />
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="md:col-span-2">
               <label className="block font-dm-mono text-[9px] uppercase text-text-muted mb-2 font-bold tracking-widest pl-1">Educational Track</label>
-              <select required className="w-full bg-surface border border-border-custom rounded-xl p-4 text-xs font-bold focus:border-gold transition-all outline-none" 
+              <select required className="w-full bg-surface border border-border-custom rounded-xl p-4 text-xs font-bold focus:border-brand transition-all outline-none" 
                 value={newCourse.track_id} onChange={e => setNewCourse({ ...newCourse, track_id: e.target.value })}>
                 <option value="">Select Institutional Track...</option>
                 {tracks.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
@@ -2629,25 +2629,25 @@ function CourseManager({ courses, onRefresh, onEditContent }: { courses: any[], 
             </div>
             <div>
               <label className="block font-dm-mono text-[9px] uppercase text-text-muted mb-2 font-bold tracking-widest pl-1">Enrollment Icon</label>
-              <input maxLength={2} className="w-full bg-surface border border-border-custom rounded-xl p-4 text-center text-xl focus:border-gold transition-all outline-none" 
+              <input maxLength={2} className="w-full bg-surface border border-border-custom rounded-xl p-4 text-center text-xl focus:border-brand transition-all outline-none" 
                 value={newCourse.thumbnail_url} onChange={e => setNewCourse({ ...newCourse, thumbnail_url: e.target.value })} />
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
              <div>
                 <label className="block font-dm-mono text-[9px] uppercase text-text-muted mb-2 font-bold tracking-widest pl-1">Course Title</label>
-                <input required className="w-full bg-surface border border-border-custom rounded-xl p-4 text-xs font-bold focus:border-gold transition-all outline-none" 
+                <input required className="w-full bg-surface border border-border-custom rounded-xl p-4 text-xs font-bold focus:border-brand transition-all outline-none" 
                   value={newCourse.title} onChange={e => setNewCourse({ ...newCourse, title: e.target.value, slug: e.target.value.toLowerCase().replace(/ /g, '-') })} />
              </div>
              <div>
                 <label className="block font-dm-mono text-[9px] uppercase text-text-muted mb-2 font-bold tracking-widest pl-1">NQF Level Verification</label>
-                <select className="w-full bg-surface border border-border-custom rounded-xl p-4 text-xs font-bold focus:border-gold transition-all outline-none"
+                <select className="w-full bg-surface border border-border-custom rounded-xl p-4 text-xs font-bold focus:border-brand transition-all outline-none"
                   value={newCourse.nqf_level} onChange={e => setNewCourse({ ...newCourse, nqf_level: parseInt(e.target.value) })}>
                   {[3,4,5,6,7,8].map(l => <option key={l} value={l}>NQF Level {l}</option>)}
                 </select>
              </div>
           </div>
-          <button type="submit" className="btn btn-gold w-full py-5 font-black text-sm tracking-[0.2em] uppercase">Commit to Academy Map</button>
+          <button type="submit" className="btn btn-brand w-full py-5 font-black text-sm tracking-[0.2em] uppercase">Commit to Academy Map</button>
         </form>
       )}
 
@@ -2660,21 +2660,21 @@ function CourseManager({ courses, onRefresh, onEditContent }: { courses: any[], 
            
            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
              {data.courses.sort((a:any, b:any) => a.nqf_level - b.nqf_level).map((course: any) => (
-               <div key={course.id} className="bg-card border border-border-custom rounded-3xl p-6 hover:border-gold/30 transition-all group flex flex-col h-full relative overflow-hidden isolate">
+               <div key={course.id} className="bg-card border border-border-custom rounded-3xl p-6 hover:border-brand/30 transition-all group flex flex-col h-full relative overflow-hidden isolate">
                   <div className={`absolute top-0 right-0 w-32 h-32 opacity-5 rounded-full -mr-16 -mt-16 blur-3xl pointer-events-none bg-current ${THEME_MAP[data.theme]?.split(' ')[2]}`} />
                   
                   <div className="flex justify-between items-start mb-6">
-                    <div className="w-12 h-12 bg-surface border border-gold/10 rounded-2xl flex items-center justify-center text-2xl shadow-inner">{course.thumbnail_url}</div>
-                    <span className="text-[8px] font-dm-mono font-black border border-gold/20 text-gold px-2 py-0.5 rounded uppercase tracking-tighter">NQF L{course.nqf_level}</span>
+                    <div className="w-12 h-12 bg-surface border border-brand/10 rounded-2xl flex items-center justify-center text-2xl shadow-inner">{course.thumbnail_url}</div>
+                    <span className="text-[8px] font-dm-mono font-black border border-brand/20 text-brand px-2 py-0.5 rounded uppercase tracking-tighter">NQF L{course.nqf_level}</span>
                   </div>
 
                   <div className="flex-1">
                     <h4 className="font-syne font-black text-base mb-1 text-text-soft leading-tight uppercase line-clamp-2">{course.title}</h4>
-                    <span className="text-[9px] font-dm-mono text-gold/60 uppercase tracking-widest block mb-4">{course.progression_level}</span>
+                    <span className="text-[9px] font-dm-mono text-brand/60 uppercase tracking-widest block mb-4">{course.progression_level}</span>
                     <p className="text-[11px] text-text-muted line-clamp-3 leading-relaxed">{course.description}</p>
                   </div>
 
-                  <div className="mt-8 pt-6 border-t border-gold/5 flex items-center justify-between">
+                  <div className="mt-8 pt-6 border-t border-brand/5 flex items-center justify-between">
                     <div className="flex gap-1.5">
                        {isSuperAdmin && (
                          <button 
@@ -2686,14 +2686,14 @@ function CourseManager({ courses, onRefresh, onEditContent }: { courses: any[], 
                                }).eq('id', course.id).then(() => onRefresh());
                              }
                            }}
-                           className="w-8 h-8 rounded-lg bg-surface border border-border-custom flex items-center justify-center text-text-dim hover:text-gold transition-all"
+                           className="w-8 h-8 rounded-lg bg-surface border border-border-custom flex items-center justify-center text-text-dim hover:text-brand transition-all"
                            title="Regulatory Compliance Settings"
                          >
                            <ShieldCheck size={12} />
                          </button>
                        )}
                     </div>
-                    <button onClick={() => onEditContent(course)} className="text-gold text-[10px] font-black uppercase tracking-tighter hover:underline flex items-center gap-1 group/btn">
+                    <button onClick={() => onEditContent(course)} className="text-brand text-[10px] font-black uppercase tracking-tighter hover:underline flex items-center gap-1 group/btn">
                       ARCHITECT 
                       <ChevronRight size={12} className="group-hover/btn:translate-x-1 transition-transform" />
                     </button>
@@ -2778,13 +2778,13 @@ function CourseContentEditor({ course, onBack }: { course: any, onBack: () => vo
 
   return (
     <div className="space-y-6 animate-fade">
-      <div className="flex items-center gap-4 bg-[#0a0d14] p-4 rounded-2xl border border-gold/10 relative overflow-hidden group">
-        <div className="absolute inset-0 bg-gold/[0.02] pointer-events-none" />
-        <button onClick={onBack} className="w-10 h-10 rounded-xl bg-surface border border-gold/10 flex items-center justify-center hover:bg-gold/10 transition-colors group">
-          <ChevronRight className="w-5 h-5 text-gold rotate-180" />
+      <div className="flex items-center gap-4 bg-[#0a0d14] p-4 rounded-2xl border border-brand/10 relative overflow-hidden group">
+        <div className="absolute inset-0 bg-brand/[0.02] pointer-events-none" />
+        <button onClick={onBack} className="w-10 h-10 rounded-xl bg-surface border border-brand/10 flex items-center justify-center hover:bg-brand/10 transition-colors group">
+          <ChevronRight className="w-5 h-5 text-brand rotate-180" />
         </button>
         <div>
-          <h2 className="font-syne font-black text-xl uppercase tracking-tighter text-gold">{course.title}</h2>
+          <h2 className="font-syne font-black text-xl uppercase tracking-tighter text-brand">{course.title}</h2>
           <p className="text-text-muted text-[10px] font-dm-mono uppercase tracking-widest">Master Curriculum Architect</p>
         </div>
       </div>
@@ -2793,21 +2793,21 @@ function CourseContentEditor({ course, onBack }: { course: any, onBack: () => vo
         <div className="lg:col-span-1 space-y-4">
           <div className="flex justify-between items-center px-2">
             <h3 className="font-syne font-black text-sm uppercase tracking-widest text-text-muted">Curriculum</h3>
-            <button onClick={() => setIsAddingModule(true)} className="text-gold text-[9px] font-black uppercase tracking-widest hover:underline">+ Add Module</button>
+            <button onClick={() => setIsAddingModule(true)} className="text-brand text-[9px] font-black uppercase tracking-widest hover:underline">+ Add Module</button>
           </div>
 
           {isAddingModule && (
-            <form onSubmit={handleAddModule} className="bg-[#0a0d14] border border-gold/20 p-3 rounded-xl flex gap-2 animate-fadeUp">
-              <input autoFocus placeholder="Module Identifier" className="flex-1 bg-surface border border-gold/10 rounded-md p-2 text-[11px] font-dm-mono" value={newModuleTitle} onChange={e => setNewModuleTitle(e.target.value)} />
-              <button type="submit" className="btn btn-gold px-3 text-[9px] font-black uppercase">Add</button>
+            <form onSubmit={handleAddModule} className="bg-[#0a0d14] border border-brand/20 p-3 rounded-xl flex gap-2 animate-fadeUp">
+              <input autoFocus placeholder="Module Identifier" className="flex-1 bg-surface border border-brand/10 rounded-md p-2 text-[11px] font-dm-mono" value={newModuleTitle} onChange={e => setNewModuleTitle(e.target.value)} />
+              <button type="submit" className="btn btn-brand px-3 text-[9px] font-black uppercase">Add</button>
             </form>
           )}
 
           <div className="space-y-3">
             {modules.map((mod, mIdx) => (
-              <div key={mod.id} className="bg-[#0a0d14] border border-gold/10 rounded-2xl overflow-hidden group hover:border-gold/30 transition-all">
-                <div className="bg-surface/30 p-3 border-b border-gold/10 flex justify-between items-center">
-                  <span className="font-dm-mono text-[9px] uppercase tracking-widest text-gold/80 font-bold">MOD_{mIdx + 1}: {mod.title}</span>
+              <div key={mod.id} className="bg-[#0a0d14] border border-brand/10 rounded-2xl overflow-hidden group hover:border-brand/30 transition-all">
+                <div className="bg-surface/30 p-3 border-b border-brand/10 flex justify-between items-center">
+                  <span className="font-dm-mono text-[9px] uppercase tracking-widest text-brand/80 font-bold">MOD_{mIdx + 1}: {mod.title}</span>
                   <div className="flex gap-2">
                     <button onClick={() => handleAddLesson(mod.id)} className="text-[9px] font-black text-emerald uppercase tracking-tighter hover:underline px-1">+ LSN</button>
                     <button onClick={() => handleAddQuiz(mod.id)} className="text-[9px] font-black text-sky uppercase tracking-tighter hover:underline px-1">+ QZ</button>
@@ -2816,8 +2816,8 @@ function CourseContentEditor({ course, onBack }: { course: any, onBack: () => vo
                 <div className="p-1 px-2 pb-2 space-y-0.5">
                   {mod.lessons?.sort((a: any, b: any) => a.order_index - b.order_index).map((lesson: any) => (
                     <button key={lesson.id} onClick={() => { setEditingLesson(lesson); setEditingQuiz(null); }}
-                      className={`w-full text-left p-2 rounded-lg text-[11px] font-bold transition-all flex items-center gap-2 ${editingLesson?.id === lesson.id ? 'bg-gold/10 text-gold border border-gold/20' : 'hover:bg-white/5 text-text-soft border border-transparent'}`}>
-                      <FileText size={12} className={editingLesson?.id === lesson.id ? 'text-gold' : 'text-text-dim'} /> 
+                      className={`w-full text-left p-2 rounded-lg text-[11px] font-bold transition-all flex items-center gap-2 ${editingLesson?.id === lesson.id ? 'bg-brand/10 text-brand border border-brand/20' : 'hover:bg-white/5 text-text-soft border border-transparent'}`}>
+                      <FileText size={12} className={editingLesson?.id === lesson.id ? 'text-brand' : 'text-text-dim'} /> 
                       <span className="truncate">{lesson.title}</span>
                     </button>
                   ))}
@@ -2826,8 +2826,8 @@ function CourseContentEditor({ course, onBack }: { course: any, onBack: () => vo
                       const { data: questions } = await supabase.from('quiz_questions').select('*').eq('quiz_id', quiz.id).order('order_index', { ascending: true });
                       setEditingQuiz({ ...quiz, questions: questions || [] }); setEditingLesson(null);
                     }}
-                      className={`w-full text-left p-2 rounded-lg text-[11px] font-bold transition-all flex items-center gap-2 ${editingQuiz?.id === quiz.id ? 'bg-gold/10 text-gold border border-gold/20' : 'hover:bg-white/5 text-text-soft border border-transparent'}`}>
-                      <ShieldCheck size={12} className={editingQuiz?.id === quiz.id ? 'text-gold' : 'text-text-dim'} />
+                      className={`w-full text-left p-2 rounded-lg text-[11px] font-bold transition-all flex items-center gap-2 ${editingQuiz?.id === quiz.id ? 'bg-brand/10 text-brand border border-brand/20' : 'hover:bg-white/5 text-text-soft border border-transparent'}`}>
+                      <ShieldCheck size={12} className={editingQuiz?.id === quiz.id ? 'text-brand' : 'text-text-dim'} />
                       <span className="truncate">{quiz.title}</span>
                     </button>
                   ))}
@@ -2839,68 +2839,68 @@ function CourseContentEditor({ course, onBack }: { course: any, onBack: () => vo
 
         <div className="lg:col-span-2">
           {editingLesson ? (
-            <form onSubmit={handleSaveLesson} className="bg-[#0a0d14] border border-gold/20 rounded-3xl p-6 md:p-8 space-y-6 shadow-2xl relative animate-fadeLeft">
-               <div className="absolute top-0 right-0 w-32 h-32 bg-gold/5 rounded-full -mr-16 -mt-16 blur-2xl" />
+            <form onSubmit={handleSaveLesson} className="bg-[#0a0d14] border border-brand/20 rounded-3xl p-6 md:p-8 space-y-6 shadow-2xl relative animate-fadeLeft">
+               <div className="absolute top-0 right-0 w-32 h-32 bg-brand/5 rounded-full -mr-16 -mt-16 blur-2xl" />
               <div className="flex justify-between items-center relative z-10">
-                <h3 className="font-syne font-black text-xl uppercase tracking-tighter text-gold">Edit Academic Module</h3>
+                <h3 className="font-syne font-black text-xl uppercase tracking-tighter text-brand">Edit Academic Module</h3>
                 <div className="flex gap-2">
                   <button type="button" onClick={() => setEditingLesson(null)} className="btn btn-outline px-4 py-2 text-[10px] font-black uppercase tracking-widest">Cancel</button>
-                  <button type="submit" className="btn btn-gold px-6 py-2 text-[10px] font-black uppercase tracking-widest">Persist Changes</button>
+                  <button type="submit" className="btn btn-brand px-6 py-2 text-[10px] font-black uppercase tracking-widest">Persist Changes</button>
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-4 relative z-10">
                 <div className="col-span-2">
                   <label className="block font-dm-mono text-[9px] uppercase tracking-[0.2em] text-text-muted mb-1 font-bold">Lesson Identifier</label>
-                  <input required className="w-full bg-surface border border-gold/10 rounded-xl p-3 text-sm font-bold focus:border-gold/30 transition-all" value={editingLesson.title} onChange={e => setEditingLesson({ ...editingLesson, title: e.target.value })} />
+                  <input required className="w-full bg-surface border border-brand/10 rounded-xl p-3 text-sm font-bold focus:border-brand/30 transition-all" value={editingLesson.title} onChange={e => setEditingLesson({ ...editingLesson, title: e.target.value })} />
                 </div>
                 <div>
                   <label className="block font-dm-mono text-[9px] uppercase tracking-[0.2em] text-text-muted mb-1 font-bold">Video Asset URL</label>
-                  <input className="w-full bg-surface border border-gold/10 rounded-xl p-3 text-sm font-dm-mono focus:border-gold/30 transition-all" value={editingLesson.video_url} onChange={e => setEditingLesson({ ...editingLesson, video_url: e.target.value })} />
+                  <input className="w-full bg-surface border border-brand/10 rounded-xl p-3 text-sm font-dm-mono focus:border-brand/30 transition-all" value={editingLesson.video_url} onChange={e => setEditingLesson({ ...editingLesson, video_url: e.target.value })} />
                 </div>
                 <div>
                   <label className="block font-dm-mono text-[9px] uppercase tracking-[0.2em] text-text-muted mb-1 font-bold">Estimated Duration</label>
-                  <input className="w-full bg-surface border border-gold/10 rounded-xl p-3 text-sm font-dm-mono focus:border-gold/30 transition-all" value={editingLesson.duration} onChange={e => setEditingLesson({ ...editingLesson, duration: e.target.value })} />
+                  <input className="w-full bg-surface border border-brand/10 rounded-xl p-3 text-sm font-dm-mono focus:border-brand/30 transition-all" value={editingLesson.duration} onChange={e => setEditingLesson({ ...editingLesson, duration: e.target.value })} />
                 </div>
               </div>
               <div className="relative z-10">
                 <label className="block font-dm-mono text-[9px] uppercase tracking-[0.2em] text-text-muted mb-1 font-bold">Academic Content (Markdown)</label>
-                <textarea className="w-full bg-surface border border-gold/10 rounded-xl p-4 text-sm h-64 font-mono focus:border-gold/30 transition-all custom-scrollbar" value={editingLesson.content} onChange={e => setEditingLesson({ ...editingLesson, content: e.target.value })} />
+                <textarea className="w-full bg-surface border border-brand/10 rounded-xl p-4 text-sm h-64 font-mono focus:border-brand/30 transition-all custom-scrollbar" value={editingLesson.content} onChange={e => setEditingLesson({ ...editingLesson, content: e.target.value })} />
               </div>
             </form>
           ) : editingQuiz ? (
-            <form onSubmit={handleSaveQuiz} className="bg-[#0a0d14] border border-gold/20 rounded-3xl p-6 md:p-8 space-y-6 shadow-2xl relative animate-fadeLeft">
+            <form onSubmit={handleSaveQuiz} className="bg-[#0a0d14] border border-brand/20 rounded-3xl p-6 md:p-8 space-y-6 shadow-2xl relative animate-fadeLeft">
                <div className="absolute top-0 right-0 w-32 h-32 bg-sky/5 rounded-full -mr-16 -mt-16 blur-2xl" />
               <div className="flex justify-between items-center relative z-10">
                 <h3 className="font-syne font-black text-xl uppercase tracking-tighter text-sky">Refine Assessment</h3>
                 <div className="flex gap-2">
                   <button type="button" onClick={() => setEditingQuiz(null)} className="btn btn-outline px-4 py-2 text-[10px] font-black uppercase tracking-widest">Cancel</button>
-                  <button type="submit" className="btn btn-gold px-6 py-2 text-[10px] font-black uppercase tracking-widest">Seal Quiz</button>
+                  <button type="submit" className="btn btn-brand px-6 py-2 text-[10px] font-black uppercase tracking-widest">Seal Quiz</button>
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-4 relative z-10">
                 <div className="col-span-2">
                   <label className="block font-dm-mono text-[9px] uppercase tracking-[0.2em] text-text-muted mb-1 font-bold">Assessment Title</label>
-                  <input required className="w-full bg-surface border border-gold/10 rounded-xl p-3 text-sm font-bold focus:border-gold/30 transition-all" value={editingQuiz.title} onChange={e => setEditingQuiz({ ...editingQuiz, title: e.target.value })} />
+                  <input required className="w-full bg-surface border border-brand/10 rounded-xl p-3 text-sm font-bold focus:border-brand/30 transition-all" value={editingQuiz.title} onChange={e => setEditingQuiz({ ...editingQuiz, title: e.target.value })} />
                 </div>
                 <div className="col-span-2">
                   <label className="block font-dm-mono text-[9px] uppercase tracking-[0.2em] text-text-muted mb-1 font-bold">Executive Summary</label>
-                  <input className="w-full bg-surface border border-gold/10 rounded-xl p-3 text-sm focus:border-gold/30 transition-all" value={editingQuiz.description} onChange={e => setEditingQuiz({ ...editingQuiz, description: e.target.value })} />
+                  <input className="w-full bg-surface border border-brand/10 rounded-xl p-3 text-sm focus:border-brand/30 transition-all" value={editingQuiz.description} onChange={e => setEditingQuiz({ ...editingQuiz, description: e.target.value })} />
                 </div>
                 <div>
                   <label className="block font-dm-mono text-[9px] uppercase tracking-[0.2em] text-text-muted mb-1 font-bold">Threshold (%)</label>
-                  <input type="number" className="w-full bg-surface border border-gold/10 rounded-xl p-3 text-sm font-dm-mono focus:border-gold/30 transition-all" value={editingQuiz.passing_score} onChange={e => setEditingQuiz({ ...editingQuiz, passing_score: parseInt(e.target.value) })} />
+                  <input type="number" className="w-full bg-surface border border-brand/10 rounded-xl p-3 text-sm font-dm-mono focus:border-brand/30 transition-all" value={editingQuiz.passing_score} onChange={e => setEditingQuiz({ ...editingQuiz, passing_score: parseInt(e.target.value) })} />
                 </div>
               </div>
-              <div className="space-y-6 pt-6 border-t border-gold/10 relative z-10">
+              <div className="space-y-6 pt-6 border-t border-brand/10 relative z-10">
                 <div className="flex justify-between items-center">
                   <h4 className="font-syne font-black text-lg uppercase tracking-widest text-text-soft">Assessment Nodes</h4>
                   <button type="button" onClick={() => setEditingQuiz({
                     ...editingQuiz, questions: [...editingQuiz.questions, { question: '', options: ['', '', '', ''], correct_answer: 0 }]
-                  })} className="text-gold text-[9px] font-black uppercase tracking-widest border border-gold/20 px-3 py-1 rounded-full hover:bg-gold/10 transition-all">+ Add Vector</button>
+                  })} className="text-brand text-[9px] font-black uppercase tracking-widest border border-brand/20 px-3 py-1 rounded-full hover:bg-brand/10 transition-all">+ Add Vector</button>
                 </div>
                 <div className="max-h-[50vh] overflow-y-auto pr-2 space-y-4 custom-scrollbar">
                   {editingQuiz.questions.map((q: any, qIdx: number) => (
-                    <div key={qIdx} className="bg-surface/50 p-4 rounded-xl border border-gold/5 space-y-4 group">
+                    <div key={qIdx} className="bg-surface/50 p-4 rounded-xl border border-brand/5 space-y-4 group">
                       <div className="flex justify-between items-start">
                         <span className="font-dm-mono text-[9px] text-text-muted uppercase tracking-widest font-bold">Vector_{qIdx + 1}</span>
                         <button type="button" onClick={() => {
@@ -2908,13 +2908,13 @@ function CourseContentEditor({ course, onBack }: { course: any, onBack: () => vo
                           setEditingQuiz({ ...editingQuiz, questions: newQs });
                         }} className="text-coral text-[9px] font-black uppercase tracking-tighter opacity-0 group-hover:opacity-100 transition-opacity">Expunge</button>
                       </div>
-                      <input placeholder="Enter assessment vector prompt" className="w-full bg-bg border border-gold/10 rounded-xl p-3 text-sm focus:border-gold/20 transition-all" value={q.question}
+                      <input placeholder="Enter assessment vector prompt" className="w-full bg-bg border border-brand/10 rounded-xl p-3 text-sm focus:border-brand/20 transition-all" value={q.question}
                         onChange={e => { const newQs = [...editingQuiz.questions]; newQs[qIdx].question = e.target.value; setEditingQuiz({ ...editingQuiz, questions: newQs }); }} />
                       <div className="grid grid-cols-2 gap-3">
                         {q.options.map((opt: string, oIdx: number) => (
-                          <div key={oIdx} className="flex items-center gap-3 bg-bg/50 p-2 rounded-lg border border-transparent hover:border-gold/10 transition-all">
+                          <div key={oIdx} className="flex items-center gap-3 bg-bg/50 p-2 rounded-lg border border-transparent hover:border-brand/10 transition-all">
                             <input type="radio" name={`correct-${qIdx}`} checked={q.correct_answer === oIdx}
-                              className="accent-gold h-4 w-4"
+                              className="accent-brand h-4 w-4"
                               onChange={() => { const newQs = [...editingQuiz.questions]; newQs[qIdx].correct_answer = oIdx; setEditingQuiz({ ...editingQuiz, questions: newQs }); }} />
                             <input placeholder={`Vector Option ${oIdx + 1}`} className="flex-1 bg-transparent border-none p-1 text-[11px] focus:ring-0" value={opt}
                               onChange={e => { const newQs = [...editingQuiz.questions]; newQs[qIdx].options[oIdx] = e.target.value; setEditingQuiz({ ...editingQuiz, questions: newQs }); }} />
@@ -2927,9 +2927,9 @@ function CourseContentEditor({ course, onBack }: { course: any, onBack: () => vo
               </div>
             </form>
           ) : (
-            <div className="bg-[#0a0d14] border-2 border-dashed border-gold/10 rounded-3xl p-20 text-center animate-pulse">
+            <div className="bg-[#0a0d14] border-2 border-dashed border-brand/10 rounded-3xl p-20 text-center animate-pulse">
               <div className="text-5xl mb-6 grayscale group-hover:grayscale-0 transition-all">🏛️</div>
-              <h3 className="font-syne font-black text-xl mb-2 uppercase tracking-tighter text-gold/40">Select Academic Node</h3>
+              <h3 className="font-syne font-black text-xl mb-2 uppercase tracking-tighter text-brand/40">Select Academic Node</h3>
               <p className="text-text-dim text-[11px] uppercase tracking-widest max-w-xs mx-auto">Choose a curriculum component to begin architectural refinement.</p>
             </div>
           )}
@@ -2972,7 +2972,7 @@ function NewsManager() {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h2 className="font-syne font-bold text-xl">News & Insights CMS</h2>
-        <button onClick={() => { setCurrentPost({ title: '', slug: '', excerpt: '', content: '', image_url: '', category: 'General' }); setIsEditing(true); }} className="btn btn-gold btn-sm">+ New Article</button>
+        <button onClick={() => { setCurrentPost({ title: '', slug: '', excerpt: '', content: '', image_url: '', category: 'General' }); setIsEditing(true); }} className="btn btn-brand btn-sm">+ New Article</button>
       </div>
 
       {isEditing ? (
@@ -2994,7 +2994,7 @@ function NewsManager() {
           </div>
           <div className="flex justify-end gap-2 pt-4">
             <button onClick={() => setIsEditing(false)} className="btn btn-outline btn-sm">Cancel</button>
-            <button onClick={handleSavePost} className="btn btn-gold btn-sm">Save Article</button>
+            <button onClick={handleSavePost} className="btn btn-brand btn-sm">Save Article</button>
           </div>
         </div>
       ) : (
@@ -3008,8 +3008,8 @@ function NewsManager() {
                 <h3 className="font-bold text-sm">{post.title}</h3>
                 <p className="text-[10px] text-text-muted line-clamp-2">{post.excerpt}</p>
                 <div className="flex justify-between items-center mt-2">
-                  <span className="text-[9px] font-dm-mono uppercase text-gold">{post.category}</span>
-                  <button onClick={() => { setCurrentPost(post); setIsEditing(true); }} className="text-gold text-[10px] font-bold">Edit</button>
+                  <span className="text-[9px] font-dm-mono uppercase text-brand">{post.category}</span>
+                  <button onClick={() => { setCurrentPost(post); setIsEditing(true); }} className="text-brand text-[10px] font-bold">Edit</button>
                 </div>
               </div>
             </div>
@@ -3053,7 +3053,7 @@ function EventsManager() {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h2 className="font-syne font-bold text-xl">Events & Webinars</h2>
-        <button onClick={() => { setCurrentEvent({ title: '', description: '', event_date: '', event_time: '', location: '', type: 'Webinar' }); setIsEditing(true); setSelectedEvent(null); }} className="btn btn-gold btn-sm">+ New Event</button>
+        <button onClick={() => { setCurrentEvent({ title: '', description: '', event_date: '', event_time: '', location: '', type: 'Webinar' }); setIsEditing(true); setSelectedEvent(null); }} className="btn btn-brand btn-sm">+ New Event</button>
       </div>
 
       {isEditing ? (
@@ -3067,18 +3067,18 @@ function EventsManager() {
           <textarea placeholder="Description" className="w-full bg-surface border border-border-custom p-2 rounded text-sm h-32" value={currentEvent.description} onChange={e => setCurrentEvent({...currentEvent, description: e.target.value})} />
           <div className="flex justify-end gap-2">
             <button onClick={() => setIsEditing(false)} className="btn btn-outline btn-sm">Cancel</button>
-            <button onClick={handleSaveEvent} className="btn btn-gold btn-sm">Save Event</button>
+            <button onClick={handleSaveEvent} className="btn btn-brand btn-sm">Save Event</button>
           </div>
         </div>
       ) : selectedEvent ? (
         <div className="bg-card border border-border-custom rounded-xl p-6 space-y-6">
           <div className="flex justify-between items-start">
             <div>
-              <button onClick={() => setSelectedEvent(null)} className="text-gold text-[10px] uppercase font-bold mb-2">← Back to List</button>
+              <button onClick={() => setSelectedEvent(null)} className="text-brand text-[10px] uppercase font-bold mb-2">← Back to List</button>
               <h3 className="font-syne font-bold text-2xl">{selectedEvent.title}</h3>
               <p className="text-text-muted text-sm">{selectedEvent.event_date} at {selectedEvent.event_time}</p>
             </div>
-            <button onClick={() => exportToCSV(regs, `registrations-${selectedEvent.id}`)} className="btn btn-gold btn-sm">📥 Export CSV</button>
+            <button onClick={() => exportToCSV(regs, `registrations-${selectedEvent.id}`)} className="btn btn-brand btn-sm">📥 Export CSV</button>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full">
@@ -3095,7 +3095,7 @@ function EventsManager() {
                     <td className="p-3 text-sm">{r.name}</td>
                     <td className="p-3 text-sm text-text-soft">{r.email}</td>
                     <td className="p-3">
-                      <span className="px-2 py-0.5 rounded-full bg-gold-dim text-gold text-[9px] border border-gold/20 uppercase font-dm-mono">{r.status}</span>
+                      <span className="px-2 py-0.5 rounded-full bg-brand-dim text-brand text-[9px] border border-brand/20 uppercase font-dm-mono">{r.status}</span>
                     </td>
                   </tr>
                 ))}
@@ -3106,13 +3106,13 @@ function EventsManager() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {events.map(ev => (
-            <div key={ev.id} className="bg-card border border-border-custom rounded-xl p-5 hover:border-gold/30 transition-all">
-              <span className="text-[9px] font-dm-mono uppercase text-gold bg-gold-dim px-2 py-0.5 rounded border border-gold/10 inline-block mb-3">{ev.type}</span>
+            <div key={ev.id} className="bg-card border border-border-custom rounded-xl p-5 hover:border-brand/30 transition-all">
+              <span className="text-[9px] font-dm-mono uppercase text-brand bg-brand-dim px-2 py-0.5 rounded border border-brand/10 inline-block mb-3">{ev.type}</span>
               <h3 className="font-bold mb-1">{ev.title}</h3>
               <p className="text-[11px] text-text-muted line-clamp-2 mb-4">{ev.description}</p>
               <div className="flex justify-between items-center pt-4 border-t border-border-custom">
                 <button onClick={() => { setSelectedEvent(ev); fetchRegistrations(ev.id); }} className="text-[10px] font-bold text-sky">View Regs ({ev.reg_count || 0})</button>
-                <button onClick={() => { setCurrentEvent(ev); setIsEditing(true); }} className="text-gold text-[10px] font-bold">Edit</button>
+                <button onClick={() => { setCurrentEvent(ev); setIsEditing(true); }} className="text-brand text-[10px] font-bold">Edit</button>
               </div>
             </div>
           ))}
@@ -3155,29 +3155,29 @@ function FinanceManager() {
       </div>
 
       <div className="grid grid-cols-3 gap-4">
-        <div className="bg-[#0a0d14] border border-gold/10 p-5 rounded-2xl relative overflow-hidden group hover:border-gold/30 transition-all">
-          <div className="absolute top-0 right-0 w-12 h-12 bg-gold/2 rounded-full -mr-6 -mt-6 blur-xl" />
+        <div className="bg-[#0a0d14] border border-brand/10 p-5 rounded-2xl relative overflow-hidden group hover:border-brand/30 transition-all">
+          <div className="absolute top-0 right-0 w-12 h-12 bg-brand/2 rounded-full -mr-6 -mt-6 blur-xl" />
           <div className="text-[9px] uppercase tracking-[0.15em] text-text-muted font-dm-mono mb-1 font-bold">Total Revenue</div>
           <div className="text-2xl font-syne font-black text-emerald tracking-tighter">R {invoices.filter(i => i.status === 'paid').reduce((acc, i) => acc + i.amount, 0).toLocaleString()}</div>
         </div>
-        <div className="bg-[#0a0d14] border border-gold/10 p-5 rounded-2xl relative overflow-hidden group hover:border-gold/30 transition-all">
-          <div className="absolute top-0 right-0 w-12 h-12 bg-gold/2 rounded-full -mr-6 -mt-6 blur-xl" />
+        <div className="bg-[#0a0d14] border border-brand/10 p-5 rounded-2xl relative overflow-hidden group hover:border-brand/30 transition-all">
+          <div className="absolute top-0 right-0 w-12 h-12 bg-brand/2 rounded-full -mr-6 -mt-6 blur-xl" />
           <div className="text-[9px] uppercase tracking-[0.15em] text-text-muted font-dm-mono mb-1 font-bold">Pending Approval</div>
-          <div className="text-2xl font-syne font-black text-gold tracking-tighter">R {invoices.filter(i => i.status === 'pending').reduce((acc, i) => acc + i.amount, 0).toLocaleString()}</div>
+          <div className="text-2xl font-syne font-black text-brand tracking-tighter">R {invoices.filter(i => i.status === 'pending').reduce((acc, i) => acc + i.amount, 0).toLocaleString()}</div>
         </div>
-        <div className="bg-[#0a0d14] border border-gold/10 p-5 rounded-2xl relative overflow-hidden group hover:border-gold/30 transition-all">
-          <div className="absolute top-0 right-0 w-12 h-12 bg-gold/2 rounded-full -mr-6 -mt-6 blur-xl" />
+        <div className="bg-[#0a0d14] border border-brand/10 p-5 rounded-2xl relative overflow-hidden group hover:border-brand/30 transition-all">
+          <div className="absolute top-0 right-0 w-12 h-12 bg-brand/2 rounded-full -mr-6 -mt-6 blur-xl" />
           <div className="text-[9px] uppercase tracking-[0.15em] text-text-muted font-dm-mono mb-1 font-bold">Institutional Outstanding</div>
           <div className="text-2xl font-syne font-black text-coral tracking-tighter">R {invoices.filter(i => i.status === 'overdue').reduce((acc, i) => acc + i.amount, 0).toLocaleString()}</div>
         </div>
       </div>
 
-      <div className="bg-[#0a0d14] border border-gold/10 rounded-2xl overflow-hidden shadow-2xl relative isolate">
-        <div className="absolute inset-0 bg-gold/[0.01] pointer-events-none" />
+      <div className="bg-[#0a0d14] border border-brand/10 rounded-2xl overflow-hidden shadow-2xl relative isolate">
+        <div className="absolute inset-0 bg-brand/[0.01] pointer-events-none" />
         <div className="overflow-x-auto custom-scrollbar">
           <table className="w-full text-left">
             <thead>
-              <tr className="bg-surface/50 border-b border-gold/10 text-gold text-[9px] uppercase font-dm-mono tracking-[0.2em]">
+              <tr className="bg-surface/50 border-b border-brand/10 text-brand text-[9px] uppercase font-dm-mono tracking-[0.2em]">
                 <th className="p-4">Invoice Cluster</th>
                 <th className="p-4">Finalist Identity</th>
                 <th className="p-4">Institutional Balance</th>
@@ -3185,9 +3185,9 @@ function FinanceManager() {
                 <th className="p-4 text-right">Governance</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gold/5">
+            <tbody className="divide-y divide-brand/5">
               {invoices.map(inv => (
-                <tr key={inv.id} className="hover:bg-gold/5 transition-colors group">
+                <tr key={inv.id} className="hover:bg-brand/5 transition-colors group">
                   <td className="p-4">
                     <div className="text-[10px] font-dm-mono text-text-soft font-bold">{inv.invoice_number}</div>
                     <div className="text-[8px] text-text-dim uppercase tracking-widest">{new Date(inv.created_at || Date.now()).toLocaleDateString('en-GB')}</div>
@@ -3201,7 +3201,7 @@ function FinanceManager() {
                   </td>
                   <td className="p-4">
                     <span className={`px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest border ${
-                      inv.status === 'paid' ? 'bg-emerald/10 text-emerald border-emerald/20' : 'bg-gold/10 text-gold border-gold/20'
+                      inv.status === 'paid' ? 'bg-emerald/10 text-emerald border-emerald/20' : 'bg-brand/10 text-brand border-brand/20'
                     }`}>
                       {inv.status}
                     </span>
@@ -3210,7 +3210,7 @@ function FinanceManager() {
                     {inv.status !== 'paid' && (
                       <button
                         onClick={() => markAsPaid(inv.id)}
-                        className="btn btn-gold px-4 py-1.5 rounded-lg text-[9px] font-black tracking-widest hover:scale-105 transition-all shadow-[0_0_15px_rgba(212,175,55,0.1)]"
+                        className="btn btn-brand px-4 py-1.5 rounded-lg text-[9px] font-black tracking-widest hover:scale-105 transition-all shadow-[0_0_15px_rgba(212,175,55,0.1)]"
                       >
                         SEAL PAYMENT
                       </button>
@@ -3252,7 +3252,7 @@ function MyFinance() {
   return (
     <div className="space-y-8 animate-fade">
       <div className="flex justify-between items-center px-2">
-        <h2 className="font-syne font-black text-2xl uppercase tracking-tighter text-gold">Financial Ledger</h2>
+        <h2 className="font-syne font-black text-2xl uppercase tracking-tighter text-brand">Financial Ledger</h2>
         <div className="flex items-center gap-2 pr-2">
           <div className="text-right">
             <p className="text-[9px] text-text-muted font-dm-mono uppercase tracking-widest">System Record</p>
@@ -3265,20 +3265,20 @@ function MyFinance() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="bg-[#0a0d14] border border-gold/10 p-6 rounded-2xl relative overflow-hidden group hover:border-gold/30 transition-all duration-300">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-gold/5 rounded-full -mr-16 -mt-16 blur-3xl group-hover:bg-gold/10 transition-all" />
+        <div className="bg-[#0a0d14] border border-brand/10 p-6 rounded-2xl relative overflow-hidden group hover:border-brand/30 transition-all duration-300">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-brand/5 rounded-full -mr-16 -mt-16 blur-3xl group-hover:bg-brand/10 transition-all" />
           <div className="text-[9px] uppercase tracking-[0.2em] text-text-muted font-dm-mono mb-2 font-bold">Account Balance Due</div>
           <div className="text-4xl font-syne font-black text-white tracking-tighter">
             R {invoices.filter(i => i.status !== 'paid').reduce((acc, i) => acc + Number(i.amount), 0).toLocaleString()}
           </div>
           <div className="mt-6 flex gap-3 relative z-10">
-            <button className="btn btn-gold px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-[0_0_20px_rgba(212,175,55,0.15)] hover:shadow-[0_0_30px_rgba(212,175,55,0.25)] transition-all">Settle Balance</button>
+            <button className="btn btn-brand px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-[0_0_20px_rgba(212,175,55,0.15)] hover:shadow-[0_0_30px_rgba(212,175,55,0.25)] transition-all">Settle Balance</button>
             <button onClick={() => exportToCSV(invoices, 'my-statement')} className="btn btn-outline px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-white/5 transition-all">Download Audit</button>
           </div>
         </div>
         
         <div className="grid grid-rows-2 gap-3">
-           <div className="bg-[#0a0d14] border border-gold/10 p-4 rounded-xl flex justify-between items-center group hover:border-gold/20 transition-all">
+           <div className="bg-[#0a0d14] border border-brand/10 p-4 rounded-xl flex justify-between items-center group hover:border-brand/20 transition-all">
               <div>
                 <span className="text-[9px] text-text-muted font-dm-mono uppercase tracking-widest block mb-0.5">Last Transaction</span>
                 <span className="text-lg font-syne font-black text-emerald tracking-tighter">{txs[0] ? `R ${txs[0].amount.toLocaleString()}` : 'N/A'}</span>
@@ -3287,28 +3287,28 @@ function MyFinance() {
                 <ArrowRight className="w-4 h-4 text-emerald" />
               </div>
            </div>
-           <div className="bg-[#0a0d14] border border-gold/10 p-4 rounded-xl flex justify-between items-center group hover:border-gold/20 transition-all">
+           <div className="bg-[#0a0d14] border border-brand/10 p-4 rounded-xl flex justify-between items-center group hover:border-brand/20 transition-all">
               <div>
                 <span className="text-[9px] text-text-muted font-dm-mono uppercase tracking-widest block mb-0.5">Next Commitment</span>
-                <span className="text-lg font-syne font-black text-gold tracking-tighter">{invoices.find(i => i.status !== 'paid')?.due_date || 'N/A'}</span>
+                <span className="text-lg font-syne font-black text-brand tracking-tighter">{invoices.find(i => i.status !== 'paid')?.due_date || 'N/A'}</span>
               </div>
-              <div className="w-10 h-10 rounded-xl bg-gold/5 border border-gold/10 flex items-center justify-center">
-                <Calendar className="w-4 h-4 text-gold" />
+              <div className="w-10 h-10 rounded-xl bg-brand/5 border border-brand/10 flex items-center justify-center">
+                <Calendar className="w-4 h-4 text-brand" />
               </div>
            </div>
         </div>
       </div>
 
-      <div className="bg-[#0a0d14] border border-gold/10 rounded-3xl overflow-hidden shadow-2xl relative isolate">
-        <div className="absolute inset-0 bg-gold/[0.01] pointer-events-none" />
-        <div className="p-4 border-b border-gold/10 bg-surface/30 flex justify-between items-center">
-          <span className="font-syne font-bold text-xs uppercase tracking-widest text-gold/80">Institutional Ledger</span>
+      <div className="bg-[#0a0d14] border border-brand/10 rounded-3xl overflow-hidden shadow-2xl relative isolate">
+        <div className="absolute inset-0 bg-brand/[0.01] pointer-events-none" />
+        <div className="p-4 border-b border-brand/10 bg-surface/30 flex justify-between items-center">
+          <span className="font-syne font-bold text-xs uppercase tracking-widest text-brand/80">Institutional Ledger</span>
           <span className="text-[9px] font-dm-mono text-text-muted uppercase tracking-widest">{invoices.length} RECORDS</span>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-left">
             <thead>
-              <tr className="bg-surface/50 border-b border-gold/10 text-gold text-[9px] uppercase font-dm-mono tracking-[0.2em]">
+              <tr className="bg-surface/50 border-b border-brand/10 text-brand text-[9px] uppercase font-dm-mono tracking-[0.2em]">
                 <th className="p-4">Reference</th>
                 <th className="p-4">Date</th>
                 <th className="p-4">Allocation</th>
@@ -3317,20 +3317,20 @@ function MyFinance() {
                 <th className="p-4 text-right">Verification</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gold/5">
+            <tbody className="divide-y divide-brand/5">
               {invoices.map(inv => (
-                <tr key={inv.id} className="hover:bg-gold/5 transition-colors group">
+                <tr key={inv.id} className="hover:bg-brand/5 transition-colors group">
                   <td className="p-4 text-[11px] font-dm-mono text-text-soft">{inv.invoice_number}</td>
                   <td className="p-4 text-[11px] font-dm-mono text-text-dim">{new Date(inv.created_at).toLocaleDateString('en-GB')}</td>
                   <td className="p-4 text-[11px] font-bold text-text-soft uppercase tracking-tighter">GDA Program Fees</td>
                   <td className="p-4 font-syne font-black text-sm">R {inv.amount.toLocaleString()}</td>
                   <td className="p-4">
-                    <span className={`px-2 py-0.5 rounded-lg text-[9px] uppercase font-dm-mono border tracking-widest ${inv.status === 'paid' ? 'bg-emerald/10 text-emerald border-emerald/20' : 'bg-gold/10 text-gold border-gold/20'}`}>
+                    <span className={`px-2 py-0.5 rounded-lg text-[9px] uppercase font-dm-mono border tracking-widest ${inv.status === 'paid' ? 'bg-emerald/10 text-emerald border-emerald/20' : 'bg-brand/10 text-brand border-brand/20'}`}>
                       {inv.status}
                     </span>
                   </td>
                   <td className="p-4 text-right">
-                    <button className="text-[9px] font-black uppercase text-text-dim hover:text-gold transition-colors tracking-widest">Verify Record</button>
+                    <button className="text-[9px] font-black uppercase text-text-dim hover:text-brand transition-colors tracking-widest">Verify Record</button>
                   </td>
                 </tr>
               ))}
@@ -3567,8 +3567,8 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
   if (loading) return (
     <div className="min-h-[50vh] flex items-center justify-center">
       <div className="text-center">
-        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-gold mx-auto mb-4"></div>
-        <p className="text-gold font-dm-mono text-[10px] uppercase tracking-widest">Loading your portal...</p>
+        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-brand mx-auto mb-4"></div>
+        <p className="text-brand font-dm-mono text-[10px] uppercase tracking-widest">Loading your portal...</p>
       </div>
     </div>
   );
@@ -3586,7 +3586,7 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
           {/* Collapse Toggle Button (Desktop Only) */}
           <button 
             onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
-            className="absolute -right-3 top-20 w-6 h-6 bg-gold text-bg rounded-full hidden lg:flex items-center justify-center shadow-lg z-30 hover:scale-110 transition-transform"
+            className="absolute -right-3 top-20 w-6 h-6 bg-brand text-bg rounded-full hidden lg:flex items-center justify-center shadow-lg z-30 hover:scale-110 transition-transform"
           >
             {isSidebarCollapsed ? <ChevronRight size={14} /> : <ChevronRight size={14} className="rotate-180" />}
           </button>
@@ -3599,7 +3599,7 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
                    await supabase.auth.signOut();
                    window.location.href = '/';
                 }}
-                className={`w-full flex items-center rounded-xl bg-gold/10 border border-gold/30 text-gold hover:bg-gold hover:text-bg transition-all font-bold text-[10px] uppercase tracking-tighter ${isSidebarCollapsed ? 'justify-center p-3' : 'px-4 py-3 gap-2.5'}`}
+                className={`w-full flex items-center rounded-xl bg-brand/10 border border-brand/30 text-brand hover:bg-brand hover:text-bg transition-all font-bold text-[10px] uppercase tracking-tighter ${isSidebarCollapsed ? 'justify-center p-3' : 'px-4 py-3 gap-2.5'}`}
               >
                 <Globe className="w-4 h-4 shrink-0" />
                 {!isSidebarCollapsed && <span className="whitespace-nowrap">Main Website →</span>}
@@ -3607,11 +3607,11 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
             </div>
 
             <div className={`mb-8 flex items-center overflow-hidden transition-all duration-200 ${isSidebarCollapsed ? 'lg:justify-center' : 'px-2 justify-start gap-2.5'}`}>
-              <div className="w-9 h-9 rounded-xl bg-gold text-bg flex items-center justify-center font-black shadow-lg shadow-gold/20 shrink-0 uppercase tracking-tighter">G</div>
+              <div className="w-9 h-9 rounded-xl bg-brand text-bg flex items-center justify-center font-black shadow-lg shadow-brand/20 shrink-0 uppercase tracking-tighter">G</div>
               {(!isSidebarCollapsed || isMobileMenuOpen) && (
                 <div className="flex flex-col animate-fade">
                   <h2 className="font-syne font-extrabold text-lg tracking-tighter whitespace-nowrap leading-none">STUDENT HUB</h2>
-                  <span className="text-[7px] font-dm-mono text-gold tracking-widest uppercase opacity-70 italic font-bold">Observer Portal</span>
+                  <span className="text-[7px] font-dm-mono text-brand tracking-widest uppercase opacity-70 italic font-bold">Observer Portal</span>
                 </div>
               )}
             </div>
@@ -3636,11 +3636,11 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
                   title={isSidebarCollapsed ? item.label : ''}
                   className={`w-full flex items-center rounded-xl font-dm-mono text-[11px] uppercase tracking-widest transition-all duration-200 group ${
                     activeSection === item.id 
-                      ? 'bg-gold text-bg font-bold shadow-lg shadow-gold/20' 
+                      ? 'bg-brand text-bg font-bold shadow-lg shadow-brand/20' 
                       : 'text-text-muted hover:text-text-custom hover:bg-white/5 border border-transparent'
                   } ${(isSidebarCollapsed && !isMobileMenuOpen) ? 'lg:justify-center p-3' : 'px-4 py-3 gap-3'}`}
                 >
-                  <item.icon className={`w-4 h-4 shrink-0 ${activeSection === item.id ? 'text-gold' : 'group-hover:text-gold'} transition-colors`} />
+                  <item.icon className={`w-4 h-4 shrink-0 ${activeSection === item.id ? 'text-brand' : 'group-hover:text-brand'} transition-colors`} />
                   {(!isSidebarCollapsed || isMobileMenuOpen) && <span className="whitespace-nowrap animate-fade">{item.label}</span>}
                 </button>
               ))}
@@ -3650,7 +3650,7 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
               {!isSidebarCollapsed ? (
                 <div className="px-4 py-3 bg-surface border border-border-custom rounded-xl animate-fade">
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-gold/20 border border-gold/30 flex items-center justify-center text-gold font-bold text-xs uppercase shrink-0">
+                    <div className="w-8 h-8 rounded-full bg-brand/20 border border-brand/30 flex items-center justify-center text-brand font-bold text-xs uppercase shrink-0">
                       {profile?.first_name?.[0] || user?.email?.[0]}
                     </div>
                     <div className="flex-1 min-w-0">
@@ -3661,7 +3661,7 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
                 </div>
               ) : (
                 <div title={`${profile?.first_name || 'Student'}`} className="flex justify-center py-2">
-                  <div className="w-8 h-8 rounded-full bg-gold/20 border border-gold/30 flex items-center justify-center text-gold font-bold text-xs uppercase shadow-sm">
+                  <div className="w-8 h-8 rounded-full bg-brand/20 border border-brand/30 flex items-center justify-center text-brand font-bold text-xs uppercase shadow-sm">
                     {profile?.first_name?.[0] || user?.email?.[0]}
                   </div>
                 </div>
@@ -3708,7 +3708,7 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
             <div className="w-px h-8 bg-border-custom" />
             <div className="flex items-center gap-2 pr-2">
               <div className="p-2 bg-surface rounded-lg">
-                <Calendar className="w-3.5 h-3.5 text-gold" />
+                <Calendar className="w-3.5 h-3.5 text-brand" />
               </div>
               <span className="text-xs font-bold">{new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</span>
             </div>
@@ -3719,33 +3719,33 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
         {activeSection === 'dashboard' && (
           <div className="space-y-8 animate-fade">
             {/* HERO BANNER */}
-            <section className="relative overflow-hidden bg-navy rounded-[2rem] border border-gold/20 p-6 md:p-10 group shadow-2xl">
-              <div className="absolute top-0 right-0 w-96 h-96 bg-gold/5 rounded-full -mr-48 -mt-48 blur-[100px] group-hover:bg-gold/10 transition-all duration-700" />
+            <section className="relative overflow-hidden bg-navy rounded-[2rem] border border-brand/20 p-6 md:p-10 group shadow-2xl">
+              <div className="absolute top-0 right-0 w-96 h-96 bg-brand/5 rounded-full -mr-48 -mt-48 blur-[100px] group-hover:bg-brand/10 transition-all duration-700" />
               <div className="relative z-10 flex flex-col md:flex-row items-center gap-8">
                 <div className="flex-1 text-center md:text-left">
-                  <div className="inline-flex items-center gap-2 px-3 py-1 bg-gold/10 border border-gold/30 rounded-full text-gold text-[9px] uppercase font-dm-mono tracking-widest mb-4">
-                    <Zap className="w-3 h-3 fill-gold" />
+                  <div className="inline-flex items-center gap-2 px-3 py-1 bg-brand/10 border border-brand/30 rounded-full text-brand text-[9px] uppercase font-dm-mono tracking-widest mb-4">
+                    <Zap className="w-3 h-3 fill-brand" />
                     New Course Intake Open
                   </div>
                   <h2 className="font-syne font-extrabold text-2xl md:text-3xl mb-4 leading-tight">
-                    Welcome back, <span className="text-gold">{profile?.first_name || 'Scholar'}</span>!
+                    Welcome back, <span className="text-brand">{profile?.first_name || 'Scholar'}</span>!
                   </h2>
                   <p className="text-text-soft text-sm md:text-base max-w-lg mb-8 leading-relaxed">
                     "Success in the cloud is about constant evolution. You are {profile?.student_number ? 'enrolled as a pioneer' : 'one step away from joining'} our 2026 cohort."
                   </p>
                   <div className="flex flex-wrap justify-center md:justify-start gap-4">
-                    <button onClick={() => setActiveSection('courses')} className="btn btn-gold group">
+                    <button onClick={() => setActiveSection('courses')} className="btn btn-brand group">
                       Go to Classes <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                     </button>
                     <button onClick={() => setActiveSection('profile')} className="btn btn-outline">Review Roadmap</button>
                   </div>
                 </div>
                 <div className="w-48 h-48 md:w-64 md:h-64 relative">
-                  <div className="absolute inset-0 bg-gold/20 rounded-full animate-ping opacity-20" />
-                  <div className="relative w-full h-full bg-navy border-4 border-gold/30 rounded-3xl overflow-hidden flex items-center justify-center p-4">
+                  <div className="absolute inset-0 bg-brand/20 rounded-full animate-ping opacity-20" />
+                  <div className="relative w-full h-full bg-navy border-4 border-brand/30 rounded-3xl overflow-hidden flex items-center justify-center p-4">
                     <div className="text-center font-syne">
                       <div className="text-6xl mb-2">🚀</div>
-                      <div className="text-gold font-bold text-lg uppercase tracking-wider">Level 1</div>
+                      <div className="text-brand font-bold text-lg uppercase tracking-wider">Level 1</div>
                       <div className="text-[10px] text-text-dim font-dm-mono">Cloud Resident</div>
                     </div>
                   </div>
@@ -3756,19 +3756,19 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
             {/* KEY METRICS */}
             <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
               {[
-                { label: 'Courses Enrolled', value: enrollments.length, color: 'text-gold', bg: 'bg-gold/10', border: 'border-gold/20', icon: BookOpen },
+                { label: 'Courses Enrolled', value: enrollments.length, color: 'text-brand', bg: 'bg-brand/10', border: 'border-brand/20', icon: BookOpen },
                 { label: 'Completed Credits', value: Object.values(progress).filter(p => p === 100).length, color: 'text-emerald', bg: 'bg-emerald/10', border: 'border-emerald/20', icon: CheckCircle2 },
                 { label: 'Applications', value: applications.length, color: 'text-sky', bg: 'bg-sky/10', border: 'border-sky/20', icon: FileText },
                 { label: 'Learning Hours', value: '12.4', color: 'text-purple', bg: 'bg-purple/10', border: 'border-purple/20', icon: Clock },
               ].map((stat, i) => (
-                <div key={i} className="bg-[#0a0d14] border border-gold/10 rounded-2xl p-5 hover:border-gold/30 transition-all duration-300 group relative overflow-hidden">
-                  <div className="absolute top-0 right-0 w-16 h-16 bg-gold/2 rounded-full -mr-8 -mt-8 blur-2xl" />
+                <div key={i} className="bg-[#0a0d14] border border-brand/10 rounded-2xl p-5 hover:border-brand/30 transition-all duration-300 group relative overflow-hidden">
+                  <div className="absolute top-0 right-0 w-16 h-16 bg-brand/2 rounded-full -mr-8 -mt-8 blur-2xl" />
                   <div className="flex justify-between items-start mb-3">
                     <div className={`p-2.5 ${stat.bg} ${stat.color} rounded-xl group-hover:scale-110 transition-transform`}>
                       <stat.icon className="w-4 h-4" />
                     </div>
                     <div className="w-6 h-6 rounded-lg bg-surface border border-border-custom flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                      <ArrowRight className="w-2.5 h-2.5 text-gold" />
+                      <ArrowRight className="w-2.5 h-2.5 text-brand" />
                     </div>
                   </div>
                   <div className="font-syne font-black text-3xl mb-0.5 tracking-tighter">{stat.value}</div>
@@ -3782,10 +3782,10 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
               <div className="xl:col-span-1 space-y-6">
                 <div className="flex items-center justify-between mb-2">
                   <h3 className="font-syne font-bold font-lg flex items-center gap-2">
-                    <div className="w-2 h-2 bg-gold animate-pulse rounded-full" />
+                    <div className="w-2 h-2 bg-brand animate-pulse rounded-full" />
                     Admission Journey
                   </h3>
-                  <span className="text-[10px] text-gold font-dm-mono uppercase">In Progress</span>
+                  <span className="text-[10px] text-brand font-dm-mono uppercase">In Progress</span>
                 </div>
                 <div className="bg-surface/30 border border-border-custom rounded-2xl p-8 space-y-0">
                   {[
@@ -3797,10 +3797,10 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
                   ].map((step, i, arr) => (
                     <div key={i} className="relative pl-8 pb-10 last:pb-0">
                       {i !== arr.length - 1 && (
-                        <div className={`absolute left-[11px] top-[24px] bottom-0 w-0.5 ${step.completed ? 'bg-gold' : 'bg-border-custom border-dashed border-l'}`} />
+                        <div className={`absolute left-[11px] top-[24px] bottom-0 w-0.5 ${step.completed ? 'bg-brand' : 'bg-border-custom border-dashed border-l'}`} />
                       )}
                       <div className={`absolute left-0 top-0 w-6 h-6 rounded-full flex items-center justify-center z-10 ${
-                        step.completed ? 'bg-gold text-bg' : 'bg-surface border border-border-custom text-text-muted'
+                        step.completed ? 'bg-brand text-bg' : 'bg-surface border border-border-custom text-text-muted'
                       }`}>
                         {step.completed ? <CheckCircle2 className="w-3.5 h-3.5" /> : <div className="w-1.5 h-1.5 rounded-full bg-text-dim/30" />}
                       </div>
@@ -3821,19 +3821,19 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
                     { type: 'Update', title: 'New Cloud Vendor Certification Path', body: 'We have officially added AWS Certified Cloud Practitioner to the April 2026 intake curriculum.', date: '2h ago' },
                     { type: 'Event', title: 'Virtual Open Day: Live Q&A', body: 'Join Chef Instructor George on Friday at 6pm for a live session on Cloud Architecture careers.', date: 'Yesterday' }
                   ].map((news, i) => (
-                    <div key={i} className="bg-card border border-border-custom p-6 rounded-2xl flex gap-6 hover:border-gold/30 transition-all group">
-                      <div className="w-2 rounded-full bg-gold/20 flex-shrink-0" />
+                    <div key={i} className="bg-card border border-border-custom p-6 rounded-2xl flex gap-6 hover:border-brand/30 transition-all group">
+                      <div className="w-2 rounded-full bg-brand/20 flex-shrink-0" />
                       <div>
                         <div className="flex items-center gap-3 mb-2">
-                          <span className="text-[9px] font-dm-mono uppercase text-gold bg-gold/10 px-2 py-0.5 rounded border border-gold/10">{news.type}</span>
+                          <span className="text-[9px] font-dm-mono uppercase text-brand bg-brand/10 px-2 py-0.5 rounded border border-brand/10">{news.type}</span>
                           <span className="text-[10px] text-text-dim">{news.date}</span>
                         </div>
-                        <h4 className="font-bold text-base mb-2 group-hover:text-gold transition-colors">{news.title}</h4>
+                        <h4 className="font-bold text-base mb-2 group-hover:text-brand transition-colors">{news.title}</h4>
                         <p className="text-sm text-text-muted leading-relaxed line-clamp-2">{news.body}</p>
                       </div>
                     </div>
                   ))}
-                  <button className="w-full py-4 text-[10px] font-dm-mono uppercase tracking-widest text-text-dim hover:text-gold transition-colors">
+                  <button className="w-full py-4 text-[10px] font-dm-mono uppercase tracking-widest text-text-dim hover:text-brand transition-colors">
                     View All News &bull; Press CMD+K to search
                   </button>
                 </div>
@@ -3859,7 +3859,7 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
                   onClick={() => setAcademicTab(tab.id as any)}
                   className={`flex items-center gap-2 px-6 py-3 rounded-xl font-dm-mono text-[10px] uppercase tracking-widest transition-all ${
                     academicTab === tab.id 
-                      ? 'bg-gold/10 text-gold border border-gold/20' 
+                      ? 'bg-brand/10 text-brand border border-brand/20' 
                       : 'text-text-muted hover:text-text-custom hover:bg-white/5 border border-transparent'
                   }`}
                 >
@@ -3874,15 +3874,15 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
                 {enrollments.length > 0 ? (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     {enrollments.map(enroll => (
-                      <div key={enroll.id} className="bg-card border border-border-custom rounded-[2rem] overflow-hidden group hover:border-gold/40 transition-all duration-500">
+                      <div key={enroll.id} className="bg-card border border-border-custom rounded-[2rem] overflow-hidden group hover:border-brand/40 transition-all duration-500">
                         <div className="h-48 bg-navy p-10 flex items-center justify-center relative overflow-hidden">
-                          <div className="absolute inset-0 bg-gold/5 rotate-12 group-hover:rotate-6 transition-transform duration-700" />
+                          <div className="absolute inset-0 bg-brand/5 rotate-12 group-hover:rotate-6 transition-transform duration-700" />
                           <div className="text-6xl z-10 group-hover:scale-110 transition-transform duration-500">{enroll.courses?.thumbnail_url || '📘'}</div>
                         </div>
                         <div className="p-8">
                           <div className="flex justify-between items-start mb-6">
                             <div>
-                              <h3 className="font-syne font-bold text-xl mb-1 group-hover:text-gold transition-colors">{enroll.courses?.title}</h3>
+                              <h3 className="font-syne font-bold text-xl mb-1 group-hover:text-brand transition-colors">{enroll.courses?.title}</h3>
                               <p className="text-[10px] text-text-dim uppercase font-dm-mono">Enrolled {new Date(enroll.enrolled_at || Date.now()).toLocaleDateString()}</p>
                             </div>
                             {progress[enroll.course_id] === 100 && (
@@ -3894,15 +3894,15 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
                             <div className="space-y-3">
                               <div className="flex justify-between text-[10px] font-dm-mono uppercase text-text-muted">
                                 <span>Completion</span>
-                                <span className="text-gold font-bold">{progress[enroll.course_id] || 0}%</span>
+                                <span className="text-brand font-bold">{progress[enroll.course_id] || 0}%</span>
                               </div>
                               <div className="h-1.5 bg-surface rounded-full overflow-hidden p-0.5 border border-border-custom">
-                                <div className="h-full bg-gradient-to-r from-gold to-gold-bright rounded-full transition-all duration-1000" style={{ width: `${progress[enroll.course_id] || 0}%` }} />
+                                <div className="h-full bg-gradient-to-r from-brand to-brand-light rounded-full transition-all duration-1000" style={{ width: `${progress[enroll.course_id] || 0}%` }} />
                               </div>
                             </div>
                             
                             <div className="flex gap-3">
-                              <button onClick={() => onStartCourse(enroll.course_id)} className="flex-1 btn btn-gold py-4">
+                              <button onClick={() => onStartCourse(enroll.course_id)} className="flex-1 btn btn-brand py-4">
                                 {progress[enroll.course_id] > 0 ? 'Resume Lesson' : 'Launch Course'}
                               </button>
                             </div>
@@ -3919,7 +3919,7 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
                       Your journey hasn't started yet. Enroll in one of our professional certifications to begin.
                     </p>
                     <div className="flex justify-center gap-4">
-                      <a href="/admissions" className="btn btn-gold px-8 py-3">Browse Catalogue</a>
+                      <a href="/admissions" className="btn btn-brand px-8 py-3">Browse Catalogue</a>
                     </div>
                   </div>
                 )}
@@ -3936,12 +3936,12 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
                         const sub = submissions.find(s => s.assessment_id === assessment.id);
                         return (
                           <div key={assessment.id} className={`bg-card border rounded-2xl p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 transition-all ${
-                            academicTab === 'exams' ? 'border-coral/50 bg-coral/5 shadow-lg shadow-coral/10' : 'border-border-custom hover:border-gold/20'
+                            academicTab === 'exams' ? 'border-coral/50 bg-coral/5 shadow-lg shadow-coral/10' : 'border-border-custom hover:border-brand/20'
                           }`}>
                              <div>
                                <div className="flex items-center gap-2 mb-1">
                                  <span className={`text-[9px] font-dm-mono uppercase px-2 py-0.5 rounded border ${
-                                   academicTab === 'exams' ? 'text-coral bg-coral/10 border-coral/20' : 'text-gold bg-gold/10 border-gold/10'
+                                   academicTab === 'exams' ? 'text-coral bg-coral/10 border-coral/20' : 'text-brand bg-brand/10 border-brand/10'
                                  }`}>{academicTab === 'exams' ? 'Final Examination' : 'Required'}</span>
                                  <h4 className="font-bold text-lg">{assessment.title}</h4>
                                </div>
@@ -3949,18 +3949,18 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
                                <div className="flex items-center gap-4 text-[10px] text-text-dim uppercase font-dm-mono">
                                  <span>Due: {assessment.due_date ? new Date(assessment.due_date).toLocaleDateString() : 'N/A'}</span>
                                  <span>Weight: {assessment.weight || 0}%</span>
-                                 {assessment.is_proctored && <span className="text-gold font-bold flex items-center gap-1"><ShieldCheck className="w-3 h-3" /> Integrity Tracking</span>}
+                                 {assessment.is_proctored && <span className="text-brand font-bold flex items-center gap-1"><ShieldCheck className="w-3 h-3" /> Integrity Tracking</span>}
                                </div>
                              </div>
                              <div className="flex flex-col items-end gap-2 shrink-0">
                                {sub ? (
                                  <div className={`px-4 py-1.5 rounded-full text-[10px] font-dm-mono uppercase border tracking-widest shadow-sm ${
-                                   sub.status === 'graded' ? 'border-emerald/20 text-emerald bg-emerald/5' : 'border-gold/20 text-gold bg-gold/5'
+                                   sub.status === 'graded' ? 'border-emerald/20 text-emerald bg-emerald/5' : 'border-brand/20 text-brand bg-brand/5'
                                  }`}>
                                    {sub.status === 'graded' ? `Graded: ${sub.marks_obtained}/${assessment.total_marks}` : 'Submitted'}
                                  </div>
                                ) : (
-                                 <button className="btn btn-gold py-2 px-6 text-xs">+ Submit Work</button>
+                                 <button className="btn btn-brand py-2 px-6 text-xs">+ Submit Work</button>
                                )}
                              </div>
                           </div>
@@ -3996,15 +3996,15 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
                   <div className="relative">
                     <button 
                       onClick={() => setIsApplyDropdownOpen(!isApplyDropdownOpen)}
-                      className="btn btn-gold px-6 py-3 flex items-center gap-2 group"
+                      className="btn btn-brand px-6 py-3 flex items-center gap-2 group"
                     >
                       <Zap className={`w-4 h-4 transition-transform ${isApplyDropdownOpen ? 'rotate-12' : ''}`} />
                       + Apply for New Course
                     </button>
                     
                     {isApplyDropdownOpen && (
-                      <div className="absolute right-0 mt-3 w-72 bg-navy border border-gold/20 rounded-2xl shadow-2xl p-4 z-[60] animate-fadeUp">
-                        <div className="text-[10px] font-dm-mono text-gold uppercase tracking-[0.2em] mb-4 px-2">Available Certificates</div>
+                      <div className="absolute right-0 mt-3 w-72 bg-navy border border-brand/20 rounded-2xl shadow-2xl p-4 z-[60] animate-fadeUp">
+                        <div className="text-[10px] font-dm-mono text-brand uppercase tracking-[0.2em] mb-4 px-2">Available Certificates</div>
                         <div className="space-y-1 max-h-64 overflow-y-auto custom-scrollbar">
                           {courses
                             .filter(course => !enrollments.some(e => e.course_id === course.id))
@@ -4016,9 +4016,9 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
                                   setApplyingCourse(course);
                                   setIsApplyDropdownOpen(false);
                                 }}
-                                className="w-full text-left p-3 hover:bg-gold/10 rounded-xl transition-all group/item"
+                                className="w-full text-left p-3 hover:bg-brand/10 rounded-xl transition-all group/item"
                               >
-                                <div className="font-bold text-sm group-hover/item:text-gold transition-colors">{course.title}</div>
+                                <div className="font-bold text-sm group-hover/item:text-brand transition-colors">{course.title}</div>
                                 <div className="text-[9px] text-text-muted uppercase font-dm-mono mt-1">{course.category || 'Professional Certification'}</div>
                               </button>
                             ))
@@ -4038,12 +4038,12 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
                       <div className={`w-16 h-16 rounded-[1.25rem] flex items-center justify-center text-3xl shadow-lg ${
                         app.status === 'approved' ? 'bg-emerald/10 border border-emerald/20 text-emerald' : 
                         app.status === 'rejected' ? 'bg-coral/10 border border-coral/20 text-coral' :
-                        'bg-gold/10 border border-gold/20 text-gold'
+                        'bg-brand/10 border border-brand/20 text-brand'
                       }`}>
                         {app.type === 'individual' ? '👤' : '🏢'}
                       </div>
                       <div>
-                        <h4 className="font-syne font-bold text-2xl mb-1 group-hover:text-gold transition-colors">{app.program}</h4>
+                        <h4 className="font-syne font-bold text-2xl mb-1 group-hover:text-brand transition-colors">{app.program}</h4>
                         <div className="flex flex-wrap items-center gap-4 font-dm-mono text-[10px] uppercase text-text-dim">
                           <span className="flex items-center gap-1.5"><ShieldCheck className="w-3 h-3" /> Ref: {app.id.slice(0, 8).toUpperCase()}</span>
                           <span className="w-1 h-1 rounded-full bg-border-custom" />
@@ -4055,12 +4055,12 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
                        <span className={`px-5 py-2 rounded-full text-[10px] font-dm-mono uppercase border tracking-widest shadow-sm ${
                         app.status === 'approved' ? 'border-emerald/20 text-emerald bg-emerald/5' :
                         app.status === 'rejected' ? 'border-coral/20 text-coral bg-coral/5' :
-                        'border-gold/20 text-gold bg-gold/5'
+                        'border-brand/20 text-brand bg-brand/5'
                       }`}>
                         {app.status || 'Admissions Review'}
                       </span>
                       {app.student_number && (
-                        <p className="text-[12px] font-extrabold text-gold px-2 bg-gold/10 rounded-lg py-1 border border-gold/20">Assigned Student ID: {app.student_number}</p>
+                        <p className="text-[12px] font-extrabold text-brand px-2 bg-brand/10 rounded-lg py-1 border border-brand/20">Assigned Student ID: {app.student_number}</p>
                       )}
                     </div>
                   </div>
@@ -4089,8 +4089,8 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
         {/* ─── ANNOUNCEMENTS CONTENT ─── */}
         {activeSection === 'announcements' && (
           <div className="space-y-8 animate-fade">
-             <div className="bg-gradient-to-r from-navy to-surface border border-gold/20 rounded-[2.5rem] p-10 relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-64 h-64 bg-gold/5 rounded-full blur-[80px]" />
+             <div className="bg-gradient-to-r from-navy to-surface border border-brand/20 rounded-[2.5rem] p-10 relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-brand/5 rounded-full blur-[80px]" />
                 <div className="relative z-10">
                   <h3 className="font-syne font-extrabold text-3xl mb-2">Academy Broadcasts</h3>
                   <p className="text-text-muted font-dm-mono text-xs uppercase tracking-widest">Global messages from institution staff</p>
@@ -4099,10 +4099,10 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
 
              <div className="grid grid-cols-1 gap-6">
                 {announcements.map(item => (
-                  <div key={item.id} className="bg-card border border-border-custom rounded-3xl p-8 hover:border-gold/30 transition-all group flex gap-8">
+                  <div key={item.id} className="bg-card border border-border-custom rounded-3xl p-8 hover:border-brand/30 transition-all group flex gap-8">
                     <div className={`w-16 h-16 rounded-2xl flex items-center justify-center text-2xl shrink-0 shadow-inner ${
                       item.type === 'urgent' ? 'bg-coral/10 text-coral border border-coral/20' :
-                      item.type === 'warning' ? 'bg-gold/10 text-gold border border-gold/20' :
+                      item.type === 'warning' ? 'bg-brand/10 text-brand border border-brand/20' :
                       'bg-sky/10 text-sky border border-sky/20'
                     }`}>
                       {item.type === 'urgent' ? <Zap className="w-8 h-8" /> : <AlertCircle className="w-8 h-8" />}
@@ -4113,11 +4113,11 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
                           <div className="flex items-center gap-3 mb-2">
                             <span className={`text-[9px] font-dm-mono uppercase px-2 py-0.5 rounded-md border ${
                               item.type === 'urgent' ? 'border-coral/20 text-coral bg-coral/5' :
-                              'border-gold/20 text-gold bg-gold/5'
+                              'border-brand/20 text-brand bg-brand/5'
                             }`}>{item.type} broadcast</span>
                             <span className="text-[10px] text-text-dim flex items-center gap-1.5"><Clock className="w-3 h-3" /> {new Date(item.created_at).toLocaleString()}</span>
                           </div>
-                          <h4 className="font-syne font-bold text-2xl mb-1 group-hover:text-gold transition-colors">{item.title}</h4>
+                          <h4 className="font-syne font-bold text-2xl mb-1 group-hover:text-brand transition-colors">{item.title}</h4>
                         </div>
                         {item.priority === 'high' && (
                           <div className="px-3 py-1 bg-coral/10 text-coral text-[9px] font-dm-mono uppercase rounded-full border border-coral/20 animate-pulse">Priority High</div>
@@ -4143,14 +4143,14 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
           <div className="grid grid-cols-1 xl:grid-cols-3 gap-10">
             <div className="xl:col-span-1 space-y-8">
               {/* PROFILE PROGRESS CARD */}
-              <div className="bg-navy rounded-[2.5rem] p-8 border border-gold/20 relative overflow-hidden shadow-2xl">
-                <div className="absolute inset-0 bg-gold/5 opacity-50 backdrop-blur-3xl" />
+              <div className="bg-navy rounded-[2.5rem] p-8 border border-brand/20 relative overflow-hidden shadow-2xl">
+                <div className="absolute inset-0 bg-brand/5 opacity-50 backdrop-blur-3xl" />
                 <div className="relative text-center">
                   <div className="relative inline-block mb-6">
-                    <div className="w-32 h-32 rounded-3xl bg-surface border-4 border-gold/30 flex items-center justify-center text-4xl overflow-hidden shadow-inner">
+                    <div className="w-32 h-32 rounded-3xl bg-surface border-4 border-brand/30 flex items-center justify-center text-4xl overflow-hidden shadow-inner">
                       {profile?.first_name?.[0] || 'G'}
                     </div>
-                    <div className="absolute -bottom-2 -right-2 p-2 bg-gold text-bg rounded-xl shadow-lg">
+                    <div className="absolute -bottom-2 -right-2 p-2 bg-brand text-bg rounded-xl shadow-lg">
                       <Zap className="w-4 h-4 fill-bg" />
                     </div>
                   </div>
@@ -4160,12 +4160,12 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
                   <div className="space-y-6 pt-6 border-t border-white/5">
                     <div className="flex justify-between items-end mb-2">
                        <span className="text-[10px] font-dm-mono uppercase text-text-soft">Profile Strength</span>
-                       <span className="text-sm font-bold text-gold">
+                       <span className="text-sm font-bold text-brand">
                          {Math.round((Object.values(profileForm || {}).filter(v => !!v).length / Object.keys(profileForm || {}).length) * 100)}%
                        </span>
                     </div>
                     <div className="h-1.5 bg-surface rounded-full overflow-hidden border border-white/5">
-                       <div className="h-full bg-gold transition-all duration-1000" style={{ width: `${(Object.values(profileForm || {}).filter(v => !!v).length / Object.keys(profileForm || {}).length) * 100}%` }} />
+                       <div className="h-full bg-brand transition-all duration-1000" style={{ width: `${(Object.values(profileForm || {}).filter(v => !!v).length / Object.keys(profileForm || {}).length) * 100}%` }} />
                     </div>
                     <p className="text-[11px] text-text-muted leading-relaxed">Complete your profile details to unlock all academy features.</p>
                   </div>
@@ -4187,7 +4187,7 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
                     </div>
                   </div>
                   <div className="flex items-center gap-4">
-                    <div className="w-1.5 h-1.5 rounded-full bg-gold" />
+                    <div className="w-1.5 h-1.5 rounded-full bg-brand" />
                     <div>
                       <p className="text-[12px] font-bold">Authentication</p>
                       <p className="text-[10px] text-text-dim">Passkey / OTP Enabled</p>
@@ -4207,10 +4207,10 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
                   {editingProfile ? (
                     <div className="flex gap-2">
                       <button onClick={() => setEditingProfile(false)} className="btn btn-outline btn-sm">Discard</button>
-                      <button onClick={handleSaveProfile} className="btn btn-gold btn-sm px-6">Commit Changes</button>
+                      <button onClick={handleSaveProfile} className="btn btn-brand btn-sm px-6">Commit Changes</button>
                     </div>
                   ) : (
-                    <button onClick={() => setEditingProfile(true)} className="btn btn-gold btn-sm px-6">Modify Details</button>
+                    <button onClick={() => setEditingProfile(true)} className="btn btn-brand btn-sm px-6">Modify Details</button>
                   )}
                 </div>
                 
@@ -4225,14 +4225,14 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
                       { label: 'Postal Code', key: 'postal_code', icon: MapPin },
                     ].map(field => (
                       <div key={field.key} className="space-y-2 group">
-                        <label className="flex items-center gap-2 text-[10px] font-dm-mono uppercase text-text-dim tracking-widest group-hover:text-gold transition-colors">
+                        <label className="flex items-center gap-2 text-[10px] font-dm-mono uppercase text-text-dim tracking-widest group-hover:text-brand transition-colors">
                           <field.icon className="w-3 h-3" />
                           {field.label}
                         </label>
                         {editingProfile ? (
                           <input 
                             type={field.type || 'text'} 
-                            className="w-full bg-bg border border-border-custom rounded-xl p-3 text-sm focus:border-gold/50 transition-all outline-none" 
+                            className="w-full bg-bg border border-border-custom rounded-xl p-3 text-sm focus:border-brand/50 transition-all outline-none" 
                             value={profileForm[field.key] || ''} 
                             onChange={e => setProfileForm({...profileForm, [field.key]: e.target.value})} 
                           />
@@ -4265,7 +4265,7 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
                   {/* EMERGENCY CONTACT SECTION */}
                   <div className="pt-10 border-t border-border-custom">
                      <div className="flex items-center gap-4 mb-8">
-                       <ShieldCheck className="w-5 h-5 text-gold" />
+                       <ShieldCheck className="w-5 h-5 text-brand" />
                        <h4 className="font-syne font-bold text-lg">Next of Kin / Emergency Contact</h4>
                      </div>
                      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8 text-left">
@@ -4274,13 +4274,13 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
                           { label: 'Emergency Contact Phone', key: 'emergency_contact_phone', icon: Phone },
                         ].map(field => (
                           <div key={field.key} className="space-y-2 group">
-                            <label className="flex items-center gap-2 text-[10px] font-dm-mono uppercase text-text-dim tracking-widest group-hover:text-gold transition-colors">
+                            <label className="flex items-center gap-2 text-[10px] font-dm-mono uppercase text-text-dim tracking-widest group-hover:text-brand transition-colors">
                               <field.icon className="w-3 h-3" />
                               {field.label}
                             </label>
                             {editingProfile ? (
                               <input 
-                                className="w-full bg-bg border border-border-custom rounded-xl p-3 text-sm focus:border-gold/50 transition-all outline-none" 
+                                className="w-full bg-bg border border-border-custom rounded-xl p-3 text-sm focus:border-brand/50 transition-all outline-none" 
                                 value={profileForm[field.key] || ''} 
                                 onChange={e => setProfileForm({...profileForm, [field.key]: e.target.value})} 
                               />
@@ -4296,12 +4296,12 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
 
                   <div className="pt-10 border-t border-border-custom">
                      <div className="flex items-center gap-4 mb-8">
-                       <Briefcase className="w-5 h-5 text-gold" />
+                       <Briefcase className="w-5 h-5 text-brand" />
                        <h4 className="font-syne font-bold text-lg">Biographical Statement</h4>
                      </div>
                      {editingProfile ? (
                        <textarea 
-                        className="w-full bg-bg border border-border-custom rounded-xl p-5 text-sm h-40 focus:border-gold/50 transition-all outline-none" 
+                        className="w-full bg-bg border border-border-custom rounded-xl p-5 text-sm h-40 focus:border-brand/50 transition-all outline-none" 
                         placeholder="Tell us about your technical background and career goals..." 
                         value={profileForm.bio || ''} 
                         onChange={e => setProfileForm({...profileForm, bio: e.target.value})} 
@@ -4324,7 +4324,7 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="bg-card border border-border-custom rounded-3xl p-8 space-y-6">
                  <div className="flex items-center gap-3 mb-2">
-                   <div className="p-3 bg-gold/10 text-gold rounded-2xl"><Settings className="w-6 h-6" /></div>
+                   <div className="p-3 bg-brand/10 text-brand rounded-2xl"><Settings className="w-6 h-6" /></div>
                    <h3 className="font-syne font-bold text-xl">Account Configuration</h3>
                  </div>
                  <div className="space-y-6">
@@ -4349,7 +4349,7 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
                    </p>
                  </div>
                  <div className="space-y-4">
-                    <button onClick={() => exportToJSON([profile || {}], 'gda-archive')} className="w-full btn btn-outline border-white/10 hover:border-gold/50 py-4 flex items-center gap-3 justify-center">
+                    <button onClick={() => exportToJSON([profile || {}], 'gda-archive')} className="w-full btn btn-outline border-white/10 hover:border-brand/50 py-4 flex items-center gap-3 justify-center">
                        <Globe className="w-4 h-4" /> Download Records Archive
                     </button>
                  </div>
@@ -4371,15 +4371,15 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
       {/* ─── CERTIFICATE MODAL ─── */}
       {showCertificate && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-navy/90 backdrop-blur-xl animate-fade">
-          <div className="bg-white text-black p-1 md:p-12 rounded-none shadow-2xl max-w-4xl w-full relative border-[24px] border-gold/10">
+          <div className="bg-white text-black p-1 md:p-12 rounded-none shadow-2xl max-w-4xl w-full relative border-[24px] border-brand/10">
             <button onClick={() => setShowCertificate(null)} className="absolute top-4 right-4 text-black/40 hover:text-black z-10 p-2">✕</button>
-            <div className="text-center border-[6px] border-gold/30 p-12 md:p-20 relative overflow-hidden">
-              <div className="absolute top-0 left-0 w-32 h-32 border-l border-t border-gold opacity-50" />
-              <div className="absolute top-0 right-0 w-32 h-32 border-r border-t border-gold opacity-50" />
-              <div className="absolute bottom-0 left-0 w-32 h-32 border-l border-b border-gold opacity-50" />
-              <div className="absolute bottom-0 right-0 w-32 h-32 border-r border-b border-gold opacity-50" />
+            <div className="text-center border-[6px] border-brand/30 p-12 md:p-20 relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-32 h-32 border-l border-t border-brand opacity-50" />
+              <div className="absolute top-0 right-0 w-32 h-32 border-r border-t border-brand opacity-50" />
+              <div className="absolute bottom-0 left-0 w-32 h-32 border-l border-b border-brand opacity-50" />
+              <div className="absolute bottom-0 right-0 w-32 h-32 border-r border-b border-brand opacity-50" />
               
-              <div className="text-gold text-6xl mb-10 opacity-30 select-none">🎓</div>
+              <div className="text-brand text-6xl mb-10 opacity-30 select-none">🎓</div>
               <h1 className="font-syne font-extrabold text-4xl md:text-5xl mb-6 uppercase tracking-tighter">Certificate of Excellence</h1>
               <p className="text-gray-400 font-dm-mono text-[12px] uppercase tracking-[0.4em] mb-14">Presented by Ginashe Digital Academy</p>
               
@@ -4391,7 +4391,7 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
               <h2 className="font-syne font-bold text-5xl md:text-6xl text-black mb-10 tracking-tight">{showCertificate.profile?.first_name} {showCertificate.profile?.last_name}</h2>
               
               <p className="text-gray-500 font-dm-mono text-[11px] uppercase tracking-widest mb-14">Has demonstrated professional mastery in the curriculum of</p>
-              <h3 className="font-syne font-bold text-3xl md:text-4xl text-gold mb-20 italic">"{showCertificate.course.title}"</h3>
+              <h3 className="font-syne font-bold text-3xl md:text-4xl text-brand mb-20 italic">"{showCertificate.course.title}"</h3>
               
               <div className="flex justify-between items-end pt-12 border-t border-black/5">
                 <div className="text-left">
@@ -4410,7 +4410,7 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
             </div>
           </div>
           <div className="fixed bottom-10 left-1/2 -translate-x-1/2">
-             <button onClick={() => window.print()} className="btn bg-white text-black font-bold px-10 py-4 shadow-2xl hover:bg-gold transition-all flex items-center gap-3">
+             <button onClick={() => window.print()} className="btn bg-white text-black font-bold px-10 py-4 shadow-2xl hover:bg-brand transition-all flex items-center gap-3">
                <Zap className="w-5 h-5" /> Export to Digital PDF
              </button>
           </div>
@@ -4420,14 +4420,14 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
       {/* ─── QUICK APPLY MODAL ─── */}
       {applyingCourse && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-navy/80 backdrop-blur-md animate-fade">
-          <div className="bg-bg border border-gold/20 rounded-[2.5rem] shadow-2xl max-w-2xl w-full p-8 md:p-12 relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-gold/5 rounded-full -mr-32 -mt-32 blur-[100px]" />
+          <div className="bg-bg border border-brand/20 rounded-[2.5rem] shadow-2xl max-w-2xl w-full p-8 md:p-12 relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-brand/5 rounded-full -mr-32 -mt-32 blur-[100px]" />
             
             <button onClick={() => setApplyingCourse(null)} className="absolute top-8 right-8 text-text-muted hover:text-white transition-colors">✕</button>
 
             <div className="relative z-10 text-left">
-              <div className="inline-flex items-center gap-2 px-3 py-1 bg-gold/10 border border-gold/30 rounded-full text-gold text-[9px] uppercase font-dm-mono tracking-widest mb-6">
-                <Zap className="w-3 h-3 fill-gold" />
+              <div className="inline-flex items-center gap-2 px-3 py-1 bg-brand/10 border border-brand/30 rounded-full text-brand text-[9px] uppercase font-dm-mono tracking-widest mb-6">
+                <Zap className="w-3 h-3 fill-brand" />
                 Intelligent Admission System
               </div>
 
@@ -4448,7 +4448,7 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
                   </div>
                   <div className="col-span-2">
                     <label className="text-[9px] font-dm-mono uppercase text-text-dim tracking-widest block mb-1">Institutional Email</label>
-                    <div className="font-bold text-sm text-gold tracking-tight">{user?.email}</div>
+                    <div className="font-bold text-sm text-brand tracking-tight">{user?.email}</div>
                   </div>
                 </div>
 
@@ -4456,7 +4456,7 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
                   <label className="text-[10px] font-dm-mono uppercase text-text-dim tracking-widest block mb-2">Motivation (Optional)</label>
                   <textarea 
                     id="app-motivation"
-                    className="w-full bg-surface border border-border-custom rounded-xl p-4 text-sm h-32 focus:border-gold/50 transition-all outline-none"
+                    className="w-full bg-surface border border-border-custom rounded-xl p-4 text-sm h-32 focus:border-brand/50 transition-all outline-none"
                     placeholder="Briefly tell us why you want to join this programme..."
                   />
                 </div>
@@ -4492,7 +4492,7 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
                       alert('Application submitted successfully!');
                     } catch (err: any) { alert('Error: ' + err.message); }
                   }}
-                  className="flex-[2] btn btn-gold py-4"
+                  className="flex-[2] btn btn-brand py-4"
                 >Submit Application →</button>
               </div>
             </div>
@@ -4538,7 +4538,7 @@ function StudentProgressTracker() {
     finally { setLoading(false); }
   }
 
-  if (loading) return <div className="flex justify-center py-20"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gold"></div></div>;
+  if (loading) return <div className="flex justify-center py-20"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand"></div></div>;
 
   return (
     <div className="space-y-4">
@@ -4570,9 +4570,9 @@ function StudentProgressTracker() {
                 <td className="p-4">
                   <div className="flex items-center gap-3">
                     <div className="flex-1 h-1.5 bg-surface rounded-full overflow-hidden">
-                      <div className="h-full bg-gold transition-all duration-500" style={{ width: `${item.progress}%` }} />
+                      <div className="h-full bg-brand transition-all duration-500" style={{ width: `${item.progress}%` }} />
                     </div>
-                    <span className="font-dm-mono text-[10px] text-gold">{item.progress}%</span>
+                    <span className="font-dm-mono text-[10px] text-brand">{item.progress}%</span>
                   </div>
                 </td>
                 <td className="p-4 text-[12px]">{item.completedLessons} / {item.totalLessons}</td>
@@ -4671,14 +4671,14 @@ function GraduationPipeline({ pendingApprovals, onApprove }: { pendingApprovals:
     }
   }
 
-  if (loading) return <div className="flex justify-center py-20"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gold"></div></div>;
+  if (loading) return <div className="flex justify-center py-20"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand"></div></div>;
 
   return (
     <div className="space-y-8 animate-fade">
       <div className="flex items-center gap-3">
-        <Lock className="w-5 h-5 text-gold" />
+        <Lock className="w-5 h-5 text-brand" />
         <h2 className="font-syne font-extrabold text-2xl tracking-tighter">Graduation Pipeline</h2>
-        <span className="text-[9px] font-dm-mono bg-gold/10 text-gold px-3 py-1 rounded-full border border-gold/20">{eligible.length} CANDIDATES</span>
+        <span className="text-[9px] font-dm-mono bg-brand/10 text-brand px-3 py-1 rounded-full border border-brand/20">{eligible.length} CANDIDATES</span>
       </div>
 
       <div className="bg-card border border-border-custom rounded-3xl overflow-hidden shadow-2xl">
@@ -4713,14 +4713,14 @@ function GraduationPipeline({ pendingApprovals, onApprove }: { pendingApprovals:
                   {s.isEligible ? (
                     <span className="text-emerald text-[10px] font-bold bg-emerald/10 px-3 py-1 rounded-full border border-emerald/20">ELIGIBLE</span>
                   ) : (
-                    <span className="text-gold text-[10px] font-bold bg-gold/10 px-3 py-1 rounded-full border border-gold/20">IN PROGRESS</span>
+                    <span className="text-brand text-[10px] font-bold bg-brand/10 px-3 py-1 rounded-full border border-brand/20">IN PROGRESS</span>
                   )}
                 </td>
                 <td className="p-5 text-right">
                   <button
                     onClick={() => handleGraduate(s)}
                     disabled={!s.isEligible}
-                    className={`px-6 py-2 rounded-xl text-[10px] font-black tracking-widest transition-all ${s.isEligible ? 'btn btn-gold hover:scale-105 shadow-[0_0_20px_rgba(212,175,55,0.1)]' : 'bg-surface text-text-dim cursor-not-allowed opacity-50'}`}
+                    className={`px-6 py-2 rounded-xl text-[10px] font-black tracking-widest transition-all ${s.isEligible ? 'btn btn-brand hover:scale-105 shadow-[0_0_20px_rgba(212,175,55,0.1)]' : 'bg-surface text-text-dim cursor-not-allowed opacity-50'}`}
                   >
                     {s.isEligible ? '🎓 SEAL GRADUATION' : 'NOT READY'}
                   </button>
@@ -4746,17 +4746,17 @@ function InstitutionalApprovalQueue({ pendingApprovals, onApprove }: { pendingAp
   return (
     <div className="space-y-4 pt-12 animate-fade">
       <div className="flex items-center gap-3 px-2">
-        <div className="w-1.5 h-6 bg-gold rounded-full shadow-[0_0_10px_rgba(212,175,55,0.4)]" />
-        <h3 className="font-syne font-black text-xl uppercase tracking-tighter text-gold">Institutional Approval Queue</h3>
-        <span className="text-[9px] font-dm-mono bg-gold/10 text-gold px-3 py-1 rounded-full border border-gold/20 tracking-widest">{pendingApprovals.length} PENDING</span>
+        <div className="w-1.5 h-6 bg-brand rounded-full shadow-[0_0_10px_rgba(212,175,55,0.4)]" />
+        <h3 className="font-syne font-black text-xl uppercase tracking-tighter text-brand">Institutional Approval Queue</h3>
+        <span className="text-[9px] font-dm-mono bg-brand/10 text-brand px-3 py-1 rounded-full border border-brand/20 tracking-widest">{pendingApprovals.length} PENDING</span>
       </div>
       
-      <div className="bg-[#0a0d14] border border-gold/10 rounded-3xl overflow-hidden shadow-2xl relative isolate">
-        <div className="absolute inset-0 bg-gold/[0.01] pointer-events-none" />
+      <div className="bg-[#0a0d14] border border-brand/10 rounded-3xl overflow-hidden shadow-2xl relative isolate">
+        <div className="absolute inset-0 bg-brand/[0.01] pointer-events-none" />
         <div className="overflow-x-auto custom-scrollbar">
           <table className="w-full text-left">
             <thead>
-              <tr className="bg-surface/50 border-b border-gold/10 text-gold text-[9px] uppercase font-dm-mono tracking-[0.2em]">
+              <tr className="bg-surface/50 border-b border-brand/10 text-brand text-[9px] uppercase font-dm-mono tracking-[0.2em]">
                 <th className="p-4">Finalist Identity</th>
                 <th className="p-4">Final GPA</th>
                 <th className="p-4">Sealed Date</th>
@@ -4764,20 +4764,20 @@ function InstitutionalApprovalQueue({ pendingApprovals, onApprove }: { pendingAp
                 <th className="p-4 text-right">Action</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gold/5">
+            <tbody className="divide-y divide-brand/5">
               {pendingApprovals.map(r => (
-                <tr key={r.id} className="hover:bg-gold/5 transition-colors group">
+                <tr key={r.id} className="hover:bg-brand/5 transition-colors group">
                   <td className="p-4">
                     <div className="font-bold text-sm text-text-soft">{r.profiles?.first_name} {r.profiles?.last_name}</div>
                     <div className="text-[9px] text-text-dim font-dm-mono uppercase">{r.profiles?.student_number}</div>
                   </td>
                   <td className="p-4 font-syne font-black text-emerald text-sm">{r.gpa_final}%</td>
                   <td className="p-4 text-[11px] text-text-dim font-dm-mono">{new Date(r.created_at).toLocaleDateString('en-GB')}</td>
-                  <td className="p-4 text-[9px] font-dm-mono text-gold/60 uppercase tracking-tighter">{r.credential_id}</td>
+                  <td className="p-4 text-[9px] font-dm-mono text-brand/60 uppercase tracking-tighter">{r.credential_id}</td>
                   <td className="p-4 text-right">
                     <button
                       onClick={() => onApprove(r)}
-                      className="btn btn-gold px-5 py-2 rounded-xl text-[9px] font-black tracking-widest hover:scale-105 transition-transform shadow-[0_0_20px_rgba(212,175,55,0.1)]"
+                      className="btn btn-brand px-5 py-2 rounded-xl text-[9px] font-black tracking-widest hover:scale-105 transition-transform shadow-[0_0_20px_rgba(212,175,55,0.1)]"
                     >
                       GRANT BLESSING
                     </button>
@@ -4808,35 +4808,35 @@ function InstitutionalAuditHub({ pendingApprovals, onApprove }: { pendingApprova
     finally { setLoading(false); }
   }
 
-  if (loading) return <div className="flex justify-center py-20"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gold"></div></div>;
+  if (loading) return <div className="flex justify-center py-20"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand"></div></div>;
 
   return (
     <div className="space-y-6 animate-fade">
       <div className="flex items-center justify-between px-2">
         <div className="flex items-center gap-3">
-          <ShieldCheck className="w-6 h-6 text-gold" />
+          <ShieldCheck className="w-6 h-6 text-brand" />
           <h2 className="font-syne font-black text-2xl tracking-tighter uppercase text-white">System Audit Log</h2>
         </div>
-        <span className="text-[9px] font-dm-mono bg-gold/5 text-gold/80 px-4 py-1.5 rounded-full border border-gold/10 tracking-[0.2em] uppercase">{logs.length} Immutable Records</span>
+        <span className="text-[9px] font-dm-mono bg-brand/5 text-brand/80 px-4 py-1.5 rounded-full border border-brand/10 tracking-[0.2em] uppercase">{logs.length} Immutable Records</span>
       </div>
 
-      <div className="bg-[#0a0d14] border border-gold/10 rounded-3xl overflow-hidden shadow-2xl relative isolate">
-        <div className="absolute inset-0 bg-gold/[0.01] pointer-events-none" />
+      <div className="bg-[#0a0d14] border border-brand/10 rounded-3xl overflow-hidden shadow-2xl relative isolate">
+        <div className="absolute inset-0 bg-brand/[0.01] pointer-events-none" />
         <div className="overflow-x-auto custom-scrollbar max-h-[60vh]">
           <table className="w-full text-left">
             <thead className="sticky top-0 z-20 bg-surface/90 backdrop-blur-md">
-              <tr className="border-b border-gold/10 text-[9px] uppercase font-dm-mono text-gold/60 tracking-[0.2em]">
+              <tr className="border-b border-brand/10 text-[9px] uppercase font-dm-mono text-brand/60 tracking-[0.2em]">
                 <th className="p-4">Action Cluster</th>
                 <th className="p-4">Entity Identifier</th>
                 <th className="p-4">Rationale</th>
                 <th className="p-4 text-right">Chronology</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gold/5">
+            <tbody className="divide-y divide-brand/5">
               {logs.map(log => (
-                <tr key={log.id} className="hover:bg-gold/5 transition-colors group">
+                <tr key={log.id} className="hover:bg-brand/5 transition-colors group">
                   <td className="p-4">
-                    <span className="text-[9px] font-black text-gold bg-gold/10 px-3 py-1 rounded-lg border border-gold/20 uppercase tracking-widest">{log.action}</span>
+                    <span className="text-[9px] font-black text-brand bg-brand/10 px-3 py-1 rounded-lg border border-brand/20 uppercase tracking-widest">{log.action}</span>
                   </td>
                   <td className="p-4 font-dm-mono">
                     <div className="text-[10px] text-text-soft font-bold uppercase tracking-tighter">{log.target_type}</div>
@@ -4883,32 +4883,32 @@ function AlumniHub({ profile }: { profile: any }) {
   return (
     <div className="min-h-screen bg-navy text-text-custom flex items-center justify-center p-8 relative overflow-hidden isolate">
       {/* Decorative Background Elements */}
-      <div className="absolute inset-0 bg-gold/5 blur-[150px] rounded-full -mr-[50%] -mt-[50%]" />
+      <div className="absolute inset-0 bg-brand/5 blur-[150px] rounded-full -mr-[50%] -mt-[50%]" />
       <div className="absolute inset-0 bg-white/2 blur-[100px] rounded-full -ml-[40%] -mb-[40%]" />
       
       <div className="max-w-4xl w-full relative z-10">
-        <div className="bg-[#0a0d14]/80 backdrop-blur-2xl border border-gold/10 rounded-[3rem] p-10 md:p-16 shadow-[0_0_50px_rgba(0,0,0,0.5)] relative overflow-hidden group">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-gold/5 rounded-full -mr-32 -mt-32 blur-[100px] animate-pulse" />
+        <div className="bg-[#0a0d14]/80 backdrop-blur-2xl border border-brand/10 rounded-[3rem] p-10 md:p-16 shadow-[0_0_50px_rgba(0,0,0,0.5)] relative overflow-hidden group">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-brand/5 rounded-full -mr-32 -mt-32 blur-[100px] animate-pulse" />
           
           <div className="flex flex-col items-center text-center space-y-8">
-            <div className="w-20 h-20 bg-gold rounded-2xl flex items-center justify-center shadow-[0_0_40px_rgba(212,175,55,0.3)] mb-2 transform group-hover:rotate-6 transition-all duration-700">
+            <div className="w-20 h-20 bg-brand rounded-2xl flex items-center justify-center shadow-[0_0_40px_rgba(212,175,55,0.3)] mb-2 transform group-hover:rotate-6 transition-all duration-700">
                <span className="text-navy font-syne font-black text-3xl">G</span>
             </div>
             
             <div className="space-y-4">
-               <span className="text-[9px] font-dm-mono uppercase tracking-[0.5em] text-gold bg-gold/5 px-6 py-2 rounded-full border border-gold/20">Institutional Alumni Governance</span>
+               <span className="text-[9px] font-dm-mono uppercase tracking-[0.5em] text-brand bg-brand/5 px-6 py-2 rounded-full border border-brand/20">Institutional Alumni Governance</span>
                <h1 className="font-syne font-black text-5xl md:text-6xl tracking-tighter leading-none text-white">
-                 Honorably Sealed, <br/><span className="text-gold">{profile?.first_name}.</span>
+                 Honorably Sealed, <br/><span className="text-brand">{profile?.first_name}.</span>
                </h1>
             </div>
 
             {record ? (
                <div className="w-full mt-12 grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
                   <div className="space-y-6 text-left relative z-10">
-                     <div className="p-6 bg-white/[0.02] border border-gold/10 rounded-3xl space-y-5">
+                     <div className="p-6 bg-white/[0.02] border border-brand/10 rounded-3xl space-y-5">
                         <div className="space-y-1">
                            <p className="text-[9px] font-dm-mono uppercase text-text-dim tracking-widest">Master Credential Lock</p>
-                           <p className="text-base font-bold text-gold/90 font-dm-mono">{record.credential_id}</p>
+                           <p className="text-base font-bold text-brand/90 font-dm-mono">{record.credential_id}</p>
                         </div>
                         <div className="grid grid-cols-2 gap-4">
                            <div className="space-y-1">
@@ -4920,8 +4920,8 @@ function AlumniHub({ profile }: { profile: any }) {
                               <p className="text-lg font-bold text-text-soft">{new Date(record.graduation_date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}</p>
                            </div>
                         </div>
-                        <div className="pt-4 border-t border-gold/5">
-                           <p className={`text-[9px] font-black uppercase tracking-[0.2em] px-4 py-2 rounded-lg inline-block ${record.is_approved ? 'bg-emerald/5 text-emerald border border-emerald/20' : 'bg-gold/5 text-gold border border-gold/20 animate-pulse'}`}>
+                        <div className="pt-4 border-t border-brand/5">
+                           <p className={`text-[9px] font-black uppercase tracking-[0.2em] px-4 py-2 rounded-lg inline-block ${record.is_approved ? 'bg-emerald/5 text-emerald border border-emerald/20' : 'bg-brand/5 text-brand border border-brand/20 animate-pulse'}`}>
                              {record.is_approved ? '✓ INSTITUTIONALLY RECOGNIZED' : '⏳ PENDING FINAL AUDIT'}
                            </p>
                         </div>
@@ -4934,17 +4934,17 @@ function AlumniHub({ profile }: { profile: any }) {
                      </div>
 
                      <div className="flex flex-col sm:flex-row gap-3 pt-2">
-                        <button className="flex-1 btn btn-gold py-4 text-[10px] font-black tracking-widest shadow-[0_0_25px_rgba(212,175,55,0.15)] hover:scale-[1.02] transition-all">GENERATE CERTIFICATE</button>
-                        <button className="flex-1 btn btn-outline py-4 text-[10px] font-black tracking-widest border-gold/10 hover:border-gold/30 transition-all">SHARE EXCELLENCE</button>
+                        <button className="flex-1 btn btn-brand py-4 text-[10px] font-black tracking-widest shadow-[0_0_25px_rgba(0,242,255,0.15)] hover:scale-[1.02] transition-all">GENERATE CERTIFICATE</button>
+                        <button className="flex-1 btn btn-outline py-4 text-[10px] font-black tracking-widest border-brand/10 hover:border-brand/30 transition-all">SHARE EXCELLENCE</button>
                      </div>
                   </div>
 
                   {/* Right: The Seal */}
                   <div className="flex justify-center flex-col items-center space-y-6">
                      <div className="relative">
-                        <div className="absolute inset-0 bg-gold/20 blur-[60px] rounded-full animate-pulse" />
+                        <div className="absolute inset-0 bg-brand/20 blur-[60px] rounded-full animate-pulse" />
                         <img 
-                          src="/gda_institutional_seal_gold_large_1775998447207.png" 
+                          src="/gda_institutional_seal_cyan.png" 
                           alt="GDA Institutional Seal" 
                           className={`w-64 h-64 object-contain relative z-10 ${record.is_approved ? 'grayscale-0' : 'grayscale transition-all duration-1000'}`}
                         />
@@ -4961,8 +4961,8 @@ function AlumniHub({ profile }: { profile: any }) {
                </div>
             ) : (
                <div className="py-20 flex flex-col items-center space-y-4">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gold" />
-                  <p className="text-[10px] font-dm-mono uppercase text-gold tracking-widest">Recalling Sealed Record...</p>
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand" />
+                  <p className="text-[10px] font-dm-mono uppercase text-brand tracking-widest">Recalling Sealed Record...</p>
                </div>
             )}
           </div>
@@ -5038,8 +5038,8 @@ export function StaffActivationView() {
 
   if (loading) return (
     <div className="min-h-screen bg-bg flex flex-col items-center justify-center p-6 animate-fade">
-      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gold" />
-      <p className="mt-8 text-gold font-dm-mono text-[10px] tracking-widest uppercase">Verifying Institutional Token...</p>
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand" />
+      <p className="mt-8 text-brand font-dm-mono text-[10px] tracking-widest uppercase">Verifying Institutional Token...</p>
     </div>
   );
 
@@ -5053,7 +5053,7 @@ export function StaffActivationView() {
           await supabase.auth.signOut();
           window.location.href = '/';
         }} 
-        className="btn btn-gold px-12 py-4 shadow-xl"
+        className="btn btn-brand px-12 py-4 shadow-xl"
       >
         Return to Academy Home
       </button>
@@ -5065,30 +5065,30 @@ export function StaffActivationView() {
       <div className="w-20 h-20 bg-emerald/10 text-emerald rounded-3xl flex items-center justify-center text-3xl mb-8">✨</div>
       <h2 className="font-syne font-extrabold text-3xl mb-4">Welcome to GDA</h2>
       <p className="text-text-soft text-sm max-w-md mb-8">Your institutional identity is active. You can now access your staff hub.</p>
-      <button onClick={() => window.location.href = '/portal'} className="btn btn-gold px-12 py-4 shadow-xl">Enter Portal</button>
+      <button onClick={() => window.location.href = '/portal'} className="btn btn-brand px-12 py-4 shadow-xl">Enter Portal</button>
     </div>
   );
 
   return (
     <div className="min-h-screen bg-bg flex flex-col lg:flex-row animate-fade">
       <div className="lg:w-1/2 p-12 md:p-20 flex flex-col justify-between relative overflow-hidden bg-[#0a0d14]">
-        <div className="absolute inset-0 bg-gold/5 blur-[120px] rounded-full -mr-32 -mt-32 animate-pulse" />
+        <div className="absolute inset-0 bg-brand/5 blur-[120px] rounded-full -mr-32 -mt-32 animate-pulse" />
         <div className="relative z-10">
           <div className="flex items-center gap-4 mb-16">
-            <div className="w-10 h-10 bg-gold text-bg rounded-xl flex items-center justify-center text-lg font-black shadow-[0_0_20px_rgba(212,175,55,0.2)]">G</div>
+            <div className="w-10 h-10 bg-brand text-bg rounded-xl flex items-center justify-center text-lg font-black shadow-[0_0_20px_rgba(0,242,255,0.2)]">G</div>
             <h1 className="font-syne font-black text-xl uppercase tracking-widest text-white">Institutional_Access</h1>
           </div>
           <div className="space-y-6">
-            <span className="text-[9px] font-dm-mono uppercase text-gold tracking-widest bg-gold/5 px-4 py-1.5 rounded-full border border-gold/20">Legacy Validation Active</span>
-            <h2 className="font-syne font-black text-5xl md:text-6xl leading-[0.9] tracking-tighter text-white">Activate <br/><span className="text-gold">Staff Hub.</span></h2>
+            <span className="text-[9px] font-dm-mono uppercase text-brand tracking-widest bg-brand/5 px-4 py-1.5 rounded-full border border-brand/20">Legacy Validation Active</span>
+            <h2 className="font-syne font-black text-5xl md:text-6xl leading-[0.9] tracking-tighter text-white">Activate <br/><span className="text-brand">Staff Hub.</span></h2>
             <p className="text-text-dim max-w-sm text-[13px] leading-relaxed">
               Complete your cryptographic onboarding by setting your institutional credentials. This will grant you governance access allocated to your professional role.
             </p>
           </div>
         </div>
-        <div className="relative z-10 pt-12 border-t border-gold/10">
+        <div className="relative z-10 pt-12 border-t border-brand/10">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-surface border border-gold/20 flex items-center justify-center text-xs text-gold font-bold shadow-inner">SF</div>
+            <div className="w-12 h-12 rounded-2xl bg-surface border border-brand/20 flex items-center justify-center text-xs text-brand font-bold shadow-inner">SF</div>
             <div>
               <p className="text-[9px] text-text-muted uppercase font-dm-mono tracking-widest mb-0.5">Assigned Professional ID</p>
               <p className="text-sm font-black text-white">{profileData?.staff_number}</p>
@@ -5098,29 +5098,29 @@ export function StaffActivationView() {
       </div>
 
       <div className="lg:w-1/2 flex flex-col justify-center p-12 lg:p-24 bg-bg border-l border-border-custom relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-gold/2 rounded-full blur-[100px]" />
+        <div className="absolute top-0 right-0 w-64 h-64 bg-brand/2 rounded-full blur-[100px]" />
         <div className="max-w-md w-full mx-auto space-y-12 relative z-10">
           <div className="space-y-4">
             <h3 className="font-syne font-black text-2xl uppercase tracking-tighter text-white">Set Command Password</h3>
-            <p className="text-text-soft text-sm italic">Institutional primary domain verified: <span className="text-gold font-dm-mono">{profileData?.email}</span></p>
+            <p className="text-text-soft text-sm italic">Institutional primary domain verified: <span className="text-brand font-dm-mono">{profileData?.email}</span></p>
           </div>
           <div className="space-y-8">
             <div className="space-y-3">
               <label className="text-[9px] font-dm-mono uppercase text-text-muted tracking-widest flex items-center gap-2 ml-1">
-                <Lock size={10} className="text-gold" /> Choose Secure Password
+                <Lock size={10} className="text-brand" /> Choose Secure Password
               </label>
               <input
                 type="password"
-                className="w-full bg-[#0a0d14] border border-gold/10 focus:border-gold/30 rounded-2xl p-5 outline-none transition-all placeholder:text-text-dim text-sm text-white selection:bg-gold selection:text-navy"
+                className="w-full bg-[#0a0d14] border border-brand/10 focus:border-brand/30 rounded-2xl p-5 outline-none transition-all placeholder:text-text-dim text-sm text-white selection:bg-brand selection:text-navy"
                 placeholder="Minimum 8 characters"
                 value={password}
                 onChange={e => setPassword(e.target.value)}
               />
             </div>
-            <div className="bg-[#0a0d14]/50 border border-gold/5 p-6 rounded-2xl space-y-4">
-              <h4 className="font-dm-mono text-[9px] uppercase font-bold text-gold tracking-widest">Role Privileges</h4>
+            <div className="bg-[#0a0d14]/50 border border-brand/5 p-6 rounded-2xl space-y-4">
+              <h4 className="font-dm-mono text-[9px] uppercase font-bold text-brand tracking-widest">Role Privileges</h4>
               <div className="flex items-center gap-3">
-                <ShieldCheck className="text-gold w-5 h-5" />
+                <ShieldCheck className="text-brand w-5 h-5" />
                 <span className="text-xs font-black uppercase tracking-wider text-text-soft">{profileData?.role} ACCESS ENABLED</span>
               </div>
               <p className="text-[10px] text-text-dim leading-relaxed font-bold">
@@ -5130,12 +5130,12 @@ export function StaffActivationView() {
             <button
               onClick={handleActivate}
               disabled={loading}
-              className="w-full btn btn-gold py-5 shadow-[0_0_30px_rgba(212,175,55,0.1)] rounded-2xl font-black tracking-[0.2em] text-sm flex items-center justify-center gap-4 hover:scale-[1.01] transition-all"
+              className="w-full btn btn-brand py-5 shadow-[0_0_30px_rgba(0,242,255,0.1)] rounded-2xl font-black tracking-[0.2em] text-sm flex items-center justify-center gap-4 hover:scale-[1.01] transition-all"
             >
               {loading ? 'INITIALIZING...' : 'ACTIVATE STAFF IDENTITY'} <ArrowRight size={18} />
             </button>
           </div>
-          <div className="pt-8 border-t border-gold/10">
+          <div className="pt-8 border-t border-brand/10">
             <p className="text-[9px] text-text-dim text-center font-dm-mono tracking-widest">GINASHE DIGITAL ACADEMY HUB SECURITY (INSTITUTIONAL_V5)</p>
           </div>
         </div>

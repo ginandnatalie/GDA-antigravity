@@ -26,7 +26,7 @@ export default function LevelFoundationPage({ onOpenModal, editMode }: LevelPage
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
             <div>
               <div className="flex items-center gap-3 mb-6">
-                <span className="font-dm-mono text-[10px] text-gold uppercase tracking-widest px-3 py-1 border border-gold/20 rounded-full bg-gold/5">Learner Profile</span>
+                <span className="font-dm-mono text-[10px] text-brand uppercase tracking-widest px-3 py-1 border border-brand/20 rounded-full bg-brand/5">Learner Profile</span>
               </div>
               <h2 className="text-3xl font-syne font-bold mb-6">Who is this for?</h2>
               <ul className="space-y-4 text-text-soft">
@@ -82,7 +82,7 @@ export default function LevelFoundationPage({ onOpenModal, editMode }: LevelPage
       <div className="bg-card border-t border-b border-border-custom px-5 py-6 flex justify-center">
         <Link 
           to="/curriculum" 
-          className="flex items-center gap-3 text-text-soft hover:text-gold transition-colors font-syne font-bold text-sm tracking-widest uppercase"
+          className="flex items-center gap-3 text-text-soft hover:text-brand transition-colors font-syne font-bold text-sm tracking-widest uppercase"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to Full Curriculum Matrix

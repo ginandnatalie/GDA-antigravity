@@ -6,6 +6,7 @@ import { supabase } from './lib/supabase';
 import Navbar from './components/Navbar';
 import { Footer } from './components/Footer';
 import { Modals } from './components/Modals';
+import WhatsAppOrb from './components/WhatsAppOrb';
 import { ArrowRight } from 'lucide-react';
 
 // Pages
@@ -24,6 +25,9 @@ import NewsDetailPage from './pages/NewsDetailPage';
 import EventsPage from './pages/EventsPage';
 import VerifyPage from './pages/VerifyPage';
 import PathwaysPage from './pages/PathwaysPage';
+import TermsPage from './pages/TermsPage';
+import RefundsPage from './pages/RefundsPage';
+import PopiaPage from './pages/PopiaPage';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -123,7 +127,7 @@ function AppContent() {
   const isPortal = pathname.startsWith('/portal') || pathname.startsWith('/admin') || pathname.startsWith('/course') || pathname.startsWith('/verify');
 
   return (
-    <div className="min-h-screen bg-bg text-text-custom selection:bg-gold-dim selection:text-gold transition-colors duration-300 flex flex-col">
+    <div className="min-h-screen bg-bg text-text-custom selection:bg-brand/30 selection:text-brand transition-colors duration-300 flex flex-col">
       <Modals 
         activeModal={activeModal} 
         onClose={closeModal} 
@@ -135,8 +139,8 @@ function AppContent() {
 
       {loading ? (
         <div className="min-h-screen bg-bg flex flex-col items-center justify-center transition-colors duration-300">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gold mb-4"></div>
-          <p className="text-gold font-dm-mono text-[10px] tracking-widest uppercase animate-pulse">Initializing Academy...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand mb-4"></div>
+          <p className="text-brand font-dm-mono text-[10px] tracking-widest uppercase animate-pulse">Initializing Academy...</p>
           <div className="mt-8">
              {/* Academy Initialization */}
           </div>
@@ -172,6 +176,9 @@ function AppContent() {
               <Route path="/news/:slug" element={<NewsDetailPage />} />
               <Route path="/events" element={<EventsPage />} />
               <Route path="/verify" element={<VerifyPage />} />
+              <Route path="/terms" element={<TermsPage />} />
+              <Route path="/refunds" element={<RefundsPage />} />
+              <Route path="/popia" element={<PopiaPage />} />
               
               <Route 
                 path="/admin" 
@@ -189,7 +196,12 @@ function AppContent() {
             </Routes>
           </main>
           
-          {!isPortal && <Footer onOpenModal={openModal} editMode={editMode} />}
+          {!isPortal && (
+            <>
+              <Footer onOpenModal={openModal} editMode={editMode} />
+              <WhatsAppOrb />
+            </>
+          )}
         </>
       )}
     </div>

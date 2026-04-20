@@ -20,16 +20,16 @@ export function Cohorts({ onOpenModal, editMode }: { onOpenModal: (id: string) =
                 { m: 'MAY', d: '05', n: 'AI & Machine Learning — Cohort 3', det: '16 weeks · Online', b: 'Open', bt: 'open' },
                 { m: 'JUN', d: '02', n: 'Data Engineering — Cohort 5', det: '12 weeks · Hybrid', b: 'Pre-Enrolling', bt: 'open' },
               ].map((c, i) => (
-                <div key={i} className={`bg-card border border-border-custom rounded-md p-5 px-5.5 flex items-center gap-4 transition-all cursor-pointer hover:border-border2 animate-fadeUp ${i === 0 ? 'border-gold/30 bg-gold/4' : ''}`}>
+                <div key={i} className={`bg-card border border-border-custom rounded-md p-5 px-5.5 flex items-center gap-4 transition-all cursor-pointer hover:border-border2 animate-fadeUp ${i === 0 ? 'border-brand/30 bg-brand/4' : ''}`}>
                   <div className="text-center shrink-0 w-[50px]">
                     <div className="font-dm-mono text-[9px] tracking-[0.15em] uppercase text-text-muted">{c.m}</div>
-                    <div className="font-syne font-extrabold text-[26px] text-gold leading-none">{c.d}</div>
+                    <div className="font-syne font-extrabold text-[26px] text-brand leading-none">{c.d}</div>
                   </div>
                   <div className="flex-1">
                     <div className="font-syne font-semibold text-[13px]">{c.n}</div>
                     <div className="font-dm-mono text-[9px] text-text-muted tracking-[0.08em] mt-0.75">{c.det}</div>
                   </div>
-                  <div className={`font-dm-mono text-[8px] tracking-[0.1em] uppercase px-2.25 py-0.75 rounded-full shrink-0 ${c.bt === 'open' ? 'bg-emerald-dim text-emerald border border-emerald/20' : 'bg-gold-dim text-gold border border-gold/20'}`}>
+                  <div className={`font-dm-mono text-[8px] tracking-[0.1em] uppercase px-2.25 py-0.75 rounded-full shrink-0 ${c.bt === 'open' ? 'bg-emerald-dim text-emerald border border-emerald/20' : 'bg-brand/10 text-brand border border-brand/20'}`}>
                     {c.b}
                   </div>
                 </div>
@@ -51,7 +51,7 @@ export function Cohorts({ onOpenModal, editMode }: { onOpenModal: (id: string) =
             
             <div className="text-center mt-6 pt-4 border-t border-border-custom">
                <span className="text-[11px] text-text-muted">
-                Enterprise enquiry? <a className="text-gold no-underline cursor-pointer hover:underline" onClick={() => onOpenModal('apply')}>Apply as an organisation</a>
+                Enterprise enquiry? <a className="text-brand no-underline cursor-pointer hover:underline" onClick={() => onOpenModal('apply')}>Apply as an organisation</a>
               </span>
             </div>
           </div>
@@ -75,8 +75,8 @@ export function Ecosystem({ onOpenModal, editMode }: { onOpenModal: (id: string)
             <button className="btn btn-outline mt-8 animate-fadeUp" onClick={() => onOpenModal('apply')}>Become a Partner</button>
           </div>
           <div className="bg-white/3 border border-border-custom rounded-2xl p-6 animate-fadeUp delay-200">
-            <div className="font-syne font-bold text-[11px] uppercase tracking-widest text-gold mb-4 flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-gold"></span>
+            <div className="font-syne font-bold text-[11px] uppercase tracking-widest text-brand mb-4 flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-brand"></span>
               Partnership Desk
             </div>
             <ul className="space-y-4">
@@ -88,7 +88,7 @@ export function Ecosystem({ onOpenModal, editMode }: { onOpenModal: (id: string)
                 <li key={i} className="group cursor-pointer">
                   <div className="flex items-center justify-between">
                     <div>
-                      <div className="font-syne font-bold text-[13px] group-hover:text-gold transition-colors">{res.t}</div>
+                      <div className="font-syne font-bold text-[13px] group-hover:text-brand transition-colors">{res.t}</div>
                       <div className="text-[10px] text-text-muted">{res.d}</div>
                     </div>
                     <span className="text-text-dim text-xs group-hover:translate-x-1 transition-transform">→</span>
@@ -102,10 +102,10 @@ export function Ecosystem({ onOpenModal, editMode }: { onOpenModal: (id: string)
         <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-14">
           <div className="flex flex-col gap-2.5">
             {[
-              { n: 'Amazon Web Services', p: 'AWS APN Partner · Training & Certification', i: '🟠', t: 'Verified', tc: 'gold' },
+              { n: 'Amazon Web Services', p: 'AWS APN Partner · Training & Certification', i: '🟠', t: 'Verified', tc: 'brand' },
               { n: 'Microsoft Azure', p: 'Microsoft Learning Partner · AI + Cloud Track', i: '🔵', t: 'Verified', tc: 'sky' },
               { n: 'Google Cloud', p: 'GCP Authorized Training Partner', i: '🟢', t: 'Verified', tc: 'em' },
-              { n: 'MICT SETA', p: 'Accredited Training Provider · NQF 4–7', i: '🏛️', t: 'Gov. Accredited', tc: 'gold' },
+              { n: 'MICT SETA', p: 'Accredited Training Provider · NQF 4–7', i: '🏛️', t: 'Gov. Accredited', tc: 'brand' },
               { n: 'Standard Bank Group', p: 'Employer Partner · Cloud & AI Roles', i: '🏦', t: 'Hiring', tc: '' },
               { n: 'MTN Group', p: 'Employer Partner · DevOps & Data Roles', i: '📱', t: 'Hiring', tc: '' }
             ].map((p, i) => (
@@ -131,13 +131,13 @@ export function Ecosystem({ onOpenModal, editMode }: { onOpenModal: (id: string)
                 'Participate in our annual GDA Tech Showcase and hiring events'
               ].map((b, i) => (
                 <li key={i} className="flex gap-2.5 text-[13px] items-start">
-                  <span className="w-1.75 h-1.75 rounded-full bg-gold shrink-0 mt-1.5"></span>
+                  <span className="w-1.75 h-1.75 rounded-full bg-brand shrink-0 mt-1.5"></span>
                   <span>{b}</span>
                 </li>
               ))}
             </ul>
             <div className="mt-6.5 flex gap-2.5 flex-wrap">
-              <button className="btn btn-gold" onClick={() => onOpenModal('apply')}>Partner Enquiry →</button>
+              <button className="btn btn-brand" onClick={() => onOpenModal('apply')}>Partner Enquiry →</button>
               <a href="mailto:partnerships@ginashe.co.za" className="btn btn-outline">partnerships@ginashe.co.za</a>
             </div>
           </div>

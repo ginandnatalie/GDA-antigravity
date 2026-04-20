@@ -11,7 +11,7 @@ import {
 } from '../lib/constants';
 
 // ─── STYLES (Based on GDA Design System) ────────────────────────
-const INPUT_CLASS = "w-full bg-surface border border-border-custom rounded-sm p-2.75 px-3.5 font-dm-sans text-[13px] text-text-custom outline-none focus:border-gold/40 focus:shadow-[0_0_0_3px_rgba(244,162,26,0.07)] transition-all";
+const INPUT_CLASS = "w-full bg-surface border border-border-custom rounded-sm p-2.75 px-3.5 font-dm-sans text-[13px] text-text-custom outline-none focus:border-brand/40 focus:shadow-[0_0_0_3px_rgba(0,242,255,0.07)] transition-all";
 const SELECT_CLASS = `${INPUT_CLASS} appearance-none bg-[url('data:image/svg+xml,%3Csvg_xmlns=%22http://www.w3.org/2000/svg%22_width=%2212%22_height=%2212%22_viewBox=%220_0_12_12%22%3E%3Cpath_fill=%22%235a607c%22_d=%22M6_8L1_3h10z%22/%3E%3C/svg%3E')] bg-no-repeat bg-[position:right_12px_center] pr-9`;
 const LABEL_CLASS = "block font-dm-mono text-[9px] tracking-[0.15em] uppercase text-text-muted mb-1.75";
 
@@ -205,9 +205,9 @@ export default function SharedAdmissionForm({ onOpenModal, onSuccess, initialPro
       {/* ─── STEP: CHECK ─── */}
       {step === 'check' && (
         <div className="space-y-5">
-          <div className="bg-surface/50 border border-gold/15 rounded-xl p-5">
+          <div className="bg-surface/50 border border-brand/15 rounded-xl p-5">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-9 h-9 rounded-lg bg-gold/10 flex items-center justify-center text-lg">🎓</div>
+              <div className="w-9 h-9 rounded-lg bg-brand/10 flex items-center justify-center text-lg">🎓</div>
               <div>
                 <div className="font-syne font-bold text-[14px]">Academic Application Process</div>
                 <div className="text-[11px] text-text-muted">Let's get you started on the right track</div>
@@ -236,7 +236,7 @@ export default function SharedAdmissionForm({ onOpenModal, onSuccess, initialPro
               )}
 
               {hasAccount && (
-                <button onClick={handleAccountCheck} disabled={checkingAccount} className={`w-full p-3 bg-gold text-[#080b12] font-syne font-extrabold text-[13px] tracking-[0.05em] uppercase rounded-sm hover:bg-gold-light transition-all ${checkingAccount ? 'opacity-50' : ''}`}>
+                <button onClick={handleAccountCheck} disabled={checkingAccount} className={`w-full p-3 bg-brand text-[#080b12] font-syne font-extrabold text-[13px] tracking-[0.05em] uppercase rounded-sm hover:bg-brand-light transition-all ${checkingAccount ? 'opacity-50' : ''}`}>
                   {checkingAccount ? 'Checking...' : hasAccount === 'yes' ? 'Look Up My Record' : 'Start New Application →'}
                 </button>
               )}
@@ -248,12 +248,12 @@ export default function SharedAdmissionForm({ onOpenModal, onSuccess, initialPro
       {/* ─── STEP: EXISTING ─── */}
       {step === 'existing' && (
         <div className="space-y-5 text-center py-4">
-          <div className="w-16 h-16 mx-auto rounded-2xl bg-gold/10 border border-gold/20 flex items-center justify-center text-3xl">👋</div>
-          <h3 className="font-syne font-bold text-[18px] mb-2 text-gold">Welcome Back!</h3>
+          <div className="w-16 h-16 mx-auto rounded-2xl bg-brand/10 border border-brand/20 flex items-center justify-center text-3xl">👋</div>
+          <h3 className="font-syne font-bold text-[18px] mb-2 text-brand">Welcome Back!</h3>
           <p className="text-[13px] text-text-soft leading-relaxed max-w-sm mx-auto">{duplicateMessage}</p>
           <div className="flex flex-col gap-3 pt-2">
-            <button onClick={() => onOpenModal?.('student')} className="w-full p-3.5 bg-gold text-[#080b12] font-syne font-extrabold text-[13px] tracking-[0.05em] uppercase rounded-sm hover:bg-gold-light transition-all">Sign In to My Portal →</button>
-            <button onClick={() => { setStep('form'); setDuplicateCheckDone(false); }} className="w-full p-3 bg-transparent text-text-muted font-dm-mono text-[11px] tracking-wider uppercase border border-border-custom rounded-sm hover:text-gold transition-all">Apply for a different programme</button>
+            <button onClick={() => onOpenModal?.('student')} className="w-full p-3.5 bg-brand text-[#080b12] font-syne font-extrabold text-[13px] tracking-[0.05em] uppercase rounded-sm hover:bg-brand-light transition-all">Sign In to My Portal →</button>
+            <button onClick={() => { setStep('form'); setDuplicateCheckDone(false); }} className="w-full p-3 bg-transparent text-text-muted font-dm-mono text-[11px] tracking-wider uppercase border border-border-custom rounded-sm hover:text-brand transition-all">Apply for a different programme</button>
           </div>
         </div>
       )}
@@ -263,7 +263,7 @@ export default function SharedAdmissionForm({ onOpenModal, onSuccess, initialPro
         <form onSubmit={handleSubmit} className="animate-fadeUp">
           {/* Section 1: Personal */}
           <div className="mb-6 pb-5 border-b border-border-custom">
-            <div className="font-dm-mono text-[9px] tracking-[0.15em] uppercase text-gold mb-4">Step 1 — Personal Information</div>
+            <div className="font-dm-mono text-[9px] tracking-[0.15em] uppercase text-brand mb-4">Step 1 — Personal Information</div>
             <div className="grid grid-cols-2 gap-3 mb-4">
               <div>
                 <label className={LABEL_CLASS}>First Name <span className="text-coral">*</span></label>
@@ -376,11 +376,11 @@ export default function SharedAdmissionForm({ onOpenModal, onSuccess, initialPro
             </div>
           </div>
 
-          <button type="submit" disabled={isSubmitting} className={`w-full p-3.5 bg-gold text-[#080b12] font-syne font-extrabold text-[13px] tracking-[0.05em] uppercase rounded-sm hover:bg-gold-light transition-all ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}>
+          <button type="submit" disabled={isSubmitting} className={`w-full p-3.5 bg-brand text-[#080b12] font-syne font-extrabold text-[13px] tracking-[0.05em] uppercase rounded-sm hover:bg-brand-light transition-all ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}>
             {isSubmitting ? 'Submitting Application...' : 'Submit Application →'}
           </button>
 
-          <button type="button" onClick={() => { setStep('check'); setDuplicateCheckDone(false); }} className="block w-full text-center mt-4 text-[11px] text-text-muted hover:text-gold transition-colors">← Back to account check</button>
+          <button type="button" onClick={() => { setStep('check'); setDuplicateCheckDone(false); }} className="block w-full text-center mt-4 text-[11px] text-text-muted hover:text-brand transition-colors">← Back to account check</button>
         </form>
       )}
     </div>

@@ -81,12 +81,12 @@ export default function NewsPage() {
             animate={{ opacity: 1, y: 0 }}
             className="flex flex-col gap-4"
           >
-            <div className="flex items-center gap-2 font-dm-mono text-[10px] tracking-[0.2em] uppercase text-gold">
+            <div className="flex items-center gap-2 font-dm-mono text-[10px] tracking-[0.2em] uppercase text-brand">
               <Newspaper size={14} />
               News & Insights
             </div>
             <h1 className="font-syne font-extrabold text-4xl md:text-6xl leading-tight">
-              The GDA <span className="text-gold">Intelligence</span> Report
+              The GDA <span className="text-brand">Intelligence</span> Report
             </h1>
             <p className="text-text-muted text-lg leading-relaxed max-w-2xl">
               Stay ahead of the curve with our latest updates on technology, career growth, and industry transformation across Africa.
@@ -99,8 +99,8 @@ export default function NewsPage() {
             transition={{ delay: 0.2 }}
             className="bg-white/3 border border-border-custom rounded-2xl p-6"
           >
-            <div className="font-syne font-bold text-[11px] uppercase tracking-widest text-gold mb-4 flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-gold"></span>
+            <div className="font-syne font-bold text-[11px] uppercase tracking-widest text-brand mb-4 flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-brand"></span>
               GDA Media Desk
             </div>
             <ul className="space-y-4">
@@ -112,7 +112,7 @@ export default function NewsPage() {
                 <li key={i} className="group cursor-pointer">
                   <div className="flex items-center justify-between">
                     <div>
-                      <div className="font-syne font-bold text-[13px] group-hover:text-gold transition-colors">{res.t}</div>
+                      <div className="font-syne font-bold text-[13px] group-hover:text-brand transition-colors">{res.t}</div>
                       <div className="text-[10px] text-text-muted">{res.d}</div>
                     </div>
                     <span className="text-text-dim text-xs group-hover:translate-x-1 transition-transform">→</span>
@@ -134,7 +134,7 @@ export default function NewsPage() {
             <button
               key={cat}
               onClick={() => setFilter(cat)}
-              className={`px-5 py-2 rounded-full font-dm-mono text-[10px] tracking-widest uppercase transition-all duration-300 ${filter === cat ? 'bg-gold text-bg' : 'text-text-muted hover:text-gold hover:bg-gold-dim'}`}
+              className={`px-5 py-2 rounded-full font-dm-mono text-[10px] tracking-widest uppercase transition-all duration-300 ${filter === cat ? 'bg-brand text-bg' : 'text-text-muted hover:text-brand hover:bg-brand/10'}`}
             >
               {cat}
             </button>
@@ -153,7 +153,7 @@ export default function NewsPage() {
             className="group"
           >
             <Link to={`/news/${post.slug}`} className="block no-underline">
-              <div className="relative aspect-[16/10] rounded-2xl overflow-hidden mb-6 bg-surface border border-border-custom transition-all duration-500 group-hover:border-gold/50 group-hover:shadow-[0_20px_50px_rgba(212,175,55,0.1)]">
+              <div className="relative aspect-[16/10] rounded-2xl overflow-hidden mb-6 bg-surface border border-border-custom transition-all duration-500 group-hover:border-brand/40 group-hover:shadow-[0_20px_50px_rgba(0,242,255,0.05)]">
                 <img 
                   src={post.image_url} 
                   alt={post.title}
@@ -161,7 +161,7 @@ export default function NewsPage() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-bg/80 to-transparent opacity-60 group-hover:opacity-40 transition-opacity"></div>
                 <div className="absolute top-4 left-4">
-                  <span className="px-3 py-1 bg-bg/80 backdrop-blur-md border border-gold/30 rounded-full font-dm-mono text-[9px] tracking-widest uppercase text-gold">
+                  <span className="px-3 py-1 bg-bg/80 backdrop-blur-md border border-brand/30 rounded-full font-dm-mono text-[9px] tracking-widest uppercase text-brand">
                     {post.category}
                   </span>
                 </div>
@@ -170,17 +170,17 @@ export default function NewsPage() {
               <div className="flex flex-col gap-3">
                 <div className="flex items-center gap-3 text-text-dim font-dm-mono text-[9px] tracking-widest uppercase">
                   <div className="flex items-center gap-1.5">
-                    <Calendar size={12} className="text-gold" />
+                    <Calendar size={12} className="text-brand" />
                     {new Date(post.published_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
                   </div>
                 </div>
-                <h3 className="font-syne font-bold text-xl group-hover:text-gold transition-colors leading-snug">
+                <h3 className="font-syne font-bold text-xl group-hover:text-brand transition-colors leading-snug">
                   {post.title}
                 </h3>
                 <p className="text-text-muted text-sm leading-relaxed line-clamp-2">
                   {post.excerpt}
                 </p>
-                <div className="flex items-center gap-2 text-gold font-dm-mono text-[10px] tracking-widest uppercase mt-2 group-hover:gap-4 transition-all duration-300">
+                <div className="flex items-center gap-2 text-brand font-dm-mono text-[10px] tracking-widest uppercase mt-2 group-hover:gap-4 transition-all duration-300">
                   Read Article <ArrowRight size={14} />
                 </div>
               </div>
@@ -196,20 +196,20 @@ export default function NewsPage() {
         viewport={{ once: true }}
         className="max-w-7xl mx-auto mt-32 p-12 md:p-16 rounded-[2rem] bg-surface border border-border-custom relative overflow-hidden"
       >
-        <div className="absolute right-0 top-0 w-1/3 h-full bg-gold/5 blur-[100px] pointer-events-none"></div>
+        <div className="absolute right-0 top-0 w-1/3 h-full bg-brand/5 blur-[100px] pointer-events-none"></div>
         <div className="relative z-10 grid md:grid-cols-2 gap-12 items-center">
           <div className="flex flex-col gap-4">
-            <h2 className="font-syne font-extrabold text-3xl md:text-4xl">Weekly Insights <br/>to your <span className="text-gold">Inbox</span></h2>
+            <h2 className="font-syne font-extrabold text-3xl md:text-4xl">Weekly Insights <br/>to your <span className="text-brand">Inbox</span></h2>
             <p className="text-text-muted max-w-md">Join over 5,000+ technology leaders and students receiving our curated weekly reports on African tech transformation.</p>
           </div>
           <form className="flex gap-2">
             <input 
               type="email" 
               placeholder="Your professional email" 
-              className="flex-1 bg-bg border border-border-custom rounded-lg px-6 py-4 focus:border-gold outline-none transition-all text-sm"
+              className="flex-1 bg-bg border border-border-custom rounded-lg px-6 py-4 focus:border-brand outline-none transition-all text-sm"
               required
             />
-            <button className="btn btn-gold px-8 whitespace-nowrap">Subscribe</button>
+            <button className="btn btn-brand px-8 whitespace-nowrap">Subscribe</button>
           </form>
         </div>
       </motion.div>

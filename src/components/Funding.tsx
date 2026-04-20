@@ -7,12 +7,12 @@ export function Funding({ onOpenModal, editMode }: { onOpenModal: (id: string) =
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-10 lg:gap-16 mb-14 items-center">
           <div className="max-w-[540px]">
             <div className="section-label">Financial Aid & Funding</div>
-            <h2 className="section-title animate-fadeUp">Cost should never be<br />the barrier to <em className="italic font-light font-dm-sans text-gold">greatness.</em></h2>
+            <h2 className="section-title animate-fadeUp">Cost should never be<br />the barrier to <em className="italic font-light font-dm-sans text-brand">greatness.</em></h2>
             <p className="section-sub animate-fadeUp delay-100">GDA programmes can be fully funded through SETA skills levies, employer training budgets, or our flexible payment plans. Every option, explained clearly.</p>
           </div>
           <div className="bg-card border border-border-custom rounded-2xl p-6 animate-fadeUp delay-200">
-            <div className="font-syne font-bold text-[11px] uppercase tracking-widest text-gold mb-4 flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-gold"></span>
+            <div className="font-syne font-bold text-[11px] uppercase tracking-widest text-brand mb-4 flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-brand"></span>
               Top Resources
             </div>
             <ul className="space-y-3">
@@ -25,7 +25,7 @@ export function Funding({ onOpenModal, editMode }: { onOpenModal: (id: string) =
                   <div className="flex items-start gap-3">
                     <span className="font-dm-mono text-[10px] text-text-dim mt-0.5">0{i+1}</span>
                     <div>
-                      <div className="font-syne font-bold text-[13px] group-hover:text-gold transition-colors">{res.t}</div>
+                      <div className="font-syne font-bold text-[13px] group-hover:text-brand transition-colors">{res.t}</div>
                       <div className="text-[10px] text-text-muted">{res.d}</div>
                     </div>
                   </div>
@@ -76,24 +76,24 @@ export function Funding({ onOpenModal, editMode }: { onOpenModal: (id: string) =
             <button className="btn btn-sm bg-sky-dim text-sky border border-sky/25 hover:bg-sky/20" onClick={() => onOpenModal('apply')}>Request Corporate Package →</button>
           </div>
 
-          <div className="bg-card p-6 sm:p-9 px-6 sm:px-7.5 relative overflow-hidden flex flex-col transition-colors hover:bg-card2 before:content-[''] before:absolute before:top-0 before:left-0 before:right-0 before:h-0.75 before:bg-[linear-gradient(90deg,var(--color-gold),#c67d10)]">
-            <div className="w-12 h-12 rounded-md flex items-center justify-center text-[22px] mb-4.5 border border-border-custom bg-gold-dim border-gold/20 text-gold">💳</div>
-            <div className="font-dm-mono text-[9px] tracking-[0.15em] uppercase text-gold mb-2">Self-Funded / Payment Plans</div>
+          <div className="bg-card p-6 sm:p-9 px-6 sm:px-7.5 relative overflow-hidden flex flex-col transition-colors hover:bg-card2 before:content-[''] before:absolute before:top-0 before:left-0 before:right-0 before:h-0.75 before:bg-[linear-gradient(90deg,var(--color-brand),#c67d10)]">
+            <div className="w-12 h-12 rounded-md flex items-center justify-center text-[22px] mb-4.5 border border-border-custom bg-brand-dim border-brand/20 text-brand">💳</div>
+            <div className="font-dm-mono text-[9px] tracking-[0.15em] uppercase text-brand mb-2">Self-Funded / Payment Plans</div>
             <div className="font-syne font-extrabold text-[18px] mb-2.5">Flexible Payment Options</div>
             <div className="text-[13px] text-text-soft leading-[1.65] mb-5 flex-1">Investing in yourself is the highest-ROI decision you'll ever make. Our plans make it possible to start without the full fee upfront — our ISA means you only pay more once you're earning more.</div>
             <ul className="list-none flex flex-col gap-2.25 mb-5.5">
               {['3-month plan — split fee into equal thirds, 0% interest', '6-month plan — available with 8% finance charge', 'Early-bird — 10% off when you apply 6+ weeks before cohort start', 'Sibling/referral — R2,000 off for every referred learner who enrols', 'Income Share Agreement (ISA) — pay 12% of salary for 24 months post-placement'].map((li, i) => (
                 <li key={i} className="flex gap-2 text-[12px] items-start">
-                  <span className="w-1.25 h-1.25 rounded-full bg-gold shrink-0 mt-1.25"></span>
+                  <span className="w-1.25 h-1.25 rounded-full bg-brand shrink-0 mt-1.25"></span>
                   <span>{li}</span>
                 </li>
               ))}
             </ul>
             <div className="p-3.5 rounded-md mb-4.5 bg-white/3 border border-border-custom">
-              <div className="flex justify-between font-dm-mono text-[9px] tracking-[0.1em] uppercase text-text-dim mb-2">Upfront required (3-month plan) <span className="text-gold text-[11px]">~33%</span></div>
-              <div className="h-1.25 bg-white/6 rounded-full overflow-hidden"><div className="h-full bg-[linear-gradient(90deg,var(--color-gold),#c67d10)] rounded-full w-1/3"></div></div>
+              <div className="flex justify-between font-dm-mono text-[9px] tracking-[0.1em] uppercase text-text-dim mb-2">Upfront required (3-month plan) <span className="text-brand text-[11px]">~33%</span></div>
+              <div className="h-1.25 bg-white/6 rounded-full overflow-hidden"><div className="h-full bg-[linear-gradient(90deg,var(--color-brand),#c67d10)] rounded-full w-1/3"></div></div>
             </div>
-            <button className="btn btn-gold btn-sm" onClick={() => onOpenModal('apply')}>Discuss Payment Options →</button>
+            <button className="btn btn-brand btn-sm" onClick={() => onOpenModal('apply')}>Discuss Payment Options →</button>
           </div>
         </div>
 
@@ -101,7 +101,7 @@ export function Funding({ onOpenModal, editMode }: { onOpenModal: (id: string) =
           <div className="font-syne font-extrabold text-[20px] mb-1.5">How to access SETA funding — step by step</div>
           <div className="text-[13px] text-text-soft mb-8">Most learners leave this money on the table. GDA's admissions team guides you through every step at no cost.</div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-0 relative">
-            <div className="hidden lg:block absolute top-[22px] left-[22px] right-[22px] h-0.5 bg-[linear-gradient(90deg,var(--color-emerald),var(--color-sky),var(--color-gold))] opacity-30 z-0"></div>
+            <div className="hidden lg:block absolute top-[22px] left-[22px] right-[22px] h-0.5 bg-[linear-gradient(90deg,var(--color-emerald),var(--color-sky),var(--color-brand))] opacity-30 z-0"></div>
             {[
               { n: 1, t: 'Confirm your employer\'s levy status', d: 'Check if your company pays the Skills Development Levy (payroll > R500k/year). GDA can verify this with your HR in under 10 minutes.' },
               { n: 2, t: 'Get a Letter of Support from HR', d: 'Your HR/L&D manager signs a one-page letter confirming the company supports your training. GDA provides the template — you just need a signature.' },
@@ -109,7 +109,7 @@ export function Funding({ onOpenModal, editMode }: { onOpenModal: (id: string) =
               { n: 4, t: 'Enrol & start at no personal cost', d: 'Once approved, GDA invoices SETA directly. You start your programme — zero out-of-pocket cost for qualifying applicants.' }
             ].map((step) => (
               <div key={step.n} className="px-4 relative z-[1] group">
-                <div className="w-11 h-11 rounded-full bg-card border-2 border-border-custom flex items-center justify-center font-syne font-extrabold text-[14px] text-text-muted mb-3.5 transition-all group-hover:bg-gold-dim group-hover:border-gold/40 group-hover:text-gold">{step.n}</div>
+                <div className="w-11 h-11 rounded-full bg-card border-2 border-border-custom flex items-center justify-center font-syne font-extrabold text-[14px] text-text-muted mb-3.5 transition-all group-hover:bg-brand-dim group-hover:border-brand/40 group-hover:text-brand">{step.n}</div>
                 <div className="font-syne font-bold text-[13px] mb-1.5">{step.t}</div>
                 <div className="text-[11px] text-text-muted leading-[1.6]">{step.d}</div>
               </div>
@@ -184,7 +184,7 @@ export function FAQ({ editMode }: { editMode?: boolean }) {
           <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[16px] opacity-40 pointer-events-none">🔍</span>
           <input 
             type="text" 
-            className="w-full bg-card border border-border-custom rounded-md p-3.25 px-4 pl-11 font-dm-sans text-[14px] text-text-custom outline-none focus:border-gold/35 focus:shadow-[0_0_0_3px_rgba(244,162,26,0.07)] transition-all" 
+            className="w-full bg-card border border-border-custom rounded-md p-3.25 px-4 pl-11 font-dm-sans text-[14px] text-text-custom outline-none focus:border-brand/35 focus:shadow-[0_0_0_3px_rgba(0,242,255,0.07)] transition-all" 
             placeholder="Search — e.g. 'SETA funding', 'remote learning', 'prerequisites'…" 
             value={search}
             onChange={e => setSearch(e.target.value)}
@@ -196,10 +196,10 @@ export function FAQ({ editMode }: { editMode?: boolean }) {
             {cats.map((cat) => (
               <button 
                 key={cat.id}
-                className={`flex items-center gap-2.5 p-3 px-4 rounded-md cursor-pointer border border-transparent bg-none text-left transition-all ${activeCat === cat.id && !search ? 'bg-card border-gold/20' : 'hover:bg-white/3 hover:border-border-custom'}`}
+                className={`flex items-center gap-2.5 p-3 px-4 rounded-md cursor-pointer border border-transparent bg-none text-left transition-all ${activeCat === cat.id && !search ? 'bg-card border-brand/20' : 'hover:bg-white/3 hover:border-border-custom'}`}
                 onClick={() => { setActiveCat(cat.id); setSearch(''); }}
               >
-                <span className={`w-1.75 h-1.75 rounded-full shrink-0 transition-colors ${activeCat === cat.id && !search ? 'bg-gold' : 'bg-text-dim'}`}></span>
+                <span className={`w-1.75 h-1.75 rounded-full shrink-0 transition-colors ${activeCat === cat.id && !search ? 'bg-brand' : 'bg-text-dim'}`}></span>
                 <span className={`font-syne font-semibold text-[13px] ${activeCat === cat.id && !search ? 'text-text-custom' : 'text-text-muted'}`}>{cat.name}</span>
                 <span className="ml-auto font-dm-mono text-[9px] text-text-dim">{cat.count}</span>
               </button>
@@ -215,8 +215,8 @@ export function FAQ({ editMode }: { editMode?: boolean }) {
                       className="w-full py-5 flex items-start justify-between gap-5 bg-none border-none cursor-pointer text-left group"
                       onClick={() => toggleItem(i)}
                     >
-                      <span className={`font-syne font-semibold text-[15px] leading-[1.35] transition-colors ${openItems.includes(i) ? 'text-gold' : 'text-text-custom group-hover:text-gold'}`}>{f.q}</span>
-                      <span className={`w-7 h-7 rounded-full bg-white/4 border border-border-custom flex items-center justify-center text-[16px] font-light text-text-muted transition-all shrink-0 mt-0.5 leading-none ${openItems.includes(i) ? 'bg-gold-dim border-gold/30 text-gold rotate-45' : ''}`}>+</span>
+                      <span className={`font-syne font-semibold text-[15px] leading-[1.35] transition-colors ${openItems.includes(i) ? 'text-brand' : 'text-text-custom group-hover:text-brand'}`}>{f.q}</span>
+                      <span className={`w-7 h-7 rounded-full bg-white/4 border border-border-custom flex items-center justify-center text-[16px] font-light text-text-muted transition-all shrink-0 mt-0.5 leading-none ${openItems.includes(i) ? 'bg-brand-dim border-brand/30 text-brand rotate-45' : ''}`}>+</span>
                     </button>
                     {openItems.includes(i) && (
                       <div className="pb-5 animate-slideDown">
@@ -227,7 +227,7 @@ export function FAQ({ editMode }: { editMode?: boolean }) {
                 ))}
               </div>
             ) : (
-              <div className="text-center py-10 text-text-muted font-dm-mono text-[12px] tracking-[0.1em]">No questions match your search. <a href="mailto:academy@ginashe.co.za" className="text-gold no-underline hover:underline">Email us directly →</a></div>
+              <div className="text-center py-10 text-text-muted font-dm-mono text-[12px] tracking-[0.1em]">No questions match your search. <a href="mailto:academy@ginashe.co.za" className="text-brand no-underline hover:underline">Email us directly →</a></div>
             )}
           </div>
         </div>

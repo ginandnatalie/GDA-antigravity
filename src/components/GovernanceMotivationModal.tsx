@@ -86,14 +86,14 @@ export function GovernanceMotivationModal({
   return (
     <div className="fixed inset-0 z-[3000] bg-black/90 backdrop-blur-xl flex items-center justify-center p-6">
       <div 
-        className="bg-card border border-gold/20 rounded-3xl w-full max-w-[500px] overflow-hidden shadow-[0_0_50px_rgba(244,162,26,0.1)] animate-fadeUp relative"
+        className="bg-card border border-brand/20 rounded-3xl w-full max-w-[500px] overflow-hidden shadow-[0_0_50px_rgba(0,242,255,0.05)] animate-fadeUp relative"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gold/50 to-transparent" />
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-brand/50 to-transparent" />
         
         <div className="p-8">
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-12 h-12 rounded-xl bg-gold/10 border border-gold/20 flex items-center justify-center text-gold">
+            <div className="w-12 h-12 rounded-xl bg-brand/10 border border-brand/20 flex items-center justify-center text-brand">
               <Shield size={24} />
             </div>
             <div>
@@ -116,7 +116,7 @@ export function GovernanceMotivationModal({
                 <label className="block font-dm-mono text-[9px] tracking-widest uppercase text-text-muted">Motivation / Rationale (Mandatory)</label>
                 <textarea 
                   required
-                  className="w-full h-32 bg-surface/50 border border-border-custom rounded-xl p-4 text-[13px] text-text-custom outline-none focus:border-gold/40 transition-all resize-none placeholder:text-text-dim"
+                  className="w-full h-32 bg-surface/50 border border-border-custom rounded-xl p-4 text-[13px] text-text-custom outline-none focus:border-brand/40 transition-all resize-none placeholder:text-text-dim"
                   placeholder="Explain why this override is necessary according to GDA policy..."
                   value={motivation}
                   onChange={(e) => setMotivation(e.target.value)}
@@ -135,11 +135,11 @@ export function GovernanceMotivationModal({
                     />
                     <label 
                       htmlFor="gov-file"
-                      className={`flex items-center justify-between w-full bg-surface/30 border border-dashed border-border-custom px-4 py-3 rounded-xl cursor-pointer hover:bg-gold/5 hover:border-gold/30 transition-all ${file ? 'border-gold/50 bg-gold/5' : ''}`}
+                      className={`flex items-center justify-between w-full bg-surface/30 border border-dashed border-border-custom px-4 py-3 rounded-xl cursor-pointer hover:bg-brand/5 hover:border-brand/30 transition-all ${file ? 'border-brand/50 bg-brand/5' : ''}`}
                     >
                       <div className="flex items-center gap-2 cursor-pointer">
-                        <FileUp size={16} className={file ? 'text-gold' : 'text-text-muted'} />
-                        <span className={`text-xs ${file ? 'text-gold font-medium' : 'text-text-dim'}`}>
+                        <FileUp size={16} className={file ? 'text-brand' : 'text-text-muted'} />
+                        <span className={`text-xs ${file ? 'text-brand font-medium' : 'text-text-dim'}`}>
                           {file ? file.name : 'Upload supporting evidence...'}
                         </span>
                       </div>
@@ -154,7 +154,7 @@ export function GovernanceMotivationModal({
                     <Link size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-text-muted" />
                     <input 
                       type="url"
-                      className="w-full bg-surface/30 border border-border-custom rounded-xl p-3 pl-10 text-xs text-text-custom outline-none focus:border-gold/40 transition-all"
+                      className="w-full bg-surface border border-border-custom rounded-xl pl-12 pr-5 py-4 text-[14px] text-text-custom focus:border-brand/40 outline-none transition-all shadow-inner"
                       placeholder="https://..."
                       value={referenceUrl}
                       onChange={(e) => setReferenceUrl(e.target.value)}
@@ -181,7 +181,7 @@ export function GovernanceMotivationModal({
                 <button 
                   type="submit"
                   disabled={isSubmitting || motivation.length < 10}
-                  className="flex-1 px-6 py-3 rounded-xl bg-gold text-black text-[11px] font-dm-mono font-bold uppercase tracking-widest hover:bg-gold-bright transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  className="flex-1 px-6 py-3 rounded-xl bg-brand text-black text-[11px] font-dm-mono font-bold uppercase tracking-widest hover:bg-white transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
                   {isSubmitting ? (
                     <>

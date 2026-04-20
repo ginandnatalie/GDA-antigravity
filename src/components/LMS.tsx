@@ -124,14 +124,14 @@ export function CourseViewer({ courseId, onBack }: { courseId: string; onBack: (
     setGovernance(settings);
   }
 
-  if (loading) return <div className="flex items-center justify-center h-[80vh]"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gold"></div></div>;
+  if (loading) return <div className="flex items-center justify-center h-[80vh]"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand"></div></div>;
 
   return (
     <div className="flex h-[calc(100vh-64px)] bg-bg overflow-hidden relative">
       {/* Sidebar */}
       <aside className="w-80 border-r border-border-custom bg-surface overflow-y-auto hidden md:block">
         <div className="p-6 border-b border-border-custom">
-          <button onClick={onBack} className="text-text-muted hover:text-gold text-[10px] uppercase tracking-widest mb-4 flex items-center gap-2">
+          <button onClick={onBack} className="text-text-muted hover:text-brand text-[10px] uppercase tracking-widest mb-4 flex items-center gap-2">
             ← Back to Portal
           </button>
           <h2 className="font-syne font-bold text-lg leading-tight">{course?.title}</h2>
@@ -148,7 +148,7 @@ export function CourseViewer({ courseId, onBack }: { courseId: string; onBack: (
                     key={lesson.id}
                     onClick={() => setActiveItem({ type: 'lesson', data: lesson })}
                     className={`w-full text-left p-3 rounded-md transition-all flex items-start gap-3 ${
-                      activeItem?.type === 'lesson' && activeItem.data.id === lesson.id ? 'bg-gold/10 text-gold' : 'hover:bg-white/5 text-text-soft'
+                      activeItem?.type === 'lesson' && activeItem.data.id === lesson.id ? 'bg-brand/10 text-brand' : 'hover:bg-white/5 text-text-soft'
                     }`}
                   >
                     <div className={`mt-1 w-4 h-4 rounded-full border flex items-center justify-center shrink-0 ${
@@ -167,11 +167,11 @@ export function CourseViewer({ courseId, onBack }: { courseId: string; onBack: (
                     key={quiz.id}
                     onClick={() => setActiveItem({ type: 'quiz', data: quiz })}
                     className={`w-full text-left p-3 rounded-md transition-all flex items-start gap-3 ${
-                      activeItem?.type === 'quiz' && activeItem.data.id === quiz.id ? 'bg-gold/10 text-gold' : 'hover:bg-white/5 text-text-soft'
+                      activeItem?.type === 'quiz' && activeItem.data.id === quiz.id ? 'bg-brand/10 text-brand' : 'hover:bg-white/5 text-text-soft'
                     }`}
                   >
                     <div className={`mt-1 w-4 h-4 rounded-full border flex items-center justify-center shrink-0 ${
-                      completedQuizzes.includes(quiz.id) ? 'bg-gold border-gold text-white' : 'border-border-custom'
+                      completedQuizzes.includes(quiz.id) ? 'bg-brand border-brand text-white' : 'border-border-custom'
                     }`}>
                       {completedQuizzes.includes(quiz.id) ? <span className="text-[10px]">✓</span> : <span className="text-[10px]">?</span>}
                     </div>
@@ -208,7 +208,7 @@ export function CourseViewer({ courseId, onBack }: { courseId: string; onBack: (
                    <div className="text-text-muted text-sm">Lesson {completedLessons.length} of {modules.reduce((acc, m) => acc + m.lessons.length, 0)} completed</div>
                    <button 
                      onClick={() => setShowDiscussions(!showDiscussions)}
-                     className="text-gold text-[10px] font-dm-mono uppercase tracking-widest flex items-center gap-2 hover:underline"
+                     className="text-brand text-[10px] font-dm-mono uppercase tracking-widest flex items-center gap-2 hover:underline"
                    >
                      <Mail className="w-3 h-3" /> {governance.global_discussion_mode === 'public-community' ? 'Course Board' : 'Message Instructor'}
                    </button>
@@ -216,7 +216,7 @@ export function CourseViewer({ courseId, onBack }: { courseId: string; onBack: (
                </div>
                <button
                  onClick={() => toggleComplete(activeItem.data.id)}
-                 className={`btn btn-sm ${completedLessons.includes(activeItem.data.id) ? 'btn-outline' : 'btn-gold'}`}
+                 className={`btn btn-sm ${completedLessons.includes(activeItem.data.id) ? 'btn-outline' : 'btn-brand'}`}
                >
                  {completedLessons.includes(activeItem.data.id) ? '✓ Completed' : 'Mark as Complete'}
                </button>
@@ -311,9 +311,9 @@ function LessonDiscussions({ lessonId, mode, onClose }: { lessonId: string, mode
             <div key={c.id} className={`flex flex-col gap-2 ${c.user_id === user?.id ? 'items-end' : 'items-start'}`}>
                <div className="flex items-center gap-2">
                   <span className="text-[9px] font-dm-mono uppercase text-text-dim">{c.profiles?.first_name} {c.profiles?.last_name}</span>
-                  {c.profiles?.role === 'instructor' && <span className="bg-gold/10 text-gold text-[7px] px-1 rounded uppercase font-bold">Staff</span>}
+                  {c.profiles?.role === 'instructor' && <span className="bg-brand/10 text-brand text-[7px] px-1 rounded uppercase font-bold">Staff</span>}
                </div>
-               <div className={`p-4 rounded-2xl text-[13px] max-w-[90%] ${c.user_id === user?.id ? 'bg-gold/10 border border-gold/20 text-text-custom' : 'bg-bg border border-border-custom text-text-soft'}`}>
+               <div className={`p-4 rounded-2xl text-[13px] max-w-[90%] ${c.user_id === user?.id ? 'bg-brand/10 border border-brand/20 text-text-custom' : 'bg-bg border border-border-custom text-text-soft'}`}>
                  {c.content}
                </div>
                <span className="text-[8px] text-text-dim font-dm-mono uppercase tracking-tighter">{new Date(c.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
@@ -333,11 +333,11 @@ function LessonDiscussions({ lessonId, mode, onClose }: { lessonId: string, mode
                value={newComment}
                onChange={e => setNewComment(e.target.value)}
                placeholder={mode === 'direct-to-instructor' ? "Ask the instructor a question..." : "Post to course board..."}
-               className="w-full bg-bg border border-border-custom rounded-xl p-4 pr-12 text-sm h-24 focus:border-gold/50 outline-none"
+               className="w-full bg-bg border border-border-custom rounded-xl p-4 pr-12 text-sm h-24 focus:border-brand/50 outline-none"
             />
             <button 
                onClick={postComment}
-               className="absolute bottom-4 right-4 text-gold hover:scale-110 transition-transform"
+               className="absolute bottom-4 right-4 text-brand hover:scale-110 transition-transform"
             >
                <Zap className="w-5 h-5 fill-current" />
             </button>
@@ -423,7 +423,7 @@ function QuizView({ quiz, onComplete }: { quiz: any, onComplete: () => void }) {
           {passed ? ' You have passed this quiz!' : ` You need ${quiz.passing_score}% to pass.`}
         </p>
         {!passed && (
-          <button onClick={() => { setSubmitted(false); setAnswers({}); }} className="btn btn-gold">Try Again</button>
+          <button onClick={() => { setSubmitted(false); setAnswers({}); }} className="btn btn-brand">Try Again</button>
         )}
       </div>
     );
@@ -447,8 +447,8 @@ function QuizView({ quiz, onComplete }: { quiz: any, onComplete: () => void }) {
                   onClick={() => setAnswers({ ...answers, [qIdx]: oIdx })}
                   className={`w-full text-left p-4 rounded-lg border transition-all ${
                     answers[qIdx] === oIdx 
-                      ? 'bg-gold/10 border-gold text-gold' 
-                      : 'bg-surface border-border-custom hover:border-gold/30'
+                      ? 'bg-brand/10 border-brand text-brand' 
+                      : 'bg-surface border-border-custom hover:border-brand/30'
                   }`}
                 >
                   {opt}
@@ -466,7 +466,7 @@ function QuizView({ quiz, onComplete }: { quiz: any, onComplete: () => void }) {
         <button
           disabled={Object.keys(answers).length < questions.length}
           onClick={handleSubmit}
-          className="btn btn-gold px-8"
+          className="btn btn-brand px-8"
         >
           Submit Quiz
         </button>

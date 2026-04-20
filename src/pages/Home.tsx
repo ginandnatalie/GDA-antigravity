@@ -30,9 +30,9 @@ function WhySection() {
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
           {reasons.map((r, i) => (
-            <div key={i} className="bg-card border border-border-custom rounded-xl p-5 md:p-6 hover:border-gold/20 transition-all group">
+            <div key={i} className="bg-card border border-border-custom rounded-xl p-5 md:p-6 hover:border-brand/20 transition-all group">
               <div className="text-2xl mb-3">{r.icon}</div>
-              <h3 className="font-syne font-bold text-[15px] mb-2 group-hover:text-gold transition-colors">{r.title}</h3>
+              <h3 className="font-syne font-bold text-[15px] mb-2 group-hover:text-brand transition-colors">{r.title}</h3>
               <p className="text-[13px] text-text-soft leading-relaxed">{r.desc}</p>
             </div>
           ))}
@@ -61,7 +61,7 @@ function Testimonials() {
           {testimonials.map((t, i) => (
             <div key={i} className="bg-card border border-border-custom rounded-xl p-5 md:p-6 flex flex-col">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-full bg-gold-dim border border-gold/20 flex items-center justify-center font-syne font-bold text-gold text-sm">{t.name.split(' ').map(n => n[0]).join('')}</div>
+                <div className="w-10 h-10 rounded-full bg-brand/10 border border-brand/20 flex items-center justify-center font-syne font-bold text-brand text-sm">{t.name.split(' ').map(n => n[0]).join('')}</div>
                 <div>
                   <div className="font-syne font-bold text-[13px]">{t.name}</div>
                   <div className="font-dm-mono text-[9px] text-text-muted uppercase tracking-wider">{t.role}</div>
@@ -69,7 +69,7 @@ function Testimonials() {
               </div>
               <blockquote className="text-[13px] text-text-soft leading-relaxed flex-1 italic">"{t.quote}"</blockquote>
               <div className="mt-4 pt-3 border-t border-border-custom">
-                <span className="font-dm-mono text-[8px] text-gold uppercase tracking-widest">{t.programme}</span>
+                <span className="font-dm-mono text-[8px] text-brand uppercase tracking-widest">{t.programme}</span>
               </div>
             </div>
           ))}

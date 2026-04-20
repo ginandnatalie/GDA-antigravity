@@ -236,14 +236,14 @@ export function Modals({ activeModal, onClose, onSwitchModal, onLoginSuccess }: 
       onClick={onClose}
     >
       <div 
-        className={`bg-card border border-border-custom rounded-3xl w-full ${isCourseId && window.location.pathname.includes('/levels/') ? 'max-w-5xl' : 'max-w-[480px]'} max-h-[90vh] overflow-y-auto transform transition-transform duration-300 relative before:content-[''] before:absolute before:top-0 before:left-0 before:right-0 before:h-px before:bg-[linear-gradient(90deg,transparent,var(--color-gold),transparent)]`}
+        className={`bg-card border border-border-custom rounded-3xl w-full ${isCourseId && window.location.pathname.includes('/levels/') ? 'max-w-5xl' : 'max-w-[480px]'} max-h-[90vh] overflow-y-auto transform transition-transform duration-300 relative before:content-[''] before:absolute before:top-0 before:left-0 before:right-0 before:h-px before:bg-[linear-gradient(90deg,transparent,var(--color-brand),transparent)]`}
         onClick={stopPropagation}
       >
         {activeModal === 'student' && (
           <>
             <div className="p-7 md:p-8 pb-5 border-b border-border-custom flex items-start justify-between">
               <div>
-                <div className="w-12 h-12 rounded-md bg-gold-dim border border-gold/20 flex items-center justify-center text-[22px] mb-3.5">🎓</div>
+                <div className="w-12 h-12 rounded-md bg-brand-dim border border-brand/20 flex items-center justify-center text-[22px] mb-3.5">🎓</div>
                 <div className="font-syne font-extrabold text-[20px]">Student Portal</div>
                 <div className="text-[12px] text-text-muted mt-1">Access your courses, assignments, and certificates</div>
               </div>
@@ -256,8 +256,8 @@ export function Modals({ activeModal, onClose, onSwitchModal, onLoginSuccess }: 
               </button>
             </div>
             <div className="flex gap-0.5 px-7 md:px-8 pt-4 border-b border-border-custom">
-              <button className={`px-4.5 pb-3 rounded-t-sm font-dm-mono text-[10px] tracking-[0.1em] uppercase cursor-pointer border-none bg-none transition-all border-b-2 ${studentTab === 'login' ? 'text-gold border-gold' : 'text-text-muted border-transparent hover:text-text-soft'}`} onClick={() => setStudentTab('login')}>Sign In</button>
-              <button className={`px-4.5 pb-3 rounded-t-sm font-dm-mono text-[10px] tracking-[0.1em] uppercase cursor-pointer border-none bg-none transition-all border-b-2 ${studentTab === 'forgot' ? 'text-gold border-gold' : 'text-text-muted border-transparent hover:text-text-soft'}`} onClick={() => setStudentTab('forgot')}>Reset Password</button>
+              <button className={`px-4.5 pb-3 rounded-t-sm font-dm-mono text-[10px] tracking-[0.1em] uppercase cursor-pointer border-none bg-none transition-all border-b-2 ${studentTab === 'login' ? 'text-brand border-brand' : 'text-text-muted border-transparent hover:text-text-soft'}`} onClick={() => setStudentTab('login')}>Sign In</button>
+              <button className={`px-4.5 pb-3 rounded-t-sm font-dm-mono text-[10px] tracking-[0.1em] uppercase cursor-pointer border-none bg-none transition-all border-b-2 ${studentTab === 'forgot' ? 'text-brand border-brand' : 'text-text-muted border-transparent hover:text-text-soft'}`} onClick={() => setStudentTab('forgot')}>Reset Password</button>
             </div>
             <div className="p-6 md:p-8">
               {user ? (
@@ -271,7 +271,7 @@ export function Modals({ activeModal, onClose, onSwitchModal, onLoginSuccess }: 
                     <label className="block font-dm-mono text-[9px] tracking-[0.15em] uppercase text-text-muted mb-1.75">Email Address</label>
                     <input 
                       type="email" 
-                      className="w-full bg-surface border border-border-custom rounded-sm p-2.75 px-3.5 font-dm-sans text-[13px] text-text-custom outline-none focus:border-gold/40 transition-all" 
+                      className="w-full bg-surface border border-border-custom rounded-sm p-2.75 px-3.5 font-dm-sans text-[13px] text-text-custom outline-none focus:border-brand/40 transition-all" 
                       placeholder="student@email.com" 
                       value={loginForm.email}
                       onChange={e => setLoginForm({...loginForm, email: e.target.value})}
@@ -283,7 +283,7 @@ export function Modals({ activeModal, onClose, onSwitchModal, onLoginSuccess }: 
                     <div className="relative">
                       <input 
                         type={showPassword ? "text" : "password"} 
-                        className="w-full bg-surface border border-border-custom rounded-sm p-2.75 px-3.5 pr-10 font-dm-sans text-[13px] text-text-custom outline-none focus:border-gold/40 transition-all" 
+                        className="w-full bg-surface border border-border-custom rounded-sm p-2.75 px-3.5 pr-10 font-dm-sans text-[13px] text-text-custom outline-none focus:border-brand/40 transition-all" 
                         placeholder="Enter your password" 
                         value={loginForm.password}
                         onChange={e => setLoginForm({...loginForm, password: e.target.value})}
@@ -291,7 +291,7 @@ export function Modals({ activeModal, onClose, onSwitchModal, onLoginSuccess }: 
                       />
                       <button 
                         type="button"
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-gold transition-colors"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-brand transition-colors"
                         onClick={() => setShowPassword(!showPassword)}
                       >
                         {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
@@ -301,7 +301,7 @@ export function Modals({ activeModal, onClose, onSwitchModal, onLoginSuccess }: 
                   <button type="submit" disabled={isSubmitting} className="btn btn-sky w-full py-3.5 justify-center mt-2">
                     {isSubmitting ? 'Signing In...' : 'Access My Portal →'}
                   </button>
-                  <div className="text-center mt-3.5 text-[11px] text-text-muted">New student? <a className="text-gold no-underline cursor-pointer hover:underline" onClick={() => onSwitchModal?.('apply')}>Apply for a programme</a></div>
+                  <div className="text-center mt-3.5 text-[11px] text-text-muted">New student? <a className="text-brand no-underline cursor-pointer hover:underline" onClick={() => onSwitchModal?.('apply')}>Apply for a programme</a></div>
                 </form>
               ) : (
                 <form className="flex flex-col gap-4" onSubmit={handleForgotPassword}>
@@ -309,7 +309,7 @@ export function Modals({ activeModal, onClose, onSwitchModal, onLoginSuccess }: 
                     <label className="block font-dm-mono text-[9px] tracking-[0.15em] uppercase text-text-muted mb-1.75">Your Email Address</label>
                     <input 
                       type="email" 
-                      className="w-full bg-surface border border-border-custom rounded-sm p-2.75 px-3.5 font-dm-sans text-[13px] text-text-custom outline-none focus:border-gold/40 transition-all" 
+                      className="w-full bg-surface border border-border-custom rounded-sm p-2.75 px-3.5 font-dm-sans text-[13px] text-text-custom outline-none focus:border-brand/40 transition-all" 
                       placeholder="student@email.com" 
                       value={forgotEmail}
                       onChange={e => setForgotEmail(e.target.value)}
@@ -319,7 +319,7 @@ export function Modals({ activeModal, onClose, onSwitchModal, onLoginSuccess }: 
                   <button type="submit" disabled={isSubmitting} className="btn btn-sky w-full py-3.5 justify-center mt-2">
                     {isSubmitting ? 'Sending...' : 'Send Reset Link'}
                   </button>
-                  <div className="text-center mt-3.5 text-[11px] text-text-muted"><a className="text-gold no-underline cursor-pointer hover:underline" onClick={() => setStudentTab('login')}>← Back to sign in</a></div>
+                  <div className="text-center mt-3.5 text-[11px] text-text-muted"><a className="text-brand no-underline cursor-pointer hover:underline" onClick={() => setStudentTab('login')}>← Back to sign in</a></div>
                 </form>
               )}
             </div>
@@ -330,7 +330,7 @@ export function Modals({ activeModal, onClose, onSwitchModal, onLoginSuccess }: 
           <>
             <div className="p-7 md:p-8 pb-5 border-b border-border-custom flex items-start justify-between">
               <div>
-                <div className="w-12 h-12 rounded-md bg-gold-dim border border-gold/20 flex items-center justify-center text-[22px] mb-3.5">⚙️</div>
+                <div className="w-12 h-12 rounded-md bg-brand-dim border border-brand/20 flex items-center justify-center text-[22px] mb-3.5">⚙️</div>
                 <div className="font-syne font-extrabold text-[20px]">Admin & Faculty Portal</div>
                 <div className="text-[12px] text-text-muted mt-1">Authorised Ginashe Digital Academy staff only</div>
               </div>
@@ -343,9 +343,9 @@ export function Modals({ activeModal, onClose, onSwitchModal, onLoginSuccess }: 
               </button>
             </div>
             <div className="flex gap-0.5 px-7 md:px-8 pt-4 border-b border-border-custom">
-              <button className={`px-4.5 pb-3 rounded-t-sm font-dm-mono text-[10px] tracking-[0.1em] uppercase cursor-pointer border-none bg-none transition-all border-b-2 ${adminTab === 'login' ? 'text-gold border-gold' : 'text-text-muted border-transparent hover:text-text-soft'}`} onClick={() => setAdminTab('login')}>Staff Login</button>
-              <button className={`px-4.5 pb-3 rounded-t-sm font-dm-mono text-[10px] tracking-[0.1em] uppercase cursor-pointer border-none bg-none transition-all border-b-2 ${adminTab === 'forgot' ? 'text-gold border-gold' : 'text-text-muted border-transparent hover:text-text-soft'}`} onClick={() => setAdminTab('forgot')}>Reset Password</button>
-              <button className={`px-4.5 pb-3 rounded-t-sm font-dm-mono text-[10px] tracking-[0.1em] uppercase cursor-pointer border-none bg-none transition-all border-b-2 ${adminTab === 'twofa' ? 'text-gold border-gold' : 'text-text-muted border-transparent hover:text-text-soft'}`} onClick={() => setAdminTab('twofa')}>2FA Verify</button>
+              <button className={`px-4.5 pb-3 rounded-t-sm font-dm-mono text-[10px] tracking-[0.1em] uppercase cursor-pointer border-none bg-none transition-all border-b-2 ${adminTab === 'login' ? 'text-brand border-brand' : 'text-text-muted border-transparent hover:text-text-soft'}`} onClick={() => setAdminTab('login')}>Staff Login</button>
+              <button className={`px-4.5 pb-3 rounded-t-sm font-dm-mono text-[10px] tracking-[0.1em] uppercase cursor-pointer border-none bg-none transition-all border-b-2 ${adminTab === 'forgot' ? 'text-brand border-brand' : 'text-text-muted border-transparent hover:text-text-soft'}`} onClick={() => setAdminTab('forgot')}>Reset Password</button>
+              <button className={`px-4.5 pb-3 rounded-t-sm font-dm-mono text-[10px] tracking-[0.1em] uppercase cursor-pointer border-none bg-none transition-all border-b-2 ${adminTab === 'twofa' ? 'text-brand border-brand' : 'text-text-muted border-transparent hover:text-text-soft'}`} onClick={() => setAdminTab('twofa')}>2FA Verify</button>
             </div>
             <div className="p-6 md:p-8">
               {user ? (
@@ -359,7 +359,7 @@ export function Modals({ activeModal, onClose, onSwitchModal, onLoginSuccess }: 
                     <label className="block font-dm-mono text-[9px] tracking-[0.15em] uppercase text-text-muted mb-1.75">Staff Email</label>
                     <input 
                       type="email" 
-                      className="w-full bg-surface border border-border-custom rounded-sm p-2.75 px-3.5 font-dm-sans text-[13px] text-text-custom outline-none focus:border-gold/40 transition-all" 
+                      className="w-full bg-surface border border-border-custom rounded-sm p-2.75 px-3.5 font-dm-sans text-[13px] text-text-custom outline-none focus:border-brand/40 transition-all" 
                       placeholder="name@ginashe.co.za" 
                       value={loginForm.email}
                       onChange={e => setLoginForm({...loginForm, email: e.target.value})}
@@ -370,7 +370,7 @@ export function Modals({ activeModal, onClose, onSwitchModal, onLoginSuccess }: 
                     <label className="block font-dm-mono text-[9px] tracking-[0.15em] uppercase text-text-muted mb-1.75">Password</label>
                     <input 
                       type="password" 
-                      className="w-full bg-surface border border-border-custom rounded-sm p-2.75 px-3.5 font-dm-sans text-[13px] text-text-custom outline-none focus:border-gold/40 transition-all" 
+                      className="w-full bg-surface border border-border-custom rounded-sm p-2.75 px-3.5 font-dm-sans text-[13px] text-text-custom outline-none focus:border-brand/40 transition-all" 
                       placeholder="Staff password" 
                       value={loginForm.password}
                       onChange={e => setLoginForm({...loginForm, password: e.target.value})}
@@ -379,7 +379,7 @@ export function Modals({ activeModal, onClose, onSwitchModal, onLoginSuccess }: 
                   </div>
                   <div className="form-group">
                     <label className="block font-dm-mono text-[9px] tracking-[0.15em] uppercase text-text-muted mb-1.75">Access Role</label>
-                    <select className="w-full bg-surface border border-border-custom rounded-sm p-2.75 px-3.5 font-dm-sans text-[13px] text-text-custom outline-none focus:border-gold/40 transition-all appearance-none bg-[url('data:image/svg+xml,%3Csvg_xmlns=%22http://www.w3.org/2000/svg%22_width=%2212%22_height=%2212%22_viewBox=%220_0_12_12%22%3E%3Cpath_fill=%22%235a607c%22_d=%22M6_8L1_3h10z%22/%3E%3C/svg%3E')] bg-no-repeat bg-[position:right_12px_center] pr-9">
+                    <select className="w-full bg-surface border border-border-custom rounded-sm p-2.75 px-3.5 font-dm-sans text-[13px] text-text-custom outline-none focus:border-brand/40 transition-all appearance-none bg-[url('data:image/svg+xml,%3Csvg_xmlns=%22http://www.w3.org/2000/svg%22_width=%2212%22_height=%2212%22_viewBox=%220_0_12_12%22%3E%3Cpath_fill=%22%235a607c%22_d=%22M6_8L1_3h10z%22/%3E%3C/svg%3E')] bg-no-repeat bg-[position:right_12px_center] pr-9">
                       <option value="">Select your role…</option>
                       <option>Academy Administrator</option>
                       <option>Instructor / Faculty</option>
@@ -389,7 +389,7 @@ export function Modals({ activeModal, onClose, onSwitchModal, onLoginSuccess }: 
                       <option>Super Admin</option>
                     </select>
                   </div>
-                  <button type="submit" disabled={isSubmitting} className="btn btn-gold w-full py-3.5 justify-center mt-2">
+                  <button type="submit" disabled={isSubmitting} className="btn btn-brand w-full py-3.5 justify-center mt-2">
                     {isSubmitting ? 'Signing In...' : 'Continue to 2FA →'}
                   </button>
                   <div className="text-center mt-3.5 text-[11px] text-text-muted">Unauthorised access attempts are logged and reported to Ginashe Digital.</div>
@@ -400,27 +400,27 @@ export function Modals({ activeModal, onClose, onSwitchModal, onLoginSuccess }: 
                     <label className="block font-dm-mono text-[9px] tracking-[0.15em] uppercase text-text-muted mb-1.75">Institutional Email Address</label>
                     <input 
                       type="email" 
-                      className="w-full bg-surface border border-border-custom rounded-sm p-2.75 px-3.5 font-dm-sans text-[13px] text-text-custom outline-none focus:border-gold/40 transition-all" 
+                      className="w-full bg-surface border border-border-custom rounded-sm p-2.75 px-3.5 font-dm-sans text-[13px] text-text-custom outline-none focus:border-brand/40 transition-all" 
                       placeholder="name@ginashe.co.za" 
                       value={forgotEmail}
                       onChange={e => setForgotEmail(e.target.value)}
                       required
                     />
                   </div>
-                  <button type="submit" disabled={isSubmitting} className="btn btn-gold w-full py-3.5 justify-center mt-2">
+                  <button type="submit" disabled={isSubmitting} className="btn btn-brand w-full py-3.5 justify-center mt-2">
                     {isSubmitting ? 'Sending...' : 'Send Recovery Link'}
                   </button>
-                  <div className="text-center mt-3.5 text-[11px] text-text-muted"><a className="text-gold no-underline cursor-pointer hover:underline" onClick={() => setAdminTab('login')}>← Back to sign in</a></div>
+                  <div className="text-center mt-3.5 text-[11px] text-text-muted"><a className="text-brand no-underline cursor-pointer hover:underline" onClick={() => setAdminTab('login')}>← Back to sign in</a></div>
                 </form>
               ) : (
                 <div className="flex flex-col gap-4">
                   <p className="text-[13px] text-text-soft mb-4.5">Enter the 6-digit code from your authenticator app or SMS.</p>
                   <div className="form-group">
                     <label className="block font-dm-mono text-[9px] tracking-[0.15em] uppercase text-text-muted mb-1.75">Two-Factor Code</label>
-                    <input type="text" className="w-full bg-surface border border-border-custom rounded-sm p-2.75 px-3.5 font-dm-mono text-[22px] text-text-custom text-center tracking-[0.4em] outline-none focus:border-gold/40 transition-all" placeholder="000 000" maxLength={7} />
+                    <input type="text" className="w-full bg-surface border border-border-custom rounded-sm p-2.75 px-3.5 font-dm-mono text-[22px] text-text-custom text-center tracking-[0.4em] outline-none focus:border-brand/40 transition-all" placeholder="000 000" maxLength={7} />
                   </div>
-                  <button className="btn btn-gold w-full py-3.5 justify-center mt-2" onClick={onClose}>Verify & Enter Portal →</button>
-                  <div className="text-center mt-3.5 text-[11px] text-text-muted"><a className="text-gold no-underline cursor-pointer hover:underline" onClick={() => setAdminTab('login')}>← Back</a></div>
+                  <button className="btn btn-brand w-full py-3.5 justify-center mt-2" onClick={onClose}>Verify & Enter Portal →</button>
+                  <div className="text-center mt-3.5 text-[11px] text-text-muted"><a className="text-brand no-underline cursor-pointer hover:underline" onClick={() => setAdminTab('login')}>← Back</a></div>
                 </div>
               )}
             </div>
@@ -431,7 +431,7 @@ export function Modals({ activeModal, onClose, onSwitchModal, onLoginSuccess }: 
           <>
             <div className="p-7 md:p-8 pb-5 border-b border-border-custom flex items-start justify-between">
               <div>
-                <div className="w-12 h-12 rounded-md bg-gold-dim border border-gold/20 flex items-center justify-center text-[22px] mb-3.5">🔐</div>
+                <div className="w-12 h-12 rounded-md bg-brand-dim border border-brand/20 flex items-center justify-center text-[22px] mb-3.5">🔐</div>
                 <div className="font-syne font-extrabold text-[20px]">Set New Password</div>
                 <div className="text-[12px] text-text-muted mt-1">Please enter your new password below</div>
               </div>
@@ -450,7 +450,7 @@ export function Modals({ activeModal, onClose, onSwitchModal, onLoginSuccess }: 
                   <div className="relative">
                     <input 
                       type={showPassword ? "text" : "password"} 
-                      className="w-full bg-surface border border-border-custom rounded-sm p-2.75 px-3.5 pr-10 font-dm-sans text-[13px] text-text-custom outline-none focus:border-gold/40 transition-all" 
+                      className="w-full bg-surface border border-border-custom rounded-sm p-2.75 px-3.5 pr-10 font-dm-sans text-[13px] text-text-custom outline-none focus:border-brand/40 transition-all" 
                       placeholder="Min 6 characters" 
                       value={resetForm.password}
                       onChange={e => setResetForm({...resetForm, password: e.target.value})}
@@ -458,7 +458,7 @@ export function Modals({ activeModal, onClose, onSwitchModal, onLoginSuccess }: 
                     />
                     <button 
                       type="button"
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-gold transition-colors"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-brand transition-colors"
                       onClick={() => setShowPassword(!showPassword)}
                     >
                       {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
@@ -470,7 +470,7 @@ export function Modals({ activeModal, onClose, onSwitchModal, onLoginSuccess }: 
                   <div className="relative">
                     <input 
                       type={showConfirm ? "text" : "password"} 
-                      className="w-full bg-surface border border-border-custom rounded-sm p-2.75 px-3.5 pr-10 font-dm-sans text-[13px] text-text-custom outline-none focus:border-gold/40 transition-all" 
+                      className="w-full bg-surface border border-border-custom rounded-sm p-2.75 px-3.5 pr-10 font-dm-sans text-[13px] text-text-custom outline-none focus:border-brand/40 transition-all" 
                       placeholder="Repeat new password" 
                       value={resetForm.confirm}
                       onChange={e => setResetForm({...resetForm, confirm: e.target.value})}
@@ -478,14 +478,14 @@ export function Modals({ activeModal, onClose, onSwitchModal, onLoginSuccess }: 
                     />
                     <button 
                       type="button"
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-gold transition-colors"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-brand transition-colors"
                       onClick={() => setShowConfirm(!showConfirm)}
                     >
                       {showConfirm ? <EyeOff size={16} /> : <Eye size={16} />}
                     </button>
                   </div>
                 </div>
-                <button type="submit" disabled={isSubmitting} className="btn btn-gold w-full py-3.5 justify-center mt-2">
+                <button type="submit" disabled={isSubmitting} className="btn btn-brand w-full py-3.5 justify-center mt-2">
                   {isSubmitting ? 'Updating...' : 'Set Password & Enter Portal →'}
                 </button>
               </form>
@@ -541,7 +541,7 @@ function CourseDetailsModal({ courseId, onClose }: { courseId: string, onClose: 
 
   if (isLoading) return (
     <div className="p-20 flex items-center justify-center">
-      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gold"></div>
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand"></div>
     </div>
   );
 
@@ -552,13 +552,13 @@ function CourseDetailsModal({ courseId, onClose }: { courseId: string, onClose: 
       <div className="p-7 md:p-8 pb-5 border-b border-border-custom bg-surface/50 flex justify-between items-start">
         <div className="flex items-center gap-12">
           <div>
-            <div className="font-dm-mono text-[9px] text-gold uppercase tracking-widest mb-1.5">{course.track} • {course.level}</div>
+            <div className="font-dm-mono text-[9px] text-brand uppercase tracking-widest mb-1.5">{course.track} • {course.level}</div>
             <h2 className={`font-syne font-extrabold text-white mb-1.5 ${window.location.pathname.includes('/levels/') ? 'text-4xl' : 'text-2xl'}`}>{course.title}</h2>
             <p className="text-text-soft text-[11px] max-w-2xl leading-relaxed">{course.description}</p>
           </div>
           {window.location.pathname.includes('/levels/') && (
             <div className="hidden lg:flex flex-col gap-2 p-5 rounded-2xl bg-white/[0.03] border border-white/5 min-w-[280px]">
-              <span className="font-dm-mono text-[9px] text-gold uppercase tracking-[0.3em] font-bold">Institutional Logic</span>
+              <span className="font-dm-mono text-[9px] text-brand uppercase tracking-[0.3em] font-bold">Institutional Logic</span>
               <p className="text-[10px] text-text-soft leading-tight">Completing the full <strong>{course.level} Pathway</strong> provides integrated credit mapping and architectural mastery across the entire track dimensions.</p>
               <div className="flex items-center gap-2 mt-1">
                 <div className="w-1 h-1 rounded-full bg-emerald" />
@@ -567,7 +567,7 @@ function CourseDetailsModal({ courseId, onClose }: { courseId: string, onClose: 
             </div>
           )}
         </div>
-        <button onClick={onClose} className="w-10 h-10 rounded-full border border-border-custom flex items-center justify-center hover:bg-gold hover:text-black hover:border-gold transition-all duration-300">✕</button>
+        <button onClick={onClose} className="w-10 h-10 rounded-full border border-border-custom flex items-center justify-center hover:bg-brand/10 hover:text-brand hover:border-brand transition-all duration-300">✕</button>
       </div>
 
       <div className="flex-1 overflow-y-auto p-7 md:p-8 bg-black/10">
@@ -576,7 +576,7 @@ function CourseDetailsModal({ courseId, onClose }: { courseId: string, onClose: 
             {modules.map((mod, mi) => (
               <div key={mod.id} className="animate-fadeUp">
                 <div className="flex items-center gap-4 mb-5">
-                  <div className="w-10 h-10 rounded-lg bg-gold/10 border border-gold/20 flex items-center justify-center font-syne font-bold text-gold text-sm shadow-[0_0_15px_rgba(244,162,26,0.1)]">
+                  <div className="w-10 h-10 rounded-lg bg-brand/10 border border-brand/20 flex items-center justify-center font-syne font-bold text-brand text-sm shadow-[0_0_15px_rgba(0,242,255,0.1)]">
                     {mi + 1}
                   </div>
                   <div>
@@ -587,18 +587,18 @@ function CourseDetailsModal({ courseId, onClose }: { courseId: string, onClose: 
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {mod.lessons?.map((lesson: any, li: number) => (
-                    <div key={lesson.id} className="bg-surface/40 border border-border-custom rounded-lg p-3 hover:border-gold/30 transition-all group relative overflow-hidden">
-                      <div className="absolute top-0 right-0 w-12 h-12 bg-gold/5 blur-2xl group-hover:bg-gold/10 transition-colors" />
+                    <div key={lesson.id} className="bg-surface/40 border border-border-custom rounded-lg p-3 hover:border-brand/30 transition-all group relative overflow-hidden">
+                      <div className="absolute top-0 right-0 w-12 h-12 bg-brand/5 blur-2xl group-hover:bg-brand/10 transition-colors" />
                       <div className="font-dm-mono text-[7px] text-text-muted mb-1 uppercase tracking-tighter">Session 0{li + 1}</div>
-                      <h4 className="font-syne font-bold text-[13px] mb-1.5 group-hover:text-gold transition-colors leading-tight">{lesson.title}</h4>
+                      <h4 className="font-syne font-bold text-[13px] mb-1.5 group-hover:text-brand transition-colors leading-tight">{lesson.title}</h4>
                       <div className="space-y-2.5">
                         <div className="text-[10px] text-text-soft flex items-start gap-1.5 leading-relaxed">
-                          <span className="text-gold mt-1 text-[7px]">▹</span>
+                          <span className="text-brand mt-1 text-[7px]">▹</span>
                           {lesson.objective || 'Primary learning objective'}
                         </div>
                         {lesson.lab_details && (
                           <div className="mt-2.5 p-2 rounded bg-black/30 border border-white/5 text-[8px] text-text-dim/80 italic font-dm-sans">
-                            <strong className="text-gold/80 not-italic mr-1.5 font-dm-mono">LAB:</strong> {lesson.lab_details.split('\n')[0]}
+                            <strong className="text-brand/80 not-italic mr-1.5 font-dm-mono">LAB:</strong> {lesson.lab_details.split('\n')[0]}
                           </div>
                         )}
                       </div>
@@ -621,12 +621,12 @@ function CourseDetailsModal({ courseId, onClose }: { courseId: string, onClose: 
          <div className="flex gap-8">
             <div className="flex flex-col">
               <span className="text-[8px] text-text-muted uppercase tracking-widest font-dm-mono">Curriculum Track</span>
-              <span className="text-[13px] font-bold text-gold py-0.5">{course.track || 'Institutional'}</span>
+              <span className="text-[13px] font-bold text-brand py-0.5">{course.track || 'Institutional'}</span>
             </div>
             <div className="w-px h-8 bg-border-custom" />
             <div className="flex flex-col">
               <span className="text-[8px] text-text-muted uppercase tracking-widest font-dm-mono">NQF Equivalence</span>
-              <span className="text-[13px] font-bold text-gold py-0.5">{course.nqf_level || 'Industry Ready'}</span>
+              <span className="text-[13px] font-bold text-brand py-0.5">{course.nqf_level || 'Industry Ready'}</span>
             </div>
             {window.location.pathname.includes('/levels/') && (
               <>
@@ -649,7 +649,7 @@ function CourseDetailsModal({ courseId, onClose }: { courseId: string, onClose: 
              </button>
              <button 
                onClick={() => window.location.href = `/admissions?type=level&id=${courseId}`}
-               className="btn btn-gold btn-sm px-8 font-syne font-black uppercase text-[10px] tracking-widest shadow-[0_10px_30px_rgba(255,215,0,0.15)]"
+               className="btn btn-brand btn-sm px-8 font-syne font-black uppercase text-[10px] tracking-widest shadow-[0_10px_30px_rgba(0,242,255,0.15)]"
              >
                Apply for Full {course.level} Pathway →
              </button>
@@ -657,7 +657,7 @@ function CourseDetailsModal({ courseId, onClose }: { courseId: string, onClose: 
          ) : (
            <button 
              onClick={() => window.location.href = '/admissions'}
-             className="btn btn-gold btn-sm px-8"
+             className="btn btn-brand btn-sm px-8"
            >
              Apply Now →
            </button>

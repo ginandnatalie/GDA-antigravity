@@ -28,7 +28,7 @@ export default function PageHero({ label, title, subtitle, image, imageAlt = '' 
       </div>
 
       {/* Accent orbs */}
-      <div className="absolute top-1/4 right-1/4 w-[300px] h-[300px] rounded-full bg-[radial-gradient(circle,rgba(244,162,26,0.06)_0%,transparent_70%)] pointer-events-none" />
+      <div className="absolute top-1/4 right-1/4 w-[300px] h-[300px] rounded-full bg-[radial-gradient(circle,rgba(0,242,255,0.06)_0%,transparent_70%)] pointer-events-none" />
       <div className="absolute bottom-0 left-1/4 w-[400px] h-[400px] rounded-full bg-[radial-gradient(circle,rgba(79,195,247,0.04)_0%,transparent_70%)] pointer-events-none" />
 
       <div className="relative z-[1] max-w-[var(--max-w)] mx-auto px-5 sm:px-6 md:px-14 py-12 sm:py-16 md:py-20 lg:py-24">
@@ -40,7 +40,7 @@ export default function PageHero({ label, title, subtitle, image, imageAlt = '' 
       </div>
 
       {/* Bottom border line */}
-      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold/20 to-transparent" />
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-brand/20 to-transparent" />
     </section>
   );
 }

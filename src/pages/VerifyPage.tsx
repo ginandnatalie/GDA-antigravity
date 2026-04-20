@@ -164,7 +164,7 @@ export default function VerifyPage() {
     <div className="min-h-screen bg-bg flex flex-col items-center justify-center p-6 relative overflow-hidden">
       {/* Background Ambience */}
       <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
-        <div className="absolute top-1/4 -left-1/4 w-[500px] h-[500px] bg-gold/5 blur-[120px] rounded-full"></div>
+        <div className="absolute top-1/4 -left-1/4 w-[500px] h-[500px] bg-brand/5 blur-[120px] rounded-full"></div>
         <div className="absolute bottom-1/4 -right-1/4 w-[500px] h-[500px] bg-sky/5 blur-[120px] rounded-full"></div>
       </div>
 
@@ -173,8 +173,8 @@ export default function VerifyPage() {
           
           {/* Header */}
           <div className="text-center mb-10">
-            <div className="w-16 h-16 bg-gold/10 rounded-2xl flex items-center justify-center mx-auto mb-6 border border-gold/20">
-              <ShieldCheck className="text-gold" size={32} />
+            <div className="w-16 h-16 bg-brand/10 rounded-2xl flex items-center justify-center mx-auto mb-6 border border-brand/20 shadow-[0_0_20px_rgba(0,242,255,0.1)]">
+              <ShieldCheck className="text-brand" size={32} />
             </div>
             <h1 className="font-syne font-extrabold text-[26px] text-text-custom mb-2">
               {step === 'email' && "Find Your Account"}
@@ -184,7 +184,7 @@ export default function VerifyPage() {
             </h1>
             <p className="text-text-soft text-[14px] leading-relaxed">
               {step === 'email' && "Enter the email you used for your application to receive a verification code."}
-              {step === 'otp' && <>Check <span className="text-gold font-medium">{email}</span> for your 6-digit activation code.</>}
+              {step === 'otp' && <>Check <span className="text-brand font-medium">{email}</span> for your 6-digit activation code.</>}
               {step === 'password' && "Code accepted for verification. Now choose a strong password to complete your setup."}
               {step === 'success' && "Your Ginashe Digital Academy account is now active and ready for use."}
             </p>
@@ -198,18 +198,18 @@ export default function VerifyPage() {
               <div>
                 <label className="block font-dm-mono text-[10px] tracking-widest uppercase text-text-muted mb-2 ml-1">Email Address</label>
                 <div className="relative group">
-                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-text-dim group-focus-within:text-gold transition-colors" size={18} />
+                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-text-dim group-focus-within:text-brand transition-colors" size={18} />
                   <input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full bg-surface border border-border-custom rounded-xl pl-12 pr-5 py-4 text-[14px] text-text-custom focus:border-gold/50 outline-none transition-all shadow-inner"
+                    className="w-full bg-surface border border-border-custom rounded-xl pl-12 pr-5 py-4 text-[14px] text-text-custom focus:border-brand/50 outline-none transition-all shadow-inner"
                     placeholder="student@email.com"
                     required
                   />
                 </div>
               </div>
-              <button type="submit" className="btn btn-gold w-full py-4 font-syne font-bold text-[14px]">
+              <button type="submit" className="btn btn-brand w-full py-4 font-syne font-bold text-[14px]">
                 Continue to Verification <ArrowRight size={16} className="ml-2" />
               </button>
             </form>
@@ -228,7 +228,7 @@ export default function VerifyPage() {
                     value={digit}
                     onChange={(e) => handleOtpChange(idx, e.target.value)}
                     onKeyDown={(e) => handleKeyDown(idx, e)}
-                    className="w-full h-14 md:h-16 bg-surface border border-border-custom rounded-xl text-center text-[20px] font-bold text-text-custom focus:border-gold outline-none transition-all shadow-inner"
+                    className="w-full h-14 md:h-16 bg-surface border border-border-custom rounded-xl text-center text-[20px] font-bold text-text-custom focus:border-brand outline-none transition-all shadow-inner"
                     autoFocus={idx === 0}
                   />
                 ))}
@@ -238,7 +238,7 @@ export default function VerifyPage() {
                 <button 
                   type="submit" 
                   disabled={loading || otp.join('').length < 6}
-                  className="btn btn-gold w-full py-4 font-syne font-bold text-[14px]"
+                  className="btn btn-brand w-full py-4 font-syne font-bold text-[14px]"
                 >
                   Verify Code →
                 </button>
@@ -247,7 +247,7 @@ export default function VerifyPage() {
                   type="button"
                   onClick={handleResendOtp}
                   disabled={resendCooldown > 0 || loading}
-                  className="w-full text-center text-[12px] text-text-dim hover:text-gold transition-colors flex items-center justify-center gap-2"
+                  className="w-full text-center text-[12px] text-text-dim hover:text-brand transition-colors flex items-center justify-center gap-2"
                 >
                   <RefreshCcw size={14} className={loading ? "animate-spin" : ""} />
                   {resendCooldown > 0 ? `Resend code in ${resendCooldown}s` : "Didn't receive a code? Resend"}
@@ -262,19 +262,19 @@ export default function VerifyPage() {
               <div>
                 <label className="block font-dm-mono text-[10px] tracking-widest uppercase text-text-muted mb-2 ml-1">New Password</label>
                 <div className="relative group">
-                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-text-dim group-focus-within:text-gold transition-colors" size={18} />
+                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-text-dim group-focus-within:text-brand transition-colors" size={18} />
                   <input
                     type={showPassword ? "text" : "password"}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full bg-surface border border-border-custom rounded-xl pl-12 pr-12 py-4 text-[14px] text-text-custom focus:border-gold/50 outline-none transition-all shadow-inner"
+                    className="w-full bg-surface border border-border-custom rounded-xl pl-12 pr-12 py-4 text-[14px] text-text-custom focus:border-brand/50 outline-none transition-all shadow-inner"
                     placeholder="Min. 6 characters"
                     required
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-text-dim hover:text-gold transition-colors"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-text-dim hover:text-brand transition-colors"
                   >
                     {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                   </button>
@@ -289,7 +289,7 @@ export default function VerifyPage() {
                     type={showPassword ? "text" : "password"}
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="w-full bg-surface border border-border-custom rounded-xl pl-12 pr-5 py-4 text-[14px] text-text-custom focus:border-gold/50 outline-none transition-all shadow-inner"
+                    className="w-full bg-surface border border-border-custom rounded-xl pl-12 pr-5 py-4 text-[14px] text-text-custom focus:border-brand/50 outline-none transition-all shadow-inner"
                     placeholder="Repeat password"
                     required
                   />
@@ -297,7 +297,7 @@ export default function VerifyPage() {
               </div>
 
               <div className="pt-2">
-                <button type="submit" disabled={loading} className="btn btn-gold w-full py-4 font-syne font-bold text-[14px] shadow-[0_12px_24px_rgba(212,175,55,0.2)]">
+                <button type="submit" disabled={loading} className="btn btn-brand w-full py-4 font-syne font-bold text-[14px] shadow-[0_12px_24px_rgba(0,242,255,0.15)]">
                   {loading ? (
                     <span className="flex items-center gap-2 justify-center">
                       <Loader2 className="animate-spin" size={18} />
@@ -312,7 +312,7 @@ export default function VerifyPage() {
               <button 
                 type="button"
                 onClick={() => setStep('otp')}
-                className="w-full text-center text-[11px] text-text-muted hover:text-gold transition-colors pt-2"
+                className="w-full text-center text-[11px] text-text-muted hover:text-brand transition-colors pt-2"
               >
                 ← Back to code entry
               </button>
@@ -327,7 +327,7 @@ export default function VerifyPage() {
               </div>
               <button 
                 onClick={() => navigate('/')}
-                className="btn btn-gold w-full py-4 font-syne font-bold text-[14px]"
+                className="btn btn-brand w-full py-4 font-syne font-bold text-[14px]"
               >
                 Go to Student Portal <ArrowRight size={16} className="ml-2" />
               </button>
@@ -338,7 +338,7 @@ export default function VerifyPage() {
         {/* Footer Support */}
         <div className="mt-10 flex flex-col items-center gap-4 text-center">
           <p className="text-text-dim text-[10px] font-dm-mono uppercase tracking-[0.2em]">Student Admissions Hub</p>
-          <a href="mailto:admissions@ginashe.co.za" className="text-gold text-[11px] font-dm-mono uppercase tracking-[0.1em] hover:text-white transition-colors border-b border-gold/20 pb-0.5">admissions@ginashe.co.za</a>
+          <a href="mailto:admissions@ginashe.co.za" className="text-brand text-[11px] font-dm-mono uppercase tracking-[0.1em] hover:text-white transition-colors border-b border-brand/20 pb-0.5">admissions@ginashe.co.za</a>
         </div>
       </div>
     </div>
