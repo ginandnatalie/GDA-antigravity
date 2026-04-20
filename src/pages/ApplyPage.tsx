@@ -1,7 +1,10 @@
 import React from 'react';
 import SharedAdmissionForm from '../components/SharedAdmissionForm';
+import { useSearchParams } from 'react-router-dom';
 
 export default function ApplyPage() {
+  const [searchParams] = useSearchParams();
+  const initialProgram = searchParams.get('program') || '';
   return (
     <div className="min-h-screen bg-bg relative overflow-hidden py-12 md:py-20 px-6">
       {/* Background Ambience */}
@@ -23,7 +26,7 @@ export default function ApplyPage() {
         </div>
 
         <div className="bg-card border border-border-custom rounded-3xl p-8 md:p-12 shadow-[0_30px_90px_rgba(0,0,0,0.3)] animate-fadeUp delay-100">
-          <SharedAdmissionForm />
+          <SharedAdmissionForm initialProgram={initialProgram} />
         </div>
 
         <div className="mt-12 text-center animate-fadeUp delay-200">

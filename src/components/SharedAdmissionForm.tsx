@@ -1,14 +1,18 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase, uploadFile } from '../lib/supabase';
+import { getNextStudentNumber, validateStudentIdentity } from '../lib/students';
 import { 
   PROGRAMMES, 
   QUALIFICATIONS, 
   GENDERS, 
   COUNTRIES, 
   NATIONALITIES, 
-  PROVINCES_SA 
+  PROVINCES_SA,
+  LEVELS
 } from '../lib/constants';
+
+const PORTAL_URL = 'https://gda-student-portal.pages.dev/';
 
 // ─── STYLES (Based on GDA Design System) ────────────────────────
 const INPUT_CLASS = "w-full bg-surface border border-border-custom rounded-sm p-2.75 px-3.5 font-dm-sans text-[13px] text-text-custom outline-none focus:border-brand/40 focus:shadow-[0_0_0_3px_rgba(0,242,255,0.07)] transition-all";
@@ -32,8 +36,9 @@ export default function SharedAdmissionForm({ onOpenModal, onSuccess, initialPro
   const [duplicateMessage, setDuplicateMessage] = useState('');
 
   // ─── FORM STATE ──────────────────
+  const [selectionType, setSelectionType] = useState<'level' | 'program' | null>(initialProgram ? 'program' : null);
   const [form, setForm] = useState({
-    first: '', last: '', email: '', phone: '', prog: initialProgram, qual: '', msg: '',
+    first: '', last: '', email: '', phone: '', prog: initialProgram, level: '', msg: '',
     dob: '', idNumber: '', gender: '', nationality: 'South African',
     country: 'South Africa', address_line1: '', city: '', province: '', postal_code: ''
   });
@@ -51,18 +56,20 @@ export default function SharedAdmissionForm({ onOpenModal, onSuccess, initialPro
       setCheckingAccount(true);
       setDuplicateMessage('');
       try {
-        const { data, error } = await supabase
-          .from('applications')
-          .select('id, email, first_name, last_name, status, program')
-          .or(`student_number.eq.${studentNumberInput.trim()},email.ilike.${studentNumberInput.trim()}`)
-          .limit(1)
-          .maybeSingle();
+        const result = await validateStudentIdentity(studentNumberInput.trim());
 
-        if (data) {
+        if (result) {
+          const { data } = result;
           setStep('existing');
-          setDuplicateMessage(`Welcome back, ${data.first_name || 'student'}! We found your record (${data.email}). Your application for ${data.program || 'a programme'} is currently: ${data.status || 'pending'}. Please sign in to your portal to continue.`);
+          const statusText = result.type === 'profile' ? 'Active Enrolled' : (data.status || 'pending');
+          setDuplicateMessage(`Institutional Record Found: Welcome back, ${data.first_name || 'student'}! We found your ${result.type} (${data.email}). Status: ${statusText}. Redirecting to Student Portal...`);
+          
+          // Redirect after a short delay to allow the user to see the message
+          setTimeout(() => {
+            window.location.href = PORTAL_URL;
+          }, 2500);
         } else {
-          setDuplicateMessage('No record found. Please double-check your student number or email, or select "No" to create a new application.');
+          setDuplicateMessage('No institutional record found. Please double-check your student number or email, or select "No" to start a fresh application.');
         }
       } catch (err: any) {
         setDuplicateMessage('Error checking records. Please try again.');
@@ -138,6 +145,9 @@ export default function SharedAdmissionForm({ onOpenModal, onSuccess, initialPro
         setDuplicateCheckDone(true);
       }
 
+      // Generate institutional ID
+      const studentNumber = await getNextStudentNumber();
+
       let cvUrl = '';
       if (cvFile) cvUrl = await uploadFile(cvFile);
 
@@ -157,15 +167,16 @@ export default function SharedAdmissionForm({ onOpenModal, onSuccess, initialPro
           province: form.province,
           country: form.country,
           postal_code: form.postal_code,
-          program: form.prog,
+          program: selectionType === 'level' ? form.level : form.prog,
           qualification: form.qual,
           message: form.msg,
           cv_url: cvUrl,
+          student_number: studentNumber,
           type: 'individual',
           history: JSON.stringify([{
             event: 'Application Submitted',
             timestamp: new Date().toISOString(),
-            details: 'Initial application submitted.'
+            details: `Initial application submitted for ${selectionType === 'level' ? form.level : form.prog}.`
           }])
         }]);
 
@@ -179,7 +190,7 @@ export default function SharedAdmissionForm({ onOpenModal, onSuccess, initialPro
           body: JSON.stringify({
             email: form.email,
             name: `${form.first} ${form.last}`,
-            program: form.prog,
+            program: selectionType === 'level' ? form.level : form.prog,
             details: form
           })
         });
@@ -252,7 +263,12 @@ export default function SharedAdmissionForm({ onOpenModal, onSuccess, initialPro
           <h3 className="font-syne font-bold text-[18px] mb-2 text-brand">Welcome Back!</h3>
           <p className="text-[13px] text-text-soft leading-relaxed max-w-sm mx-auto">{duplicateMessage}</p>
           <div className="flex flex-col gap-3 pt-2">
-            <button onClick={() => onOpenModal?.('student')} className="w-full p-3.5 bg-brand text-[#080b12] font-syne font-extrabold text-[13px] tracking-[0.05em] uppercase rounded-sm hover:bg-brand-light transition-all">Sign In to My Portal →</button>
+            <button 
+              onClick={() => window.location.href = PORTAL_URL} 
+              className="w-full p-3.5 bg-brand text-[#080b12] font-syne font-extrabold text-[13px] tracking-[0.05em] uppercase rounded-sm hover:bg-brand-light transition-all"
+            >
+              Sign In to My Portal →
+            </button>
             <button onClick={() => { setStep('form'); setDuplicateCheckDone(false); }} className="w-full p-3 bg-transparent text-text-muted font-dm-mono text-[11px] tracking-wider uppercase border border-border-custom rounded-sm hover:text-brand transition-all">Apply for a different programme</button>
           </div>
         </div>
@@ -341,7 +357,8 @@ export default function SharedAdmissionForm({ onOpenModal, onSuccess, initialPro
 
           {/* Section 3: Contact & Academics */}
           <div className="mb-6 pb-5 border-b border-border-custom">
-            <div className="font-dm-mono text-[9px] tracking-[0.15em] uppercase text-emerald mb-4">Step 3 — Contact & Academics</div>
+            <div className="font-dm-mono text-[9px] tracking-[0.15em] uppercase text-emerald mb-5">Step 3 — Path Selection & Quals</div>
+            
             <div className="grid grid-cols-2 gap-3 mb-4">
               <div>
                 <label className={LABEL_CLASS}>Email Address <span className="text-coral">*</span></label>
@@ -352,13 +369,73 @@ export default function SharedAdmissionForm({ onOpenModal, onSuccess, initialPro
                 <input type="tel" className={INPUT_CLASS} placeholder="+27 XX XXX XXXX" value={form.phone} onChange={e => setForm({...form, phone: e.target.value})} />
               </div>
             </div>
-            <div className="mb-4">
-              <label className={LABEL_CLASS}>Programme of Interest <span className="text-coral">*</span></label>
-              <select className={SELECT_CLASS} value={form.prog} onChange={e => setForm({...form, prog: e.target.value})} required>
-                <option value="">Select a programme…</option>
-                {PROGRAMMES.map(p => <option key={p} value={p}>{p}</option>)}
-              </select>
+
+            {/* DUAL SELECTION INTERFACE */}
+            <div className="mb-5">
+              <label className={LABEL_CLASS}>Define Your Admission Path <span className="text-coral">*</span></label>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                
+                {/* LEVEL SELECTION CARD */}
+                <div 
+                  onClick={() => setSelectionType('level')}
+                  className={`relative p-4 rounded-xl border transition-all duration-300 cursor-pointer overflow-hidden group ${
+                    selectionType === 'level' 
+                      ? 'bg-brand/5 border-brand shadow-[0_0_20px_rgba(0,242,255,0.05)]' 
+                      : selectionType === 'program' ? 'bg-surface/20 border-border-custom opacity-50 grayscale scale-[0.98]' : 'bg-surface border-border-custom hover:border-brand/30'
+                  }`}
+                >
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-sm transition-colors ${selectionType === 'level' ? 'bg-brand text-[#080b12]' : 'bg-surface/50 text-brand'}`}>🏛️</div>
+                    <div className="font-syne font-bold text-[13px]">Full Level Pathway</div>
+                  </div>
+                  <select 
+                    className={`${SELECT_CLASS} !bg-none px-2`} 
+                    value={form.level} 
+                    onChange={e => {
+                      setSelectionType('level');
+                      setForm({...form, level: e.target.value, prog: ''});
+                    }}
+                    required={selectionType === 'level'}
+                    disabled={selectionType === 'program'}
+                  >
+                    <option value="">Select Level...</option>
+                    {LEVELS.map(l => <option key={l} value={l}>{l}</option>)}
+                  </select>
+                  <div className="mt-2 text-[9px] text-text-muted leading-tight opacity-70">Enroll in all modules for the entire academic NQF level.</div>
+                </div>
+
+                {/* PROGRAM SELECTION CARD */}
+                <div 
+                  onClick={() => setSelectionType('program')}
+                  className={`relative p-4 rounded-xl border transition-all duration-300 cursor-pointer overflow-hidden group ${
+                    selectionType === 'program' 
+                      ? 'bg-sky/5 border-sky shadow-[0_0_20px_rgba(0,242,255,0.05)]' 
+                      : selectionType === 'level' ? 'bg-surface/20 border-border-custom opacity-50 grayscale scale-[0.98]' : 'bg-surface border-border-custom hover:border-brand/30'
+                  }`}
+                >
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-sm transition-colors ${selectionType === 'program' ? 'bg-sky text-[#080b12]' : 'bg-surface/50 text-sky'}`}>💻</div>
+                    <div className="font-syne font-bold text-[13px]">Individual Programme</div>
+                  </div>
+                  <select 
+                    className={`${SELECT_CLASS} !bg-none px-2`} 
+                    value={form.prog} 
+                    onChange={e => {
+                      setSelectionType('program');
+                      setForm({...form, prog: e.target.value, level: ''});
+                    }}
+                    required={selectionType === 'program'}
+                    disabled={selectionType === 'level'}
+                  >
+                    <option value="">Select Programme...</option>
+                    {PROGRAMMES.map(p => <option key={p} value={p}>{p}</option>)}
+                  </select>
+                  <div className="mt-2 text-[9px] text-text-muted leading-tight opacity-70">Focus on a specific industry-aligned technical programme.</div>
+                </div>
+
+              </div>
             </div>
+
             <div className="mb-4">
               <label className={LABEL_CLASS}>Highest Qualification</label>
               <select className={SELECT_CLASS} value={form.qual} onChange={e => setForm({...form, qual: e.target.value})}>
@@ -366,13 +443,20 @@ export default function SharedAdmissionForm({ onOpenModal, onSuccess, initialPro
                 {QUALIFICATIONS.map(q => <option key={q} value={q}>{q}</option>)}
               </select>
             </div>
-            <div className="mb-4">
+            
+            <div className="mb-5">
               <label className={LABEL_CLASS}>Upload CV (PDF)</label>
               <input type="file" accept=".pdf" className={INPUT_CLASS} onChange={e => setCvFile(e.target.files?.[0] || null)} />
             </div>
+
             <div>
-              <label className={LABEL_CLASS}>Message (optional)</label>
-              <textarea className={`${INPUT_CLASS} resize-y min-h-[80px]`} placeholder="Tell us about your background and goals…" value={form.msg} onChange={e => setForm({...form, msg: e.target.value})}></textarea>
+              <label className={LABEL_CLASS}>Additional Enquiries & Comments</label>
+              <textarea 
+                className={`${INPUT_CLASS} resize-y min-h-[100px] bg-surface/30`} 
+                placeholder="Tell us about your background, career goals, or ask any pre-admission questions..." 
+                value={form.msg} 
+                onChange={e => setForm({...form, msg: e.target.value})}
+              ></textarea>
             </div>
           </div>
 

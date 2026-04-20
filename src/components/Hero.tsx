@@ -232,7 +232,7 @@ export default function Hero({ onOpenModal, editMode }: HeroProps) {
           </div>
 
           <div className="flex flex-col sm:flex-row gap-3 flex-wrap mb-8 animate-fadeUp delay-300">
-            <button className="btn btn-brand btn-lg w-full sm:w-auto justify-center" onClick={() => onOpenModal('apply')}>
+            <button className="btn btn-brand btn-lg w-full sm:w-auto justify-center" onClick={() => onOpenModal('apply_direct')}>
               Apply for a Programme
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 7h10M8 3l4 4-4 4"/></svg>
             </button>
@@ -240,12 +240,11 @@ export default function Hero({ onOpenModal, editMode }: HeroProps) {
           </div>
 
           <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap animate-fadeUp delay-400">
-            <span className="font-dm-mono text-[8px] sm:text-[9px] tracking-[0.15em] text-text-dim uppercase mr-1">Certified on</span>
+            <span className="font-dm-mono text-[8px] sm:text-[9px] tracking-[0.15em] text-text-dim uppercase mr-1">Curriculum Aligned To</span>
             {[
               { label: 'AWS', color: '#ff9900' },
               { label: 'Azure', color: '#0078d4' },
               { label: 'GCP', color: '#4285f4' },
-              { label: 'SETA', color: '#56cfac' },
               { label: 'Microsoft', color: '#a78bfa' },
             ].map(c => (
               <span key={c.label} className="flex items-center gap-1 bg-card border border-border-custom px-2 py-1 rounded-sm font-dm-mono text-[8px] sm:text-[9px] tracking-[0.06em] text-text-muted hover:border-border2 hover:text-text-custom transition-all">
@@ -257,21 +256,21 @@ export default function Hero({ onOpenModal, editMode }: HeroProps) {
 
         <div className="hidden lg:flex flex-col items-center justify-center relative animate-fadeUp delay-200 min-h-[320px]">
           <div className="absolute top-0 right-0 bg-emerald-dim border border-emerald/20 rounded-lg px-5 py-4 animate-float1 shadow-lg shadow-emerald/5">
-            <div className="font-dm-mono text-[9px] tracking-[0.1em] uppercase text-emerald">Placement Rate</div>
-            <div className="font-syne font-extrabold text-[22px] text-text-custom leading-[1.1]">94%</div>
-            <div className="font-dm-mono text-[8px] text-text-muted mt-0.5">within 90 days</div>
+            <div className="font-dm-mono text-[9px] tracking-[0.1em] uppercase text-emerald">Production Rigour</div>
+            <div className="font-syne font-extrabold text-[18px] text-text-custom leading-[1.1]">Enterprise Standards</div>
+            <div className="font-dm-mono text-[8px] text-text-muted mt-0.5">Verified Delivery</div>
           </div>
 
           <div className="absolute bottom-8 left-0 bg-sky-dim border border-sky/20 rounded-lg px-5 py-4 animate-float2 shadow-lg shadow-sky/5">
-            <div className="font-dm-mono text-[9px] tracking-[0.1em] uppercase text-sky">Avg. Salary Increase</div>
-            <div className="font-syne font-extrabold text-[22px] text-text-custom leading-[1.1]">+62%</div>
-            <div className="font-dm-mono text-[8px] text-text-muted mt-0.5">post-graduation</div>
+            <div className="font-dm-mono text-[9px] tracking-[0.1em] uppercase text-sky">Technical Mastery</div>
+            <div className="font-syne font-extrabold text-[18px] text-text-custom leading-[1.1]">Production Grade</div>
+            <div className="font-dm-mono text-[8px] text-text-muted mt-0.5">Real-world Systems</div>
           </div>
 
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-brand-dim border border-brand/20 rounded-lg px-5 py-4 animate-float1 shadow-lg shadow-brand/5" style={{ animationDelay: '0.5s' }}>
-            <div className="font-dm-mono text-[9px] tracking-[0.1em] uppercase text-brand">Active Learners</div>
-            <div className="font-syne font-extrabold text-[22px] text-text-custom leading-[1.1]">247</div>
-            <div className="font-dm-mono text-[8px] text-text-muted mt-0.5">across 7 countries</div>
+            <div className="font-dm-mono text-[9px] tracking-[0.1em] uppercase text-brand">Curriculum Depth</div>
+            <div className="font-syne font-extrabold text-[18px] text-text-custom leading-[1.1]">28 Modules</div>
+            <div className="font-dm-mono text-[8px] text-text-muted mt-0.5">High-Fidelity Learning</div>
           </div>
         </div>
       </div>
@@ -279,11 +278,11 @@ export default function Hero({ onOpenModal, editMode }: HeroProps) {
       <div className="relative z-[2] border-t border-border-custom bg-bg/70 backdrop-blur-md">
         <div className="max-w-[1280px] mx-auto px-5 sm:px-6 md:px-14 py-4 sm:py-5 grid grid-cols-3 sm:grid-cols-3 md:grid-cols-5 gap-y-4 gap-x-2">
           {[
-            { value: counters.graduates, suffix: '+', label: 'Certified graduates' },
-            { value: counters.placement, suffix: '%', label: 'Placement rate' },
-            { value: counters.employers, suffix: '+', label: 'Employer partners' },
-            { value: counters.uplift, suffix: '%', label: 'Avg salary uplift' },
-            { value: counters.countries, suffix: '', label: 'African countries' },
+            { value: '28', suffix: '+', label: 'Curriculum Modules' },
+            { value: '100', suffix: '%', label: 'Practitioner Led' },
+            { value: '4', suffix: '', label: 'Program Pathways' },
+            { value: 'Live', suffix: '', label: 'Fire Training' },
+            { value: 'Built', suffix: '', label: 'For Africa' },
           ].map((stat, i) => (
             <div key={i} className={`flex flex-col gap-0.5 text-center md:text-left px-2 md:px-4 ${i < 4 ? 'md:border-r border-border-custom' : ''}`}>
               <div className="font-syne font-extrabold text-[20px] sm:text-[24px] md:text-[28px] tracking-[-0.04em] leading-none text-text-custom">{stat.value}<span className="text-brand">{stat.suffix}</span></div>

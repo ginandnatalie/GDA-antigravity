@@ -28,6 +28,7 @@ import PathwaysPage from './pages/PathwaysPage';
 import TermsPage from './pages/TermsPage';
 import RefundsPage from './pages/RefundsPage';
 import PopiaPage from './pages/PopiaPage';
+import ApplyPage from './pages/ApplyPage';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -179,6 +180,7 @@ function AppContent() {
               <Route path="/terms" element={<TermsPage />} />
               <Route path="/refunds" element={<RefundsPage />} />
               <Route path="/popia" element={<PopiaPage />} />
+              <Route path="/apply" element={<ApplyPage />} />
               
               <Route 
                 path="/admin" 
@@ -186,11 +188,11 @@ function AppContent() {
               />
               <Route 
                 path="/portal" 
-                element={<Navigate to="https://portal.ginashe.academy" replace />} 
+                element={<Navigate to="https://gda-student-portal.pages.dev/" replace />} 
               />
               <Route 
                 path="/course/*" 
-                element={<Navigate to="https://portal.ginashe.academy" replace />} 
+                element={<Navigate to="https://gda-student-portal.pages.dev/" replace />} 
               />
               <Route path="/activate" element={<Navigate to="https://staff.ginashe.academy" replace />} />
             </Routes>

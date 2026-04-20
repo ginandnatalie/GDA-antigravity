@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export function Funding({ onOpenModal, editMode }: { onOpenModal: (id: string) => void, editMode?: boolean }) {
+  const navigate = useNavigate();
   return (
     <section id="funding" className="bg-bg border-t border-border-custom">
       <div className="section-inner">
@@ -53,7 +55,7 @@ export function Funding({ onOpenModal, editMode }: { onOpenModal: (id: string) =
               <div className="flex justify-between font-dm-mono text-[9px] tracking-[0.1em] uppercase text-text-dim mb-2">Potential coverage <span className="text-emerald text-[11px]">Up to 100%</span></div>
               <div className="h-1.25 bg-white/6 rounded-full overflow-hidden"><div className="h-full bg-[linear-gradient(90deg,var(--color-emerald),#2e9e7a)] rounded-full w-full"></div></div>
             </div>
-            <button className="btn btn-sm bg-emerald-dim text-emerald border border-emerald/25 hover:bg-emerald/20" onClick={() => onOpenModal('apply')}>Check SETA Eligibility →</button>
+            <button className="btn btn-sm bg-emerald-dim text-emerald border border-emerald/25 hover:bg-emerald/20" onClick={() => navigate('/apply')}>Check SETA Eligibility →</button>
           </div>
 
           <div className="bg-card p-6 sm:p-9 px-6 sm:px-7.5 relative overflow-hidden flex flex-col transition-colors hover:bg-card2 before:content-[''] before:absolute before:top-0 before:left-0 before:right-0 before:h-0.75 before:bg-[linear-gradient(90deg,var(--color-sky),#0288d1)]">
@@ -73,7 +75,7 @@ export function Funding({ onOpenModal, editMode }: { onOpenModal: (id: string) =
               <div className="flex justify-between font-dm-mono text-[9px] tracking-[0.1em] uppercase text-text-dim mb-2">Potential coverage <span className="text-sky text-[11px]">Up to 100%</span></div>
               <div className="h-1.25 bg-white/6 rounded-full overflow-hidden"><div className="h-full bg-[linear-gradient(90deg,var(--color-sky),#0288d1)] rounded-full w-full"></div></div>
             </div>
-            <button className="btn btn-sm bg-sky-dim text-sky border border-sky/25 hover:bg-sky/20" onClick={() => onOpenModal('apply')}>Request Corporate Package →</button>
+            <button className="btn btn-sm bg-sky-dim text-sky border border-sky/25 hover:bg-sky/20" onClick={() => navigate('/apply')}>Request Corporate Package →</button>
           </div>
 
           <div className="bg-card p-6 sm:p-9 px-6 sm:px-7.5 relative overflow-hidden flex flex-col transition-colors hover:bg-card2 before:content-[''] before:absolute before:top-0 before:left-0 before:right-0 before:h-0.75 before:bg-[linear-gradient(90deg,var(--color-brand),#c67d10)]">
@@ -93,7 +95,7 @@ export function Funding({ onOpenModal, editMode }: { onOpenModal: (id: string) =
               <div className="flex justify-between font-dm-mono text-[9px] tracking-[0.1em] uppercase text-text-dim mb-2">Upfront required (3-month plan) <span className="text-brand text-[11px]">~33%</span></div>
               <div className="h-1.25 bg-white/6 rounded-full overflow-hidden"><div className="h-full bg-[linear-gradient(90deg,var(--color-brand),#c67d10)] rounded-full w-1/3"></div></div>
             </div>
-            <button className="btn btn-brand btn-sm" onClick={() => onOpenModal('apply')}>Discuss Payment Options →</button>
+            <button className="btn btn-brand btn-sm" onClick={() => navigate('/apply')}>Discuss Payment Options →</button>
           </div>
         </div>
 

@@ -55,67 +55,113 @@ const LucideIcon = ({ name, className = "w-5 h-5" }: { name: string; className?:
   return <Icon className={className} />;
 };
 
-export function TrustBar({ editMode }: { editMode?: boolean }) {
-  const [title, setTitle] = useState('Recognised by');
+interface BrandPartner {
+  slug: string | null;
+  hex: string;
+  accent: string;
+  short: string;
+  name: string;
+  initials?: string;
+}
+
+const PartnerCard = ({ brand }: { brand: BrandPartner }) => {
+  const [svgData, setSvgData] = useState<string | null>(null);
+  const [loadError, setLoadError] = useState(false);
 
   useEffect(() => {
-    async function fetchSettings() {
-      try {
-        const { data, error } = await supabase.from('site_settings').select('trustBarTitle').eq('id', 1).single();
-        if (data) setTitle(data.trustBarTitle || 'Recognised by');
-      } catch (err) {
-        console.error('Error fetching trust bar settings:', err);
-      }
+    if (!brand.slug) return;
+    
+    fetch(`https://cdn.jsdelivr.net/npm/simple-icons/icons/${brand.slug}.svg`)
+      .then(r => { if (!r.ok) throw new Error(); return r.text(); })
+      .then(svg => {
+        const colored = svg
+          .replace(/width="[^"]*"/, '')
+          .replace(/height="[^"]*"/, '')
+          .replace('<svg ', `<svg fill="#${brand.hex}" width="44" height="44" `);
+        setSvgData(colored);
+      })
+      .catch(() => setLoadError(true));
+  }, [brand.slug, brand.hex]);
+
+  const renderContent = () => {
+    if (!brand.slug || loadError) {
+      return (
+        <div 
+          className="w-11 h-11 rounded-lg flex items-center justify-center text-[10px] font-bold tracking-wider"
+          style={{ 
+            background: `${brand.accent}18`, 
+            border: `1.5px solid ${brand.accent}44`,
+            color: brand.accent 
+          }}
+        >
+          {brand.initials || brand.short}
+        </div>
+      );
     }
-    fetchSettings();
-  }, []);
 
-  useEffect(() => {
-    const handleSave = async () => {
-      try {
-        await supabase.from('site_settings').update({ trustBarTitle: title }).eq('id', 1);
-      } catch (err) {
-        console.error('Error saving trust bar content:', err);
-      }
-    };
-    window.addEventListener('save-site-content', handleSave);
-    return () => window.removeEventListener('save-site-content', handleSave);
-  }, [title]);
+    if (!svgData) {
+      return (
+        <div 
+          className="w-5 h-5 rounded-full border-2 border-white/10 animate-spin"
+          style={{ borderTopColor: brand.accent }}
+        />
+      );
+    }
+
+    return <div dangerouslySetInnerHTML={{ __html: svgData }} />;
+  };
 
   return (
-    <div id="trust" className="border-b border-border-custom bg-bg2">
-      <div className="max-w-[1280px] mx-auto px-5 sm:px-6 md:px-14 py-4 sm:py-5 flex items-center gap-6 sm:gap-8 md:gap-12 overflow-x-auto scrollbar-hide">
-        {editMode ? (
-          <input 
-            className="font-dm-mono text-[9px] tracking-[0.2em] uppercase text-brand bg-transparent border-b border-brand/30 outline-none focus:border-brand shrink-0 whitespace-nowrap"
-            value={title}
-            onChange={e => setTitle(e.target.value)}
-          />
-        ) : (
-          <span className="font-dm-mono text-[9px] tracking-[0.2em] uppercase text-text-dim shrink-0 whitespace-nowrap">{title}</span>
-        )}
-        <div className="flex items-center gap-9 flex-wrap md:flex-nowrap">
-          {[
-            { name: 'Amazon Web Services', color: '#FF9900', label: 'AWS', size: 9 },
-            { name: 'Microsoft Azure', color: '#0078D4', label: 'AZ', size: 7 },
-            { name: 'Google Cloud', color: '#4285F4', label: 'GCP', size: 7 },
-            { name: 'Oracle Cloud', color: '#F80000', label: 'OCI', size: 7 },
-            { name: 'CompTIA Aligned', color: '#00aeef', label: 'TIA', size: 6 },
-            { name: 'IASA Global', color: '#7c3aed', label: 'IASA', size: 6 }
-          ].map((logo) => (
-            <span key={logo.name} className="flex items-center gap-1.5 sm:gap-2 opacity-40 hover:opacity-75 transition-opacity font-syne font-bold text-[11px] sm:text-[13px] text-text-custom whitespace-nowrap">
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="shrink-0">
-                <rect width="20" height="20" rx="4" fill={logo.color} opacity="0.8"/>
-                <text x="4" y="15" fontSize={logo.size} fill="white" fontWeight="bold">{logo.label}</text>
-              </svg>
-              {logo.name}
-            </span>
+    <div className="flex-1 min-w-[110px] max-w-[140px] group relative overflow-hidden bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-4 flex flex-col items-center gap-3 transition-all duration-300 hover:border-white/20 hover:bg-white/10 hover:-translate-y-1">
+      <div 
+        className="absolute top-2 right-2 w-1 h-1 rounded-full opacity-40 shadow-[0_0_8px_currentColor]"
+        style={{ color: brand.accent, backgroundColor: 'currentColor' }}
+      />
+      
+      <div className="w-10 h-10 flex items-center justify-center flex-shrink-0 transition-transform duration-500 group-hover:scale-110">
+        {renderContent()}
+      </div>
+
+      <div className="space-y-0.5 text-center">
+        <p className="text-[11px] font-bold tracking-wide transition-colors" style={{ color: brand.accent }}>
+          {brand.short}
+        </p>
+        <p className="text-[8px] leading-tight text-white/40 font-medium uppercase tracking-widest whitespace-nowrap">
+          {brand.name}
+        </p>
+      </div>
+    </div>
+  );
+};
+
+export const TrustBar = () => {
+  const brands: BrandPartner[] = [
+    { slug: 'amazonaws',      hex: 'FF9900', accent: '#FF9900', short: 'AWS',          name: 'Amazon Web Services' },
+    { slug: 'microsoftazure', hex: '0078D4', accent: '#0078D4', short: 'Azure',        name: 'Microsoft Azure'     },
+    { slug: 'googlecloud',    hex: '4285F4', accent: '#4285F4', short: 'Google Cloud', name: 'Google Cloud'        },
+    { slug: 'oracle',         hex: 'F80000', accent: '#F80000', short: 'Oracle',       name: 'Oracle'              },
+    { slug: 'comptia',        hex: 'C8202F', accent: '#C8202F', short: 'CompTIA',      name: 'CompTIA'             },
+    { slug: null,             hex: '00F2FF', accent: '#00F2FF', short: 'IASA',         name: 'IASA Global', initials: 'IASA' },
+  ];
+
+  return (
+    <div className="py-12">
+      <div className="flex flex-col items-center gap-8 opacity-30 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-1000 group/bar">
+        <div className="flex flex-col items-center">
+          <div className="section-label justify-center">
+            Curriculum Aligned To
+          </div>
+        </div>
+
+        <div className="flex flex-wrap justify-center gap-3 w-full max-w-5xl px-4">
+          {brands.map((brand, idx) => (
+            <PartnerCard key={brand.short + idx} brand={brand} />
           ))}
         </div>
       </div>
     </div>
   );
-}
+};
 
 interface Program {
   id: string;
@@ -413,13 +459,21 @@ export function Programs({ onOpenModal, editMode, isHomePage, initialFilterLevel
               </div>
             </div>
 
-            <div className="mt-16 text-center">
+            <div className="mt-16 flex flex-col sm:flex-row items-center justify-center gap-4">
               <button
-                onClick={() => navigate('/curriculum')}
+                onClick={() => navigate('/pathways')}
                 className="bg-brand text-black font-syne font-bold px-8 py-4 rounded hover:bg-white transition-all uppercase tracking-widest text-xs inline-flex items-center gap-3 shadow-[0_0_15px_rgba(0,242,255,0.2)] hover:shadow-[0_0_25px_rgba(255,255,255,0.4)]"
               >
-                View Full 28-Course Matrix
-                <LucideIcon name="ArrowRight" className="w-4 h-4" />
+                Explore Academy Pathways
+                <LucideIcon name="Rocket" className="w-4 h-4" />
+              </button>
+              
+              <button
+                onClick={() => navigate('/curriculum')}
+                className="bg-white/5 border border-brand/40 text-brand font-syne font-bold px-8 py-4 rounded hover:bg-brand/10 transition-all uppercase tracking-widest text-xs inline-flex items-center gap-3"
+              >
+                View 28-Course Matrix
+                <LucideIcon name="LayoutGrid" className="w-4 h-4" />
               </button>
             </div>
           </div>
@@ -689,13 +743,13 @@ export function Programs({ onOpenModal, editMode, isHomePage, initialFilterLevel
                                     </div>
                                   </div>
 
-                                  <div className="flex flex-col gap-3 pt-4">
-                                    <button 
-                                      onClick={() => onOpenModal('apply')}
-                                      className="w-full py-4 bg-brand text-black font-syne font-black uppercase text-[10px] tracking-[0.3em] rounded-xl hover:bg-white transition-all shadow-[0_20px_40px_rgba(0,242,255,0.15)] active:scale-95"
-                                    >
-                                      Secure My Admission
-                                    </button>
+                                    <div className="flex flex-col gap-3 pt-4">
+                                      <button 
+                                        onClick={() => navigate(`/apply?program=${encodeURIComponent(program.title)}`)}
+                                        className="w-full py-4 bg-brand text-black font-syne font-black uppercase text-[10px] tracking-[0.3em] rounded-xl hover:bg-white transition-all shadow-[0_20px_40px_rgba(0,242,255,0.15)] active:scale-95"
+                                      >
+                                        Secure My Admission
+                                      </button>
                                     <p className="text-center font-dm-mono text-[8px] text-white/20 uppercase tracking-widest">Limited Cohort Intake Cycle</p>
                                   </div>
                                 </div>

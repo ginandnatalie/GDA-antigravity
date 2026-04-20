@@ -37,6 +37,13 @@ export const PROGRAMMES = [
   "I'm not sure — I want guidance",
 ];
 
+export const LEVELS = [
+  'Foundation Pathway (Level 1)',
+  'Associate Pathway (Level 2)',
+  'Professional Pathway (Level 3)',
+  'Enterprise Pathway (Level 4)',
+];
+
 export const QUALIFICATIONS = [
   'Matric / NSC',
   'Diploma',

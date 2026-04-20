@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { MapPin, Mail, Phone, Clock, Send, ExternalLink } from 'lucide-react';
 import PageHero from '../components/PageHero';
 
@@ -8,6 +9,7 @@ interface ContactPageProps {
 }
 
 export default function ContactPage({ onOpenModal, editMode }: ContactPageProps) {
+  const navigate = useNavigate();
   const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' });
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
@@ -100,7 +102,7 @@ export default function ContactPage({ onOpenModal, editMode }: ContactPageProps)
 
               <div className="grid grid-cols-2 gap-4 mt-2">
                 <button 
-                  onClick={() => onOpenModal('apply')}
+                  onClick={() => navigate('/apply')}
                   className="btn btn-brand w-full justify-center text-[10px]"
                 >
                   Apply Now

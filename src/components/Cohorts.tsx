@@ -1,8 +1,10 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import SharedAdmissionForm from './SharedAdmissionForm';
 
 export function Cohorts({ onOpenModal, editMode }: { onOpenModal: (id: string) => void, editMode?: boolean }) {
+  const navigate = useNavigate();
   return (
     <section id="cohorts" className="bg-bg2 border-t border-border-custom">
       <div className="section-inner">
@@ -39,20 +41,25 @@ export function Cohorts({ onOpenModal, editMode }: { onOpenModal: (id: string) =
 
           {/* ─── RIGHT: APPLICATION FORM ─── */}
           <div className="bg-card border border-border-custom rounded-3xl p-6 sm:p-10 sticky top-20 animate-fadeUp">
-            <div className="mb-7 pb-5.5 border-b border-border-custom">
-              <div className="font-syne font-extrabold text-[20px] mb-1.5">Apply to GDA</div>
-              <div className="text-[12px] text-text-muted">We respond within 2 business days. No commitment required to enquire.</div>
-            </div>
+            <div className="flex flex-col gap-6">
+              <div className="p-8 rounded-2xl bg-white/[0.03] border border-white/5 flex flex-col items-center text-center">
+                <div className="w-16 h-16 rounded-full bg-brand/10 border border-brand/20 flex items-center justify-center text-2xl mb-6 shadow-[0_0_30px_rgba(0,242,255,0.1)]">📜</div>
+                <h3 className="font-syne font-extrabold text-[22px] mb-3">Begin Your Application</h3>
+                <p className="text-[13px] text-text-muted leading-relaxed mb-8 max-w-sm">Secure your seat in the 2026 Academic Cycle through our institutional Hub.</p>
+                
+                <button 
+                  onClick={() => navigate('/apply')}
+                  className="btn btn-brand w-full py-5 rounded-2xl font-outfit font-black uppercase text-[12px] tracking-[0.2em] shadow-[0_20px_40px_rgba(0,242,255,0.2)]"
+                >
+                  Enter Application Hub →
+                </button>
+              </div>
 
-            <SharedAdmissionForm 
-              onOpenModal={onOpenModal}
-              onSuccess={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            />
-            
-            <div className="text-center mt-6 pt-4 border-t border-border-custom">
-               <span className="text-[11px] text-text-muted">
-                Enterprise enquiry? <a className="text-brand no-underline cursor-pointer hover:underline" onClick={() => onOpenModal('apply')}>Apply as an organisation</a>
-              </span>
+              <div className="text-center p-4">
+                 <span className="text-[11px] text-text-muted">
+                  Institutional Record Lookup: Already have a student number? <a className="text-brand no-underline cursor-pointer hover:underline" onClick={() => navigate('/apply')}>Validate your status</a>
+                </span>
+              </div>
             </div>
           </div>
         </div>
@@ -72,7 +79,7 @@ export function Ecosystem({ onOpenModal, editMode }: { onOpenModal: (id: string)
             <p className="section-sub animate-fadeUp delay-100">
               Our employer and technology partnerships aren't logo placements. They're active recruitment pipelines, co-created content, and sponsored learner placements.
             </p>
-            <button className="btn btn-outline mt-8 animate-fadeUp" onClick={() => onOpenModal('apply')}>Become a Partner</button>
+            <button className="btn btn-outline mt-8 animate-fadeUp" onClick={() => onOpenModal('partner')}>Become a Partner</button>
           </div>
           <div className="bg-white/3 border border-border-custom rounded-2xl p-6 animate-fadeUp delay-200">
             <div className="font-syne font-bold text-[11px] uppercase tracking-widest text-brand mb-4 flex items-center gap-2">
@@ -137,7 +144,7 @@ export function Ecosystem({ onOpenModal, editMode }: { onOpenModal: (id: string)
               ))}
             </ul>
             <div className="mt-6.5 flex gap-2.5 flex-wrap">
-              <button className="btn btn-brand" onClick={() => onOpenModal('apply')}>Partner Enquiry →</button>
+              <button className="btn btn-brand" onClick={() => onOpenModal('partner')}>Partner Enquiry →</button>
               <a href="mailto:partnerships@ginashe.co.za" className="btn btn-outline">partnerships@ginashe.co.za</a>
             </div>
           </div>

@@ -2,6 +2,7 @@ import React from 'react';
 import PageHero from '../components/PageHero';
 import { WhyGDA, Alumni } from '../components/WhyGDA';
 import { Ecosystem } from '../components/Cohorts';
+import { AcademyStaff } from '../components/Staff';
 
 interface AboutPageProps {
   onOpenModal: (id: string) => void;
@@ -19,6 +20,7 @@ export default function AboutPage({ onOpenModal, editMode }: AboutPageProps) {
         imageAlt="Modern tech campus and innovation workspace"
       />
       <WhyGDA editMode={editMode} />
+      <AcademyStaff />
       <Alumni editMode={editMode} />
       <Ecosystem onOpenModal={onOpenModal} editMode={editMode} />
     </>

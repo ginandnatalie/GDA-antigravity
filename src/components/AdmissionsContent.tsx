@@ -1,7 +1,8 @@
-import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { CheckCircle2, Info, Landmark, CreditCard, Clock } from 'lucide-react';
 
 export function Requirements() {
+  const navigate = useNavigate();
   const criteria = [
     { title: 'Academic Qualification', desc: 'Grade 12 (Matric) certificate or equivalent NQF Level 4 qualification.', mandatory: true },
     { title: 'English Proficiency', desc: 'Ability to read, write and communicate effectively in English for technical documentation.', mandatory: true },
@@ -79,6 +80,7 @@ export function Requirements() {
 }
 
 export function TuitionFees() {
+  const navigate = useNavigate();
   const plans = [
     { title: 'Upfront Investment', price: 'R 36,000', benefit: '15% Discount included', popular: false },
     { title: 'Standard Installment', price: 'R 6,500 /mo', benefit: 'Pay over 6-8 months', popular: true },
@@ -98,7 +100,10 @@ export function TuitionFees() {
               <h3 className={`font-syne font-bold text-lg mb-4 ${plan.popular ? 'text-navy' : 'text-white'}`}>{plan.title}</h3>
               <div className={`text-3xl font-black mb-2 ${plan.popular ? 'text-navy' : 'text-brand'}`}>{plan.price}</div>
               <p className={`text-[11px] mb-8 uppercase tracking-widest ${plan.popular ? 'text-navy/70' : 'text-text-dim'}`}>{plan.benefit}</p>
-              <button className={`w-full py-3 rounded-xl font-bold text-sm transition-all ${plan.popular ? 'bg-navy text-white hover:bg-navy/80' : 'bg-brand text-navy hover:bg-brand-dim'}`}>
+              <button 
+                onClick={() => navigate('/apply')}
+                className={`w-full py-3 rounded-xl font-bold text-sm transition-all ${plan.popular ? 'bg-navy text-white hover:bg-navy/80' : 'bg-brand text-navy hover:bg-brand-dim'}`}
+              >
                 Apply Now
               </button>
             </div>

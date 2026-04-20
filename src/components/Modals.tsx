@@ -233,12 +233,33 @@ export function Modals({ activeModal, onClose, onSwitchModal, onLoginSuccess }: 
   return (
     <div 
       className={`fixed inset-0 z-[2000] bg-bg/88 backdrop-blur-md flex items-center justify-center p-6 transition-opacity duration-250 ${activeModal ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
-      onClick={onClose}
     >
       <div 
         className={`bg-card border border-border-custom rounded-3xl w-full ${isCourseId && window.location.pathname.includes('/levels/') ? 'max-w-5xl' : 'max-w-[480px]'} max-h-[90vh] overflow-y-auto transform transition-transform duration-300 relative before:content-[''] before:absolute before:top-0 before:left-0 before:right-0 before:h-px before:bg-[linear-gradient(90deg,transparent,var(--color-brand),transparent)]`}
         onClick={stopPropagation}
       >
+        {activeModal === 'apply_direct' && (
+          <div className="p-0">
+             <div className="p-7 md:p-8 pb-5 border-b border-border-custom flex items-start justify-between bg-surface/50">
+              <div>
+                <div className="w-12 h-12 rounded-md bg-brand-dim border border-brand/20 flex items-center justify-center text-[22px] mb-3.5">🚀</div>
+                <div className="font-syne font-extrabold text-[20px]">Institutional Application</div>
+                <div className="text-[12px] text-text-muted mt-1">Applying for the 2026 Academic Cycle</div>
+              </div>
+              <button 
+                className="w-8 h-8 rounded-full border flex items-center justify-center text-[14px] text-text-muted cursor-pointer transition-all hover:text-text-custom" 
+                style={{ backgroundColor: 'var(--glass-bg)', borderColor: 'var(--border-custom)' }}
+                onClick={onClose}
+              >
+                ✕
+              </button>
+            </div>
+            <div className="p-6 md:p-8">
+              <SharedAdmissionForm isModal={true} onSuccess={onClose} />
+            </div>
+          </div>
+        )}
+
         {activeModal === 'student' && (
           <>
             <div className="p-7 md:p-8 pb-5 border-b border-border-custom flex items-start justify-between">
@@ -425,6 +446,153 @@ export function Modals({ activeModal, onClose, onSwitchModal, onLoginSuccess }: 
               )}
             </div>
           </>
+        )}
+        
+        {activeModal === 'partner' && (
+          <div className="p-0">
+             <div className="p-7 md:p-8 pb-5 border-b border-border-custom flex items-start justify-between bg-surface/50">
+              <div>
+                <div className="w-12 h-12 rounded-md bg-brand-dim border border-brand/20 flex items-center justify-center text-[22px] mb-3.5">🤝</div>
+                <div className="font-syne font-extrabold text-[20px]">Partner Enquiry</div>
+                <div className="text-[12px] text-text-muted mt-1">Join the Ginashe Talent Ecosystem</div>
+              </div>
+              <button 
+                className="w-8 h-8 rounded-full border flex items-center justify-center text-[14px] text-text-muted cursor-pointer transition-all hover:text-text-custom" 
+                style={{ backgroundColor: 'var(--glass-bg)', borderColor: 'var(--border-custom)' }}
+                onClick={onClose}
+              >
+                ✕
+              </button>
+            </div>
+            <div className="p-6 md:p-8">
+              <form className="flex flex-col gap-4" onSubmit={handlePartnerSubmit}>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="form-group">
+                    <label className="block font-dm-mono text-[9px] tracking-[0.15em] uppercase text-text-muted mb-1.75">Organisation Name</label>
+                    <input 
+                      className="w-full bg-surface border border-border-custom rounded-sm p-2.75 px-3.5 font-dm-sans text-[13px] text-text-custom outline-none focus:border-brand/40 transition-all" 
+                      placeholder="Company Ltd" 
+                      value={partnerForm.name}
+                      onChange={e => setPartnerForm({...partnerForm, name: e.target.value})}
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="block font-dm-mono text-[9px] tracking-[0.15em] uppercase text-text-muted mb-1.75">Partner Type</label>
+                    <select 
+                      className="w-full bg-surface border border-border-custom rounded-sm p-2.75 px-3.5 font-dm-sans text-[13px] text-text-custom outline-none focus:border-brand/40 transition-all appearance-none"
+                      value={partnerForm.type}
+                      onChange={e => setPartnerForm({...partnerForm, type: e.target.value})}
+                      required
+                    >
+                      <option value="">Select...</option>
+                      <option>Hiring Partner</option>
+                      <option>Academic / Accreditation</option>
+                      <option>Technology / Vendor</option>
+                      <option>Government / NGO</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="form-group">
+                  <label className="block font-dm-mono text-[9px] tracking-[0.15em] uppercase text-text-muted mb-1.75">Contact Email</label>
+                  <input 
+                    type="email"
+                    className="w-full bg-surface border border-border-custom rounded-sm p-2.75 px-3.5 font-dm-sans text-[13px] text-text-custom outline-none focus:border-brand/40 transition-all" 
+                    placeholder="contact@company.com" 
+                    value={partnerForm.email}
+                    onChange={e => setPartnerForm({...partnerForm, email: e.target.value})}
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label className="block font-dm-mono text-[9px] tracking-[0.15em] uppercase text-text-muted mb-1.75">Message / Intent</label>
+                  <textarea 
+                    className="w-full bg-surface border border-border-custom rounded-sm p-2.75 px-3.5 font-dm-sans text-[13px] text-text-custom outline-none focus:border-brand/40 transition-all min-h-[80px]" 
+                    placeholder="Tell us about your objectives..." 
+                    value={partnerForm.msg}
+                    onChange={e => setPartnerForm({...partnerForm, msg: e.target.value})}
+                  />
+                </div>
+                <button type="submit" disabled={isSubmitting} className="btn btn-brand w-full py-3.5 justify-center mt-2 shadow-[0_15px_40px_rgba(0,242,255,0.15)]">
+                  {isSubmitting ? 'Submitting...' : 'Submit Partnership Enquiry'}
+                </button>
+              </form>
+            </div>
+          </div>
+        )}
+
+        {activeModal === 'organisation' && (
+          <div className="p-0">
+             <div className="p-7 md:p-8 pb-5 border-b border-border-custom flex items-start justify-between bg-surface/50">
+              <div>
+                <div className="w-12 h-12 rounded-md bg-sky/10 border border-sky/20 flex items-center justify-center text-[22px] mb-3.5">🏢</div>
+                <div className="font-syne font-extrabold text-[20px]">Enterprise Training</div>
+                <div className="text-[12px] text-text-muted mt-1">Upskill your engineering workforce</div>
+              </div>
+              <button 
+                className="w-8 h-8 rounded-full border flex items-center justify-center text-[14px] text-text-muted cursor-pointer transition-all hover:text-text-custom" 
+                style={{ backgroundColor: 'var(--glass-bg)', borderColor: 'var(--border-custom)' }}
+                onClick={onClose}
+              >
+                ✕
+              </button>
+            </div>
+            <div className="p-6 md:p-8">
+              <form className="flex flex-col gap-4" onSubmit={handleOrgSubmit}>
+                 <div className="form-group">
+                  <label className="block font-dm-mono text-[9px] tracking-[0.15em] uppercase text-text-muted mb-1.75">Organisation Name</label>
+                  <input 
+                    className="w-full bg-surface border border-border-custom rounded-sm p-2.75 px-3.5 font-dm-sans text-[13px] text-text-custom outline-none focus:border-brand/40 transition-all" 
+                    placeholder="Enterprise Corp" 
+                    value={orgForm.org}
+                    onChange={e => setOrgForm({...orgForm, org: e.target.value})}
+                    required
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="form-group">
+                    <label className="block font-dm-mono text-[9px] tracking-[0.15em] uppercase text-text-muted mb-1.75">Primary Contact</label>
+                    <input 
+                      className="w-full bg-surface border border-border-custom rounded-sm p-2.75 px-3.5 font-dm-sans text-[13px] text-text-custom outline-none focus:border-brand/40 transition-all" 
+                      placeholder="Full Name" 
+                      value={orgForm.contact}
+                      onChange={e => setOrgForm({...orgForm, contact: e.target.value})}
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="block font-dm-mono text-[9px] tracking-[0.15em] uppercase text-text-muted mb-1.75">Fleet Size</label>
+                    <select 
+                      className="w-full bg-surface border border-border-custom rounded-sm p-2.75 px-3.5 font-dm-sans text-[13px] text-text-custom outline-none focus:border-brand/40 transition-all appearance-none"
+                      value={orgForm.size}
+                      onChange={e => setOrgForm({...orgForm, size: e.target.value})}
+                      required
+                    >
+                      <option value="">Select size...</option>
+                      <option>1-10 staff</option>
+                      <option>11-50 staff</option>
+                      <option>51-200 staff</option>
+                      <option>200+ staff</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="form-group">
+                  <label className="block font-dm-mono text-[9px] tracking-[0.15em] uppercase text-text-muted mb-1.75">Work Email</label>
+                  <input 
+                    type="email"
+                    className="w-full bg-surface border border-border-custom rounded-sm p-2.75 px-3.5 font-dm-sans text-[13px] text-text-custom outline-none focus:border-brand/40 transition-all" 
+                    placeholder="hr@enterprise.com" 
+                    value={orgForm.email}
+                    onChange={e => setOrgForm({...orgForm, email: e.target.value})}
+                    required
+                  />
+                </div>
+                <button type="submit" disabled={isSubmitting} className="btn btn-sky w-full py-3.5 justify-center mt-2 shadow-[0_15px_40px_rgba(0,242,255,0.1)]">
+                  {isSubmitting ? 'Submitting...' : 'Request Enterprise Briefing'}
+                </button>
+              </form>
+            </div>
+          </div>
         )}
 
         {activeModal === 'reset-password' && (
@@ -642,13 +810,21 @@ function CourseDetailsModal({ courseId, onClose }: { courseId: string, onClose: 
          {window.location.pathname.includes('/levels/') ? (
            <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
              <button 
-               onClick={() => window.location.href = `/admissions?type=module&id=${courseId}`}
+               onClick={() => {
+                 onClose();
+                 const url = `/apply?program=${encodeURIComponent(course.title)}`;
+                 // Use window.location as we are outside of the main Router context sometimes or for safety
+                 window.location.href = url;
+               }}
                className="btn btn-outline btn-sm px-6 font-syne font-black uppercase text-[9px] tracking-widest"
              >
                Apply for {course.title} Only
              </button>
              <button 
-               onClick={() => window.location.href = `/admissions?type=level&id=${courseId}`}
+               onClick={() => {
+                 onClose();
+                 window.location.href = `/apply?level=${encodeURIComponent(course.level)}`;
+               }}
                className="btn btn-brand btn-sm px-8 font-syne font-black uppercase text-[10px] tracking-widest shadow-[0_10px_30px_rgba(0,242,255,0.15)]"
              >
                Apply for Full {course.level} Pathway →
@@ -656,7 +832,10 @@ function CourseDetailsModal({ courseId, onClose }: { courseId: string, onClose: 
            </div>
          ) : (
            <button 
-             onClick={() => window.location.href = '/admissions'}
+             onClick={() => {
+               onClose();
+               window.location.href = `/apply?program=${encodeURIComponent(course.title)}`;
+             }}
              className="btn btn-brand btn-sm px-8"
            >
              Apply Now →

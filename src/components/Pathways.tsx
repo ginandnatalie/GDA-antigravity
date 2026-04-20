@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Linkedin } from 'lucide-react';
 
 export function Pathways({ editMode }: { editMode?: boolean }) {
   const [activePath, setActivePath] = useState('cloud');
@@ -102,12 +103,66 @@ export function Pathways({ editMode }: { editMode?: boolean }) {
 
 export function Faculty({ editMode }: { editMode?: boolean }) {
   const faculty = [
-    { name: 'Munashe Ndoro', role: 'Lead Instructor · Cloud Architecture', init: 'MN', color: 'linear-gradient(135deg,#00f2ff,#009eb3)', banner: 'linear-gradient(90deg, #00f2ff, #009eb3)', spec: '15 years in cloud infrastructure. Former AWS Solutions Architect at Nedbank. Designed multi-region disaster recovery platforms for JSE-listed companies.', certs: [{ l: 'AWS SAP', t: 'brand' }, { l: 'Azure Expert', t: 'sky' }, { l: 'GCP Pro', t: 'em' }], students: '342', rating: '4.9★', online: true },
-    { name: 'Thandeka Mokoena', role: 'Senior Instructor · AI & ML', init: 'TM', color: 'linear-gradient(135deg,#4fc3f7,#0288d1)', banner: 'linear-gradient(90deg, #4fc3f7, #0288d1)', spec: 'PhD candidate, Computer Science (UCT). Built fraud detection models at Standard Bank processing 2M+ transactions daily. Specialises in applied NLP for African languages.', certs: [{ l: 'TensorFlow Cert', t: 'vio' }, { l: 'Azure AI', t: 'sky' }, { l: 'AWS ML', t: 'em' }], students: '218', rating: '4.8★', online: true },
-    { name: 'Sipho Khumalo', role: 'Instructor · Data Engineering', init: 'SK', color: 'linear-gradient(135deg,#56cfac,#2e9e7a)', banner: 'linear-gradient(90deg, #56cfac, #2e9e7a)', spec: 'Former Lead Data Engineer at Woolworths Holdings. Built a real-time supply chain analytics platform ingesting 50TB/day. Expert in dbt, Databricks, and Google BigQuery.', certs: [{ l: 'GCP DE Pro', t: 'sky' }, { l: 'Databricks', t: '' }, { l: 'dbt Labs', t: 'brand' }], students: '187', rating: '4.9★' },
-    { name: 'Zintle Dlamini', role: 'Instructor · DevSecOps', init: 'ZD', color: 'linear-gradient(135deg,#f4664a,#c04030)', banner: 'linear-gradient(90deg, #f4664a, #c04030)', spec: 'Platform engineer with 9 years in fintech security. Former Head of Cloud Security at a JSE top-40 company. Built zero-trust architectures protecting R200Bn+ in daily transactions.', certs: [{ l: 'CKA', t: 'vio' }, { l: 'CISSP', t: 'cor' }, { l: 'Terraform Pro', t: 'sky' }], students: '156', rating: '4.7★' },
-    { name: 'Priya Naidoo', role: 'Instructor · Executive AI', init: 'PN', color: 'linear-gradient(135deg,#a78bfa,#7c3aed)', banner: 'linear-gradient(90deg, #a78bfa, #7c3aed)', spec: 'MBA (Wits), formerly Chief Digital Officer at a Big 4 bank. Leads the AI for Business Leaders track. Specialises in digital transformation strategy and responsible AI governance.', certs: [{ l: 'MBA (Wits)', t: 'vio' }, { l: 'AI Strategy', t: 'brand' }, { l: 'IASA Fellow', t: '' }], students: '203', rating: '4.9★', online: true },
-    { name: 'Lungelo Mthembu', role: 'Curriculum Director', init: 'LM', color: 'linear-gradient(135deg,#00f2ff,#56cfac)', banner: 'linear-gradient(90deg, #00f2ff, #56cfac)', spec: 'Former AWS Education Lead for Sub-Saharan Africa. Designed SETA-accredited curricula for 14,000+ learners across the continent. Architect of the GDA global-standard framework.', certs: [{ l: 'AWS Educator', t: 'brand' }, { l: 'SETA Expert', t: 'em' }, { l: 'NQF Assessor', t: 'sky' }], students: '14k+', rating: '5.0★' }
+    { 
+      name: 'George K', 
+      role: 'Executive Director', 
+      init: 'GK', 
+      color: 'linear-gradient(135deg,#00f2ff,#009eb3)', 
+      banner: 'linear-gradient(90deg, #00f2ff, #009eb3)', 
+      spec: 'Digital Strategy Lead & Executive Director. MBA (JBS - Digital Transformation) with a focus on institutional sovereignty. Expert in Google Cloud Platform (GCP) and Popular BaaS computing.', 
+      certs: [{ l: 'MBA (JBS)', t: 'vio' }, { l: 'GCP PRO', t: 'brand' }, { l: 'POSTGRES', t: 'sky' }], 
+      experience: '20+ Yrs', 
+      projects: '100+ Strategic', 
+      online: true,
+      image: '/images/faculty/george.jpg',
+      linkedin: 'https://www.linkedin.com/in/george-kapendeka/'
+    },
+    { 
+      name: 'Talent K', 
+      role: 'Lead Faculty · Cloud Architecture', 
+      init: 'TK', 
+      color: 'linear-gradient(135deg,#4fc3f7,#0288d1)', 
+      banner: 'linear-gradient(90deg, #4fc3f7, #0288d1)', 
+      spec: 'Multi-cloud architect with 12+ years experience. Specializes in mission-critical infrastructure for the African digital economy. Lead of GDA\'s flagship Residency programs.', 
+      certs: [{ l: 'AWS SAA', t: 'brand' }, { l: 'AZ-104', t: 'sky' }, { l: 'GCP Pro', t: 'em' }], 
+      experience: '12+ Yrs', 
+      projects: '50+ Enterprise', 
+      online: true 
+    },
+    { 
+      name: 'Eddie M', 
+      role: 'Lead · Database Engineering', 
+      init: 'EM', 
+      color: 'linear-gradient(135deg,#56cfac,#2e9e7a)', 
+      banner: 'linear-gradient(90deg, #56cfac, #2e9e7a)', 
+      spec: 'Specialist in distributed data systems and high-availability clusters. Core contributor to the Ginashe Data Systems Mastery curriculum and enterprise engineering tracks.', 
+      certs: [{ l: 'Oracle OCP', t: 'cor' }, { l: 'Azure Data', t: 'sky' }, { l: 'Postgres', t: 'brand' }], 
+      experience: '10+ Yrs', 
+      projects: '30+ Systems' 
+    },
+    { 
+      name: 'Falakhe', 
+      role: 'Lead · Database Administration', 
+      init: 'FL', 
+      color: 'linear-gradient(135deg,#f4664a,#c04030)', 
+      banner: 'linear-gradient(90deg, #f4664a, #c04030)', 
+      spec: 'Focused on institutional data governance and operational uptime. Expert in cloud-native database management, security protocols, and high-fidelity recovery systems.', 
+      certs: [{ l: 'MSSQL', t: 'sky' }, { l: 'AWS DBA', t: 'brand' }, { l: 'MongoDB', t: 'em' }], 
+      experience: '15+ Yrs', 
+      projects: '40+ DBA Ops' 
+    },
+    { 
+      name: 'Tumelo M', 
+      role: 'Cloud Engineer/Developer', 
+      init: 'TM', 
+      color: 'linear-gradient(135deg,#a78bfa,#7c3aed)', 
+      banner: 'linear-gradient(90deg, #a78bfa, #7c3aed)', 
+      spec: 'DevOps and automation lead with a focus on cost-optimization and resilient CI/CD pipelines. Practitioner-led instructor driving the GDA Associate and Developer tracks.', 
+      certs: [{ l: 'CKA', t: 'vio' }, { l: 'Terraform', t: 'sky' }, { l: 'AWS Dev', t: 'brand' }], 
+      experience: '8+ Yrs', 
+      projects: '25+ DevOps', 
+      online: true 
+    }
   ];
 
   return (
@@ -148,12 +203,23 @@ export function Faculty({ editMode }: { editMode?: boolean }) {
               <div className="h-1.5" style={{ background: fac.banner }}></div>
               <div className="p-7 px-6 pb-5.5">
                 <div className="flex items-start gap-3.5 mb-4">
-                  <div className="w-14 h-14 rounded-full flex items-center justify-center font-syne font-extrabold text-[18px] text-[#080b12] shrink-0 relative" style={{ background: fac.color }}>
-                    {fac.init}
+                  <div className="w-14 h-14 rounded-full flex items-center justify-center font-syne font-extrabold text-[18px] text-[#080b12] shrink-0 relative overflow-hidden" style={{ background: fac.color }}>
+                    {fac.image ? (
+                      <img src={fac.image} alt={fac.name} className="w-full h-full object-cover" />
+                    ) : (
+                      fac.init
+                    )}
                     {fac.online && <span className="absolute bottom-0.25 right-0.25 w-3 h-3 rounded-full bg-[#22c55e] border-2 border-card"></span>}
                   </div>
-                  <div className="fac-info">
-                    <div className="font-syne font-bold text-[14px] mb-0.5">{fac.name}</div>
+                  <div className="fac-info flex-1">
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="font-syne font-bold text-[14px] mb-0.5">{fac.name}</div>
+                      {fac.linkedin && (
+                        <a href={fac.linkedin} target="_blank" rel="noopener noreferrer" className="text-text-muted hover:text-brand transition-colors">
+                          <Linkedin size={14} />
+                        </a>
+                      )}
+                    </div>
                     <div className="font-dm-mono text-[9px] text-text-muted tracking-[0.1em] uppercase">{fac.role}</div>
                   </div>
                 </div>
@@ -165,12 +231,12 @@ export function Faculty({ editMode }: { editMode?: boolean }) {
                 </div>
                 <div className="grid grid-cols-2 gap-px bg-border-custom border-t border-border-custom -mx-6 px-6">
                   <div className="bg-card py-3 font-dm-mono">
-                    <div className="text-[15px] font-medium text-brand">{fac.students}</div>
-                    <div className="text-[8px] tracking-[0.12em] uppercase text-text-dim">{fac.name.includes('Priya') ? 'Executives' : 'Students'}</div>
+                    <div className="text-[13px] font-medium text-brand">{fac.experience}</div>
+                    <div className="text-[8px] tracking-[0.12em] uppercase text-text-dim">Experience</div>
                   </div>
                   <div className="bg-card py-3 font-dm-mono text-right">
-                    <div className="text-[15px] font-medium text-brand">{fac.rating}</div>
-                    <div className="text-[8px] tracking-[0.12em] uppercase text-text-dim">Rating</div>
+                    <div className="text-[13px] font-medium text-brand">{fac.projects}</div>
+                    <div className="text-[8px] tracking-[0.12em] uppercase text-text-dim">Strategic Projects</div>
                   </div>
                 </div>
               </div>

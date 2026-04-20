@@ -50,13 +50,13 @@ export default function Navbar({ onOpenModal, editMode, setEditMode, siteSetting
     { label: 'Academy Pathways', path: '/pathways', hasMega: true },
     { label: 'Institutional Matrix', path: '/curriculum', hasMega: true },
     { label: 'Admissions', path: '/admissions', hasMega: true },
-    { label: 'Faculty', path: '/faculty', hasMega: false },
+    { label: 'About GDA', path: '/about', hasMega: false },
     { label: 'Discover', path: '#', hasMega: true },
   ];
 
   // Discover Nested Items
   const discoverItems = [
-    { label: 'About GDA', path: '/about', icon: <Globe className="w-4 h-4" />, desc: 'Global vision & local impact' },
+    { label: 'The Faculty', path: '/faculty', icon: <Users className="w-4 h-4" />, desc: 'World-class practitioner lead' },
     { label: 'News & Insights', path: '/news', icon: <Newspaper className="w-4 h-4" />, desc: 'Weekly tech trends & articles' },
     { label: 'Upcoming Events', path: '/events', icon: <Calendar className="w-4 h-4" />, desc: 'Join our next masterclass' },
     { label: 'Support Center', path: '/contact', icon: <MessageSquare className="w-4 h-4" />, desc: 'Get in touch with GDA' },
@@ -246,7 +246,7 @@ export default function Navbar({ onOpenModal, editMode, setEditMode, siteSetting
           >
             {/* Student/Staff Profile Section */}
             <a 
-              href={user ? (isAdmin ? 'https://staff.ginashe.academy' : 'https://portal.ginashe.academy') : 'https://portal.ginashe.academy'}
+              href={user ? (isAdmin ? 'https://staff.ginashe.academy' : 'https://gda-student-portal.pages.dev/') : 'https://gda-student-portal.pages.dev/'}
               onClick={!user ? (e) => { e.preventDefault(); onOpenModal('student'); } : undefined}
               className="flex items-center gap-3 px-6 hover:bg-white/5 transition-all group border-r border-white/10 no-underline"
             >
@@ -264,7 +264,7 @@ export default function Navbar({ onOpenModal, editMode, setEditMode, siteSetting
 
             {/* High-Impact CTA */}
             <button 
-              onClick={() => onOpenModal('apply')}
+              onClick={() => navigate('/apply')}
               className="px-8 bg-brand relative overflow-hidden group/btn"
             >
               <div className="absolute inset-0 bg-navy translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300" />
@@ -402,11 +402,11 @@ export default function Navbar({ onOpenModal, editMode, setEditMode, siteSetting
                   <button onClick={() => { setIsMobileMenuOpen(false); onOpenModal('student'); }} className="py-4 rounded-2xl border border-white/10 font-outfit font-black text-white text-[13px] hover:bg-white/5 transition-all uppercase tracking-widest flex items-center justify-center gap-2">
                     <User size={16} /> Portal
                   </button>
-                  <button onClick={() => { setIsMobileMenuOpen(false); onOpenModal('apply'); }} className="py-4 rounded-2xl bg-white/5 border border-brand/30 font-outfit font-black text-brand text-[13px] hover:bg-brand/10 transition-all uppercase tracking-widest flex items-center justify-center gap-2">
+                  <button onClick={() => { setIsMobileMenuOpen(false); navigate('/apply'); }} className="py-4 rounded-2xl bg-white/5 border border-brand/30 font-outfit font-black text-brand text-[13px] hover:bg-brand/10 transition-all uppercase tracking-widest flex items-center justify-center gap-2">
                     <Rocket size={16} /> Status
                   </button>
                 </div>
-                <button onClick={() => { setIsMobileMenuOpen(false); onOpenModal('apply'); }} className="w-full py-5 rounded-2xl bg-brand font-outfit font-black text-navy text-[15px] hover:brightness-110 transition-all uppercase tracking-[0.2em] shadow-[0_10px_30px_rgba(0,242,255,0.3)]">
+                <button onClick={() => { setIsMobileMenuOpen(false); navigate('/apply'); }} className="w-full py-5 rounded-2xl bg-brand font-outfit font-black text-navy text-[15px] hover:brightness-110 transition-all uppercase tracking-[0.2em] shadow-[0_10px_30px_rgba(0,242,255,0.3)]">
                   Apply Now
                 </button>
               </div>

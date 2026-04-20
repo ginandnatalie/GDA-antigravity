@@ -87,6 +87,14 @@
     --glass-bg: rgba(255, 255, 255, 0.03);
     --glass-border: rgba(255, 255, 255, 0.06);
     --glass-text: rgba(255, 255, 255, 0.03);
+
+    /* Curriculum Aligned Brand Colors */
+    --aws: #FF9900;
+    --gcp: #4285F4;
+    --azure: #0078D4;
+    --oracle: #F80000;
+    --comptia: #00aeef;
+    --iasa: #7c3aed;
   }
 
   html.light {

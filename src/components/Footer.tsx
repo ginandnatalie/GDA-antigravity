@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import Logo from './Logo';
 
 export function CTA({ onOpenModal, editMode }: { onOpenModal: (id: string) => void, editMode?: boolean }) {
+  const navigate = useNavigate();
   const [content, setContent] = useState({
     title: 'Your cloud career starts today.',
     subtitle: 'Applications for the April 2026 cohort close soon. Seats are limited to 25 per cohort — secure yours now.'
@@ -68,7 +69,7 @@ export function CTA({ onOpenModal, editMode }: { onOpenModal: (id: string) => vo
           </>
         )}
         <div className="flex gap-3 justify-center flex-wrap mb-10 animate-fadeUp delay-200">
-          <button className="btn btn-brand btn-lg w-full sm:w-auto justify-center" onClick={() => onOpenModal('apply')}>
+          <button className="btn btn-brand btn-lg w-full sm:w-auto justify-center" onClick={() => navigate('/apply')}>
             Apply Now — April Cohort
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 7h10M8 3l4 4-4 4"/></svg>
           </button>
