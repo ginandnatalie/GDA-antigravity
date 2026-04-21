@@ -29,6 +29,7 @@ import TermsPage from './pages/TermsPage';
 import RefundsPage from './pages/RefundsPage';
 import PopiaPage from './pages/PopiaPage';
 import ApplyPage from './pages/ApplyPage';
+import TrackDetailPage from './pages/TrackDetailPage';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -181,6 +182,7 @@ function AppContent() {
               <Route path="/refunds" element={<RefundsPage />} />
               <Route path="/popia" element={<PopiaPage />} />
               <Route path="/apply" element={<ApplyPage />} />
+              <Route path="/tracks/:trackId" element={<TrackDetailPage onOpenModal={openModal} editMode={editMode} />} />
               
               <Route 
                 path="/admin" 

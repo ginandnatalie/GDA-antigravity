@@ -142,10 +142,24 @@ export function Footer({ onOpenModal, editMode }: { onOpenModal: (id: string) =>
         </div>
 
         <div>
-          <div className="font-dm-mono text-[9px] tracking-[0.2em] uppercase text-text-dim mb-4">Programmes</div>
+          <div className="font-dm-mono text-[9px] tracking-[0.2em] uppercase text-text-dim mb-4">Learning Pathways</div>
           <ul className="list-none flex flex-col gap-2.25">
-            {['Cloud Launchpad', 'Cloud Architecture Residency', 'AI & ML Engineering', 'Data Engineering', 'AI for Business Leaders', 'Workforce Modernisation'].map((l) => (
-              <li key={l}><a href="#programs" className="text-[12px] text-text-muted no-underline transition-colors hover:text-text-custom tracking-[0.01em]">{l}</a></li>
+            {[
+              { label: 'Cloud Engineering', href: '/tracks/cloud-engineering' },
+              { label: 'AI & ML Engineering', href: '/tracks/ai-ml-engineering' },
+              { label: 'Data Engineering', href: '/tracks/data-engineering' },
+              { label: 'DevSecOps & SRE', href: '/tracks/devsecops-sre' },
+              { label: 'Technical Leadership', href: '/tracks/technical-leadership' },
+              { label: 'Cybersecurity', href: '/tracks/cybersecurity' },
+              { label: 'Digital Transformation', href: '/tracks/digital-transformation' },
+              { label: 'Digital Business', href: '/tracks/digital-business' },
+              { label: 'All Programmes', href: '/curriculum' }
+            ].map((p) => (
+              <li key={p.label}>
+                <Link to={p.href} className="text-[12px] text-text-muted no-underline transition-colors hover:text-text-custom tracking-[0.01em]">
+                  {p.label}
+                </Link>
+              </li>
             ))}
           </ul>
         </div>
@@ -161,10 +175,25 @@ export function Footer({ onOpenModal, editMode }: { onOpenModal: (id: string) =>
         </div>
 
         <div>
-          <div className="font-dm-mono text-[9px] tracking-[0.2em] uppercase text-text-dim mb-4">Company</div>
+          <div className="font-dm-mono text-[9px] tracking-[0.2em] uppercase text-text-dim mb-4">Ginashe Ecosystem</div>
           <ul className="list-none flex flex-col gap-2.25">
-            {['Ginashe Digital', 'Services', 'Hosting', 'Contact', 'Terms of Use', 'Refund Policy'].map((l) => (
-              <li key={l}><a href={`https://digital.ginashe.co.za/${l.toLowerCase().replace(/ /g, '-')}`} className="text-[12px] text-text-muted no-underline transition-colors hover:text-text-custom tracking-[0.01em]">{l}</a></li>
+            {[
+              { label: 'Digital Services', href: 'https://digital.ginashe.co.za' },
+              { label: 'Financial Solutions', href: 'https://finance.ginashe.co.za' },
+              { label: 'Cloud Hosting', href: 'https://hosting.ginashe.co.za' },
+              { label: 'Institutional Strategy', href: 'https://strategy.ginashe.co.za' }
+            ].map((link) => (
+              <li key={link.label}>
+                <a 
+                  href={link.href} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-[12px] text-text-muted no-underline transition-colors hover:text-text-custom tracking-[0.01em] flex items-center gap-1.5 group"
+                >
+                  {link.label}
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="opacity-0 -translate-y-0.5 group-hover:opacity-100 transition-all"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+                </a>
+              </li>
             ))}
           </ul>
         </div>
