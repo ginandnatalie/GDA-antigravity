@@ -47,7 +47,7 @@ export default function Navbar({ onOpenModal, editMode, setEditMode, siteSetting
 
   // Primary Navigation
   const navItems = [
-    { label: 'Academy Pathways', path: '/pathways', hasMega: true },
+    { label: 'Career Tracks', path: '/tracks', hasMega: true },
     { label: 'Institutional Matrix', path: '/curriculum', hasMega: true },
     { label: 'Admissions', path: '/admissions', hasMega: true },
     { label: 'About GDA', path: '/about', hasMega: false },
@@ -103,18 +103,21 @@ export default function Navbar({ onOpenModal, editMode, setEditMode, siteSetting
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 15, scale: 0.97 }}
                     transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-                    className="absolute top-full left-1/2 -translate-x-1/2 pt-4 w-[540px] z-[2100]"
+                    className="absolute top-full left-1/2 -translate-x-1/2 pt-4 w-[640px] z-[2100]"
                   >
                     <div className="bg-[#0b0e14] border border-white/10 rounded-2xl shadow-[0_40px_80px_rgba(0,0,0,0.6)] overflow-hidden">
                       
-                      {/* Academy Pathways Mega Menu */}
-                      {item.label === 'Academy Pathways' && (
+                      {/* Career Tracks Mega Menu */}
+                      {item.label === 'Career Tracks' && (
                         <div className="p-5 grid grid-cols-2 gap-4">
                           {[
-                            { title: 'Foundation Core', desc: 'Institutional Entrance & Literacy', icon: <Cpu className="w-5 h-5" />, color: 'text-brand', bg: 'bg-brand/5', path: '/levels/foundation' },
-                            { title: 'Associate Specialist', desc: 'Technical Specialisation Phase', icon: <Zap className="w-5 h-5" />, color: 'text-emerald', bg: 'bg-emerald/5', path: '/levels/associate' },
-                            { title: 'Professional Residency', desc: 'High-Performance Mastery', icon: <Shield className="w-5 h-5" />, color: 'text-sky', bg: 'bg-sky/5', path: '/levels/professional' },
-                            { title: 'Enterprise Fellowship', desc: 'Global Leadership & Governance', icon: <Globe className="w-5 h-5" />, color: 'text-violet', bg: 'bg-violet/5', path: '/levels/enterprise' }
+                            { title: 'Cloud Computing', desc: 'Architecture & Infrastructure', icon: <Cpu className="w-5 h-5" />, color: 'text-brand', bg: 'bg-brand/5', path: '/tracks/cloud-computing' },
+                            { title: 'AI & Machine Learning', desc: 'Intelligence & RAG Engineering', icon: <Zap className="w-5 h-5" />, color: 'text-violet', bg: 'bg-violet/5', path: '/tracks/ai-machine-learning' },
+                            { title: 'Cybersecurity', desc: 'Defensive & Offensive Ops', icon: <Shield className="w-5 h-5" />, color: 'text-coral', bg: 'bg-coral/5', path: '/tracks/cybersecurity' },
+                            { title: 'Data & Analytics', desc: 'Engineering & BI Platforms', icon: <Layout className="w-5 h-5" />, color: 'text-emerald', bg: 'bg-emerald/5', path: '/tracks/data-analytics' },
+                            { title: 'Software & DevOps', desc: 'Full-Stack & Cloud Native', icon: <Code className="w-5 h-5" />, color: 'text-sky', bg: 'bg-sky/5', path: '/tracks/software-devops' },
+                            { title: 'Digital Business', desc: 'Ventures & E-Commerce Strategy', icon: <Rocket className="w-5 h-5" />, color: 'text-pink-400', bg: 'bg-pink-400/5', path: '/tracks/digital-business' },
+                            { title: 'Full Curriculum', desc: 'Compare all 28 modules', icon: <ArrowRight className="w-5 h-5" />, color: 'text-white', bg: 'bg-white/5', path: '/curriculum' }
                           ].map((c, i) => (
                             <Link key={i} to={c.path} className="flex items-start gap-4 p-4 rounded-xl hover:bg-white/5 transition-all group/item border border-transparent hover:border-white/5">
                               <div className={`p-2.5 rounded-xl ${c.bg} border border-white/5 group-hover/item:scale-110 transition-transform ${c.color}`}>{c.icon}</div>
@@ -320,12 +323,15 @@ export default function Navbar({ onOpenModal, editMode, setEditMode, siteSetting
                                 className="overflow-hidden"
                               >
                                 <div className="grid grid-cols-1 gap-3 py-4 pl-2">
-                                  {/* Render Academy Pathways sub-items */}
-                                  {item.label === 'Academy Pathways' && [
-                                    { title: 'Foundation Core', desc: 'Level 1: Entry', icon: <Cpu className="w-4 h-4" />, path: '/levels/foundation' },
-                                    { title: 'Associate Specialist', desc: 'Level 2: Speciality', icon: <Zap className="w-4 h-4" />, path: '/levels/associate' },
-                                    { title: 'Professional Residency', desc: 'Level 3: Mastery', icon: <Shield className="w-4 h-4" />, path: '/levels/professional' },
-                                    { title: 'Enterprise Fellowship', desc: 'Level 4: Fellowship', icon: <Globe className="w-4 h-4" />, path: '/levels/enterprise' }
+                                  {/* Render Career Tracks sub-items */}
+                                  {item.label === 'Career Tracks' && [
+                                    { title: 'Cloud Computing', desc: 'Architecture', icon: <Cpu className="w-4 h-4" />, path: '/tracks/cloud-computing' },
+                                    { title: 'AI & Machine Learning', desc: 'Intelligence', icon: <Zap className="w-4 h-4" />, path: '/tracks/ai-machine-learning' },
+                                    { title: 'Cybersecurity', desc: 'Active Defense', icon: <Shield className="w-4 h-4" />, path: '/tracks/cybersecurity' },
+                                    { title: 'Data & Analytics', desc: 'Engineering', icon: <Layout className="w-4 h-4" />, path: '/tracks/data-analytics' },
+                                    { title: 'Software & DevOps', desc: 'Cloud Native', icon: <Code className="w-4 h-4" />, path: '/tracks/software-devops' },
+                                    { title: 'Digital Business', desc: 'Ventures', icon: <Rocket className="w-4 h-4" />, path: '/tracks/digital-business' },
+                                    { title: 'Digital Transformation', desc: 'Strategy', icon: <Globe className="w-4 h-4" />, path: '/tracks/digital-transformation' }
                                   ].map((c, i) => (
                                     <Link key={i} to={c.path} onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/5">
                                       <div className="w-10 h-10 rounded-xl bg-brand/10 flex items-center justify-center text-brand">{c.icon}</div>

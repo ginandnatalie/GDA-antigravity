@@ -324,9 +324,7 @@ export function Programs({ onOpenModal, editMode, isHomePage, initialFilterLevel
     }
   ];
 
-  const tracks = isHomePage 
-    ? ['Cloud Computing'] 
-    : [
+  const tracks = [
     'Cloud Computing', 
     'AI & Machine Learning', 
     'Cybersecurity', 
@@ -335,7 +333,14 @@ export function Programs({ onOpenModal, editMode, isHomePage, initialFilterLevel
     'Software & DevOps', 
     'Digital Business'
   ];
-  const levels = ['Foundation', 'Associate', 'Professional', 'Enterprise'];
+  const levels = [
+    '01: Technical Core', 
+    '02: Specialisation', 
+    '03: Solutions Mastery', 
+    '04: Global Leadership'
+  ];
+
+  const getTrackId = (name: string) => name.toLowerCase().replace(/ & /g, '-').replace(/ /g, '-');
 
   const filteredPrograms = programs.filter(p => {
     const matchesLevel = activeLevel === 'all' || p.level?.toLowerCase() === activeLevel.toLowerCase() || p.cat?.toLowerCase() === activeLevel.toLowerCase();
@@ -414,7 +419,6 @@ export function Programs({ onOpenModal, editMode, isHomePage, initialFilterLevel
                     <div 
                       key={item.lvl} 
                       className="relative group cursor-pointer h-full"
-                      onClick={() => navigate(`/levels/${item.lvl.toLowerCase()}`)}
                     >
                       {/* Timeline Node (Dot) */}
                       <div className="absolute top-[80px] left-1/2 w-4 h-4 rounded-full bg-bg border-2 border-brand -translate-x-1/2 -translate-y-1/2 hidden lg:block group-hover:bg-brand group-hover:scale-150 group-hover:shadow-[0_0_20px_rgba(0,242,255,0.5)] transition-all z-20 duration-300" />
@@ -461,7 +465,7 @@ export function Programs({ onOpenModal, editMode, isHomePage, initialFilterLevel
 
             <div className="mt-16 flex flex-col sm:flex-row items-center justify-center gap-4">
               <button
-                onClick={() => navigate('/pathways')}
+                onClick={() => navigate('/tracks')}
                 className="bg-brand text-black font-syne font-bold px-8 py-4 rounded hover:bg-white transition-all uppercase tracking-widest text-xs inline-flex items-center gap-3 shadow-[0_0_15px_rgba(0,242,255,0.2)] hover:shadow-[0_0_25px_rgba(255,255,255,0.4)]"
               >
                 Explore Academy Pathways
@@ -510,7 +514,7 @@ export function Programs({ onOpenModal, editMode, isHomePage, initialFilterLevel
                     All
                   </button>
                   {levels.map(lvl => {
-                    const emoji = lvl === 'Foundation' ? '🚀' : lvl === 'Associate' ? '⚡' : lvl === 'Professional' ? '🛡️' : lvl === 'Enterprise' ? '🌍' : '';
+                    const emoji = lvl.includes('01') ? '🚀' : lvl.includes('02') ? '⚡' : lvl.includes('03') ? '🛡️' : lvl.includes('04') ? '🌍' : '';
                     return (
                       <button 
                         key={lvl}
@@ -610,216 +614,58 @@ export function Programs({ onOpenModal, editMode, isHomePage, initialFilterLevel
 
                return (
                  <div key={trackName} className="space-y-6 animate-fadeIn">
-                   {/* Track Header */}
-                   <div className="flex items-center gap-6 py-6 border-b border-white/5">
-                     <div className="flex flex-col">
-                       <span className="font-dm-mono text-[9px] text-brand uppercase tracking-[0.4em] mb-1">Track Dimension</span>
-                       <h3 className="font-syne font-extrabold text-2xl text-white uppercase tracking-tight">{trackName}</h3>
-                     </div>
-                     <div className="flex-1 h-px bg-gradient-to-r from-white/10 via-white/5 to-transparent"></div>
-                   </div>
+                    {/* Track Header */}
+                    <div className="flex items-center gap-6 py-6 border-b border-white/5">
+                      <div className="flex flex-col">
+                        <span className="font-dm-mono text-[9px] text-brand uppercase tracking-[0.4em] mb-1">Track Dimension</span>
+                        <h3 
+                          onClick={() => navigate(`/tracks/${getTrackId(trackName)}`)}
+                          className="font-syne font-extrabold text-2xl text-white uppercase tracking-tight hover:text-brand cursor-pointer transition-colors flex items-center gap-3"
+                        >
+                          {trackName}
+                          <ArrowRight className="w-5 h-5 opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all" />
+                        </h3>
+                      </div>
+                      <div className="flex-1 h-px bg-gradient-to-r from-white/10 via-white/5 to-transparent"></div>
+                      <button 
+                        onClick={() => navigate(`/tracks/${getTrackId(trackName)}`)}
+                        className="px-6 py-2.5 rounded-full border border-white/10 font-syne font-black uppercase text-[10px] tracking-widest text-text-soft hover:bg-white hover:text-navy transition-all"
+                      >
+                        Explore Full Track
+                      </button>
+                    </div>
 
-                   <div className={isCurrentLevelPage ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12" : "grid gap-4"}>
-                     {trackPrograms.map(program => {
-                        const isCurrentProgram = isCurrentLevelPage && program.level?.toLowerCase() === initialFilterLevel?.toLowerCase();
-                        const isFaint = isCurrentLevelPage && !isCurrentProgram;
-                        
-                        const handleFaintClick = () => {
-                          if (isFaint) {
-                            navigate(`/levels/${program.level?.toLowerCase()}`);
-                          }
-                        };
-
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+                      {trackPrograms.map(program => {
                         return (
                         <div 
                           key={program.id} 
-                          onClick={() => isFaint ? handleFaintClick() : isCurrentLevelPage ? onOpenModal(program.id) : setExpandedProgram(expandedProgram === program.id ? null : program.id)}
+                          onClick={() => onOpenModal(program.id)}
                           className={`
                             group rounded-3xl border transition-all duration-700 overflow-hidden relative
                             ${expandedProgram === program.id ? 'bg-bg border-brand/40 shadow-[0_30px_100px_rgba(0,0,0,0.8)]' : 'bg-white/[0.02] border-white/5 hover:border-white/20 hover:bg-white/[0.04]'}
-                            ${isCurrentLevelPage && isCurrentProgram ? 'scale-[1.03] border-brand/40 bg-brand/[0.03] shadow-[0_0_50px_rgba(0,242,255,0.15)] ring-1 ring-brand/20' : ''}
-                            ${isCurrentLevelPage && isFaint ? 'opacity-25 grayscale blur-[1.2px] hover:opacity-100 hover:grayscale-0 hover:blur-0 hover:scale-[1.02] hover:z-20 transition-all cursor-pointer' : 'cursor-pointer'}
                           `}
                         >
-                          {/* Intelligent Hover Warning (Only for Fainted Cards on Levels Page) */}
-                          {isCurrentLevelPage && isFaint && (
-                            <motion.div 
-                              initial={{ opacity: 0, y: 10 }}
-                              whileHover={{ opacity: 1, y: 0 }}
-                              className="absolute inset-x-4 top-4 z-50 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity"
-                            >
-                              <div className="bg-brand p-3 rounded-xl shadow-2xl border border-white/20 flex items-center gap-3">
-                                <div className="w-8 h-8 rounded-full bg-black/20 flex items-center justify-center">
-                                  <LucideIcon name="ShieldAlert" className="text-black w-4 h-4" />
-                                </div>
-                                <div className="flex flex-col">
-                                  <span className="text-[10px] font-syne font-black uppercase text-black leading-none mb-1">Pathway Switch</span>
-                                  <span className="text-[9px] text-black/70 font-medium leading-tight">Clicking will shift your focus to the dedicated {program.level} syllabus.</span>
-                                </div>
-                              </div>
-                            </motion.div>
-                          )}
-                          {/* Animated Intelligence Metrics (Repositioned for 4-Column Grid) */}
-                          {isCurrentLevelPage && isCurrentProgram && (
-                            <motion.div 
-                              initial={{ opacity: 0, scale: 0.95 }}
-                              whileHover={{ opacity: 1, scale: 1 }}
-                              className="absolute inset-x-4 bottom-4 z-50 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity flex flex-col gap-2 p-4 bg-black/95 border border-brand/30 rounded-xl backdrop-blur-xl shadow-2xl"
-                            >
-                              <div className="font-dm-mono text-[8px] text-brand uppercase tracking-widest border-b border-brand/20 pb-1 mb-1">Intelligence Insights</div>
-                              <div className="grid grid-cols-2 gap-4">
-                                <div className="flex flex-col">
-                                  <span className="text-[7px] text-white/40 uppercase">Avg. Entry</span>
-                                  <span className="text-[10px] font-bold text-white">R18k - R25k</span>
-                                </div>
-                                <div className="flex flex-col">
-                                  <span className="text-[7px] text-white/40 uppercase">Demand</span>
-                                  <span className="text-[9px] text-emerald font-bold uppercase tracking-tighter">High Tier</span>
-                                </div>
-                              </div>
-                            </motion.div>
-                          )}
-
                           {/* Header: Core Info */}
-                          <div 
-                            className={`p-4 md:p-6 flex flex-col justify-between gap-6 relative ${isCurrentLevelPage ? 'min-h-[280px] text-center items-center' : 'md:flex-row items-start md:items-center'}`}
-                          >
+                          <div className="p-4 md:p-6 flex flex-col justify-between gap-6 relative">
                             {/* Hover Glow Background */}
                             <div className="absolute inset-0 bg-gradient-to-r from-brand/0 to-brand/[0.02] opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
 
-                            <div className={`flex items-center gap-6 relative z-10 ${isCurrentLevelPage ? 'flex-col' : 'flex-1'}`}>
-                              <div className={`w-16 h-16 rounded-xl bg-black/60 border border-white/10 flex items-center justify-center text-3xl group-hover:scale-110 group-hover:border-brand/30 transition-all duration-500 shadow-2xl relative overflow-hidden ${isCurrentLevelPage ? 'mx-auto' : ''}`}>
+                            <div className="flex items-center gap-6 relative z-10 flex-1">
+                              <div className="w-16 h-16 rounded-xl bg-black/60 border border-white/10 flex items-center justify-center text-3xl group-hover:scale-110 group-hover:border-brand/30 transition-all duration-500 shadow-2xl relative overflow-hidden">
                                 <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-50" />
                                 <LucideIcon name={program.icon} className="w-8 h-8 relative z-10" />
                               </div>
-                              <div className={isCurrentLevelPage ? 'mt-2' : ''}>
-                                <div className={`flex items-center gap-3 mb-2 ${isCurrentLevelPage ? 'justify-center' : ''}`}>
+                              <div>
+                                <div className="flex items-center gap-3 mb-2">
                                   <span className="px-2 py-0.5 rounded bg-brand/10 border border-brand/20 font-dm-mono text-[8px] text-brand uppercase tracking-widest">{program.level || 'Professional'} Level</span>
                                   <span className="w-1 h-1 rounded-full bg-white/10"></span>
                                   <span className="font-dm-mono text-[9px] text-text-soft uppercase tracking-[0.2em]">{program.duration} intensive</span>
                                 </div>
-                                <h4 className={`font-syne font-extrabold text-xl text-white group-hover:text-brand transition-colors tracking-tight ${isCurrentLevelPage ? 'text-2xl' : 'md:text-2xl'}`}>{program.title}</h4>
-                              </div>
-                            </div>
-
-                            <div className={`flex items-center gap-6 relative z-10 ${isCurrentLevelPage ? 'w-full justify-center border-t border-white/5 pt-4' : ''}`}>
-                              <div className={`${isCurrentLevelPage ? 'hidden' : 'hidden sm:flex'} flex-col items-end`}>
-                                <span className="font-dm-mono text-[8px] text-white/20 uppercase tracking-[0.4em] mb-1">Primary Credential</span>
-                                <span className="text-[10px] text-white font-bold uppercase tracking-wider bg-white/5 px-3 py-1.5 rounded-lg border border-white/5">{program.certs?.split('·')[0] || 'GDA Cert'}</span>
-                              </div>
-                              <div className={`w-12 h-12 rounded-full border flex items-center justify-center transition-all duration-700 ${expandedProgram === program.id ? 'rotate-180 bg-brand border-transparent shadow-[0_0_30px_rgba(0,242,255,0.3)]' : 'border-white/10 group-hover:border-white/30 group-hover:bg-white/5'} ${isCurrentLevelPage ? 'mx-auto' : ''}`}>
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className={expandedProgram === program.id ? 'text-black' : 'text-white'}>
-                                  <path d="M6 9L12 15L18 9" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-                                </svg>
+                                <h4 className="font-syne font-extrabold text-xl text-white group-hover:text-brand transition-colors tracking-tight">{program.title}</h4>
                               </div>
                             </div>
                           </div>
-
-                          {/* Detailed Body: Syllabus and Phases */}
-                          {expandedProgram === program.id && (
-                            <motion.div 
-                              initial={{ height: 0, opacity: 0 }}
-                              animate={{ height: 'auto', opacity: 1 }}
-                              className="border-t border-white/5 p-4 md:p-8 bg-black/60"
-                            >
-                              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                                {/* Left: Program Overview */}
-                                <div className="lg:col-span-4 space-y-6">
-                                  <div>
-                                    <span className="font-dm-mono text-[9px] text-brand uppercase tracking-[0.4em] mb-2 block">Institutional Resonance</span>
-                                    <p className="text-text-soft text-sm leading-relaxed opacity-90">{program.description}</p>
-                                  </div>
-                                  
-                                  <div className="space-y-2">
-                                    <div className="flex items-center justify-between p-4 rounded-xl bg-white/[0.02] border border-white/5">
-                                       <div className="flex flex-col">
-                                         <span className="font-dm-mono text-[8px] text-white/20 uppercase tracking-widest mb-1">Tuition / Investment</span>
-                                         <span className="text-base font-bold text-white tracking-tight">{program.price}</span>
-                                       </div>
-                                       <div className="flex flex-col items-end">
-                                         <span className="font-dm-mono text-[8px] text-white/20 uppercase tracking-widest mb-1">Mapping</span>
-                                         <span className="text-xs font-bold text-brand">{program.nqf_level || 'Credit-Ready'}</span>
-                                       </div>
-                                    </div>
-                                  </div>
-
-                                    <div className="flex flex-col gap-3 pt-4">
-                                      <button 
-                                        onClick={() => navigate(`/apply?program=${encodeURIComponent(program.title)}`)}
-                                        className="w-full py-4 bg-brand text-black font-syne font-black uppercase text-[10px] tracking-[0.3em] rounded-xl hover:bg-white transition-all shadow-[0_20px_40px_rgba(0,242,255,0.15)] active:scale-95"
-                                      >
-                                        Secure My Admission
-                                      </button>
-                                    <p className="text-center font-dm-mono text-[8px] text-white/20 uppercase tracking-widest">Limited Cohort Intake Cycle</p>
-                                  </div>
-                                </div>
-
-                                {/* Right: The Phases (Syllabus) */}
-                                 <div className="lg:col-span-8 space-y-6">
-                                   {(() => {
-                                     const programModules = modules.filter(m => {
-                                       const courseTitle = m.courses?.title;
-                                       return m.course_id === program.id || (courseTitle && courseTitle === program.title);
-                                     });
-                                     return (
-                                       <>
-                                         <div className="flex items-center justify-between border-b border-white/5 pb-4">
-                                           <div className="flex items-center gap-3">
-                                              <div className="w-1.5 h-1.5 rounded-full bg-brand animate-pulse" />
-                                              <span className="font-dm-mono text-[9px] text-white uppercase tracking-[0.5em]">Advanced Syllabus Matrix</span>
-                                           </div>
-                                           <span className="font-dm-mono text-[9px] text-white/40 uppercase tracking-widest">{programModules.length || 8} Logical Modules</span>
-                                         </div>
-                                         
-                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                           {programModules.length > 0 ? (
-                                              programModules.map((mod, idx) => (
-                                                <div key={mod.id} className="group/mod p-2.5 rounded-lg bg-white/[0.01] border border-white/5 hover:border-brand/30 hover:bg-white/[0.03] transition-all flex flex-col gap-1.5">
-                                                  <div className="flex items-center justify-between">
-                                                    <div className="w-6 h-6 rounded-md bg-black/60 border border-white/10 flex items-center justify-center font-dm-mono text-[9px] text-brand/60 group-hover/mod:text-brand transition-colors">
-                                                      {idx + 1}
-                                                    </div>
-                                                    <div className="px-1.5 py-0.5 rounded-full bg-emerald/10 border border-emerald/20 font-dm-mono text-[6px] text-emerald uppercase tracking-widest">
-                                                      WK {idx * 2 + 1}-{idx * 2 + 2}
-                                                    </div>
-                                                  </div>
-                                                  <div>
-                                                    <h5 className="font-syne font-bold text-white text-[13px] tracking-tight leading-tight group-hover/mod:text-brand transition-colors">{mod.title}</h5>
-                                                  </div>
-                                                </div>
-                                              ))
-                                           ) : (
-                                             /* Placeholder modules if data hasn't been injected for this course yet */
-                                             [1,2,3,4].map((i) => (
-                                               <div key={i} className="group/mod p-4 rounded-xl bg-white/[0.01] border border-white/5 border-dashed flex flex-col gap-3 opacity-40">
-                                                 <div className="w-8 h-8 rounded-lg bg-black/40 border border-white/5" />
-                                                 <div className="space-y-2">
-                                                   <div className="h-1.5 w-16 bg-white/5 rounded" />
-                                                   <div className="h-3 w-32 bg-white/10 rounded" />
-                                                 </div>
-                                               </div>
-                                             ))
-                                           )}
-                                         </div>
-                                       </>
-                                     );
-                                   })()}
-
-                                  {/* Curriculum Meta */}
-                                  <div className="p-4 rounded-xl bg-brand/[0.02] border border-brand/10 flex flex-col md:flex-row items-center justify-between gap-4">
-                                     <div className="flex items-center gap-3">
-                                       <LucideIcon name="Shield" className="text-brand w-4 h-4" />
-                                       <span className="text-[10px] text-text-soft uppercase tracking-[0.2em] font-bold">Institutional Quality Framework Integrated</span>
-                                     </div>
-                                     <div className="flex items-center gap-2">
-                                       <div className="w-1.5 h-1.5 rounded-full bg-emerald shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
-                                       <span className="text-[9px] text-text-muted font-dm-mono uppercase tracking-widest">System Ready</span>
-                                     </div>
-                                     </div>
-                                   </div>
-                                 </div>
-                               </motion.div>
-                            )}
                         </div>
                         );
                      })}
@@ -836,23 +682,32 @@ export function Programs({ onOpenModal, editMode, isHomePage, initialFilterLevel
                 <div className="pl-8 p-3 font-dm-mono text-[9px] uppercase text-brand/60 tracking-[0.3em] border-r border-white/10 flex items-center bg-navy sticky left-0 z-40 shadow-[4px_0_10px_rgba(0,0,0,0.3)]">Tracks</div>
                 {levels.map(lvl => (
                   <div key={lvl} className="p-3 text-center border-r border-border-custom last:border-r-0 flex items-center justify-center">
-                    <button 
-                      onClick={() => navigate(`/levels/${lvl.toLowerCase()}`)}
-                      className="font-syne font-bold text-[11px] text-text-custom hover:text-brand hover:scale-110 transition-all cursor-pointer inline-block"
-                    >
-                      {lvl} Level
-                    </button>
+                    <span className="font-syne font-bold text-[10px] text-white uppercase tracking-tighter leading-tight">{lvl}</span>
                   </div>
                 ))}
               </div>
               
+              {/* Rows */}
               {tracks.map(track => (
-                <div key={track} className="grid grid-cols-[220px_repeat(4,1fr)] border-b border-border-custom last:border-b-0 hover:bg-white/[0.02] transition-colors relative group/row">
-                  <div className="pl-8 p-3 border-r border-border-custom bg-black/10 flex items-center sticky left-0 z-20 bg-card/95 backdrop-blur-sm shadow-[4px_0_10px_rgba(0,0,0,0.2)]">
-                    <span className="font-syne font-bold text-[10px] text-text-soft uppercase tracking-wide">{track}</span>
+                <div key={track} className="grid grid-cols-[220px_repeat(4,1fr)] border-b border-white/[0.05] group">
+                  <div className="pl-8 p-6 flex flex-col justify-center border-r border-white/10 bg-navy sticky left-0 z-20 shadow-[4px_0_10px_rgba(0,0,0,0.2)]">
+                    <span 
+                      onClick={() => navigate(`/tracks/${getTrackId(track)}`)}
+                      className="font-syne font-black text-[13px] text-white uppercase tracking-tighter group-hover:text-brand cursor-pointer transition-colors"
+                    >
+                      {track}
+                    </span>
                   </div>
                   {levels.map(lvl => {
-                    const prog = programs.find(p => p.track === track && p.level === lvl);
+                    const stageKey = lvl.split(':')[0].trim(); // e.g. "01"
+                    const levelMap: Record<string, string> = {
+                      '01': 'Foundation',
+                      '02': 'Associate',
+                      '03': 'Professional',
+                      '04': 'Enterprise'
+                    };
+                    const levelName = levelMap[stageKey];
+                    const prog = programs.find(p => p.track === track && p.level === levelName);
                     return (
                       <div 
                         key={`${track}-${lvl}`} 

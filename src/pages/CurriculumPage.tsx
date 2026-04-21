@@ -12,9 +12,9 @@ export default function CurriculumPage({ onOpenModal, editMode }: CurriculumPage
   return (
     <>
       <PageHero
-        label="Institutional Curriculum"
+        label="Career Tracks"
         title={<>World-Class Technical Rigour,<br />African by Design.</>}
-        subtitle="Explore the 28-course matrix powering the next generation of African digital leaders. Real-time data, industry-aligned pathways."
+        subtitle="Choose a career track and follow a structured sequence of programmes, micro-credentials, and capstone projects — all industry-verified and stackable."
         image="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=80&w=2070"
         imageAlt="Students collaborating in a modern learning environment"
       />

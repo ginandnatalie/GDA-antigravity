@@ -1,39 +1,52 @@
 import React, { useState } from 'react';
-import { Linkedin } from 'lucide-react';
+import { ArrowRight, Linkedin } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 export function Pathways({ editMode }: { editMode?: boolean }) {
-  const [activePath, setActivePath] = useState('cloud');
+  const [activePath, setActivePath] = useState('cloud-computing');
 
   const paths = [
-    { id: 'cloud', name: 'Cloud Engineer', icon: '☁️', sub: '12–18 months · AWS / Azure / GCP', title: 'Cloud Engineer Pathway', desc: 'From zero to multi-cloud certified architect in 18 months.', steps: [
-      { num: '✓', title: 'Cloud Launchpad (Foundations)', detail: '12 weeks · Linux, Networking, Cloud fundamentals', certs: [{ label: 'AWS CCP', type: 'em' }, { label: 'AZ-900', type: 'sky' }], done: true },
-      { num: '2', title: 'Cloud Architecture Residency', detail: '6 months · Solutions Architecture, IaC, Containers', certs: [{ label: 'AWS SAA', type: 'brand' }, { label: 'AZ-104', type: 'sky' }], current: true },
-      { num: '3', title: 'Capstone: Industry Live Project', detail: '8 weeks · Real client, real infrastructure', certs: [{ label: 'GDA Capstone', type: '' }] },
-      { num: '4', title: 'Micro-Credential: DevSecOps', detail: '4 weeks · GitHub Actions, Snyk, Kubernetes', certs: [{ label: 'Kubernetes CKA', type: 'vio' }] },
-      { num: '5', title: 'GDA Placement Programme', detail: 'CV, LinkedIn, interviews, partner matching', certs: [{ label: 'GDA Certified Cloud Engineer', type: 'brand' }] }
+    { id: 'cloud-computing', name: 'Cloud Computing', icon: '☁️', sub: '12–18 months · Multi-Cloud', title: 'Cloud Computing Pathway', desc: 'Master the design and governance of high-availability infrastructure across AWS and Azure.', steps: [
+      { num: '✓', title: 'Cloud Launchpad', detail: '12 weeks · Linux, Networking, Fundamentals', done: true },
+      { num: '2', title: 'Cloud Practitioner Pro', detail: '6 months · Specialised Resource Management', current: true },
+      { num: '3', title: 'Cloud Architect', detail: 'Capstone: Production Design Pattern' },
+      { num: '4', title: 'Enterprise Mastery', detail: 'FinOps, Landing Zones & Governance' }
     ]},
-    { id: 'ai', name: 'AI/ML Engineer', icon: '🤖', sub: '10–14 months · Python · LLMOps', title: 'AI/ML Engineer Pathway', desc: 'Build production-grade AI systems from data to deployment.', steps: [
-      { num: '✓', title: 'Python for Data & AI (Foundations)', detail: '6 weeks · Python, NumPy, Pandas, APIs', done: true },
-      { num: '2', title: 'AI & Machine Learning Engineering', detail: '4 months · Classical ML, Deep Learning, NLP', certs: [{ label: 'TensorFlow Cert', type: 'vio' }], current: true },
-      { num: '3', title: 'LLMOps & Generative AI', detail: '6 weeks · Prompt engineering, RAG, fine-tuning' },
-      { num: '4', title: 'Capstone: AI Product Build', detail: '8 weeks · Full product: data → model → API → UI', certs: [{ label: 'GDA AI Engineer Cert', type: 'brand' }] }
+    { id: 'ai-machine-learning', name: 'AI & Machine Learning', icon: '🤖', sub: '10–14 months · LLMs · MLOps', title: 'AI & Machine Learning Pathway', desc: 'Engineering intelligence from data literacy to production-grade LLM applications.', steps: [
+      { num: '✓', title: 'AI Fundamentals', detail: '6 weeks · Logic, Ethics, Prompt Engineering', done: true },
+      { num: '2', title: 'ML Essentials', detail: '4 months · Python, Scikit-learn, Tuning', current: true },
+      { num: '3', title: 'Applied AI Engineering', detail: 'RAG, APIs, and MLOps Orchestration' },
+      { num: '4', title: 'Enterprise Strategy', detail: 'Strategic ROI and Responsible AI Leadership' }
     ]},
-    { id: 'data', name: 'Data Engineer', icon: '📊', sub: '8–12 months · Spark · dbt', title: 'Data Engineer Pathway', desc: 'Design and operate enterprise-grade data infrastructure.', steps: [
-      { num: '✓', title: 'SQL & Database Fundamentals', detail: '4 weeks · PostgreSQL, BigQuery, data modelling', done: true },
-      { num: '2', title: 'Data Engineering & Analytics', detail: '5 months · dbt, Spark, orchestration, warehousing', certs: [{ label: 'GCP DE Cert', type: 'sky' }], current: true },
-      { num: '3', title: 'DataOps & Real-Time Streaming', detail: '4 weeks · Kafka, Flink, CDC pipelines' },
-      { num: '4', title: 'Capstone & Placement', detail: 'End-to-end data platform build + employer matching', certs: [{ label: 'GDA Data Engineer Cert', type: 'brand' }] }
+    { id: 'cybersecurity', name: 'Cybersecurity', icon: '🛡️', sub: '8–12 months · Zero Trust', title: 'Cybersecurity Pathway', desc: 'Defending institutional borders through offensive and defensive technical rigs.', steps: [
+      { num: '✓', title: 'Cyber Essentials', detail: '4 weeks · Threat Detection & Identity Basics', done: true },
+      { num: '2', title: 'Ethical Hacking', detail: '5 months · Kali Linux, Pen Testing, Vulnerability', current: true },
+      { num: '3', title: 'Security Operations', detail: 'SOC, SIEM, and Incident Response' },
+      { num: '4', title: 'CISO Programme', detail: 'Risk Management, POPIA & ISO 27001' }
     ]},
-    { id: 'devsec', name: 'DevSecOps', icon: '🔐', sub: '6–10 months · K8s · CI/CD', title: 'DevSecOps Pathway', desc: 'Automate delivery pipelines with security built in from the start.', steps: [
-      { num: '✓', title: 'Linux & Cloud Fundamentals', detail: '6 weeks · Shell scripting, networking, IAM', done: true },
-      { num: '2', title: 'CI/CD & Container Orchestration', detail: '8 weeks · Docker, Kubernetes, GitHub Actions, ArgoCD', certs: [{ label: 'CKA', type: 'vio' }], current: true },
-      { num: '3', title: 'Infrastructure as Code & Security', detail: 'Terraform, Vault, Snyk, SAST/DAST, compliance' },
-      { num: '4', title: 'Capstone & Certification', detail: 'Platform engineering capstone + employer matching', certs: [{ label: 'GDA DevSecOps Cert', type: 'brand' }] }
+    { id: 'data-analytics', name: 'Data & Analytics', icon: '📊', sub: '8–12 months · dbt · Spark', title: 'Data & Analytics Pathway', desc: 'Building high-performance data pipelines and AI-driven business intelligence.', steps: [
+      { num: '✓', title: 'Data Literacy', detail: '6 weeks · SQL Logic, Visualization', done: true },
+      { num: '2', title: 'Data Analysis & BI', detail: '8 weeks · Power BI, Statistics, Insights', current: true },
+      { num: '3', title: 'Data Engineering', detail: 'Pipelines, Spark, and Distributed Data' },
+      { num: '4', title: 'Institutional CDO', detail: 'Data Mesh & AI-Driven Analytics Strategy' }
     ]},
-    { id: 'leader', name: 'Tech Executive', icon: '💼', sub: '4–6 months · AI Strategy', title: 'Tech Executive Pathway', desc: 'Strategic AI literacy and digital transformation leadership.', steps: [
-      { num: '✓', title: 'Digital Economy Foundations', detail: '2 weeks · Cloud economics, AI landscape, POPIA', done: true },
-      { num: '2', title: 'AI for Business Leaders', detail: '8 weeks · Strategy, ROI frameworks, vendor mgmt', certs: [{ label: '24 CPD Points', type: 'cor' }], current: true },
-      { num: '3', title: 'GDA Leadership Roundtable', detail: 'Peer network, CIO/CTO mentorship, exec placement', certs: [{ label: 'GDA Executive Cert', type: 'brand' }] }
+    { id: 'software-devops', name: 'Software & DevOps', icon: '💻', sub: '12–16 months · React · K8s', title: 'Software & DevOps Pathway', desc: 'Mastering the full delivery lifecycle from code launchpad to platform engineering.', steps: [
+      { num: '✓', title: 'Code Launchpad', detail: '2 months · HTML/CSS, Python, Git', done: true },
+      { num: '2', title: 'Full-Stack Development', detail: '6 months · React, Node.js, Databases', current: true },
+      { num: '3', title: 'DevOps & Cloud-Native', detail: 'Docker, Kubernetes, CI/CD, Terraform' },
+      { num: '4', title: 'Platform Engineering', detail: 'SRE and Internal Platform Design' }
+    ]},
+    { id: 'digital-transformation', name: 'Digital Transformation', icon: '⚡', sub: '6–10 months · DX Strategy', title: 'Digital Transformation Pathway', desc: 'Leading institutional change through process digitisation and strategic performance.', steps: [
+      { num: '✓', title: 'Digital Literacy for Work', detail: '4 weeks · M365 & Digital Ecosystems', done: true },
+      { num: '2', title: 'Process Digitisation', detail: '3 months · Low-Code/Automation/BPM', current: true },
+      { num: '3', title: 'DX Leadership', detail: 'Change Mgmt, Milestone Planning' },
+      { num: '4', title: 'Executive CDO', detail: 'Innovation Governance & performance KPIs' }
+    ]},
+    { id: 'digital-business', name: 'Digital Business', icon: '🚀', sub: '6–10 months · E-Commerce', title: 'Digital Business Pathway', desc: 'Designing and scaling digital ventures for the African and global markets.', steps: [
+      { num: '✓', title: 'Entrepreneurship 101', detail: '6 weeks · Business Models & SEO Foundations', done: true },
+      { num: '2', title: 'E-Commerce & Marketing', detail: '2 months · Shopify, Ads, Conversion Logic', current: true },
+      { num: '3', title: 'Product Strategy', detail: 'Monetisation Design & Growth Hacking' },
+      { num: '4', title: 'Innovation & Scaling', detail: 'Funding Architecture & Venture Governance' }
     ]}
   ];
 
@@ -51,7 +64,8 @@ export function Pathways({ editMode }: { editMode?: boolean }) {
         <div className="grid grid-cols-1 md:grid-cols-[1fr_1.5fr] gap-16 items-start">
           <div className="flex flex-col gap-1">
             {paths.map((path) => (
-              <button 
+              <Link 
+                to={`/tracks/${path.id}`}
                 key={path.id}
                 className={`flex items-center gap-3.5 p-4 py-4.5 rounded-md cursor-pointer border border-transparent transition-all text-left ${activePath === path.id ? 'bg-card border-brand/20' : 'bg-transparent hover:bg-white/3 hover:border-border-custom'}`}
                 onClick={() => setActivePath(path.id)}
@@ -92,6 +106,15 @@ export function Pathways({ editMode }: { editMode?: boolean }) {
                     </div>
                   </div>
                 ))}
+              </div>
+              <div className="mt-12 flex justify-start">
+                <Link 
+                  to={`/tracks/${currentPath.id}`}
+                  className="inline-flex items-center gap-3 px-8 py-4 bg-brand text-navy font-syne font-black uppercase text-[11px] tracking-[0.25em] rounded-xl hover:bg-white transition-all no-underline shadow-[0_15px_40px_rgba(0,242,255,0.2)]"
+                >
+                  Explore Full {currentPath.name} Track
+                  <ArrowRight size={16} />
+                </Link>
               </div>
             </div>
           </div>

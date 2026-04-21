@@ -156,11 +156,9 @@ function AppContent() {
           <main className="flex-1">
             <Routes>
               <Route path="/" element={<Home onOpenModal={openModal} editMode={editMode} siteSettings={siteSettings} />} />
-              <Route path="/levels/foundation" element={<LevelFoundationPage onOpenModal={openModal} editMode={editMode} />} />
-              <Route path="/levels/associate" element={<LevelAssociatePage onOpenModal={openModal} editMode={editMode} />} />
-              <Route path="/levels/professional" element={<LevelProfessionalPage onOpenModal={openModal} editMode={editMode} />} />
-              <Route path="/levels/enterprise" element={<LevelEnterprisePage onOpenModal={openModal} editMode={editMode} />} />
-              <Route path="/pathways" element={<PathwaysPage onOpenModal={openModal} editMode={editMode} />} />
+              <Route path="/tracks" element={<PathwaysPage onOpenModal={openModal} editMode={editMode} />} />
+              <Route path="/pathways" element={<Navigate to="/tracks" replace />} />
+              <Route path="/levels/*" element={<Navigate to="/tracks" replace />} />
               {(!siteSettings || siteSettings.showCurriculum !== false) && (
                 <Route path="/curriculum" element={<CurriculumPage onOpenModal={openModal} editMode={editMode} />} />
               )}

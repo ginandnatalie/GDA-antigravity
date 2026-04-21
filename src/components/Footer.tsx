@@ -142,18 +142,17 @@ export function Footer({ onOpenModal, editMode }: { onOpenModal: (id: string) =>
         </div>
 
         <div>
-          <div className="font-dm-mono text-[9px] tracking-[0.2em] uppercase text-text-dim mb-4">Learning Pathways</div>
+          <div className="font-dm-mono text-[9px] tracking-[0.2em] uppercase text-text-dim mb-4">Career Tracks</div>
           <ul className="list-none flex flex-col gap-2.25">
             {[
-              { label: 'Cloud Engineering', href: '/tracks/cloud-engineering' },
-              { label: 'AI & ML Engineering', href: '/tracks/ai-ml-engineering' },
-              { label: 'Data Engineering', href: '/tracks/data-engineering' },
-              { label: 'DevSecOps & SRE', href: '/tracks/devsecops-sre' },
-              { label: 'Technical Leadership', href: '/tracks/technical-leadership' },
+              { label: 'Cloud Computing', href: '/tracks/cloud-computing' },
+              { label: 'AI & Machine Learning', href: '/tracks/ai-machine-learning' },
               { label: 'Cybersecurity', href: '/tracks/cybersecurity' },
+              { label: 'Data & Analytics', href: '/tracks/data-analytics' },
+              { label: 'Software & DevOps', href: '/tracks/software-devops' },
               { label: 'Digital Transformation', href: '/tracks/digital-transformation' },
               { label: 'Digital Business', href: '/tracks/digital-business' },
-              { label: 'All Programmes', href: '/curriculum' }
+              { label: 'Institutional Matrix', href: '/curriculum' }
             ].map((p) => (
               <li key={p.label}>
                 <Link to={p.href} className="text-[12px] text-text-muted no-underline transition-colors hover:text-text-custom tracking-[0.01em]">
@@ -167,8 +166,8 @@ export function Footer({ onOpenModal, editMode }: { onOpenModal: (id: string) =>
         <div>
           <div className="font-dm-mono text-[9px] tracking-[0.2em] uppercase text-text-dim mb-4">Academy</div>
           <ul className="list-none flex flex-col gap-2.25">
-            {['Faculty', 'Learning Pathways', 'News', 'Events', 'Intake Calendar', 'Graduate Outcomes'].map((l) => (
-              <li key={l}><a href={l === 'News' ? '/news' : l === 'Events' ? '/events' : `#${l.toLowerCase().replace(' ', '')}`} className="text-[12px] text-text-muted no-underline transition-colors hover:text-text-custom tracking-[0.01em]">{l}</a></li>
+            {['Faculty', 'Career Tracks', 'News', 'Events', 'Intake Calendar', 'Graduate Outcomes'].map((l) => (
+              <li key={l}><a href={l === 'Career Tracks' ? '/tracks' : l === 'News' ? '/news' : l === 'Events' ? '/events' : `#${l.toLowerCase().replace(' ', '')}`} className="text-[12px] text-text-muted no-underline transition-colors hover:text-text-custom tracking-[0.01em]">{l}</a></li>
             ))}
             <li><a href="#" onClick={() => onOpenModal('student')} className="text-[12px] text-text-muted no-underline transition-colors hover:text-text-custom tracking-[0.01em]">Student Portal</a></li>
           </ul>
