@@ -31,11 +31,25 @@ import PopiaPage from './pages/PopiaPage';
 import ApplyPage from './pages/ApplyPage';
 import TrackDetailPage from './pages/TrackDetailPage';
 
-function ScrollToTop() {
-  const { pathname } = useLocation();
+function ScrollManager() {
+  const { pathname, hash } = useLocation();
+
   useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [pathname]);
+    if (hash) {
+      // Small timeout to ensure the element is rendered (especially after page transitions)
+      const timer = setTimeout(() => {
+        const id = hash.replace('#', '');
+        const element = document.getElementById(id);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 100);
+      return () => clearTimeout(timer);
+    } else {
+      window.scrollTo(0, 0);
+    }
+  }, [pathname, hash]);
+
   return null;
 }
 
@@ -217,7 +231,7 @@ export default function App() {
     <ThemeProvider>
       <AuthProvider>
         <Router>
-          <ScrollToTop />
+          <ScrollManager />
           <AppContent />
         </Router>
       </AuthProvider>

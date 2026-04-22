@@ -1,9 +1,9 @@
 import React from 'react';
 import { useTheme } from '../lib/theme';
 
-export default function Logo() {
+export default function Logo({ variant }: { variant?: 'light' | 'dark' }) {
   const { theme } = useTheme();
-  const isDark = theme === 'dark';
+  const isDark = variant ? variant === 'dark' : theme === 'dark';
   
   // Theme-aware color variables
   // Dark: White (#ffffff), Light: Obsidian (#0B0C10)
@@ -50,9 +50,9 @@ export default function Logo() {
         <style>
           {`
             @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Outfit:wght@500;700&display=swap');
-            .word-ginashe { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 82px; fill: ${primaryBrand}; transition: fill 0.3s ease; }
-            .word-digital { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 26px; fill: ${primaryBrand}; text-transform: uppercase; transition: fill 0.3s ease; }
-            .word-academy { font-family: 'Outfit', sans-serif; font-weight: 500; font-size: 26px; fill: ${primaryBrand}; text-transform: uppercase; opacity: ${secondaryOpacity}; transition: all 0.3s ease; }
+            .word-ginashe { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 82px; transition: fill 0.3s ease; }
+            .word-digital { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 26px; text-transform: uppercase; transition: fill 0.3s ease; }
+            .word-academy { font-family: 'Outfit', sans-serif; font-weight: 500; font-size: 26px; text-transform: uppercase; transition: all 0.3s ease; }
             
             @keyframes flowData {
               0%, 80% { stroke-dashoffset: 50; opacity: 0; }
@@ -120,7 +120,7 @@ export default function Logo() {
         <rect x="140" y="40" width="4" height="4" fill={primaryBrand} />
       </g>
 
-      <text x="290" y="125" className="word-ginashe" textLength="480" lengthAdjust="spacing">GINASHE</text>
+      <text x="290" y="125" fill={primaryBrand} className="word-ginashe" textLength="480" lengthAdjust="spacing">GINASHE</text>
       
       <line x1="290" y1="145" x2="770" y2="145" stroke={brandCyan} strokeWidth="20" opacity="0.05" strokeLinecap="round"/>
       <line x1="290" y1="145" x2="770" y2="145" stroke={brandCyan} strokeWidth="12" opacity="0.15" strokeLinecap="round"/>
@@ -133,8 +133,8 @@ export default function Logo() {
       <line className="tech-flow" x1="290" y1="145" x2="840" y2="145" stroke={primaryBrand} strokeWidth="2" strokeLinecap="round"/>
 
       <text x="290" y="182" textLength="480" lengthAdjust="spacing">
-        <tspan className="word-digital">DIGITAL</tspan>
-        <tspan className="word-academy"> ACADEMY</tspan>
+        <tspan fill={primaryBrand} className="word-digital">DIGITAL</tspan>
+        <tspan fill={primaryBrand} className="word-academy" style={{ opacity: secondaryOpacity }}> ACADEMY</tspan>
       </text>
     </svg>
   );

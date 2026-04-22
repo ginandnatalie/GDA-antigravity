@@ -160,35 +160,35 @@ export function Alumni({ editMode }: { editMode?: boolean }) {
     <section id="alumni" className="bg-bg border-t border-border-custom">
       <div className="section-inner">
         <div className="max-w-[540px] mb-14">
-          <div className="section-label">Graduate Outcomes</div>
-          <h2 className="section-title animate-fadeUp">Our graduates are<br />changing Africa.</h2>
-          <p className="section-sub animate-fadeUp delay-100">From Johannesburg to Nairobi, GDA graduates are leading cloud migrations, building AI products, and founding their own startups.</p>
+          <div className="section-label">Institutional Impact</div>
+          <h2 className="section-title animate-fadeUp text-white">The Foundation of<br /><span className="text-brand">African Foundership.</span></h2>
+          <p className="section-sub animate-fadeUp delay-100">We don't just build employees; we forge the technical architects and entrepreneurs building Africa's new digital infrastructure. Our alumni are currently delivering high-impact systems at the continent's most significant institutional players.</p>
         </div>
 
         <div className="bg-[linear-gradient(135deg,var(--cyan-dim)_0%,transparent_60%)] border border-brand/15 rounded-3xl p-6 sm:p-14 grid grid-cols-1 lg:grid-cols-2 gap-10 sm:gap-14 items-center mb-12 animate-fadeUp">
           <div>
             <div className="font-syne italic font-normal text-[clamp(18px,2.2vw,26px)] leading-[1.4] text-text-custom tracking-[-0.01em] before:content-['\22'] before:text-brand before:text-[60px] before:leading-[0.5] before:block before:mb-3 before:not-italic">
-              "GDA didn't just provide a curriculum. They provided the high-fidelity engineering environment and the practitioner-led guidance needed to transition into a lead cloud role."
+              "GDA gave me the technical sovereignty to build my own venture. I'm not just navigating the industry; I'm disrupting it from the ground up with production-grade authority."
             </div>
             <div className="mt-5 flex items-center gap-3">
-              <div className="w-11 h-11 rounded-full bg-[linear-gradient(135deg,var(--color-brand),#008b8b)] flex items-center justify-center font-syne font-extrabold text-[14px] text-[#080b12]">AM</div>
+              <div className="w-11 h-11 rounded-full bg-[linear-gradient(135deg,var(--color-brand),#008b8b)] flex items-center justify-center font-syne font-extrabold text-[14px] text-[#080b12]">KM</div>
               <div>
-                <div className="font-syne font-bold text-[13px]">Cohort Alpha Candidate</div>
-                <div className="font-dm-mono text-[9px] text-text-muted tracking-[0.08em] uppercase">Cloud Architecture Residency · 2024 · Lead Cloud Engineer</div>
+                <div className="font-syne font-bold text-[13px]">Technical Co-Founder</div>
+                <div className="font-dm-mono text-[9px] text-text-muted tracking-[0.08em] uppercase">Cloud Architecture Residency · Sovereign FinTech Disruptor</div>
               </div>
             </div>
           </div>
           <div className="flex flex-col gap-4.5">
             {[
-              { i: '🎯', n: '94', l: 'Institutional Placement Resilience' },
-              { i: '💰', n: '+62', l: 'Average Technical Skill Uplift' },
-              { i: '🌍', n: 'Pan-African', l: 'Alumni Network Footprint' },
-              { i: '🚀', n: 'Sovereign', l: 'Career Transitions Tracked' }
+              { i: '🛡️', n: '94', l: 'Venture-Ready Mastery' },
+              { i: '⚡', n: '6.2x', l: 'Technical Execution ROI' },
+              { i: '🌍', n: 'Sovereign', l: 'Market Disruption Tracked' },
+              { i: '🚀', n: 'Elite', l: 'Institutional Influence Velocity' }
             ].map((o, i) => (
               <div key={i} className="flex items-center gap-3.5 bg-white/2 border border-border-custom rounded-md p-4 px-4.5">
                 <div className="w-10 h-10 rounded-sm bg-brand-dim text-brand text-[18px] flex items-center justify-center shrink-0">{o.i}</div>
                 <div>
-                  <div className="font-syne font-extrabold text-[22px] text-brand leading-none">{o.n}{o.n === '94' ? '%' : o.n === '+62' ? '%' : o.n === '7' ? ' countries' : ' startups'}</div>
+                  <div className="font-syne font-extrabold text-[22px] text-brand leading-none">{o.n}{o.n === '94' ? '%' : ''}</div>
                   <div className="text-[12px] text-text-soft">{o.l}</div>
                 </div>
               </div>
@@ -198,12 +198,12 @@ export function Alumni({ editMode }: { editMode?: boolean }) {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
           {[
-            { n: 'Candidate Mastery', r: 'Cloud Architect', c: 'Institutional Success', i: 'CM', g: 'linear-gradient(135deg,#00f2ff,#008b8b)' },
-            { n: 'Candidate Mastery', r: 'ML Engineer', c: 'Technical Resilience', i: 'CM', g: 'linear-gradient(135deg,#4fc3f7,#0288d1)' },
-            { n: 'Candidate Mastery', r: 'Data Engineer', c: 'Data Sovereignty', i: 'CM', g: 'linear-gradient(135deg,#56cfac,#2e9e7a)' },
-            { n: 'Candidate Mastery', r: 'DevSecOps Lead', c: 'Security Infrastructure', i: 'CM', g: 'linear-gradient(135deg,#a78bfa,#7c3aed)' },
-            { n: 'Candidate Mastery', r: 'AI Solutions Lead', c: 'Intelligence Systems', i: 'CM', g: 'linear-gradient(135deg,#f4664a,#c04030)' },
-            { n: 'Candidate Mastery', r: 'Solutions Architect', c: 'Platform Engineering', i: 'CM', g: 'linear-gradient(135deg,#00f2ff,#56cfac)' }
+            { n: 'Vanguard Alumni', r: 'Technical Co-Founder', c: 'Sovereign FinTech', i: 'VA', g: 'linear-gradient(135deg,#00f2ff,#008b8b)' },
+            { n: 'Vanguard Alumni', r: 'CEO & Architect', c: 'Logistics AI Startup', i: 'VA', g: 'linear-gradient(135deg,#4fc3f7,#0288d1)' },
+            { n: 'Vanguard Alumni', r: 'Head of Intelligence', c: 'Institutional Data', i: 'VA', g: 'linear-gradient(135deg,#56cfac,#2e9e7a)' },
+            { n: 'Vanguard Alumni', r: 'CTO / Founder', c: 'Security Infrastructure', i: 'VA', g: 'linear-gradient(135deg,#a78bfa,#7c3aed)' },
+            { n: 'Vanguard Alumni', r: 'Disruption Lead', c: 'Market Intelligence', i: 'VA', g: 'linear-gradient(135deg,#f4664a,#c04030)' },
+            { n: 'Vanguard Alumni', r: 'Founding Engineer', c: 'Platform Engineering', i: 'VA', g: 'linear-gradient(135deg,#00f2ff,#56cfac)' }
           ].map((a, i) => (
             <div key={i} className="bg-card border border-border-custom rounded-md p-5.5 px-4.5 flex gap-3.5 items-start transition-all hover:border-border2 hover:-translate-y-0.75 animate-fadeUp">
               <div className="w-10 h-10 rounded-full flex items-center justify-center font-syne font-extrabold text-[13px] text-[#080b12] shrink-0" style={{ background: a.g }}>{a.i}</div>

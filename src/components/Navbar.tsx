@@ -63,17 +63,17 @@ export default function Navbar({ onOpenModal, editMode, setEditMode, siteSetting
   ];
 
   return (
-    <nav id="nav" className="fixed top-0 left-0 right-0 z-[1000] px-4 sm:px-8 mt-5">
+    <nav id="nav" className={`fixed top-0 left-0 right-0 z-[1000] px-4 sm:px-8 transition-all duration-500 ${isScrolled ? 'mt-2' : 'mt-5'}`}>
       {/* Main Navbar Bar */}
-      <div className={`mx-auto max-w-7xl relative z-[2001] h-[72px] flex items-center px-6 rounded-2xl transition-all duration-500 border ${
+      <div className={`mx-auto max-w-7xl relative z-[2001] h-[72px] flex items-center px-6 rounded-2xl transition-all duration-700 border ${
         isScrolled 
-          ? 'bg-bg/98 backdrop-blur-3xl border-border2 shadow-[0_20px_50px_rgba(0,0,0,0.3)]' 
-          : 'bg-bg/60 backdrop-blur-xl border-white/10'
+          ? 'bg-[#0b0e14]/95 backdrop-blur-3xl border-brand/30 shadow-[0_20px_60px_rgba(0,242,255,0.15)] scale-[0.99]' 
+          : 'bg-white/95 backdrop-blur-3xl border-black/5 shadow-[0_20px_60px_rgba(0,0,0,0.1)]'
       }`}>
         
         {/* --- LOGO --- */}
-        <Link to="/" className="no-underline shrink-0 group">
-          <Logo />
+        <Link to="/" className="no-underline shrink-0 group" onClick={() => setActiveDropdown(null)}>
+          <Logo variant={isScrolled ? 'dark' : 'light'} />
         </Link>
 
         {/* --- MAIN NAVIGATION --- */}
@@ -87,12 +87,15 @@ export default function Navbar({ onOpenModal, editMode, setEditMode, siteSetting
             >
               <Link 
                 to={item.path}
+                onClick={() => setActiveDropdown(null)}
                 className={`inline-flex items-center gap-1.5 font-outfit font-bold text-[14px] tracking-wide no-underline px-5 py-2.5 rounded-xl transition-all ${
-                  pathname === item.path ? 'text-brand bg-brand/10' : 'text-text-soft hover:text-white hover:bg-white/5'
+                  pathname === item.path 
+                    ? (isScrolled ? 'text-brand bg-brand/10' : 'bg-navy text-white shadow-lg shadow-navy/20') 
+                    : (isScrolled ? 'text-text-soft hover:text-white hover:bg-white/5' : 'text-navy/60 hover:text-navy hover:bg-black/5')
                 }`}
               >
                 {item.label}
-                {item.hasMega && <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-500 ${activeDropdown === item.label ? 'rotate-180 text-brand' : 'text-text-muted'}`} />}
+                {item.hasMega && <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-500 ${activeDropdown === item.label ? 'rotate-180 text-brand' : (isScrolled ? 'text-text-muted' : 'text-navy/30')}`} />}
               </Link>
 
               {/* RICH MEGA MENUS */}
@@ -103,91 +106,333 @@ export default function Navbar({ onOpenModal, editMode, setEditMode, siteSetting
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 15, scale: 0.97 }}
                     transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-                    className="absolute top-full left-1/2 -translate-x-1/2 pt-4 w-[640px] z-[2100]"
+                    className="absolute top-full left-1/2 -translate-x-1/2 pt-4 w-[860px] z-[2100]"
                   >
                     <div className="bg-[#0b0e14] border border-white/10 rounded-2xl shadow-[0_40px_80px_rgba(0,0,0,0.6)] overflow-hidden">
                       
                       {/* Career Tracks Mega Menu */}
                       {item.label === 'Career Tracks' && (
-                        <div className="p-5 grid grid-cols-2 gap-4">
-                          {[
-                            { title: 'Cloud Computing', desc: 'Architecture & Infrastructure', icon: <Cpu className="w-5 h-5" />, color: 'text-brand', bg: 'bg-brand/5', path: '/tracks/cloud-computing' },
-                            { title: 'AI & Machine Learning', desc: 'Intelligence & RAG Engineering', icon: <Zap className="w-5 h-5" />, color: 'text-violet', bg: 'bg-violet/5', path: '/tracks/ai-machine-learning' },
-                            { title: 'Cybersecurity', desc: 'Defensive & Offensive Ops', icon: <Shield className="w-5 h-5" />, color: 'text-coral', bg: 'bg-coral/5', path: '/tracks/cybersecurity' },
-                            { title: 'Data & Analytics', desc: 'Engineering & BI Platforms', icon: <Layout className="w-5 h-5" />, color: 'text-emerald', bg: 'bg-emerald/5', path: '/tracks/data-analytics' },
-                            { title: 'Software & DevOps', desc: 'Full-Stack & Cloud Native', icon: <Code className="w-5 h-5" />, color: 'text-sky', bg: 'bg-sky/5', path: '/tracks/software-devops' },
-                            { title: 'Digital Business', desc: 'Ventures & E-Commerce Strategy', icon: <Rocket className="w-5 h-5" />, color: 'text-pink-400', bg: 'bg-pink-400/5', path: '/tracks/digital-business' },
-                            { title: 'Full Curriculum', desc: 'Compare all 28 modules', icon: <ArrowRight className="w-5 h-5" />, color: 'text-white', bg: 'bg-white/5', path: '/curriculum' }
-                          ].map((c, i) => (
-                            <Link key={i} to={c.path} className="flex items-start gap-4 p-4 rounded-xl hover:bg-white/5 transition-all group/item border border-transparent hover:border-white/5">
-                              <div className={`p-2.5 rounded-xl ${c.bg} border border-white/5 group-hover/item:scale-110 transition-transform ${c.color}`}>{c.icon}</div>
-                              <div>
-                                <div className="font-outfit font-bold text-[14px] text-white group-hover/item:text-brand transition-colors">{c.title}</div>
-                                <div className="text-[11px] text-text-muted leading-relaxed mt-1">{c.desc}</div>
+                        <div className="flex divide-x divide-white/5 h-[380px]">
+                          {/* Panel A: The Tracks Grid (Left 60%) */}
+                          <div className="flex-[1.5] p-6 pr-8">
+                            <div className="flex items-center justify-between mb-6">
+                              <div className="flex items-center gap-3">
+                                <div className="w-1.5 h-6 bg-brand rounded-full" />
+                                <div>
+                                  <h4 className="font-syne font-black text-sm text-white uppercase tracking-wider">Strategic Career Pathways</h4>
+                                  <p className="font-dm-mono text-[8px] text-text-dim uppercase tracking-[0.2em] mt-0.5">Industry Aligned // Global Outcomes</p>
+                                </div>
                               </div>
-                            </Link>
-                          ))}
+                              <span className="font-dm-mono text-[9px] text-brand/60 uppercase tracking-widest bg-brand/5 px-2 py-1 rounded border border-brand/10">Velocity_Sync</span>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-4">
+                              {[
+                                { title: 'Cloud Computing', desc: 'Architecture & Infrastructure', icon: <Cpu className="w-5 h-5 text-sky" />, bg: 'bg-sky/5', path: '/tracks/cloud-computing' },
+                                { title: 'AI & Machine Learning', desc: 'Intelligence & RAG Engineering', icon: <Zap className="w-5 h-5 text-violet" />, bg: 'bg-violet/5', path: '/tracks/ai-machine-learning' },
+                                { title: 'Cybersecurity', desc: 'Defensive & Offensive Ops', icon: <Shield className="w-5 h-5 text-coral" />, bg: 'bg-coral/5', path: '/tracks/cybersecurity' },
+                                { title: 'Data & Analytics', desc: 'Engineering & BI Platforms', icon: <Layout className="w-5 h-5 text-emerald" />, bg: 'bg-emerald/5', path: '/tracks/data-analytics' },
+                                { title: 'Software & DevOps', desc: 'Full-Stack & Cloud Native', icon: <Code className="w-5 h-5 text-brand" />, bg: 'bg-brand/5', path: '/tracks/software-devops' },
+                                { title: 'Digital Business', desc: 'Ventures & E-Commerce', icon: <Rocket className="w-5 h-5 text-pink-400" />, bg: 'bg-pink-400/5', path: '/tracks/digital-business' },
+                              ].map((c, i) => (
+                                <Link 
+                                  key={i} 
+                                  to={c.path} 
+                                  onClick={() => setActiveDropdown(null)}
+                                  className="group/gate p-4 rounded-xl bg-white/[0.02] border border-white/5 hover:border-white/10 hover:bg-white/[0.04] transition-all relative overflow-hidden"
+                                >
+                                  <div className="flex items-start gap-4">
+                                    <div className={`p-2 rounded-lg ${c.bg} border border-white/5 group-hover/gate:scale-110 transition-transform`}>{c.icon}</div>
+                                    <div className="flex-1">
+                                      <h5 className="font-syne font-black text-[13px] text-white group-hover/gate:text-brand transition-colors">{c.title}</h5>
+                                      <p className="text-[10px] text-text-dim leading-snug mt-1 line-clamp-1">{c.desc}</p>
+                                    </div>
+                                  </div>
+                                </Link>
+                              ))}
+                            </div>
+                          </div>
+
+                          {/* Panel B: Visual Anchor (Right 40%) */}
+                          <div className="flex-1 bg-black/40 relative overflow-hidden group/featured">
+                            <img 
+                              src="/career_tracks_visual.png" 
+                              className="absolute inset-0 w-full h-full object-cover opacity-60 grayscale group-hover/featured:grayscale-0 transition-all duration-1000 group-hover/featured:scale-110"
+                              alt="Career Pathways"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-l from-black via-black/40 to-transparent" />
+                            
+                            <div className="absolute inset-0 p-8 flex flex-col justify-end z-10">
+                              <div className="space-y-4">
+                                <div className="space-y-1">
+                                  <span className="font-dm-mono text-[9px] text-brand uppercase tracking-[0.4em] block">Sovereign Focus</span>
+                                  <h4 className="font-syne font-black text-xl text-white uppercase leading-none tracking-tighter">
+                                    Deploy<br />Your<br />Future
+                                  </h4>
+                                </div>
+                                <p className="text-[10px] text-text-dim leading-relaxed">Execute global velocity with practitioner-led technical tracks.</p>
+                                <button 
+                                  onClick={(e) => { 
+                                    e.preventDefault(); 
+                                    setActiveDropdown(null);
+                                    navigate('/tracks'); 
+                                  }}
+                                  className="w-full py-3 bg-white text-navy font-syne font-black text-[10px] uppercase tracking-widest rounded-lg hover:bg-brand transition-all shadow-[0_10px_25px_rgba(255,255,255,0.1)] hover:shadow-[0_10px_25px_rgba(0,242,255,0.2)]"
+                                >
+                                  Initialize Tracks
+                                </button>
+                              </div>
+                            </div>
+                            <div className="absolute top-0 left-0 w-full h-px bg-white/40 shadow-[0_0_15px_rgba(255,255,255,0.5)] animate-scan z-20" />
+                          </div>
                         </div>
                       )}
                       
                       {item.label === 'Institutional Matrix' && (
-                        <div className="p-5 grid grid-cols-2 gap-4">
-                          {[
-                            { title: 'AI & Machine Learning', desc: 'Intelligence & Predictive Systems', indicator: 'Market Critical', icon: <Zap className="w-5 h-5" />, color: 'text-emerald', bg: 'bg-emerald/5' },
-                            { title: 'Cloud Computing', desc: 'Infrastructure & Distributed Systems', indicator: 'Institutional Pillar', icon: <Cpu className="w-5 h-5" />, color: 'text-sky', bg: 'bg-sky/5' },
-                            { title: 'Software & DevOps', desc: 'Engineering Sovereignty & CI/CD', indicator: 'High Growth', icon: <Code className="w-5 h-5" />, color: 'text-coral', bg: 'bg-coral/5' },
-                            { title: 'Digital Transformation', desc: 'Strategy & Institutional Governance', indicator: 'Strategic Leadership', icon: <Briefcase className="w-5 h-5" />, color: 'text-brand', bg: 'bg-brand/5' }
-                          ].map((c, i) => (
-                            <Link key={i} to="/curriculum" className="flex items-start gap-4 p-4 rounded-xl hover:bg-white/5 transition-all group/item border border-transparent hover:border-white/5 relative overflow-hidden">
-                              <div className={`p-2.5 rounded-xl ${c.bg} border border-white/5 group-hover/item:scale-110 transition-transform ${c.color}`}>{c.icon}</div>
-                              <div>
-                                <div className="flex items-center gap-2 mb-1">
-                                  <div className="font-outfit font-bold text-[14px] text-white group-hover/item:text-brand transition-colors">{c.title}</div>
-                                  <span className="font-dm-mono text-[7px] px-1.5 py-0.5 rounded-sm bg-white/5 text-text-muted uppercase tracking-wider">{c.indicator}</span>
+                        <div className="flex divide-x divide-white/5 h-[380px]">
+                          {/* Panel A: The Syllabus Matrix (Left 60%) */}
+                          <div className="flex-[1.5] p-6 pr-8">
+                            <div className="flex items-center justify-between mb-6">
+                              <div className="flex items-center gap-3">
+                                <div className="w-1.5 h-6 bg-brand rounded-full" />
+                                <div>
+                                  <h4 className="font-syne font-black text-sm text-white uppercase tracking-wider">Academic Intelligence Matrix</h4>
+                                  <p className="font-dm-mono text-[8px] text-text-dim uppercase tracking-[0.2em] mt-0.5">Syllabus Ver_2026.4 // Verified Registry</p>
                                 </div>
-                                <div className="text-[11px] text-text-muted leading-relaxed">{c.desc}</div>
                               </div>
-                            </Link>
-                          ))}
+                              <span className="font-dm-mono text-[9px] text-brand/60 uppercase tracking-widest bg-brand/5 px-2 py-1 rounded border border-brand/10">Master_Console</span>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-4">
+                              {[
+                                { tier: 'MAT_01', title: 'Intelligence & RAG', desc: 'Neural architectures & vector search protocols', count: '08 Modules', icon: <Zap className="w-5 h-5 text-emerald" />, bg: 'bg-emerald/5' },
+                                { tier: 'MAT_02', title: 'Infra & Cloud Ops', desc: 'Distributed systems & sovereign cloud logic', count: '06 Modules', icon: <Cpu className="w-5 h-5 text-sky" />, bg: 'bg-sky/5' },
+                                { tier: 'MAT_03', title: 'Engineering Hub', desc: 'CI/CD pipelines & high-velocity deployment', count: '07 Modules', icon: <Code className="w-5 h-5 text-coral" />, bg: 'bg-coral/5' },
+                                { tier: 'MAT_04', title: 'Digital Governance', desc: 'Strategy, compliance & institutional pivot', count: '07 Modules', icon: <Globe className="w-5 h-5 text-brand" />, bg: 'bg-brand/5' }
+                              ].map((c, i) => (
+                                <Link 
+                                  key={i} 
+                                  to="/curriculum" 
+                                  onClick={() => setActiveDropdown(null)}
+                                  className="group/gate p-4 rounded-xl bg-white/[0.02] border border-white/5 hover:border-brand/30 hover:bg-white/[0.04] transition-all relative overflow-hidden"
+                                >
+                                  <div className="flex items-start gap-4">
+                                    <div className={`p-2 rounded-lg ${c.bg} border border-white/5 group-hover/gate:scale-110 transition-transform`}>{c.icon}</div>
+                                    <div className="flex-1">
+                                      <div className="flex items-center justify-between mb-1">
+                                        <span className="font-dm-mono text-[9px] text-text-dim group-hover/gate:text-brand transition-colors">{c.tier}</span>
+                                        <span className="font-dm-mono text-[8px] text-white/20 uppercase tracking-widest">{c.count}</span>
+                                      </div>
+                                      <h5 className="font-syne font-black text-[13px] text-white group-hover/gate:text-white transition-colors">{c.title}</h5>
+                                      <p className="text-[10px] text-text-dim leading-snug mt-1 line-clamp-1">{c.desc}</p>
+                                    </div>
+                                  </div>
+                                </Link>
+                              ))}
+                            </div>
+                          </div>
+
+                          {/* Panel B: Institutional Mastery Visual (Right 40%) */}
+                          <div className="flex-1 bg-black/40 relative overflow-hidden group/featured">
+                            {/* Matrix Image Anchor */}
+                            <img 
+                              src="/institutional_matrix_visual_1776800140008.png" 
+                              className="absolute inset-0 w-full h-full object-cover opacity-60 grayscale hover:grayscale-0 transition-all duration-1000 group-hover/featured:scale-110"
+                              alt="Matrix Visual"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-l from-black via-black/40 to-transparent" />
+                            
+                            <div className="absolute inset-0 p-8 flex flex-col justify-end">
+                              <div className="space-y-4">
+                                <div className="space-y-1">
+                                  <span className="font-dm-mono text-[9px] text-brand uppercase tracking-[0.4em] block">Sovereign Standard</span>
+                                  <h4 className="font-syne font-black text-xl text-white uppercase leading-none tracking-tighter">
+                                    Strategic<br />Institutional<br />Mastery
+                                  </h4>
+                                </div>
+                                <p className="text-[10px] text-text-dim leading-relaxed">Execute full matrix disclosure to view all 28 course modules and technical benchmarks.</p>
+                                <button 
+                                  onClick={(e) => { 
+                                    e.preventDefault(); 
+                                    setActiveDropdown(null);
+                                    navigate('/curriculum'); 
+                                  }}
+                                  className="w-full py-3 bg-brand text-navy font-syne font-black text-[10px] uppercase tracking-widest rounded-lg hover:bg-white transition-all shadow-[0_10px_25px_rgba(0,242,255,0.2)]"
+                                >
+                                  Request Full Protocol
+                                </button>
+                              </div>
+                            </div>
+
+                            {/* Scanning Line Overlay */}
+                            <div className="absolute top-0 left-0 w-full h-px bg-brand/40 shadow-[0_0_15px_rgba(0,242,255,0.5)] animate-scan" />
+                          </div>
                         </div>
                       )}
                       
                       {/* Admissions Mega Menu */}
                       {item.label === 'Admissions' && (
-                        <div className="p-4 space-y-1">
-                          {[
-                            { title: 'How to Apply', desc: 'Step-by-step application guide', icon: <Rocket className="w-4 h-4" />, path: '/admissions#apply' },
-                            { title: 'Scholarships', desc: 'Merit-based funding & support', icon: <CreditCard className="w-4 h-4" />, path: '/admissions#funding' },
-                            { title: 'Tuition & Fees', desc: 'Investment plans & structure', icon: <Landmark className="w-4 h-4" />, path: '/admissions#tuition' },
-                            { title: 'Entry Requirements', desc: 'Academic & technical criteria', icon: <Shield className="w-4 h-4" />, path: '/admissions#entry' },
-                            { title: 'Talk to an Advisor', desc: 'One-on-one career consultation', icon: <MessageSquare className="w-4 h-4" />, path: '/contact' }
-                          ].map((l, i) => (
-                            <Link key={i} to={l.path} className="flex items-center justify-between p-4 rounded-xl hover:bg-brand/10 group/item transition-all border border-transparent hover:border-brand/10">
-                              <div className="flex items-center gap-4">
-                                <div className="w-10 h-10 rounded-lg bg-white/5 border border-white/5 flex items-center justify-center text-brand group-hover/item:bg-brand group-hover/item:text-navy transition-all">{l.icon}</div>
+                        <div className="flex divide-x divide-white/5 h-[380px]">
+                          {/* Panel A: The Syllabus Matrix (Left 60%) */}
+                          <div className="flex-[1.5] p-6 pr-8">
+                            <div className="flex items-center justify-between mb-6">
+                              <div className="flex items-center gap-3">
+                                <div className="w-1.5 h-6 bg-brand rounded-full" />
                                 <div>
-                                  <div className="font-outfit font-bold text-[14px] text-white">{l.title}</div>
-                                  <div className="text-[10px] text-text-dim mt-0.5">{l.desc}</div>
+                                  <h4 className="font-syne font-black text-sm text-white uppercase tracking-wider">Admissions Operations Hub</h4>
+                                  <p className="font-dm-mono text-[8px] text-text-dim uppercase tracking-[0.2em] mt-0.5">Secure Gateway // Enterprise Flow</p>
                                 </div>
                               </div>
-                              <ChevronRight className="w-4 h-4 text-text-muted group-hover/item:translate-x-1 group-hover/item:text-brand transition-all" />
-                            </Link>
-                          ))}
+                              <span className="font-dm-mono text-[9px] text-brand/60 uppercase tracking-widest bg-brand/5 px-2 py-1 rounded border border-brand/10">INTAKE_2026</span>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-4">
+                              {[
+                                { title: 'How to Apply', desc: 'Application Pipeline', code: 'OP_01', icon: <Rocket className="w-5 h-5 text-sky" />, bg: 'bg-sky/5', path: '/admissions#apply' },
+                                { title: 'Tuition & Fees', desc: 'Institutional Capital', code: 'OP_02', icon: <Landmark className="w-5 h-5 text-emerald" />, bg: 'bg-emerald/5', path: '/admissions#tuition' },
+                                { title: 'Scholarships', desc: 'Talent Funding', code: 'OP_03', icon: <CreditCard className="w-5 h-5 text-violet" />, bg: 'bg-violet/5', path: '/admissions#funding' },
+                                { title: 'Requirements', desc: 'Entry Baselines', code: 'OP_04', icon: <Shield className="w-5 h-5 text-coral" />, bg: 'bg-coral/5', path: '/admissions#entry' }
+                              ].map((c, i) => (
+                                <Link 
+                                  key={i} 
+                                  to={c.path} 
+                                  onClick={() => setActiveDropdown(null)}
+                                  className="group/gate p-4 rounded-xl bg-white/[0.02] border border-white/5 hover:border-white/10 hover:bg-white/[0.04] transition-all relative overflow-hidden"
+                                >
+                                  <div className="flex items-start gap-4">
+                                    <div className={`p-2 rounded-lg ${c.bg} border border-white/5 group-hover/gate:scale-110 transition-transform`}>{c.icon}</div>
+                                    <div className="flex-1">
+                                      <div className="flex items-center justify-between mb-1">
+                                        <span className="font-dm-mono text-[9px] text-text-dim group-hover/gate:text-brand transition-colors">{c.title}</span>
+                                        <span className="font-dm-mono text-[8px] text-white/20 uppercase tracking-widest">{c.code}</span>
+                                      </div>
+                                      <h5 className="font-syne font-black text-[11px] text-text-soft group-hover/gate:text-white transition-colors mt-1">{c.desc}</h5>
+                                    </div>
+                                  </div>
+                                </Link>
+                              ))}
+                              
+                              <Link 
+                                to="/contact" 
+                                onClick={() => setActiveDropdown(null)}
+                                className="col-span-2 group/gate p-4 rounded-xl bg-brand/[0.03] border border-brand/10 hover:border-brand/30 hover:bg-brand/[0.05] transition-all relative overflow-hidden flex items-center justify-between"
+                              >
+                                <div className="flex items-center gap-4">
+                                  <div className="p-2 rounded-lg bg-brand/10 border border-brand/20 text-brand"><MessageSquare className="w-5 h-5" /></div>
+                                  <div>
+                                    <h5 className="font-syne font-black text-[13px] text-white group-hover/gate:text-brand transition-colors">Talk to an Advisor</h5>
+                                    <p className="text-[10px] text-text-dim leading-snug mt-1">One-on-one career consultation & deployment strategy</p>
+                                  </div>
+                                </div>
+                                <ArrowRight className="w-4 h-4 text-brand opacity-50 group-hover/gate:opacity-100 group-hover/gate:translate-x-1 transition-all" />
+                              </Link>
+                            </div>
+                          </div>
+
+                          {/* Panel B: Visual Anchor (Right 40%) */}
+                          <div className="flex-1 bg-black/40 relative overflow-hidden group/featured">
+                            <img 
+                              src="/admissions_visual.png" 
+                              className="absolute inset-0 w-full h-full object-cover opacity-60 grayscale group-hover/featured:grayscale-0 transition-all duration-1000 group-hover/featured:scale-110"
+                              alt="Admissions Gateway"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-l from-black via-black/40 to-transparent" />
+                            
+                            <div className="absolute inset-0 p-8 flex flex-col justify-end z-10">
+                              <div className="space-y-4">
+                                <div className="space-y-1">
+                                  <span className="font-dm-mono text-[9px] text-emerald uppercase tracking-[0.4em] block">Access Granted</span>
+                                  <h4 className="font-syne font-black text-xl text-white uppercase leading-none tracking-tighter">
+                                    Initialize<br />Enterprise<br />Gateway
+                                  </h4>
+                                </div>
+                                <p className="text-[10px] text-text-dim leading-relaxed">Secure your institution slot and verify deployment readiness.</p>
+                                <button 
+                                  onClick={(e) => { 
+                                    e.preventDefault(); 
+                                    setActiveDropdown(null);
+                                    navigate('/apply'); 
+                                  }}
+                                  className="w-full py-3 bg-emerald text-navy font-syne font-black text-[10px] uppercase tracking-widest rounded-lg hover:bg-white transition-all shadow-[0_10px_25px_rgba(86,207,172,0.2)] hover:shadow-[0_10px_25px_rgba(255,255,255,0.2)]"
+                                >
+                                  Begin Onboarding
+                                </button>
+                              </div>
+                            </div>
+                            <div className="absolute top-0 left-0 w-full h-px bg-emerald/40 shadow-[0_0_15px_rgba(86,207,172,0.5)] animate-scan z-20" />
+                          </div>
                         </div>
                       )}
 
                       {/* Discover Dropdown */}
                       {item.label === 'Discover' && (
-                        <div className="p-4 grid grid-cols-2 gap-3">
-                          {discoverItems.map((d, i) => (
-                            <Link key={i} to={d.path} className="p-4 rounded-xl hover:bg-white/5 transition-all group/item border border-transparent hover:border-white/5">
-                              <div className="flex items-center gap-2.5 mb-2">
-                                <span className="text-brand group-hover/item:scale-110 transition-transform">{d.icon}</span>
-                                <span className="font-outfit font-bold text-[14px] text-white">{d.label}</span>
+                        <div className="flex divide-x divide-white/5 h-[380px]">
+                          {/* Panel A: The Discover Grid (Left 60%) */}
+                          <div className="flex-[1.5] p-6 pr-8">
+                            <div className="flex items-center justify-between mb-6">
+                              <div className="flex items-center gap-3">
+                                <div className="w-1.5 h-6 bg-brand rounded-full" />
+                                <div>
+                                  <h4 className="font-syne font-black text-sm text-white uppercase tracking-wider">Global Knowledge Network</h4>
+                                  <p className="font-dm-mono text-[8px] text-text-dim uppercase tracking-[0.2em] mt-0.5">Faculty // Intelligence // Community</p>
+                                </div>
                               </div>
-                              <div className="text-[11px] text-text-muted leading-snug">{d.desc}</div>
-                            </Link>
-                          ))}
+                              <span className="font-dm-mono text-[9px] text-brand/60 uppercase tracking-widest bg-brand/5 px-2 py-1 rounded border border-brand/10">Data_Node</span>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-4">
+                              {discoverItems.map((d, i) => (
+                                <Link 
+                                  key={i} 
+                                  to={d.path} 
+                                  onClick={() => setActiveDropdown(null)}
+                                  className="group/gate p-4 rounded-xl bg-white/[0.02] border border-white/5 hover:border-white/10 hover:bg-white/[0.04] transition-all relative overflow-hidden"
+                                >
+                                  <div className="flex items-start gap-4">
+                                    <div className="p-2 rounded-lg bg-white/5 border border-white/10 text-brand group-hover/gate:bg-brand/10 group-hover/gate:text-white transition-all">{d.icon}</div>
+                                    <div className="flex-1">
+                                      <h5 className="font-syne font-black text-[13px] text-white group-hover/gate:text-brand transition-colors">{d.label}</h5>
+                                      <p className="text-[10px] text-text-dim leading-snug mt-1 line-clamp-2">{d.desc}</p>
+                                    </div>
+                                  </div>
+                                </Link>
+                              ))}
+                            </div>
+                          </div>
+
+                          {/* Panel B: Visual Anchor (Right 40%) */}
+                          <div className="flex-1 bg-black/40 relative overflow-hidden group/featured">
+                            <video 
+                              src="/network_visualization.mp4" 
+                              poster="/discover_visual.png"
+                              autoPlay loop muted playsInline
+                              className="absolute inset-0 w-full h-full object-cover opacity-60 grayscale group-hover/featured:grayscale-0 transition-all duration-1000 group-hover/featured:scale-110"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-l from-black via-black/40 to-transparent" />
+                            
+                            <div className="absolute inset-0 p-8 flex flex-col justify-end z-10">
+                              <div className="space-y-4">
+                                <div className="space-y-1">
+                                  <span className="font-dm-mono text-[9px] text-sky uppercase tracking-[0.4em] block">Live Feed</span>
+                                  <h4 className="font-syne font-black text-xl text-white uppercase leading-none tracking-tighter">
+                                    Ginashe<br />Ecosystem<br />Matrix
+                                  </h4>
+                                </div>
+                                <p className="text-[10px] text-text-dim leading-relaxed">Engage with world-class faculty and global technology trends.</p>
+                                <button 
+                                  onClick={(e) => { 
+                                    e.preventDefault(); 
+                                    setActiveDropdown(null);
+                                    navigate('/about'); 
+                                  }}
+                                  className="w-full py-3 bg-sky/20 border border-sky/40 text-white font-syne font-black text-[10px] uppercase tracking-widest rounded-lg hover:bg-sky hover:text-navy transition-all shadow-[0_10px_25px_rgba(79,195,247,0.1)] hover:shadow-[0_10px_25px_rgba(79,195,247,0.3)]"
+                                >
+                                  Access Network
+                                </button>
+                              </div>
+                            </div>
+                            <div className="absolute top-0 left-0 w-full h-px bg-sky/40 shadow-[0_0_15px_rgba(79,195,247,0.5)] animate-scan z-20" />
+                          </div>
                         </div>
                       )}
 
@@ -197,7 +442,11 @@ export default function Navbar({ onOpenModal, editMode, setEditMode, siteSetting
                           <div className="w-2 h-2 rounded-full bg-emerald shadow-[0_0_10px_rgba(34,197,94,0.5)] animate-pulse" />
                           <span className="text-[10px] font-jetbrains uppercase tracking-widest text-text-muted">Next Intake: April 2026</span>
                         </div>
-                        <Link to="/contact" className="text-[11px] font-bold text-brand hover:underline flex items-center gap-1">
+                        <Link 
+                          to="/contact" 
+                          onClick={() => setActiveDropdown(null)}
+                          className="text-[11px] font-bold text-brand hover:underline flex items-center gap-1"
+                        >
                           Speak to GDA Experts <ArrowRight className="w-3 h-3" />
                         </Link>
                       </div>
@@ -211,14 +460,14 @@ export default function Navbar({ onOpenModal, editMode, setEditMode, siteSetting
 
         {/* --- NAVBAR ACTIONS --- */}
         <div className="flex items-center gap-4">
-          <div className="hidden sm:flex items-center gap-1.5 pr-4 border-r border-white/10">
-            <button onClick={toggleTheme} className="p-2.5 rounded-xl hover:bg-white/5 text-text-muted hover:text-brand transition-all">
+          <div className={`hidden sm:flex items-center gap-1.5 pr-4 border-r ${isScrolled ? 'border-white/10' : 'border-black/5'}`}>
+            <button onClick={toggleTheme} className={`p-2.5 rounded-xl transition-all ${isScrolled ? 'hover:bg-white/5 text-text-muted hover:text-brand' : 'hover:bg-navy/5 text-navy/40 hover:text-brand'}`}>
               {theme === 'light' ? <Moon size={19} /> : <Sun size={19} />}
             </button>
             {isSuperAdmin && (
               <button 
                 onClick={editMode ? handleSaveAll : () => setEditMode(true)}
-                className={`p-2.5 rounded-xl transition-all ${editMode ? 'text-emerald bg-emerald/10 border border-emerald/20' : 'text-text-muted hover:text-brand hover:bg-white/5'}`}
+                className={`p-2.5 rounded-xl transition-all ${editMode ? 'text-emerald bg-emerald/10 border border-emerald/20' : (isScrolled ? 'text-text-muted hover:text-brand hover:bg-white/5' : 'text-navy/40 hover:text-brand hover:bg-navy/5')}`}
               >
                 <Zap size={19} className={editMode ? 'animate-pulse' : ''} />
               </button>
@@ -226,13 +475,13 @@ export default function Navbar({ onOpenModal, editMode, setEditMode, siteSetting
           </div>
 
           <div className="flex items-center gap-3">
-            <Link to="/contact" className="hidden xl:flex items-center gap-2 font-jetbrains text-[9px] tracking-[0.2em] text-[#22c55e] hover:text-brand transition-colors no-underline">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#22c55e] animate-pulse" />
+            <Link to="/contact" className={`hidden xl:flex items-center gap-2 font-jetbrains text-[9px] tracking-[0.2em] transition-colors no-underline ${isScrolled ? 'text-[#22c55e] hover:text-brand' : 'text-navy/60 hover:text-brand'}`}>
+              <span className={`w-1.5 h-1.5 rounded-full animate-pulse ${isScrolled ? 'bg-[#22c55e]' : 'bg-brand'}`} />
               CONTACT US
             </Link>
             
             <button 
-              className="lg:hidden p-2 text-white hover:text-brand transition-colors"
+              className={`lg:hidden p-2 transition-colors ${isScrolled ? 'text-white hover:text-brand' : 'text-navy hover:text-brand'}`}
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
               {isMobileMenuOpen ? <X size={26} /> : <Menu size={26} />}

@@ -78,7 +78,7 @@ export function Pathways({ editMode }: { editMode?: boolean }) {
                   <div className="font-dm-mono text-[9px] text-text-muted tracking-[0.08em] mt-0.5">{path.sub}</div>
                 </div>
                 <span className={`text-[10px] text-text-dim transition-all ${activePath === path.id ? 'translate-x-1 text-brand' : ''}`}>→</span>
-              </button>
+              </Link>
             ))}
           </div>
 

@@ -8,9 +8,10 @@ import {
   Star, Search, Server, FileText, MessageSquare, Layout, Network, 
   Container, Binary, ShieldAlert, Cpu as CpuIcon, ArrowRight,
   PieChart, TrendingUp, Compass, Repeat, Users, Rocket, ShoppingBag, Key, Award,
-  LayoutGrid, TableProperties, ListOrdered
+  LayoutGrid, TableProperties, ListOrdered, ChevronDown
 } from 'lucide-react';
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
+import { TRACKS, TrackData } from '../data/tracks';
 
 const LucideIcon = ({ name, className = "w-5 h-5" }: { name: string; className?: string }) => {
   const icons: { [key: string]: any } = {
@@ -47,6 +48,7 @@ const LucideIcon = ({ name, className = "w-5 h-5" }: { name: string; className?:
     'ShoppingBag': ShoppingBag,
     'Key': Key,
     'Award': Award,
+    'ChevronDown': ChevronDown,
     'LayoutGrid': LayoutGrid,
     'TableProperties': TableProperties,
     'ListOrdered': ListOrdered
@@ -192,7 +194,9 @@ export function Programs({ onOpenModal, editMode, isHomePage, initialFilterLevel
   const [modules, setModules] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [expandedProgram, setExpandedProgram] = useState<string | null>(null);
+  const [expandedTrackId, setExpandedTrackId] = useState<string | null>('cloud-computing'); // Default to first track for high-impact load
   const [isAdding, setIsAdding] = useState(false);
+  const [selectedTrackId, setSelectedTrackId] = useState<string | null>(null);
   const [dbStatus, setDbStatus] = useState<'connected' | 'error' | 'loading'>('loading');
   const [sectionContent, setSectionContent] = useState({
     title: 'Rigorous pathways.\nReal-world outcomes.',
@@ -365,123 +369,202 @@ export function Programs({ onOpenModal, editMode, isHomePage, initialFilterLevel
   return (
     <section id="programs" className="bg-bg relative">
       {isHomePage ? (
-        <div className="relative w-[100vw] ml-[calc(-50vw+50%)] py-20 bg-surface/10 border-y border-border-custom overflow-hidden">
+        <>
+          <div className="relative w-[100vw] ml-[calc(-50vw+50%)] py-20 bg-surface/10 border-y border-border-custom overflow-hidden">
           {/* Ambient Background Accents */}
           <div className="absolute top-0 left-1/4 w-96 h-96 bg-brand/5 rounded-full blur-[120px] pointer-events-none" />
           <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-emerald/5 rounded-full blur-[120px] pointer-events-none" />
 
           <div className="max-w-[1400px] mx-auto px-5 sm:px-6 md:px-14 relative z-10">
             <div className="text-center mb-16 max-w-3xl mx-auto">
-              <span className="font-dm-mono text-[10px] text-brand uppercase tracking-[0.2em] mb-4 block">The Flagship Pathway</span>
-              <h3 className="text-4xl md:text-5xl font-syne font-bold text-text-custom mb-6 tracking-tight">Journey from Novice to Architect</h3>
+              <span className="font-dm-mono text-[10px] text-brand uppercase tracking-[0.4em] mb-4 block">Institutional Discovery Hub</span>
+              <h3 className="text-4xl md:text-5xl font-syne font-bold text-text-custom mb-6 tracking-tight">Select Your Career Track</h3>
               <p className="text-text-soft text-sm md:text-base leading-relaxed">
-                Experience the {tracks[0]} track. Follow the progression line to see how your career will evolve at every step of the Ginashe curriculum—designed with precision for true industry impact.
               </p>
             </div>
-
-            {/* The Timeline Visualization */}
-            <div className="relative mt-20 mb-16">
-              {/* Connecting Line */}
-              <div className="absolute top-[80px] left-0 w-full h-[2px] bg-gradient-to-r from-surface via-brand/50 to-emerald/50 hidden lg:block" />
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative z-10">
-                {[
-                  { 
-                    lvl: 'Foundation', 
-                    title: 'Digital Core Pathway', 
-                    icon: 'Rocket', 
-                    tag: 'Institutional Gateway',
-                    desc: 'The official entry point to the Ginashe matrix. Master the fundamental architecture of infrastructure, networking, and digital trust to anchor your global career.'
-                  },
-                  { 
-                    lvl: 'Associate', 
-                    title: 'Practitioner Specialisation', 
-                    icon: 'Layers', 
-                    tag: 'Mid-Level Professional',
-                    desc: 'Mid-career evolution. Transition from fundamentals to specialist implementation, mastering technical integration and advanced system paradigms.'
-                  },
-                  { 
-                    lvl: 'Professional', 
-                    title: 'Solutions Architecture Residency', 
-                    icon: 'Award', 
-                    tag: 'Expert Practitioner',
-                    desc: 'High-performance mastery. Command the full stack with architectural precision and strategic infrastructure design, co-led by industry practitioners.'
-                  },
-                  { 
-                    lvl: 'Enterprise', 
-                    title: 'Global Architecture Fellowship', 
-                    icon: 'Globe', 
-                    tag: 'Strategic Executive',
-                    desc: 'Strategic world-class leadership. Design and govern global-scale digital transformation with multi-cloud strategy and enterprise-grade resilience.'
-                  }
-                ].map((item, index) => {
-                  return (
-                    <div 
-                      key={item.lvl} 
-                      className="relative group cursor-pointer h-full"
-                    >
-                      {/* Timeline Node (Dot) */}
-                      <div className="absolute top-[80px] left-1/2 w-4 h-4 rounded-full bg-bg border-2 border-brand -translate-x-1/2 -translate-y-1/2 hidden lg:block group-hover:bg-brand group-hover:scale-150 group-hover:shadow-[0_0_20px_rgba(0,242,255,0.5)] transition-all z-20 duration-300" />
-                      
-                      {/* Card */}
-                      <div className="bg-card/40 backdrop-blur-xl border border-border-custom rounded-2xl p-6 lg:mt-6 hover:bg-card hover:border-brand/30 transition-all duration-300 transform group-hover:-translate-y-2 h-[380px] flex flex-col justify-between shadow-lg hover:shadow-brand/5 relative overflow-hidden group">
-                        {/* Inner Gradient Glow on Hover */}
-                        <div className="absolute inset-0 bg-gradient-to-br from-brand/0 via-transparent to-brand/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                        
-                        <div className="relative z-10 flex-1 flex flex-col items-center">
-                          <div className="flex justify-center mb-6">
-                            <div className="w-16 h-16 rounded-full bg-surface/50 border border-border-custom flex items-center justify-center text-brand group-hover:scale-110 group-hover:bg-brand/10 transition-all duration-300 relative">
-                              <LucideIcon name={item.icon} className="w-8 h-8" />
-                              <div className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-brand text-black flex items-center justify-center font-bold text-[10px] font-dm-mono">
-                                {index + 1}
-                              </div>
-                            </div>
-                          </div>
-                          
-                          <div className="text-center mb-4">
-                            <span className="font-dm-mono text-[9px] text-brand uppercase tracking-[0.2em] mb-2 block">{item.lvl} Level</span>
-                            <h4 className="text-xl font-syne font-extrabold text-text-custom leading-tight group-hover:text-brand transition-colors">{item.title}</h4>
-                          </div>
-
-                          <p className="text-[11px] text-text-soft leading-relaxed line-clamp-4 mb-6 text-center flex-1">
-                            {item.desc}
-                          </p>
-                        </div>
-                        
-                        <div className="relative z-10 pt-4 border-t border-border-custom/50 flex flex-col gap-2 mt-auto text-center">
-                          <div className="font-dm-mono text-[8px] uppercase tracking-wider text-emerald font-bold">
-                            {item.tag}
-                          </div>
-                          <span className="text-[10px] text-brand flex items-center justify-center gap-1 opacity-80 group-hover:opacity-100 transition-all duration-300 font-bold tracking-widest mt-1">
-                            EXPLORE PATHWAY →
-                          </span>
-                        </div>
-                      </div>
+                       {/* Ginashe Way: 4x2 Institutional Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-12">
+              {Object.values(TRACKS).map((track, idx) => (
+                <div 
+                  key={track.id}
+                  onClick={() => setSelectedTrackId(track.id)}
+                  className="group relative bg-[#0a0a0b] border border-white/5 rounded-[24px] p-6 cursor-pointer transition-all duration-500 hover:border-brand/40 hover:shadow-[0_20px_50px_rgba(0,0,0,0.5)] hover:-translate-y-1 overflow-hidden"
+                >
+                  {/* Subtle Glow Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-brand/[0.03] to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                  
+                  <div className="flex items-center gap-5 relative z-10">
+                    {/* Icon Pill */}
+                    <div className="w-14 h-24 rounded-full bg-black/60 border border-white/10 flex items-center justify-center text-3xl shadow-2xl transition-all group-hover:border-brand/30 group-hover:scale-105">
+                      <span className="filter grayscale group-hover:grayscale-0 transition-all">{track.icon}</span>
                     </div>
-                  );
-                })}
+
+                    <div className="flex-1 space-y-3">
+                      {/* Status Badges */}
+                      <div className="flex items-center gap-2">
+                        <div className="px-2 py-0.5 rounded-md bg-brand/10 border border-brand/20">
+                          <span className="font-dm-mono text-[8px] text-brand uppercase tracking-widest font-bold">Foundation</span>
+                        </div>
+                        <span className="font-dm-mono text-[8px] text-text-dim uppercase tracking-widest">12 Weeks</span>
+                      </div>
+
+                      {/* Command Title */}
+                      <h4 className="font-syne font-black text-xl text-text-custom leading-tight group-hover:text-white transition-colors">
+                        {track.title}
+                      </h4>
+                    </div>
+                  </div>
+                </div>
+              ))}
+
+              {/* Box 8: Filler - Strategic Custom Enterprise */}
+              <div 
+                className="group relative bg-[#0a0a0b]/40 border border-white/5 border-dashed rounded-[24px] p-6 cursor-pointer transition-all duration-500 hover:border-brand/40 flex items-center justify-center text-center opacity-60 hover:opacity-100"
+              >
+                <div className="relative z-10">
+                   <div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center mx-auto mb-4 group-hover:border-brand/30">
+                     <LucideIcon name="Layers" className="w-5 h-5 text-text-dim group-hover:text-brand" />
+                   </div>
+                   <h4 className="font-syne font-bold text-sm text-text-dim uppercase tracking-widest group-hover:text-white transition-colors">
+                     Institutional<br />Strategic Design
+                   </h4>
+                   <p className="text-[9px] text-text-dim/60 font-dm-mono mt-2 uppercase tracking-widest">Custom Enterprise Pathways</p>
+                </div>
               </div>
             </div>
 
-            <div className="mt-16 flex flex-col sm:flex-row items-center justify-center gap-4">
-              <button
-                onClick={() => navigate('/tracks')}
-                className="bg-brand text-black font-syne font-bold px-8 py-4 rounded hover:bg-white transition-all uppercase tracking-widest text-xs inline-flex items-center gap-3 shadow-[0_0_15px_rgba(0,242,255,0.2)] hover:shadow-[0_0_25px_rgba(255,255,255,0.4)]"
-              >
-                Explore Academy Pathways
-                <LucideIcon name="Rocket" className="w-4 h-4" />
-              </button>
-              
-              <button
-                onClick={() => navigate('/curriculum')}
-                className="bg-white/5 border border-brand/40 text-brand font-syne font-bold px-8 py-4 rounded hover:bg-brand/10 transition-all uppercase tracking-widest text-xs inline-flex items-center gap-3"
-              >
-                View 28-Course Matrix
-                <LucideIcon name="LayoutGrid" className="w-4 h-4" />
-              </button>
-            </div>
+            {/* Track Master Modal: Full-Screen Deep Dive */}
+            <AnimatePresence>
+              {selectedTrackId && (
+                <div 
+                  className="fixed inset-0 z-[3000] flex items-center justify-center p-4 md:p-12 overflow-hidden"
+                  onClick={() => setSelectedTrackId(null)}
+                >
+                  <motion.div 
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="absolute inset-0 bg-bg/95 backdrop-blur-2xl"
+                  />
+                  
+                  <motion.div 
+                    initial={{ scale: 0.9, opacity: 0, y: 20 }}
+                    animate={{ scale: 1, opacity: 1, y: 0 }}
+                    exit={{ scale: 0.9, opacity: 0, y: 20 }}
+                    onClick={(e) => e.stopPropagation()}
+                    className="relative w-full max-w-7xl max-h-full bg-card/40 border border-white/10 rounded-[40px] shadow-[0_50px_150px_rgba(0,0,0,0.8)] overflow-hidden flex flex-col md:flex-row"
+                  >
+                    {/* Close Button */}
+                    <button 
+                      onClick={() => setSelectedTrackId(null)}
+                      className="absolute top-8 right-8 z-50 w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-white/40 hover:text-brand hover:border-brand transition-all"
+                    >
+                      ✕
+                    </button>
+
+                    {/* Left Panel: High-Impact Visuals */}
+                    <div className="w-full md:w-[400px] h-64 md:h-auto relative overflow-hidden flex-shrink-0">
+                       <img 
+                        src={TRACKS[selectedTrackId].heroImage} 
+                        className="absolute inset-0 w-full h-full object-cover opacity-50 grayscale hover:grayscale-0 transition-all duration-1000"
+                        alt={TRACKS[selectedTrackId].title}
+                       />
+                       <div className="absolute inset-0 bg-gradient-to-r from-bg via-transparent to-transparent hidden md:block" />
+                       <div className="absolute inset-0 bg-gradient-to-t from-bg to-transparent md:hidden" />
+                       
+                       <div className="absolute bottom-12 left-12 right-12 z-10">
+                          <div className="w-20 h-20 rounded-2xl bg-black/60 border border-brand/40 flex items-center justify-center text-4xl mb-6 shadow-[0_0_30px_rgba(0,242,255,0.2)]">
+                            {TRACKS[selectedTrackId].icon}
+                          </div>
+                          <span className="font-dm-mono text-[10px] text-brand uppercase tracking-[0.6em] mb-3 block">Institutional Dimension</span>
+                          <h2 className="font-syne font-black text-4xl text-white tracking-tighter uppercase leading-none">
+                            {TRACKS[selectedTrackId].title}
+                          </h2>
+                       </div>
+                    </div>
+
+                    {/* Right Panel: Content Viewport */}
+                    <div className="flex-1 overflow-y-auto p-8 md:p-20 md:pl-28">
+                       <div className="max-w-3xl space-y-16">
+                          <div className="space-y-6">
+                            <span className="font-dm-mono text-[10px] text-white/20 uppercase tracking-[0.5em] block">Institutional Mission</span>
+                            <p className="text-2xl md:text-3xl text-text-soft font-outfit leading-snug">
+                              {TRACKS[selectedTrackId].mission}
+                            </p>
+                          </div>
+
+                          {/* Tactical Roadmap Timeline */}
+                          <div className="space-y-10">
+                            <div className="flex items-center justify-between">
+                              <span className="font-dm-mono text-[10px] text-white/20 uppercase tracking-[0.5em] block">Tactical Progression Matrix</span>
+                              <div className="h-px flex-1 mx-8 bg-white/5" />
+                              <span className="font-dm-mono text-[9px] text-brand uppercase tracking-widest font-bold">4 Technical Gates</span>
+                            </div>
+
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                               {TRACKS[selectedTrackId].roadmap.map((step, sIdx) => (
+                                 <div key={step.level} className="group/gate p-6 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-brand/30 transition-all">
+                                    <div className="flex items-start gap-4">
+                                      <div className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-sm font-syne font-black text-white/40 group-hover/gate:text-brand transition-colors">
+                                        0{sIdx + 1}
+                                      </div>
+                                      <div>
+                                        <h5 className="font-syne font-bold text-lg text-white mb-2">{step.title}</h5>
+                                        <p className="text-xs text-text-soft/80 leading-relaxed">{step.description}</p>
+                                        <div className="mt-4 flex flex-wrap gap-2">
+                                           {step.vendor_alignment.map(v => (
+                                             <span key={v} className="px-2 py-0.5 rounded text-[8px] font-dm-mono bg-black/40 border border-white/10 text-text-dim uppercase tracking-widest">{v}</span>
+                                           ))}
+                                        </div>
+                                      </div>
+                                    </div>
+                                 </div>
+                               ))}
+                            </div>
+                          </div>
+
+                          {/* Action Hub */}
+                          <div className="pt-12 border-t border-white/5 flex flex-col sm:flex-row gap-6">
+                             <button 
+                               onClick={() => (setSelectedTrackId(null), navigate(`/tracks/${selectedTrackId}`))}
+                               className="flex-1 bg-brand text-black font-syne font-black text-xs uppercase tracking-widest py-6 rounded-2xl hover:bg-white transition-all shadow-[0_20px_50px_rgba(0,242,255,0.2)] flex items-center justify-center gap-4 group"
+                             >
+                               Initialize Track Authority <ArrowRight className="group-hover:translate-x-1 transition-transform" />
+                             </button>
+                             <button 
+                               onClick={() => setSelectedTrackId(null)}
+                               className="px-12 py-6 rounded-2xl border border-white/10 font-syne font-black text-xs uppercase tracking-widest text-text-soft hover:bg-white/5 transition-all"
+                             >
+                               Close Master View
+                             </button>
+                          </div>
+                       </div>
+                    </div>
+                  </motion.div>
+                </div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
+
+          <div className="mt-16 flex flex-col sm:flex-row items-center justify-center gap-4">
+            <button
+              onClick={() => navigate('/tracks')}
+              className="bg-brand text-black font-syne font-bold px-8 py-4 rounded hover:bg-white transition-all uppercase tracking-widest text-xs inline-flex items-center gap-3 shadow-[0_0_15px_rgba(0,242,255,0.2)] hover:shadow-[0_0_25px_rgba(255,255,255,0.4)]"
+            >
+              Explore All Tracks
+              <LucideIcon name="Rocket" className="w-4 h-4" />
+            </button>
+            
+            <button
+              onClick={() => navigate('/curriculum')}
+              className="bg-white/5 border border-brand/40 text-brand font-syne font-bold px-8 py-4 rounded hover:bg-brand/10 transition-all uppercase tracking-widest text-xs inline-flex items-center gap-3"
+            >
+              View 28-Course Matrix
+              <LucideIcon name="LayoutGrid" className="w-4 h-4" />
+            </button>
+          </div>
+        </>
       ) : (
       <div className="max-w-7xl mx-auto pt-12 pb-8">
         {/* Header: Title and Horizontal Institutional Command Center */}
