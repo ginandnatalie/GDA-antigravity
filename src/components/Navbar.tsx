@@ -459,7 +459,7 @@ export default function Navbar({ onOpenModal, editMode, setEditMode, siteSetting
         </ul>
 
         {/* --- NAVBAR ACTIONS --- */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 ml-auto lg:ml-0">
           <div className={`hidden sm:flex items-center gap-1.5 pr-4 border-r ${isScrolled ? 'border-white/10' : 'border-black/5'}`}>
             <button onClick={toggleTheme} className={`p-2.5 rounded-xl transition-all ${isScrolled ? 'hover:bg-white/5 text-text-muted hover:text-brand' : 'hover:bg-navy/5 text-navy/40 hover:text-brand'}`}>
               {theme === 'light' ? <Moon size={19} /> : <Sun size={19} />}

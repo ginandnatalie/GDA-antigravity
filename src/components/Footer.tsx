@@ -166,8 +166,22 @@ export function Footer({ onOpenModal, editMode }: { onOpenModal: (id: string) =>
         <div>
           <div className="font-dm-mono text-[9px] tracking-[0.2em] uppercase text-text-dim mb-4">Academy</div>
           <ul className="list-none flex flex-col gap-2.25">
-            {['Faculty', 'Career Tracks', 'News', 'Events', 'Intake Calendar', 'Graduate Outcomes'].map((l) => (
-              <li key={l}><a href={l === 'Career Tracks' ? '/tracks' : l === 'News' ? '/news' : l === 'Events' ? '/events' : `#${l.toLowerCase().replace(' ', '')}`} className="text-[12px] text-text-muted no-underline transition-colors hover:text-text-custom tracking-[0.01em]">{l}</a></li>
+            {[
+              { label: 'Faculty', href: '/faculty' },
+              { label: 'Career Tracks', href: '/tracks' },
+              { label: 'News', href: '/news' },
+              { label: 'Events', href: '/events' },
+              { label: 'Intake Calendar', href: '/#cohorts' },
+              { label: 'Institutional Impact', href: '/#alumni' }
+            ].map((l) => (
+              <li key={l.label}>
+                <a 
+                  href={l.href} 
+                  className="text-[12px] text-text-muted no-underline transition-colors hover:text-text-custom tracking-[0.01em]"
+                >
+                  {l.label}
+                </a>
+              </li>
             ))}
             <li><a href="#" onClick={() => onOpenModal('student')} className="text-[12px] text-text-muted no-underline transition-colors hover:text-text-custom tracking-[0.01em]">Student Portal</a></li>
           </ul>
