@@ -77,36 +77,57 @@ export default function VerifyPage() {
     setLoading(true);
     setError(null);
     try {
-      // Calls the same application processing logic which generates a new manual OTP
-      const response = await fetch('/api/process-application', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email,
-          name: "GDA Student",
-          program: "Ginashe Digital Academy",
-          type: 'individual'
-        })
+      // Trigger Supabase native OTP signup/login
+      const { error } = await supabase.auth.signInWithOtp({
+        email: email.trim(),
+        options: {
+          shouldCreateUser: true // This will create the auth user if they don't exist yet
+        }
       });
 
-      if (!response.ok) throw new Error("Failed to resend code");
+      if (error) throw error;
 
       setResendCooldown(60);
-      setError(null);
+      setStep('otp'); // Ensure we are on OTP step
     } catch (err: any) {
-      setError(err.message || "Failed to resend activation code.");
+      setError(err.message || "Failed to send activation code. Please verify your email.");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleVerifyOtpStep = (e: React.FormEvent) => {
+  const handleVerifyOtpStep = async (e: React.FormEvent) => {
     e.preventDefault();
     const token = otp.join('');
     if (token.length < 6) return;
     
-    // Simply move to password step (Verification happens on final submit)
-    setStep('password');
+    setLoading(true);
+    setError(null);
+    try {
+      // Verify the OTP token via Supabase
+      const { error } = await supabase.auth.verifyOtp({
+        email: email.trim(),
+        token,
+        type: 'signup' // or 'magiclink'
+      });
+
+      if (error) {
+        // Try fallback type if signup fails (case where user already exists but is just signing in)
+        const { error: error2 } = await supabase.auth.verifyOtp({
+          email: email.trim(),
+          token,
+          type: 'magiclink'
+        });
+        if (error2) throw error2;
+      }
+      
+      // Verification successful - move to password step
+      setStep('password');
+    } catch (err: any) {
+      setError("Invalid or expired code. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleFinalActivation = async (e: React.FormEvent) => {
@@ -123,33 +144,26 @@ export default function VerifyPage() {
     setLoading(true);
     setError(null);
     try {
-      // Call the Manual OTP Verification API
-      const response = await fetch('/api/verify-manual-otp', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email,
-          otp: otp.join(''),
-          password
-        })
+      // Since the user is now logged in via OTP, we update their password
+      const { error } = await supabase.auth.updateUser({
+        password: password
       });
 
-      const result = await response.json();
-      if (!response.ok) throw new Error(result.error || "Verification failed");
+      if (error) throw error;
 
       // SUCCESS!
-      await signOut();
       setStep('success');
     } catch (err: any) {
-      setError(err.message || "Failed to activate account. Please check your code.");
+      setError(err.message || "Failed to set password. Your session may have expired.");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleEmailSubmit = (e: React.FormEvent) => {
+  const handleEmailSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (email) setStep('otp');
+    if (!email) return;
+    handleResendOtp(); // Trigger the first OTP
   };
 
   // Helper UI Components

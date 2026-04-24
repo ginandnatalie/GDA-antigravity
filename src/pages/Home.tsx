@@ -18,7 +18,7 @@ function WhySection() {
     { icon: '🤝', title: 'Strategic Industry Bridging', desc: 'Our Career Services team doesn\'t just wait for graduation. We align our curriculum with active technical hiring cycles across our institutional network to ensure our candidates are priority-listed.' },
     { icon: '🌍', title: 'Built for Africa', desc: 'From cloud engineering to digital transformation, everything is contextualised for the African digital economy.' },
     { icon: '💰', title: 'Flexible Funding', desc: 'Instalment plans, employer-sponsored, or self-funded — we have a path for every budget. No one is turned away for financial reasons alone.' },
-    { icon: '🔄', title: 'Lifetime Alumni Access', desc: 'Graduate once, belong forever. Access updated coursework, alumni networking, job boards, and mentorship for life.' },
+    { icon: '🚀', title: 'Founder & Freelance Empowerment', desc: 'We don\'t just train employees; we build digital entrepreneurs. Our curriculum includes specialized pathways for launching your own tech consultancy, freelancing globally, or founding a startup.' },
   ];
 
   return (
@@ -101,18 +101,18 @@ function Testimonials() {
 export default function Home({ onOpenModal, editMode, siteSettings }: HomeProps) {
   return (
     <>
-      {(!siteSettings || siteSettings.showHero !== false) && (
+      {(!siteSettings || siteSettings.showhero !== false) && (
         <Hero onOpenModal={onOpenModal} editMode={editMode} />
       )}
-      {(!siteSettings || siteSettings.showPrograms !== false) && (
+      {(!siteSettings || siteSettings.showprograms !== false) && (
         <Programs onOpenModal={onOpenModal} editMode={editMode} isHomePage={true} />
       )}
       <WhySection />
-      {(!siteSettings || siteSettings.showTrustBar !== false) && (
+      {(!siteSettings || siteSettings.showtrustbar !== false) && (
         <TrustBar />
       )}
       <Testimonials />
-      {(!siteSettings || siteSettings.showCTA !== false) && (
+      {(!siteSettings || siteSettings.showcta !== false) && (
         <CTA onOpenModal={onOpenModal} editMode={editMode} />
       )}
     </>

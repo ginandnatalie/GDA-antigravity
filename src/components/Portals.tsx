@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../lib/auth';
+import { toast } from 'sonner';
 import AcademyDashboard from './AcademyDashboard';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -294,7 +295,7 @@ export function AdminDashboard() {
             reason: govData.motivation,
             new_value: { record_id: record.id, status: 'approved', evidence_url: govData.evidenceUrl }
           });
-          alert('Institutional Blessing Granted!');
+          toast.success('Institutional Blessing Granted!');
           fetchAlumniApprovals();
         }
       }
@@ -309,7 +310,9 @@ export function AdminDashboard() {
         redirectTo: `${window.location.origin}/portal`,
       });
       if (error) throw error;
-      alert(`Institutional security protocol initiated. A recovery link has been dispatched to ${user.email}. Please follow the instructions to secure your access.`);
+      toast.success('Institutional Security Protocol Initiated', {
+        description: `A recovery link has been dispatched to ${user.email}.`
+      });
     } catch (err: any) {
       alert(`Security protocol failed: ${err.message}`);
     }
@@ -1326,13 +1329,15 @@ function InstitutionalUserRegistry() {
         if (alumniErr) console.warn('Post-Action Warning: Alumni record creation failed', alumniErr);
       }
 
-      alert(`Administrative Directive Successfully Executed.`);
+      toast.success('Administrative Directive Successfully Executed.');
       setGovernanceUser(null);
       setMotivation('');
       setComments('');
       setEvidenceUrl('');
       fetchUsers();
-    } catch (err: any) { alert(`Governance Breach Detected: ${err.message}`); }
+    } catch (err: any) { 
+      toast.error('Governance Breach Detected', { description: err.message });
+    }
     finally { setIsProcessing(false); }
   }
 
@@ -1724,9 +1729,9 @@ function BroadcastHub() {
         await supabase.from('system_notifications').insert(notifications);
       }
 
-      alert('Institutional Bulletin Dispatched.');
+      toast.success('Institutional Bulletin Dispatched');
       setTitle(''); setContent(''); setType('info');
-    } catch (err: any) { alert(err.message); }
+    } catch (err: any) { toast.error('System Failure', { description: err.message }); }
     finally { setIsSending(false); }
   }
 
@@ -1812,7 +1817,7 @@ function StaffManagement() {
       const { error } = await supabase.from('profiles').update({ role: newRole }).eq('id', id);
       if (error) throw error;
       fetchStaff();
-    } catch (err: any) { alert('Error updating role: ' + err.message); }
+    } catch (err: any) { toast.error('Error updating role', { description: err.message }); }
   }
 
   if (loading) return <div className="flex justify-center py-20"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand"></div></div>;
@@ -1840,7 +1845,7 @@ function StaffManagement() {
             <button onClick={async () => {
               const { data: u } = await supabase.from('profiles').select('id').eq('email', newStaff.email).single();
               if (u) { handleUpdateRole(u.id, newStaff.role); setIsAdding(false); }
-              else { alert('User not found. They must sign up first.'); }
+              else { toast.error('Protocol Violation', { description: 'User not found. They must sign up first.' }); }
             }} className="btn btn-brand">Assign Role</button>
           </div>
         </div>
@@ -1916,8 +1921,8 @@ function SiteSettings() {
     try {
       const { error } = await supabase.from('site_settings').upsert({ id: 1, ...settings });
       if (error) throw error;
-      alert('Settings saved!');
-    } catch (err: any) { alert('Error: ' + err.message); }
+      toast.success('Institutional Settings Synchronized');
+    } catch (err: any) { toast.error('Protocol Violation', { description: err.message }); }
     finally { setSaving(false); }
   }
 
@@ -2028,7 +2033,7 @@ function TimetableManager({ courses }: { courses: any[] }) {
       setForm({ title: '', description: '', category: activeCategory, start_time: '', end_time: '', course_id: '', location: '' });
       fetchSchedule();
     } catch (err: any) {
-      alert(err.message);
+      toast.error('System Failure', { description: err.message });
     }
   }
 
@@ -2232,7 +2237,7 @@ function ComplianceDashboard() {
 
       const { error } = await supabase.from('school_settings').upsert(updates, { onConflict: 'key' });
       if (error) throw error;
-      alert('Institutional Compliance Registry Updated.');
+      toast.success('Directive Executed', { description: 'Institutional compliance registry updated.' });
     } catch (err: any) {
       alert('Protocol Error: ' + err.message);
     } finally {
@@ -2265,7 +2270,7 @@ function ComplianceDashboard() {
 
           <div className="space-y-6">
             <div className="space-y-2">
-              <label className="text-[10px] font-dm-mono uppercase text-text-dim tracking-widest pl-1">SETA Accreditation ID</label>
+              <label className="text-[10px] font-dm-mono uppercase text-text-dim tracking-widest pl-1">Academic Registry ID</label>
               <input 
                 className="w-full bg-bg border border-border-custom rounded-xl p-4 text-xs font-dm-mono focus:border-brand outline-none transition-all" 
                 value={settings.seta_accreditation_no}
@@ -2274,12 +2279,12 @@ function ComplianceDashboard() {
               />
             </div>
             <div className="space-y-2">
-              <label className="text-[10px] font-dm-mono uppercase text-text-dim tracking-widest pl-1">QCTO Reference Number</label>
+              <label className="text-[10px] font-dm-mono uppercase text-text-dim tracking-widest pl-1">Provincial Reference Number</label>
               <input 
                 className="w-full bg-bg border border-border-custom rounded-xl p-4 text-xs font-dm-mono focus:border-brand outline-none transition-all" 
                 value={settings.qcto_reference_no}
                 onChange={e => setSettings({...settings, qcto_reference_no: e.target.value})}
-                placeholder="QCTO Reference..."
+                placeholder="Provincial Ref..."
               />
             </div>
             <div className="space-y-2">
@@ -2724,7 +2729,7 @@ function CourseContentEditor({ course, onBack }: { course: any, onBack: () => vo
       const { data, error } = await supabase.from('modules').select('*, lessons (*), quizzes (*)').eq('course_id', course.id).order('order_index', { ascending: true });
       if (error) throw error;
       setModules(data || []);
-    } catch (err: any) { alert('Error: ' + err.message); }
+    } catch (err: any) { toast.error('Protocol Violation', { description: err.message }); }
     finally { setLoading(false); }
   }
 
@@ -2734,7 +2739,7 @@ function CourseContentEditor({ course, onBack }: { course: any, onBack: () => vo
       const { error } = await supabase.from('modules').insert({ course_id: course.id, title: newModuleTitle, order_index: modules.length + 1 });
       if (error) throw error;
       setNewModuleTitle(''); setIsAddingModule(false); fetchContent();
-    } catch (err: any) { alert('Error: ' + err.message); }
+    } catch (err: any) { toast.error('Protocol Violation', { description: err.message }); }
   }
 
   async function handleAddLesson(moduleId: string) {
@@ -2742,7 +2747,7 @@ function CourseContentEditor({ course, onBack }: { course: any, onBack: () => vo
       const { data, error } = await supabase.from('lessons').insert({ module_id: moduleId, title: 'New Lesson', content: '', video_url: '', duration: '10:00', order_index: 99 }).select().single();
       if (error) throw error;
       setEditingLesson(data); setEditingQuiz(null); fetchContent();
-    } catch (err: any) { alert('Error: ' + err.message); }
+    } catch (err: any) { toast.error('Protocol Violation', { description: err.message }); }
   }
 
   async function handleAddQuiz(moduleId: string) {
@@ -2750,7 +2755,7 @@ function CourseContentEditor({ course, onBack }: { course: any, onBack: () => vo
       const { data, error } = await supabase.from('quizzes').insert({ module_id: moduleId, title: 'Module Quiz', description: 'Test your knowledge.', passing_score: 80, order_index: 100 }).select().single();
       if (error) throw error;
       setEditingQuiz({ ...data, questions: [] }); setEditingLesson(null); fetchContent();
-    } catch (err: any) { alert('Error: ' + err.message); }
+    } catch (err: any) { toast.error('Protocol Violation', { description: err.message }); }
   }
 
   async function handleSaveLesson(e: React.FormEvent) {
@@ -2759,7 +2764,7 @@ function CourseContentEditor({ course, onBack }: { course: any, onBack: () => vo
       const { error } = await supabase.from('lessons').update(editingLesson).eq('id', editingLesson.id);
       if (error) throw error;
       setEditingLesson(null); fetchContent();
-    } catch (err: any) { alert('Error: ' + err.message); }
+    } catch (err: any) { toast.error('Protocol Violation', { description: err.message }); }
   }
 
   async function handleSaveQuiz(e: React.FormEvent) {
@@ -2773,7 +2778,7 @@ function CourseContentEditor({ course, onBack }: { course: any, onBack: () => vo
         })));
       }
       setEditingQuiz(null); fetchContent();
-    } catch (err: any) { alert('Error: ' + err.message); }
+    } catch (err: any) { toast.error('Protocol Violation', { description: err.message }); }
   }
 
   return (
@@ -2960,10 +2965,10 @@ function NewsManager() {
       if (!currentPost.slug) currentPost.slug = currentPost.title.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
       const { error } = await supabase.from('posts').upsert(currentPost);
       if (error) throw error;
-      alert('Post saved!');
+      toast.success('Institutional Record Saved');
       setIsEditing(false);
       fetchPosts();
-    } catch (err: any) { alert(err.message); }
+    } catch (err: any) { toast.error('System Failure', { description: err.message }); }
   }
 
   if (loading && !isEditing) return <div className="py-20 text-center">Loading posts...</div>;
@@ -3046,7 +3051,7 @@ function EventsManager() {
       if (error) throw error;
       setIsEditing(false);
       fetchEvents();
-    } catch (err: any) { alert(err.message); }
+    } catch (err: any) { toast.error('System Failure', { description: err.message }); }
   }
 
   return (
@@ -3532,8 +3537,8 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
       if (error) throw error;
       setProfile(profileForm);
       setEditingProfile(false);
-      alert('Profile updated successfully!');
-    } catch (err: any) { alert('Error: ' + err.message); }
+      toast.success('Resident Profile Updated Successfully');
+    } catch (err: any) { toast.error('Protocol Violation', { description: err.message }); }
   }
 
   async function handlePasswordReset() {
@@ -3542,8 +3547,8 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
         redirectTo: window.location.origin,
       });
       if (error) throw error;
-      alert('Password reset link sent to your email!');
-    } catch (err: any) { alert('Error: ' + err.message); }
+      toast.success('Security Protocol Initiated', { description: 'Password reset link sent to your email!' });
+    } catch (err: any) { toast.error('Protocol Violation', { description: err.message }); }
   }
 
   async function handleUpload(type: string) {
@@ -4480,7 +4485,7 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
                       });
                       if (error) throw error;
                       
-                      await fetch('/api/process-application', {
+                      await fetch('https://ffgypwmrmdosaihgpkuw.supabase.co/functions/v1/process-application', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ email: user?.email, name: `${profile?.first_name} ${profile?.last_name}`, program: applyingCourse.title })
@@ -4489,8 +4494,8 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
                       setApplyingCourse(null);
                       // @ts-ignore
                       fetchStudentData();
-                      alert('Application submitted successfully!');
-                    } catch (err: any) { alert('Error: ' + err.message); }
+                      toast.success('Application Submitted Successfully');
+                    } catch (err: any) { toast.error('Protocol Violation', { description: err.message }); }
                   }}
                   className="flex-[2] btn btn-brand py-4"
                 >Submit Application →</button>
@@ -4655,7 +4660,7 @@ function GraduationPipeline({ pendingApprovals, onApprove }: { pendingApprovals:
     });
 
     if (error) {
-      alert('Graduation failed: ' + error.message);
+      toast.error('Graduation Failure', { description: error.message });
     } else {
       await supabase.from('profiles').update({ graduation_status: 'graduated' }).eq('id', student.user_id);
       await supabase.from('institutional_audit_logs').insert({
@@ -4666,7 +4671,7 @@ function GraduationPipeline({ pendingApprovals, onApprove }: { pendingApprovals:
         reason: `Graduated from ${student.courses?.title} with GPA ${student.gpaFinal}%`,
         new_value: { credential_id: credentialId, gpa: student.gpaFinal },
       });
-      alert('🎓 Graduation sealed! Awaiting Institutional Blessing.');
+      toast.success('Graduation Sealed', { description: 'Awaiting Institutional Blessing.' });
       fetchEligibility();
     }
   }
@@ -5010,7 +5015,10 @@ export function StaffActivationView() {
   }
 
   async function handleActivate() {
-    if (password.length < 8) { alert('Password must be at least 8 characters.'); return; }
+    if (password.length < 8) { 
+      toast.error('Security Breach', { description: 'Password must be at least 8 characters.' });
+      return; 
+    }
     setLoading(true);
     try {
       const { data: authData, error: authError } = await supabase.auth.signUp({
@@ -5030,7 +5038,7 @@ export function StaffActivationView() {
       await supabase.from('profiles').delete().eq('id', profileData.id);
       setSuccess(true);
     } catch (err: any) {
-      alert('Activation failed: ' + err.message);
+      toast.error('Activation Failed', { description: err.message });
     } finally {
       setLoading(false);
     }

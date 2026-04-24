@@ -6,7 +6,7 @@ export default function ApplyPage() {
   const [searchParams] = useSearchParams();
   const initialProgram = searchParams.get('program') || '';
   return (
-    <div className="min-h-screen bg-bg relative overflow-hidden py-12 md:py-20 px-6">
+    <div className="min-h-screen bg-bg relative overflow-hidden pt-32 pb-12 md:pt-40 md:pb-20 px-6">
       {/* Background Ambience */}
       <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-brand/5 rounded-full blur-[120px] -translate-y-1/2 pointer-events-none" />
       <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-sky/5 rounded-full blur-[150px] translate-y-1/2 pointer-events-none" />

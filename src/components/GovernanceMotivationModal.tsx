@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { supabase, uploadFile } from '../lib/supabase';
 import { useAuth } from '../lib/auth';
+import { toast } from 'sonner';
 import { Shield, FileUp, Link, AlertCircle, CheckCircle2 } from 'lucide-react';
 
 interface GovernanceMotivationModalProps {
@@ -26,12 +27,21 @@ export function GovernanceMotivationModal({
   const [status, setStatus] = useState<'idle' | 'uploading' | 'logging' | 'success' | 'error'>('idle');
   const [errorMsg, setErrorMsg] = useState('');
 
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => { document.body.style.overflow = 'unset'; };
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!motivation || motivation.length < 10) {
-      alert('Please provide a meaningful motivation (min 10 characters).');
+      toast.error('Governance Violation', { description: 'Please provide a meaningful motivation (min 10 characters).' });
       return;
     }
 

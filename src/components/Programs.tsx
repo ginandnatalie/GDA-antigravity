@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { sanitizeAccreditation } from '../utils/governance';
 import { 
@@ -165,7 +165,7 @@ export const TrustBar = () => {
   );
 };
 
-interface Program {
+interface Course {
   id: string;
   cat: string;
   title: string;
@@ -182,25 +182,71 @@ interface Program {
   track?: string;
   level?: string;
   nqf_level?: string;
+  status?: 'active' | 'coming_soon';
 }
+
+const defaultCourses: Course[] = [
+  {
+    id: '1', cat: 'foundation', title: 'Cloud Engineering & Infrastructure', accent: 'var(--emerald)', num: '01', icon: 'Rocket',
+    description: 'The foundation of modern business. Master AWS, Azure, and Linux infrastructure to build, scale, and manage global cloud systems.',
+    duration: '6 Months', meta: 'Foundation Track', mode: 'Blended / In-person', certs: 'AWS CCP · Azure AZ-900', price: 'Enquire', price_sub: '/ scholarship available', status: 'coming_soon',
+    level: 'Foundation', track: 'Cloud Computing'
+  },
+  {
+    id: '2', cat: 'professional', title: 'Cyber Security & Digital Trust', accent: 'var(--sky)', num: '02', icon: 'Shield',
+    description: 'Defend the digital frontier. Learn ethical hacking, security operations, and digital forensics to protect enterprise assets.',
+    duration: '4 Months', meta: 'Professional Track', mode: 'Hybrid', certs: 'Security+ · CEH · AZ-500', price: 'Enquire', price_sub: '/ Professional', status: 'coming_soon',
+    level: 'Professional', track: 'Cybersecurity'
+  },
+  {
+    id: '3', cat: 'professional', title: 'Data Science & Artificial Intelligence', accent: 'var(--violet)', num: '03', icon: 'Brain',
+    description: 'Harness the power of data. From Python essentials to deploying production-grade AI models and generative intelligence.',
+    duration: '5 Months', meta: 'Professional Track', mode: 'Online / Cohort', certs: 'TensorFlow · SageMaker', price: 'Enquire', price_sub: '/ Professional', status: 'coming_soon',
+    level: 'Professional', track: 'AI & Machine Learning'
+  },
+  {
+    id: '4', cat: 'professional', title: 'Software Engineering & Full Stack Dev', accent: 'var(--brand)', num: '04', icon: 'Code',
+    description: 'Build the applications of tomorrow. Master React, Node.js, and modern DevOps practices to deliver high-performance software.',
+    duration: '6 Months', meta: 'Professional Track', mode: 'In-person / Hybrid', certs: 'Full Stack Diploma', price: 'Enquire', price_sub: '/ Professional', status: 'coming_soon',
+    level: 'Professional', track: 'Software & DevOps'
+  },
+  {
+    id: '5', cat: 'executive', title: 'Digital Leadership & Strategy', accent: 'var(--coral)', num: '05', icon: 'BarChart',
+    description: 'Lead the digital transformation. Strategy, ROI frameworks, and ethical governance for senior professionals and executives.',
+    duration: '8 Weeks', meta: 'Executive Track', mode: 'In-person / Weekend', certs: 'GDA Executive Cert', price: 'Enquire', price_sub: '/ Executive', status: 'coming_soon',
+    level: 'Executive', track: 'Digital Business'
+  },
+  {
+    id: '6', cat: 'foundation', title: 'Advanced Networking & Connectivity', accent: 'var(--sky)', num: '06', icon: 'Globe',
+    description: 'The backbone of the internet. Master enterprise networking, 5G architectures, and software-defined WAN systems.',
+    duration: '4 Months', meta: 'Foundation Track', mode: 'In-person', certs: 'CCNA · Network+', price: 'Enquire', price_sub: '/ ZAR', status: 'coming_soon',
+    level: 'Foundation', track: 'Cloud Computing'
+  },
+  {
+    id: '7', cat: 'foundation', title: 'Creative Media & UI/UX Design', accent: 'var(--brand)', num: '07', icon: 'Layout',
+    description: 'Design with purpose. From visual identity to user experience and interface design for global digital products.',
+    duration: '3 Months', meta: 'Foundation Track', mode: 'Blended', certs: 'UI/UX Portfolio Cert', price: 'Enquire', price_sub: '/ ZAR', status: 'coming_soon',
+    level: 'Foundation', track: 'Digital Transformation'
+  }
+];
 
 export function Programs({ onOpenModal, editMode, isHomePage, initialFilterLevel }: { onOpenModal: (id: string) => void, editMode?: boolean, isHomePage?: boolean, initialFilterLevel?: string }) {
   const navigate = useNavigate();
   const isCurrentLevelPage = !!initialFilterLevel;
-  const [viewMode, setViewMode] = useState<'grid' | 'matrix' | 'accordion'>(initialFilterLevel ? 'accordion' : 'accordion');
+  const [viewMode, setViewMode] = useState<'grid' | 'matrix' | 'accordion'>(initialFilterLevel ? 'accordion' : 'matrix');
   const [activeLevel, setActiveLevel] = useState(initialFilterLevel?.toLowerCase() || 'all');
   const [activeTrack, setActiveTrack] = useState('all');
-  const [programs, setPrograms] = useState<Program[]>([]);
+  const [courses, setCourses] = useState<Course[]>([]);
   const [modules, setModules] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [expandedProgram, setExpandedProgram] = useState<string | null>(null);
+  const [expandedCourse, setExpandedCourse] = useState<string | null>(null);
   const [expandedTrackId, setExpandedTrackId] = useState<string | null>('cloud-computing'); // Default to first track for high-impact load
   const [isAdding, setIsAdding] = useState(false);
   const [selectedTrackId, setSelectedTrackId] = useState<string | null>(null);
   const [dbStatus, setDbStatus] = useState<'connected' | 'error' | 'loading'>('loading');
   const [sectionContent, setSectionContent] = useState({
     title: 'Rigorous pathways.\nReal-world outcomes.',
-    subtitle: 'Every programme is co-designed with industry, built on cloud-vendor curricula, and delivered by practitioners who have solved the problems you\'ll face.'
+    subtitle: 'Every course is co-designed with industry, built on cloud-vendor curricula, and delivered by practitioners who have solved the problems you\'ll face.'
   });
 
   useEffect(() => {
@@ -246,9 +292,9 @@ export function Programs({ onOpenModal, editMode, isHomePage, initialFilterLevel
     async function fetchData() {
       try {
         const { data: pData, error: pError } = await supabase
-          .from('programs')
-          .select('*')
-          .order('id', { ascending: true });
+          .from('courses')
+          .select('*, track:curriculum_tracks(name)')
+          .order('title', { ascending: true });
 
         if (pError) throw pError;
         
@@ -258,10 +304,42 @@ export function Programs({ onOpenModal, editMode, isHomePage, initialFilterLevel
           .order('order_index', { ascending: true });
 
         if (pData && pData.length > 0) {
-          setPrograms(pData);
+          // Map database fields to the UI Course interface
+          const mappedCourses: Course[] = pData.map(p => {
+            const progLevel = p.progression_level || 'Foundation';
+            const progressionToNum: Record<string, string> = {
+              'Foundation': '01',
+              'Associate': '02',
+              'Professional': '03',
+              'Enterprise': '04',
+              'Executive': '05'
+            };
+            const num = progressionToNum[progLevel] || '01';
+            
+            return {
+              id: p.id,
+              title: p.title,
+              description: p.short_description || p.description,
+              duration: p.weeks ? `${p.weeks} Weeks` : p.duration,
+              meta: p.credential || 'GDA Certification',
+              mode: p.delivery_mode || 'Blended',
+              certs: p.accreditation_meta || 'Institutional',
+              price: p.price_label || 'Enquire',
+              price_sub: p.price_sub || '/ scholarship available',
+              icon: p.icon || 'Rocket',
+              accent: p.accent_color || 'var(--brand)',
+              num: num,
+              track: p.track?.name || 'Technical',
+              level: progLevel,
+              nqf_level: p.nqf_level ? String(p.nqf_level) : undefined,
+              status: p.status,
+              cat: progLevel.toLowerCase()
+            };
+          });
+          setCourses(mappedCourses);
           setDbStatus('connected');
         } else {
-          setPrograms(defaultPrograms);
+          setCourses(defaultCourses);
           setDbStatus('error');
         }
 
@@ -270,7 +348,7 @@ export function Programs({ onOpenModal, editMode, isHomePage, initialFilterLevel
         }
       } catch (err) {
         console.error('Error fetching curriculum data:', err);
-        setPrograms(defaultPrograms);
+        setCourses(defaultCourses);
         setDbStatus('error');
       } finally {
         setIsLoading(false);
@@ -279,54 +357,6 @@ export function Programs({ onOpenModal, editMode, isHomePage, initialFilterLevel
     fetchData();
   }, []);
 
-  async function handleDeleteProgram(id: string) {
-    if (!confirm('Are you sure you want to delete this program?')) return;
-    try {
-      const { error } = await supabase.from('programs').delete().eq('id', id);
-      if (error) throw error;
-      setPrograms(programs.filter(p => p.id !== id));
-    } catch (err: any) {
-      alert('Error deleting program: ' + err.message);
-    }
-  }
-
-  const defaultPrograms: Program[] = [
-    {
-      id: '1', cat: 'foundation', title: 'Cloud Engineering & Infrastructure', accent: 'var(--emerald)', num: '01', icon: '🚀',
-      description: 'The foundation of modern business. Master AWS, Azure, and Linux infrastructure to build, scale, and manage global cloud systems.',
-      duration: '6 Months', meta: 'Foundation Track', mode: 'Blended / In-person', certs: 'AWS CCP · Azure AZ-900', price: 'Enquire', price_sub: '/ Scholarship Available'
-    },
-    {
-      id: '2', cat: 'professional', title: 'Cyber Security & Digital Trust', accent: 'var(--sky)', num: '02', icon: '🛡️',
-      description: 'Defend the digital frontier. Learn ethical hacking, security operations, and digital forensics to protect enterprise assets.',
-      duration: '4 Months', meta: 'Professional Track', mode: 'Hybrid', certs: 'Security+ · CEH · AZ-500', price: 'Enquire', price_sub: '/ Professional'
-    },
-    {
-      id: '3', cat: 'professional', title: 'Data Science & Artificial Intelligence', accent: 'var(--violet)', num: '03', icon: '🧠',
-      description: 'Harness the power of data. From Python essentials to deploying production-grade AI models and generative intelligence.',
-      duration: '5 Months', meta: 'Professional Track', mode: 'Online / Cohort', certs: 'TensorFlow · SageMaker', price: 'Enquire', price_sub: '/ Professional'
-    },
-    {
-      id: '4', cat: 'professional', title: 'Software Engineering & Full Stack Dev', accent: 'var(--brand)', num: '04', icon: '💻',
-      description: 'Build the applications of tomorrow. Master React, Node.js, and modern DevOps practices to deliver high-performance software.',
-      duration: '6 Months', meta: 'Professional Track', mode: 'In-person / Hybrid', certs: 'Full Stack Diploma', price: 'Enquire', price_sub: '/ Professional'
-    },
-    {
-      id: '5', cat: 'executive', title: 'Digital Leadership & Strategy', accent: 'var(--coral)', num: '05', icon: '📊',
-      description: 'Lead the digital transformation. Strategy, ROI frameworks, and ethical governance for senior professionals and executives.',
-      duration: '8 Weeks', meta: 'Executive Track', mode: 'In-person / Weekend', certs: 'GDA Executive Cert', price: 'Enquire', price_sub: '/ Executive'
-    },
-    {
-      id: '6', cat: 'foundation', title: 'Advanced Networking & Connectivity', accent: 'var(--sky)', num: '06', icon: '🌐',
-      description: 'The backbone of the internet. Master enterprise networking, 5G architectures, and software-defined WAN systems.',
-      duration: '4 Months', meta: 'Foundation Track', mode: 'In-person', certs: 'CCNA · Network+', price: 'Enquire', price_sub: '/ ZAR'
-    },
-    {
-      id: '7', cat: 'foundation', title: 'Creative Media & UI/UX Design', accent: 'var(--brand)', num: '07', icon: '🎨',
-      description: 'Design with purpose. From visual identity to user experience and interface design for global digital products.',
-      duration: '3 Months', meta: 'Foundation Track', mode: 'Blended', certs: 'UI/UX Portfolio Cert', price: 'Enquire', price_sub: '/ ZAR'
-    }
-  ];
 
   const tracks = [
     'Cloud Computing', 
@@ -338,30 +368,34 @@ export function Programs({ onOpenModal, editMode, isHomePage, initialFilterLevel
     'Digital Business'
   ];
   const levels = [
-    '01: Technical Core', 
-    '02: Specialisation', 
-    '03: Solutions Mastery', 
-    '04: Global Leadership'
+    '01: Foundation', 
+    '02: Associate', 
+    '03: Professional', 
+    '04: Enterprise'
   ];
 
   const getTrackId = (name: string) => name.toLowerCase().replace(/ & /g, '-').replace(/ /g, '-');
 
-  const filteredPrograms = programs.filter(p => {
+  const filteredCourses = courses.filter(p => {
     const matchesLevel = activeLevel === 'all' || p.level?.toLowerCase() === activeLevel.toLowerCase() || p.cat?.toLowerCase() === activeLevel.toLowerCase();
     const matchesTrack = activeTrack === 'all' || p.track === activeTrack;
     return matchesLevel && matchesTrack;
+  }).sort((a, b) => {
+    const trackDiff = tracks.indexOf(a.track || '') - tracks.indexOf(b.track || '');
+    if (trackDiff !== 0) return trackDiff;
+    return (a.num || '').localeCompare(b.num || '');
   });
 
   // Intelligence Metrics for HUD
   const stats = {
-    total: programs.length,
+    total: courses.length,
     activeTracks: tracks.length,
     byLevel: levels.reduce((acc, lvl) => {
-      acc[lvl] = programs.filter(p => p.level?.toLowerCase() === lvl.toLowerCase() || p.cat?.toLowerCase() === lvl.toLowerCase()).length;
+      acc[lvl] = courses.filter(p => p.level?.toLowerCase() === lvl.toLowerCase() || p.cat?.toLowerCase() === lvl.toLowerCase()).length;
       return acc;
     }, {} as Record<string, number>),
     byTrack: tracks.reduce((acc, tr) => {
-      acc[tr] = programs.filter(p => p.track === tr).length;
+      acc[tr] = courses.filter(p => p.track === tr).length;
       return acc;
     }, {} as Record<string, number>)
   };
@@ -380,6 +414,7 @@ export function Programs({ onOpenModal, editMode, isHomePage, initialFilterLevel
               <span className="font-dm-mono text-[10px] text-brand uppercase tracking-[0.4em] mb-4 block">Institutional Discovery Hub</span>
               <h3 className="text-4xl md:text-5xl font-syne font-bold text-text-custom mb-6 tracking-tight">Select Your Career Track</h3>
               <p className="text-text-soft text-sm md:text-base leading-relaxed">
+                Our curriculum is not a collection of isolated courses. We offer 7 holistic, practitioner-led Career Tracks designed to guide you from foundational understanding to enterprise-grade technical mastery. Select your discipline below to explore the progression pathway.
               </p>
             </div>
                        {/* Ginashe Way: 4x2 Institutional Grid */}
@@ -398,39 +433,37 @@ export function Programs({ onOpenModal, editMode, isHomePage, initialFilterLevel
                     <div className="w-14 h-24 rounded-full bg-black/60 border border-white/10 flex items-center justify-center text-3xl shadow-2xl transition-all group-hover:border-brand/30 group-hover:scale-105">
                       <span className="filter grayscale group-hover:grayscale-0 transition-all">{track.icon}</span>
                     </div>
+                      <div className="flex-1 space-y-3">
 
-                    <div className="flex-1 space-y-3">
-                      {/* Status Badges */}
-                      <div className="flex items-center gap-2">
-                        <div className="px-2 py-0.5 rounded-md bg-brand/10 border border-brand/20">
-                          <span className="font-dm-mono text-[8px] text-brand uppercase tracking-widest font-bold">Foundation</span>
-                        </div>
-                        <span className="font-dm-mono text-[8px] text-text-dim uppercase tracking-widest">12 Weeks</span>
+
+                        {/* Command Title */}
+                        <h4 className="font-syne font-black text-xl text-text-custom leading-tight group-hover:text-white transition-colors">
+                          {track.title}
+                        </h4>
                       </div>
-
-                      {/* Command Title */}
-                      <h4 className="font-syne font-black text-xl text-text-custom leading-tight group-hover:text-white transition-colors">
-                        {track.title}
-                      </h4>
                     </div>
                   </div>
-                </div>
               ))}
 
-              {/* Box 8: Filler - Strategic Custom Enterprise */}
-              <div 
-                className="group relative bg-[#0a0a0b]/40 border border-white/5 border-dashed rounded-[24px] p-6 cursor-pointer transition-all duration-500 hover:border-brand/40 flex items-center justify-center text-center opacity-60 hover:opacity-100"
+              {/* Box 8: Strategic Custom Enterprise */}
+              <Link 
+                to="/enterprise"
+                className="group relative overflow-hidden bg-[#0a0a0b] border border-brand/40 rounded-[24px] p-6 cursor-pointer transition-all duration-500 hover:border-brand hover:shadow-[0_0_30px_rgba(0,242,255,0.3)] flex items-center justify-center text-center"
               >
+                {/* Neon Glow Background */}
+                <div className="absolute inset-0 bg-brand/5 group-hover:bg-brand/10 transition-colors" />
+                <div className="absolute -inset-1 bg-gradient-to-r from-brand/20 via-transparent to-brand/20 blur-xl opacity-50 group-hover:opacity-100 animate-pulse transition-opacity" />
+                
                 <div className="relative z-10">
-                   <div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center mx-auto mb-4 group-hover:border-brand/30">
-                     <LucideIcon name="Layers" className="w-5 h-5 text-text-dim group-hover:text-brand" />
+                   <div className="w-12 h-12 rounded-full border border-brand/50 bg-brand/10 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                     <LucideIcon name="Layers" className="w-5 h-5 text-brand" />
                    </div>
-                   <h4 className="font-syne font-bold text-sm text-text-dim uppercase tracking-widest group-hover:text-white transition-colors">
+                   <h4 className="font-syne font-bold text-sm text-white uppercase tracking-widest group-hover:text-brand transition-colors">
                      Institutional<br />Strategic Design
                    </h4>
-                   <p className="text-[9px] text-text-dim/60 font-dm-mono mt-2 uppercase tracking-widest">Custom Enterprise Pathways</p>
+                   <p className="text-[9px] text-brand/80 font-dm-mono mt-2 uppercase tracking-widest font-bold">Custom Enterprise Pathways</p>
                 </div>
-              </div>
+              </Link>
             </div>
 
             {/* Track Master Modal: Full-Screen Deep Dive */}
@@ -578,7 +611,7 @@ export function Programs({ onOpenModal, editMode, isHomePage, initialFilterLevel
             <p className="text-text-soft text-base md:text-lg leading-relaxed opacity-80">
               {initialFilterLevel 
                 ? `Focusing strictly on the ${initialFilterLevel} modules. These pathways are designed for specific institutional resonance and high-performance outcomes.`
-                : 'Every programme is co-designed with industry, built on cloud-vendor curricula, and delivered by practitioners who have solved the problems you’ll face.'
+                : 'Every course is co-designed with industry, built on cloud-vendor curricula, and delivered by practitioners who have solved the problems you’ll face.'
               }
             </p>
           </div>
@@ -601,11 +634,11 @@ export function Programs({ onOpenModal, editMode, isHomePage, initialFilterLevel
                     return (
                       <button 
                         key={lvl}
-                        onClick={() => setActiveLevel(lvl.toLowerCase())}
-                        className={`px-4 py-2 rounded-md text-[9px] font-bold uppercase tracking-[0.2em] transition-all flex items-center gap-2 ${activeLevel === lvl.toLowerCase() ? 'bg-brand text-black shadow-lg shadow-brand/20' : 'bg-white/5 text-text-dim hover:text-white hover:bg-white/10 border border-white/5'}`}
+                        onClick={() => setActiveLevel(lvl.split(':')[1]?.trim().toLowerCase() || lvl.toLowerCase())}
+                        className={`px-4 py-2 rounded-md text-[9px] font-bold uppercase tracking-[0.2em] transition-all flex items-center gap-2 ${activeLevel === (lvl.split(':')[1]?.trim().toLowerCase() || lvl.toLowerCase()) ? 'bg-brand text-black shadow-lg shadow-brand/20' : 'bg-white/5 text-text-dim hover:text-white hover:bg-white/10 border border-white/5'}`}
                       >
                         <span>{emoji}</span>
-                        {lvl}
+                        {lvl.split(':')[1]?.trim() || lvl}
                       </button>
                     );
                   })}
@@ -683,7 +716,7 @@ export function Programs({ onOpenModal, editMode, isHomePage, initialFilterLevel
               className="bg-brand text-black font-syne font-bold px-8 py-4 rounded-lg hover:bg-white transition-all flex items-center gap-3 shadow-[0_0_20px_rgba(0,242,255,0.2)]"
             >
               <LucideIcon name="Rocket" className="w-5 h-5" />
-              <span>Inject New Curriculum Module</span>
+              <span>Inject New Curriculum Course</span>
             </button>
           </div>
         )}
@@ -692,8 +725,8 @@ export function Programs({ onOpenModal, editMode, isHomePage, initialFilterLevel
           /* High-Fidelity Accordion Syllabus View with Independent Levels Overhaul */
           <div className="mt-8 space-y-6 px-4 max-w-7xl mx-auto">
              {tracks.filter(t => activeTrack === 'all' || activeTrack === t).map(trackName => {
-               const trackPrograms = programs.filter(p => p.track === trackName);
-               if (trackPrograms.length === 0) return null;
+               const trackCourses = courses.filter(p => p.track === trackName);
+               if (trackCourses.length === 0) return null;
 
                return (
                  <div key={trackName} className="space-y-6 animate-fadeIn">
@@ -719,40 +752,60 @@ export function Programs({ onOpenModal, editMode, isHomePage, initialFilterLevel
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
-                      {trackPrograms.map(program => {
+                      {levels.map(lvl => {
+                        const stageKey = lvl.split(':')[0].trim();
+                        const levelMap: Record<string, string> = {
+                          '01': 'Foundation',
+                          '02': 'Associate',
+                          '03': 'Professional',
+                          '04': 'Enterprise'
+                        };
+                        const targetLevel = levelMap[stageKey];
+                        const course = trackCourses.find(c => c.level === targetLevel);
+
+                        if (!course) {
+                          // Render an empty placeholder that maintains the column structure
+                          return (
+                            <div key={`empty-${lvl}`} className="rounded-3xl border border-white/5 bg-black/20 flex flex-col items-center justify-center min-h-[160px] opacity-30">
+                              <span className="font-dm-mono text-[9px] uppercase tracking-widest text-text-muted">{targetLevel}</span>
+                              <div className="w-8 h-px bg-white/10 mt-3" />
+                            </div>
+                          );
+                        }
+
                         return (
                         <div 
-                          key={program.id} 
-                          onClick={() => onOpenModal(program.id)}
+                          key={course.id} 
+                          onClick={() => onOpenModal(course.id)}
                           className={`
-                            group rounded-3xl border transition-all duration-700 overflow-hidden relative
-                            ${expandedProgram === program.id ? 'bg-bg border-brand/40 shadow-[0_30px_100px_rgba(0,0,0,0.8)]' : 'bg-white/[0.02] border-white/5 hover:border-white/20 hover:bg-white/[0.04]'}
+                            group rounded-3xl border transition-all duration-700 overflow-hidden relative cursor-pointer
+                            ${expandedCourse === course.id ? 'bg-bg border-brand/40 shadow-[0_30px_100px_rgba(0,0,0,0.8)]' : 'bg-white/[0.02] border-white/5 hover:border-white/20 hover:bg-white/[0.04]'}
                           `}
                         >
                           {/* Header: Core Info */}
-                          <div className="p-4 md:p-6 flex flex-col justify-between gap-6 relative">
+                          <div className="p-4 md:p-6 flex flex-col justify-between gap-6 relative min-h-[160px]">
                             {/* Hover Glow Background */}
                             <div className="absolute inset-0 bg-gradient-to-r from-brand/0 to-brand/[0.02] opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
 
                             <div className="flex items-center gap-6 relative z-10 flex-1">
-                              <div className="w-16 h-16 rounded-xl bg-black/60 border border-white/10 flex items-center justify-center text-3xl group-hover:scale-110 group-hover:border-brand/30 transition-all duration-500 shadow-2xl relative overflow-hidden">
+                              <div className="w-16 h-16 rounded-xl bg-black/60 border border-white/10 flex items-center justify-center text-3xl group-hover:scale-110 group-hover:border-brand/30 transition-all duration-500 shadow-2xl relative overflow-hidden flex-shrink-0">
                                 <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-50" />
-                                <LucideIcon name={program.icon} className="w-8 h-8 relative z-10" />
+                                <LucideIcon name={course.icon} className="w-8 h-8 relative z-10" />
                               </div>
                               <div>
-                                <div className="flex items-center gap-3 mb-2">
-                                  <span className="px-2 py-0.5 rounded bg-brand/10 border border-brand/20 font-dm-mono text-[8px] text-brand uppercase tracking-widest">{program.level || 'Professional'} Level</span>
+                                <div className="flex flex-wrap items-center gap-2 mb-2">
+                                  <span className="px-2 py-0.5 rounded bg-brand/10 border border-brand/20 font-dm-mono text-[8px] text-brand uppercase tracking-widest">{course.level || 'Professional'} Level</span>
                                   <span className="w-1 h-1 rounded-full bg-white/10"></span>
-                                  <span className="font-dm-mono text-[9px] text-text-soft uppercase tracking-[0.2em]">{program.duration} intensive</span>
+                                  <span className="font-dm-mono text-[9px] text-text-soft uppercase tracking-[0.2em]">{course.duration} intensive</span>
                                 </div>
-                                <h4 className="font-syne font-extrabold text-xl text-white group-hover:text-brand transition-colors tracking-tight">{program.title}</h4>
+                                <h4 className="font-syne font-extrabold text-xl text-white group-hover:text-brand transition-colors tracking-tight leading-tight">{course.title}</h4>
                               </div>
                             </div>
                           </div>
                         </div>
                         );
-                     })}
-                   </div>
+                      })}
+                    </div>
                  </div>
                );
              })}
@@ -771,7 +824,19 @@ export function Programs({ onOpenModal, editMode, isHomePage, initialFilterLevel
               </div>
               
               {/* Rows */}
-              {tracks.map(track => (
+              {tracks
+                .filter(track => {
+                  if (activeTrack !== 'all' && activeTrack !== track) return false;
+                  if (activeLevel !== 'all') {
+                    const hasMatch = courses.some(p => 
+                      p.track === track && 
+                      (p.level?.toLowerCase() === activeLevel.toLowerCase() || p.cat?.toLowerCase() === activeLevel.toLowerCase())
+                    );
+                    if (!hasMatch) return false;
+                  }
+                  return true;
+                })
+                .map(track => (
                 <div key={track} className="grid grid-cols-[220px_repeat(4,1fr)] border-b border-white/[0.05] group">
                   <div className="pl-8 p-6 flex flex-col justify-center border-r border-white/10 bg-navy sticky left-0 z-20 shadow-[4px_0_10px_rgba(0,0,0,0.2)]">
                     <span 
@@ -790,41 +855,45 @@ export function Programs({ onOpenModal, editMode, isHomePage, initialFilterLevel
                       '04': 'Enterprise'
                     };
                     const levelName = levelMap[stageKey];
-                    const prog = programs.find(p => p.track === track && p.level === levelName);
+                    const course = courses.find(p => p.track === track && p.level === levelName);
+                    
+                    // Highlight matching level or dim non-matching
+                    const isFaint = course && activeLevel !== 'all' && (course.level?.toLowerCase() !== activeLevel.toLowerCase() && course.cat?.toLowerCase() !== activeLevel.toLowerCase());
+                    
                     return (
                       <div 
                         key={`${track}-${lvl}`} 
                         className={`p-3 last:pr-8 border-r border-white/10 last:border-r-0 min-h-[140px] flex flex-col justify-between group cursor-pointer transition-all ${
-                          prog ? 'hover:bg-white/[0.02]' : 'bg-black/40'
-                        }`}
-                        onClick={() => prog && (isHomePage ? navigate('/curriculum') : onOpenModal(prog.id))}
+                          course ? 'hover:bg-white/[0.02]' : 'bg-black/40'
+                        } ${isFaint ? 'opacity-30 grayscale hover:opacity-100 hover:grayscale-0' : ''}`}
+                        onClick={() => course && (isHomePage ? navigate('/curriculum') : onOpenModal(course.id))}
                       >
-                        {prog ? (
+                        {course ? (
                           <>
                             <div>
                               <div className="flex items-center justify-between mb-1">
                                 <div className="font-dm-mono text-[7px] text-brand uppercase tracking-tighter">
-                                  {sanitizeAccreditation(prog.nqf_level || 'Institutional Credit')}
+                                  {sanitizeAccreditation(course.nqf_level || 'Institutional Credit')}
                                 </div>
-                                {prog.nqf_level && (
+                                {course.nqf_level && (
                                   <div className="w-1 h-1 rounded-full bg-brand/20 border border-brand/40" />
                                 )}
                               </div>
-                              <div className="font-syne font-bold text-[12px] text-text-custom leading-tight group-hover:text-brand transition-colors">{prog.title}</div>
+                              <div className="font-syne font-bold text-[12px] text-text-custom leading-tight group-hover:text-brand transition-colors">{course.title}</div>
                               <div className="text-[9px] text-text-dim mt-1.5 line-clamp-2 leading-relaxed opacity-60">
-                                {sanitizeAccreditation(prog.description)}
+                                {sanitizeAccreditation(course.description)}
                               </div>
                             </div>
                             <div className="flex items-center justify-between mt-2">
                               <span className="text-brand opacity-60 group-hover:opacity-100 transition-opacity">
-                                <LucideIcon name={prog.icon} className="w-4 h-4" />
+                                <LucideIcon name={course.icon} className="w-4 h-4" />
                               </span>
                               <span className="font-dm-mono text-[8px] text-text-muted group-hover:text-text-soft transition-colors tracking-widest">VIEW →</span>
                             </div>
                           </>
                         ) : (
                           <div className="flex flex-col items-center justify-center h-full gap-1.5 opacity-20">
-                            <span className="font-dm-mono text-[7px] uppercase tracking-widest text-text-muted">Specialisation</span>
+                            <span className="font-dm-mono text-[7px] uppercase tracking-widest text-text-muted">{levelName}</span>
                             <div className="w-6 h-px bg-border-custom" />
                           </div>
                         )}
@@ -837,51 +906,53 @@ export function Programs({ onOpenModal, editMode, isHomePage, initialFilterLevel
           </div>
         ) : !initialFilterLevel && viewMode === 'grid' ? (
           /* Grid View - Large Portfolio Cards */
-          <div className="relative w-[100vw] ml-[calc(-50vw+50%)] border-t border-b border-border-custom bg-border-custom">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px animate-fadeUp overflow-hidden">
-              {filteredPrograms.map((prog) => (
+          <div className="max-w-7xl mx-auto pt-8 pb-12 px-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 animate-fadeUp">
+              {filteredCourses.map((course) => (
                 <div 
-                  key={prog.id} 
-                  className="bg-bg p-8 flex flex-col min-h-[480px] group relative hover:bg-card transition-all duration-500"
+                  key={course.id} 
+                  className="bg-white/[0.02] border border-white/5 hover:border-white/20 hover:bg-white/[0.04] rounded-3xl p-8 flex flex-col min-h-[480px] group relative transition-all duration-500 overflow-hidden"
                 >
-                  <div className="absolute top-8 right-8 font-syne font-black text-[80px] leading-none pointer-events-none tracking-tighter text-white/[0.03] group-hover:text-brand/[0.05] transition-colors">{prog.num}</div>
+                  <div className="absolute top-8 right-8 font-syne font-black text-[80px] leading-none pointer-events-none tracking-tighter text-white/[0.03] group-hover:text-brand/[0.05] transition-colors">{course.num}</div>
                   
                   <div className="flex items-center justify-between mb-8">
                     <div className="w-12 h-12 rounded-xl bg-brand/5 border border-brand/10 flex items-center justify-center text-brand group-hover:bg-brand/10 group-hover:border-brand/20 transition-all">
-                      <LucideIcon name={prog.icon} className="w-6 h-6" />
+                      <LucideIcon name={course.icon} className="w-6 h-6" />
                     </div>
-                    <div className="font-dm-mono text-[9px] tracking-[0.2em] uppercase text-brand/60">{prog.cat}</div>
+                    <div className="font-dm-mono text-[9px] tracking-[0.2em] uppercase text-brand/60">{course.cat}</div>
                   </div>
 
                   <div className="mb-6">
                     <div className="flex items-center gap-2 mb-2">
                        <div className="font-dm-mono text-[8px] text-brand uppercase tracking-[0.2em]">
-                        {sanitizeAccreditation(prog.nqf_level || 'Institutional Credit')}
+                        {sanitizeAccreditation(course.nqf_level || 'Institutional Credit')}
                       </div>
-                      {prog.nqf_level && (
+                      {course.nqf_level && (
                         <div className="w-1.5 h-1.5 rounded-full bg-brand/20 border border-brand/30" title="Governance Logged" />
                       )}
                     </div>
-                    <h3 className="font-syne font-bold text-2xl mb-4 group-hover:text-brand transition-colors">{prog.title}</h3>
-                    <p className="text-[14px] text-text-soft leading-relaxed line-clamp-4">{sanitizeAccreditation(prog.description)}</p>
+                    <h3 className="font-syne font-bold text-2xl mb-4 group-hover:text-brand transition-colors">{course.title}</h3>
+                    <p className="text-[14px] text-text-soft leading-relaxed line-clamp-4">{sanitizeAccreditation(course.description)}</p>
                   </div>
 
                   <div className="mt-auto space-y-4">
                     <div className="grid grid-cols-2 gap-4 pt-6 border-t border-border-custom">
                       <div>
-                        <div className="font-dm-mono text-[8px] text-text-muted uppercase tracking-widest mb-1">Duration</div>
-                        <div className="font-dm-mono text-[10px] text-text-soft">{prog.duration || '12-24 Weeks'}</div>
+                        <div className="flex flex-col">
+                          <span className="text-[8px] text-text-muted uppercase tracking-widest font-dm-mono">Certification Level</span>
+                          <span className="text-[13px] font-bold text-brand py-0.5">{sanitizeAccreditation(course.nqf_level || 'Institutional Credit')}</span>
+                        </div>
                       </div>
                       <div>
                         <div className="font-dm-mono text-[8px] text-text-muted uppercase tracking-widest mb-1">Track</div>
-                        <div className="font-dm-mono text-[10px] text-text-soft">{prog.track}</div>
+                        <div className="font-dm-mono text-[10px] text-text-soft">{course.track}</div>
                       </div>
                     </div>
                     
                     <div className="flex items-center justify-between pt-4">
                        <div className="font-syne font-bold text-sm">Apply for 2026</div>
                        <button 
-                        onClick={() => onOpenModal(prog.id)}
+                        onClick={() => onOpenModal(course.id)}
                         className="w-10 h-10 rounded-full border border-border-custom flex items-center justify-center hover:bg-brand hover:border-brand hover:text-black transition-all group/btn"
                       >
                          <ArrowRight className="w-4 h-4" />
@@ -899,40 +970,40 @@ export function Programs({ onOpenModal, editMode, isHomePage, initialFilterLevel
               {tracks
                 .filter(t => activeTrack === 'all' || t === activeTrack)
                 .map((track) => {
-                  const trackPrograms = programs.filter(p => {
+                  const trackCourses = courses.filter(p => {
                     const trackMatch = p.track === track;
                     if (!trackMatch) return false;
                     
                     if (!initialFilterLevel) {
-                      return activeLevel === 'all' || p.level.toLowerCase() === activeLevel;
+                      return activeLevel === 'all' || (p.level || '').toLowerCase() === activeLevel;
                     }
                     return true;
                   });
 
-                  if (trackPrograms.length === 0) return null;
+                  if (trackCourses.length === 0) return null;
 
                   return (
                     <div key={track} className="relative">
                       <div className="flex items-center gap-4 mb-12">
                         <div className="h-[1px] w-12 bg-brand/30" />
                         <h3 className="font-syne font-bold text-xl uppercase tracking-tighter text-white">
-                          {track} <span className="text-brand/40 ml-2 font-dm-mono text-sm tracking-widest">({trackPrograms.length})</span>
+                          {track} <span className="text-brand/40 ml-2 font-dm-mono text-sm tracking-widest">({trackCourses.length})</span>
                         </h3>
                         <div className="h-[1px] flex-1 bg-gradient-to-r from-white/10 to-transparent" />
                       </div>
 
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                        {trackPrograms.map((prog) => {
-                          const isCurrentLevel = initialFilterLevel && prog.level.toLowerCase() === initialFilterLevel.toLowerCase();
+                        {trackCourses.map((course) => {
+                          const isCurrentLevel = initialFilterLevel && (course.level || '').toLowerCase() === initialFilterLevel.toLowerCase();
                           const isFaint = initialFilterLevel && !isCurrentLevel;
                           
                           return (
                           <motion.div
-                            key={prog.id}
+                            key={course.id}
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
-                            onClick={() => onOpenModal(prog.id)}
+                            onClick={() => onOpenModal(course.id)}
                             className={`
                               border rounded-2xl p-6 transition-all duration-500 group cursor-pointer relative overflow-hidden
                               ${isCurrentLevel 
@@ -946,21 +1017,21 @@ export function Programs({ onOpenModal, editMode, isHomePage, initialFilterLevel
                             `}
                           >
                             <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-30 transition-opacity">
-                               <LucideIcon name={prog.icon} className="w-12 h-12" />
+                               <LucideIcon name={course.icon} className="w-12 h-12" />
                             </div>
                             
                             <div className="flex items-center gap-3 mb-4">
-                              <span className="w-8 h-8 rounded-lg bg-brand/10 text-brand flex items-center justify-center font-bold text-xs">{prog.num}</span>
-                              <span className="font-dm-mono text-[9px] text-brand/60 uppercase tracking-[0.2em]">{prog.level}</span>
+                              <span className="w-8 h-8 rounded-lg bg-brand/10 text-brand flex items-center justify-center font-bold text-xs">{course.num}</span>
+                              <span className="font-dm-mono text-[9px] text-brand/60 uppercase tracking-[0.2em]">{course.level}</span>
                             </div>
 
-                            <h4 className="font-syne font-bold text-lg mb-3 text-white group-hover:text-brand transition-colors leading-tight">{prog.title}</h4>
+                            <h4 className="font-syne font-bold text-lg mb-3 text-white group-hover:text-brand transition-colors leading-tight">{course.title}</h4>
                             <p className="text-text-dim text-[12px] leading-relaxed line-clamp-3 mb-6">
-                              {sanitizeAccreditation(prog.description)}
+                              {sanitizeAccreditation(course.description)}
                             </p>
 
                             <div className="pt-4 border-t border-white/5 flex items-center justify-between">
-                               <span className="font-dm-mono text-[9px] text-text-dim uppercase tracking-widest">{prog.duration || '12-24 Weeks'}</span>
+                               <span className="font-dm-mono text-[9px] text-text-dim uppercase tracking-widest">{course.duration || '12-24 Weeks'}</span>
                                <span className="font-syne font-bold text-[9px] text-brand uppercase tracking-[0.2em] opacity-0 group-hover:opacity-100 transition-opacity">Explore Intel →</span>
                             </div>
                           </motion.div>

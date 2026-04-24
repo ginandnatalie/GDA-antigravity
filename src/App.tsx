@@ -8,6 +8,7 @@ import { Footer } from './components/Footer';
 import { Modals } from './components/Modals';
 import WhatsAppOrb from './components/WhatsAppOrb';
 import { ArrowRight } from 'lucide-react';
+import { Toaster, toast } from 'sonner';
 
 // Pages
 import Home from './pages/Home';
@@ -30,6 +31,7 @@ import RefundsPage from './pages/RefundsPage';
 import PopiaPage from './pages/PopiaPage';
 import ApplyPage from './pages/ApplyPage';
 import TrackDetailPage from './pages/TrackDetailPage';
+import EnterprisePage from './pages/EnterprisePage';
 
 function ScrollManager() {
   const { pathname, hash } = useLocation();
@@ -117,7 +119,9 @@ function AppContent() {
     try {
       const { error } = await supabase.from('enrollments').insert({ user_id: user.id, course_id: courseId });
       if (error) throw error;
-      alert('Payment successful! You are now enrolled in the course.');
+      toast.success('Payment successful!', {
+        description: 'You are now enrolled in the course.'
+      });
       window.history.replaceState({}, document.title, window.location.pathname);
       navigate('/portal');
     } catch (err: any) {
@@ -144,6 +148,7 @@ function AppContent() {
 
   return (
     <div className="min-h-screen bg-bg text-text-custom selection:bg-brand/30 selection:text-brand transition-colors duration-300 flex flex-col">
+      <Toaster position="top-right" theme="dark" richColors />
       <Modals 
         activeModal={activeModal} 
         onClose={closeModal} 
@@ -195,6 +200,7 @@ function AppContent() {
               <Route path="/popia" element={<PopiaPage />} />
               <Route path="/apply" element={<ApplyPage />} />
               <Route path="/tracks/:trackId" element={<TrackDetailPage onOpenModal={openModal} editMode={editMode} />} />
+              <Route path="/enterprise" element={<EnterprisePage onOpenModal={openModal} editMode={editMode} />} />
               
               <Route 
                 path="/admin" 

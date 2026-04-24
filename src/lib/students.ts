@@ -42,7 +42,8 @@ export async function getNextStudentNumber(): Promise<string> {
 
 function extractNumber(sn: string | null): number | null {
   if (!sn) return null;
-  const match = sn.match(/ST-(\d+)/);
+  // Match the new format: GDA-2026-XXXX or legacy ST-XXXX
+  const match = sn.match(/(?:GDA-\d{4}-|ST-)(\d+)/);
   if (match) return parseInt(match[1], 10);
   return null;
 }

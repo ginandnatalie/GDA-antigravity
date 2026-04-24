@@ -4,27 +4,34 @@ interface PageHeroProps {
   label: string;
   title: React.ReactNode;
   subtitle: string;
-  image: string;
+  image?: string;
   imageAlt?: string;
+  visual?: React.ReactNode;
 }
 
-export default function PageHero({ label, title, subtitle, image, imageAlt = '' }: PageHeroProps) {
+export default function PageHero({ label, title, subtitle, image, imageAlt = '', visual }: PageHeroProps) {
   return (
     <section className="relative overflow-hidden bg-bg pt-[72px]">
-      {/* Background image — pushed far right, clearly visible */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
-        <img 
-          src={image} 
-          alt={imageAlt}
-          loading="eager"
-          decoding="async"
-          className="absolute right-0 top-0 h-full w-[90%] sm:w-[80%] md:w-[65%] lg:w-[55%] object-cover object-center opacity-35 sm:opacity-40 md:opacity-50 lg:opacity-55"
-        />
+      {/* Background visual or image — pushed far right, clearly visible */}
+      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+        {visual ? (
+          <div className="absolute right-0 top-0 h-full w-[90%] sm:w-[80%] md:w-[65%] lg:w-[55%]">
+            {visual}
+          </div>
+        ) : image && (
+          <img 
+            src={image} 
+            alt={imageAlt}
+            loading="eager"
+            decoding="async"
+            className="absolute right-0 top-0 h-full w-[90%] sm:w-[80%] md:w-[65%] lg:w-[55%] object-cover object-center opacity-35 sm:opacity-40 md:opacity-50 lg:opacity-55"
+          />
+        )}
         {/* Multi-layer fade: hard left → transparent right */}
-        <div className="absolute inset-0 bg-gradient-to-r from-bg from-20% via-bg/80 via-40% to-transparent"></div>
-        <div className="absolute inset-0 bg-gradient-to-t from-bg via-transparent to-bg/50"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-bg from-10% via-bg/90 via-30% to-transparent z-[5]"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-bg via-transparent to-bg/50 z-[5]"></div>
         {/* Extra mobile text protection */}
-        <div className="absolute inset-0 bg-gradient-to-r from-bg/40 to-transparent md:hidden"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-bg/40 to-transparent md:hidden z-[5]"></div>
       </div>
 
       {/* Accent orbs */}

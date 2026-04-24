@@ -3,6 +3,7 @@ import PageHero from '../components/PageHero';
 import { WhyGDA, Alumni } from '../components/WhyGDA';
 import { Ecosystem } from '../components/Cohorts';
 import { AcademyStaff } from '../components/Staff';
+import InstitutionalHeroVisual from '../components/InstitutionalHeroVisual';
 
 interface AboutPageProps {
   onOpenModal: (id: string) => void;
@@ -16,8 +17,7 @@ export default function AboutPage({ onOpenModal, editMode }: AboutPageProps) {
         label="Institutional Authority"
         title={<>The Sovereign Authority on<br />Cloud & AI Engineering.</>}
         subtitle="Africa's definitive practitioner-led academy for high-fidelity technical mastery — headquartered in Sandton, Johannesburg."
-        image="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&q=80&w=2070"
-        imageAlt="Modern tech campus and innovation workspace"
+        visual={<InstitutionalHeroVisual />}
       />
       <WhyGDA editMode={editMode} />
       <AcademyStaff />

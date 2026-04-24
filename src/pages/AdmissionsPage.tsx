@@ -22,10 +22,10 @@ export default function AdmissionsPage({ onOpenModal, editMode }: AdmissionsPage
       <div id="apply">
         <Cohorts onOpenModal={onOpenModal} editMode={editMode} />
       </div>
-      <Requirements />
+      <Requirements onOpenModal={onOpenModal} />
       <TuitionFees />
       <Funding onOpenModal={onOpenModal} editMode={editMode} />
-      <FAQ editMode={editMode} />
+      <FAQ onOpenModal={onOpenModal} editMode={editMode} />
     </>
   );
 }

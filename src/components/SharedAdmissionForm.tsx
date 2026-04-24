@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 import { supabase, uploadFile } from '../lib/supabase';
 import { getNextStudentNumber, validateStudentIdentity } from '../lib/students';
 import { 
@@ -184,7 +185,7 @@ export default function SharedAdmissionForm({ onOpenModal, onSuccess, initialPro
 
       // Process emails via backend
       try {
-        await fetch('/api/process-application', {
+        await fetch('https://ffgypwmrmdosaihgpkuw.supabase.co/functions/v1/process-application', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -203,7 +204,9 @@ export default function SharedAdmissionForm({ onOpenModal, onSuccess, initialPro
       // Navigate to verify page with email
       navigate(`/verify?email=${encodeURIComponent(form.email)}`, { replace: true });
     } catch (error: any) {
-      alert(`Submission Error: ${error.message || 'Error occurred. Please try again.'}`);
+      toast.error('Admission Portal Error', {
+        description: error.message || 'The application registry encountered an issue. Please try again.'
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -238,7 +241,7 @@ export default function SharedAdmissionForm({ onOpenModal, onSuccess, initialPro
               {hasAccount === 'yes' && (
                 <div className="animate-fadeUp">
                   <label className={LABEL_CLASS}>Student Number or Email</label>
-                  <input type="text" className={INPUT_CLASS} placeholder="GDA-2026-XXXX or your@email.com" value={studentNumberInput} onChange={e => setStudentNumberInput(e.target.value)} />
+                  <input type="text" className={INPUT_CLASS} placeholder="ST-XXXX or your@email.com" value={studentNumberInput} onChange={e => setStudentNumberInput(e.target.value)} />
                 </div>
               )}
 

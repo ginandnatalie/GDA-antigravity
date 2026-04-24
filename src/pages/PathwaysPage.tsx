@@ -133,7 +133,7 @@ export default function PathwaysPage({ onOpenModal, editMode }: PathwaysPageProp
            </p>
            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-6">
              <button
-               onClick={() => onOpenModal('student')}
+               onClick={() => onOpenModal('guidance')}
                className="px-10 py-5 bg-navy border border-brand/30 text-brand font-syne font-black uppercase text-[11px] tracking-[0.25em] rounded-xl hover:bg-brand/10 transition-all w-full sm:w-auto"
              >
                Request Career Guidance

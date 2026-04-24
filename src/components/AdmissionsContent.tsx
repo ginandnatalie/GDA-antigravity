@@ -1,7 +1,8 @@
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CheckCircle2, Info, Landmark, CreditCard, Clock } from 'lucide-react';
 
-export function Requirements() {
+export function Requirements({ onOpenModal }: { onOpenModal: (id: string) => void }) {
   const navigate = useNavigate();
   const criteria = [
     { title: 'Academic Qualification', desc: 'Grade 12 (Matric) certificate or equivalent industry-standard prerequisite.', mandatory: true },
@@ -9,6 +10,22 @@ export function Requirements() {
     { title: 'Digital Literacy', desc: 'Basic computer skills (email, web browsing, file management). Coding experience is NOT required for Launchpad.', mandatory: false },
     { title: 'Hardware Requirements', desc: 'A modern laptop (i5 processor, 8GB RAM minimum) and stable internet connection.', mandatory: true }
   ];
+
+  const handleLinkClick = (title: string) => {
+    switch (title) {
+      case 'Application Portal':
+        onOpenModal('apply_direct');
+        break;
+      case 'Required Documents':
+        onOpenModal('required_docs');
+        break;
+      case 'Interview Tips':
+        onOpenModal('interview_tips');
+        break;
+      default:
+        break;
+    }
+  };
 
   return (
     <section id="entry" className="bg-bg py-24 border-t border-border-custom px-6 sm:px-14">
@@ -32,7 +49,7 @@ export function Requirements() {
                 { t: 'Required Documents', d: 'Checklist PDF' },
                 { t: 'Interview Tips', d: 'GDA Prep Guide' }
               ].map((res, i) => (
-                <li key={i} className="group cursor-pointer">
+                <li key={i} className="group cursor-pointer" onClick={() => handleLinkClick(res.t)}>
                   <div className="flex items-center justify-between">
                     <div>
                       <div className="font-syne font-bold text-[13px] group-hover:text-brand transition-colors">{res.t}</div>
@@ -81,9 +98,44 @@ export function Requirements() {
 
 export function TuitionFees() {
   const navigate = useNavigate();
+  const [activeTrack, setActiveTrack] = useState('Associate Track');
+
+  const tracks = [
+    { 
+      name: 'Cloud Launchpad', 
+      upfront: 'R 12,500', 
+      installment: 'R 2,250 /mo', 
+      install_desc: '6 Month Term',
+      isa: 'Available'
+    },
+    { 
+      name: 'Associate Track', 
+      upfront: 'R 36,000', 
+      installment: 'R 6,500 /mo', 
+      install_desc: '6 Month Term',
+      isa: 'Standard'
+    },
+    { 
+      name: 'Professional Track', 
+      upfront: 'R 58,000', 
+      installment: 'R 10,500 /mo', 
+      install_desc: '6 Month Term',
+      isa: 'Elite'
+    },
+    { 
+      name: 'Dual Specialisation', 
+      upfront: 'R 85,000', 
+      installment: 'R 15,500 /mo', 
+      install_desc: '6 Month Term',
+      isa: 'Premium'
+    }
+  ];
+
+  const currentTrack = tracks.find(t => t.name === activeTrack) || tracks[1];
+
   const plans = [
-    { title: 'Upfront Investment', price: 'R 36,000', benefit: '15% Discount included', popular: false },
-    { title: 'Standard Installment', price: 'R 6,500 /mo', benefit: 'Pay over 6-8 months', popular: true },
+    { title: 'Upfront Investment', price: currentTrack.upfront, benefit: '15% Discount included', popular: false },
+    { title: 'Standard Installment', price: currentTrack.installment, benefit: currentTrack.install_desc, popular: true },
     { title: 'Income Share (ISA)', price: '0 Upfront', benefit: 'Pay only once employed', popular: false }
   ];
 
@@ -92,19 +144,33 @@ export function TuitionFees() {
       <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-brand/5 rounded-full blur-[120px] pointer-events-none" />
       <div className="max-w-6xl mx-auto text-center relative z-10">
         <h2 className="font-syne font-extrabold text-4xl mb-4 text-white">Tuition & Investment</h2>
-        <p className="text-text-muted mb-16 max-w-2xl mx-auto">Flexible payment options designed to suit every student's financial journey.</p>
+        <p className="text-text-muted mb-10 max-w-2xl mx-auto">Select your specialized engineering track to view specific investment models.</p>
         
+        {/* Track Selector */}
+        <div className="flex flex-wrap justify-center gap-3 mb-16">
+          {tracks.map((track) => (
+            <button
+              key={track.name}
+              onClick={() => setActiveTrack(track.name)}
+              className={`px-6 py-3 rounded-full font-dm-mono text-[10px] uppercase tracking-widest border transition-all ${activeTrack === track.name ? 'bg-brand border-brand text-navy' : 'bg-white/5 border-border-custom text-text-muted hover:border-brand/30'}`}
+            >
+              {track.name}
+            </button>
+          ))}
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {plans.map((plan, i) => (
-            <div key={i} className={`p-8 rounded-3xl border transition-all ${plan.popular ? 'bg-brand border-brand scale-105 z-20 shadow-2xl' : 'bg-white/3 border-border-custom hover:border-brand/30'}`}>
+            <div key={i} className={`p-8 rounded-3xl border transition-all flex flex-col ${plan.popular ? 'bg-brand border-brand scale-105 z-20 shadow-2xl' : 'bg-white/3 border-border-custom hover:border-brand/30'}`}>
               <h3 className={`font-syne font-bold text-lg mb-4 ${plan.popular ? 'text-navy' : 'text-white'}`}>{plan.title}</h3>
               <div className={`text-3xl font-black mb-2 ${plan.popular ? 'text-navy' : 'text-brand'}`}>{plan.price}</div>
               <p className={`text-[11px] mb-8 uppercase tracking-widest ${plan.popular ? 'text-navy/70' : 'text-text-dim'}`}>{plan.benefit}</p>
+              <div className="flex-1" />
               <button 
                 onClick={() => navigate('/apply')}
                 className={`w-full py-3 rounded-xl font-bold text-sm transition-all ${plan.popular ? 'bg-navy text-white hover:bg-navy/80' : 'bg-brand text-navy hover:bg-brand-dim'}`}
               >
-                Apply Now
+                Apply for {activeTrack}
               </button>
             </div>
           ))}

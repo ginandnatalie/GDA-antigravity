@@ -430,3 +430,70 @@
   0%,100% { opacity: 1; transform: scale(1); }
   50% { opacity: 0.4; transform: scale(0.8); }
 }
+
+/* Institutional Hero Animations */
+@keyframes gridDrift { 
+  from { background-position: 0 0, 0 0; } 
+  to { background-position: 0 60px, 60px 0; } 
+}
+.animate-grid-drift { animation: gridDrift 20s linear infinite; }
+
+@keyframes glitchFlash { 
+  0%,97%,100% { opacity: 0; clip-path: none; } 
+  97.5% { opacity: 1; clip-path: inset(30% 0 45% 0); transform: translateX(-3px); } 
+  98% { opacity: 1; clip-path: inset(60% 0 10% 0); transform: translateX(3px); } 
+  98.5% { opacity: 0; } 
+}
+.animate-glitch-flash { animation: glitchFlash 9s steps(1) infinite; }
+
+@keyframes scanBeam { 
+  0% { top: -2px; opacity: 0; } 
+  5% { opacity: 0.7; } 
+  90% { opacity: 0.4; } 
+  95% { opacity: 0; } 
+  100% { top: 100%; opacity: 0; } 
+}
+.animate-scan-beam { animation: scanBeam 8s ease-in-out infinite; }
+
+@keyframes circuitAppear { 
+  0%,100% { opacity: 0; } 
+  15%,75% { opacity: 1; } 
+}
+.animate-circuit-appear { animation: circuitAppear 6s ease-in-out infinite; }
+
+@keyframes cornerPulse { 
+  0%,100% { opacity: 0.4; width: 40px; height: 40px; } 
+  50% { opacity: 0.9; width: 46px; height: 46px; } 
+}
+.animate-corner-pulse { animation: cornerPulse 3s ease-in-out infinite; }
+
+@keyframes hexPulse { 
+  0%,100% { opacity: 0; transform: scale(0.8); } 
+  40%,60% { opacity: 0.7; transform: scale(1); } 
+}
+.animate-hex-pulse { animation: hexPulse 5s ease-in-out infinite; }
+
+@keyframes barGlow { 
+  from { opacity: 0.6; box-shadow: 0 0 10px #00f2ff; } 
+  to { opacity: 1; box-shadow: 0 0 24px #00f2ff, 0 0 50px rgba(0,242,255,0.4); } 
+}
+.animate-bar-glow { animation: barGlow 3s ease-in-out infinite alternate; }
+
+/* ─── PREMIUM SCROLLBAR UTILITY ─── */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--color-brand-dim);
+  border-radius: 10px;
+  border: 1px solid transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--color-brand);
+  box-shadow: 0 0 10px var(--color-brand-glow);
+}
+
