@@ -10,9 +10,10 @@ interface ModalsProps {
   onClose: () => void;
   onSwitchModal?: (id: string) => void;
   onLoginSuccess?: (role: string) => void;
+  metadata?: any;
 }
 
-export function Modals({ activeModal, onClose, onSwitchModal, onLoginSuccess }: ModalsProps) {
+export function Modals({ activeModal, onClose, onSwitchModal, onLoginSuccess, metadata }: ModalsProps) {
   const { user, signOut } = useAuth();
   const [studentTab, setStudentTab] = useState('login');
   const [adminTab, setAdminTab] = useState('login');
@@ -323,27 +324,7 @@ export function Modals({ activeModal, onClose, onSwitchModal, onLoginSuccess }: 
         className={`bg-card border border-border-custom rounded-3xl w-full ${isCourseId && window.location.pathname.includes('/levels/') ? 'max-w-5xl' : 'max-w-[480px]'} max-h-[90vh] overflow-y-auto transform transition-transform duration-300 relative before:content-[''] before:absolute before:top-0 before:left-0 before:right-0 before:h-px before:bg-[linear-gradient(90deg,transparent,var(--color-brand),transparent)]`}
         onClick={stopPropagation}
       >
-        {activeModal === 'apply_direct' && (
-          <>
-             <div className="p-7 md:p-8 pb-5 border-b border-border-custom flex items-start justify-between bg-surface/50">
-              <div>
-                <div className="w-12 h-12 rounded-md bg-brand-dim border border-brand/20 flex items-center justify-center text-[22px] mb-3.5">🚀</div>
-                <div className="font-syne font-extrabold text-[20px]">Institutional Application</div>
-                <div className="text-[12px] text-text-muted mt-1">Applying for the 2026 Academic Cycle</div>
-              </div>
-              <button 
-                className="w-8 h-8 rounded-full border flex items-center justify-center text-[14px] text-text-muted cursor-pointer transition-all hover:text-text-custom" 
-                style={{ backgroundColor: 'var(--glass-bg)', borderColor: 'var(--border-custom)' }}
-                onClick={onClose}
-              >
-                ✕
-              </button>
-            </div>
-            <div className="p-6 md:p-8">
-              <SharedAdmissionForm isModal={true} onSuccess={onClose} />
-            </div>
-          </>
-        )}
+
 
         {activeModal === 'student' && (
           <>
@@ -1071,16 +1052,21 @@ export function Modals({ activeModal, onClose, onSwitchModal, onLoginSuccess }: 
 
         {activeModal === 'apply_direct' && (
           <>
-            <div className="p-12 text-center">
-              <div className="w-16 h-16 rounded-full bg-brand/10 border border-brand/20 flex items-center justify-center mx-auto mb-6">
-                <ArrowRight className="w-8 h-8 text-brand" />
+            <div className="p-7 md:p-8 pb-5 border-b border-border-custom flex items-start justify-between bg-surface/50">
+              <div>
+                <div className="w-12 h-12 rounded-md bg-brand-dim border border-brand/20 flex items-center justify-center text-[22px] mb-3.5"><ArrowRight className="w-6 h-6 text-brand" /></div>
+                <div className="font-syne font-extrabold text-[20px]">Admission Portal</div>
+                <div className="text-[12px] text-text-muted mt-1">Official Enrollment Gateway — Academic Cohort 2026</div>
               </div>
-              <h2 className="font-syne font-black text-2xl text-white mb-2">Initiating Admission</h2>
-              <p className="text-text-muted text-[13px] mb-8">Redirecting to the secure GDA Application Console...</p>
-              <div className="flex gap-4 justify-center">
-                <button className="btn btn-brand px-8" onClick={() => { onClose(); window.location.href='/apply'; }}>Proceed →</button>
-                <button className="btn btn-outline px-8" onClick={onClose}>Cancel</button>
-              </div>
+              <button className="w-8 h-8 rounded-full border border-border-custom flex items-center justify-center text-text-muted hover:text-text-custom transition-all" onClick={onClose}>✕</button>
+            </div>
+            <div className="p-6 md:p-8">
+              <SharedAdmissionForm 
+                isModal 
+                initialProgram={metadata?.program} 
+                initialPaymentMode={metadata?.paymentMode}
+                onSuccess={onClose} 
+              />
             </div>
           </>
         )}

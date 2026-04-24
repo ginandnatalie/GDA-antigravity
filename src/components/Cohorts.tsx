@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import SharedAdmissionForm from './SharedAdmissionForm';
+import { ACADEMIC_TRACKS, INTAKE_SCHEDULE } from '../lib/constants';
 
 export function Cohorts({ onOpenModal, editMode }: { onOpenModal: (id: string) => void, editMode?: boolean }) {
   const navigate = useNavigate();
@@ -13,29 +14,71 @@ export function Cohorts({ onOpenModal, editMode }: { onOpenModal: (id: string) =
           <div>
             <div className="section-label">Intake Calendar</div>
             <h2 className="section-title mb-3.5 animate-fadeUp">Upcoming cohorts</h2>
-            <p className="text-[14px] text-text-soft mb-8 leading-[1.7] animate-fadeUp delay-100">We run rolling cohorts through the year. Seats are limited to 25 per cohort to ensure intimate, high-quality instruction.</p>
+            <p className="text-[14px] text-text-soft mb-8 leading-[1.7] animate-fadeUp delay-100">All Ginashe practitioner-led tracks feature three standardized annual intakes. Select your preferred cohort below to begin your professional journey.</p>
 
             <div className="flex flex-col gap-2.5">
-              {[
-                { m: 'APR', d: '07', n: 'Cloud Launchpad — Cohort 12', det: '12 weeks · In-person · Sandton Campus', b: 'Filling Fast', bt: 'filling' },
-                { m: 'APR', d: '14', n: 'Cloud Architecture Residency — Cohort 7', det: '6 months · Hybrid', b: 'Open', bt: 'open' },
-                { m: 'MAY', d: '05', n: 'AI & Machine Learning — Cohort 3', det: '16 weeks · Online', b: 'Open', bt: 'open' },
-                { m: 'JUN', d: '02', n: 'Data Engineering — Cohort 5', det: '12 weeks · Hybrid', b: 'Pre-Enrolling', bt: 'open' },
-              ].map((c, i) => (
-                <div key={i} className={`bg-card border border-border-custom rounded-md p-5 px-5.5 flex items-center gap-4 transition-all cursor-pointer hover:border-border2 animate-fadeUp ${i === 0 ? 'border-brand/30 bg-brand/4' : ''}`}>
-                  <div className="text-center shrink-0 w-[50px]">
-                    <div className="font-dm-mono text-[9px] tracking-[0.15em] uppercase text-text-muted">{c.m}</div>
-                    <div className="font-syne font-extrabold text-[26px] text-brand leading-none">{c.d}</div>
+              {(() => {
+                const now = new Date();
+                const currentYear = now.getFullYear();
+                const monthNames = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+
+                const dynamicCohorts: any[] = [];
+
+                ACADEMIC_TRACKS.forEach(track => {
+                  [currentYear, currentYear + 1].forEach(year => {
+                    INTAKE_SCHEDULE.forEach(window => {
+                      const startDate = new Date(year, window.monthIdx, window.day);
+                      const deadlineDate = new Date(startDate);
+                      deadlineDate.setDate(startDate.getDate() - window.closingDaysBefore);
+
+                      if (deadlineDate >= now) {
+                        const yearsSinceBase = year - 2025;
+                        const windowIndex = INTAKE_SCHEDULE.indexOf(window);
+                        const cohortNumber = track.baseCohort + (yearsSinceBase * 3) + windowIndex;
+
+                        dynamicCohorts.push({
+                          m: monthNames[window.monthIdx],
+                          d: window.day.toString().padStart(2, '0'),
+                          n: `${track.name} — Cohort ${cohortNumber}`,
+                          det: `${track.durationWeeks} weeks · ${track.mode} · ${track.campus}`,
+                          b: 'Open',
+                          bt: 'open',
+                          dateObj: startDate,
+                          deadline: deadlineDate
+                        });
+                      }
+                    });
+                  });
+                });
+
+                // Sort by date and show the top 6 closest to now
+                const sortedCohorts = dynamicCohorts
+                  .sort((a, b) => a.dateObj.getTime() - b.dateObj.getTime())
+                  .slice(0, 6);
+
+                return sortedCohorts.map((c, i) => (
+                  <div key={i} className={`bg-card border border-border-custom rounded-md p-5 px-5.5 flex items-center gap-4 transition-all cursor-pointer hover:border-border2 animate-fadeUp ${i === 0 ? 'border-brand/30 bg-brand/4 shadow-[0_0_20px_rgba(0,242,255,0.03)]' : ''}`}>
+                    <div className="text-center shrink-0 w-[50px]">
+                      <div className="font-dm-mono text-[8px] tracking-[0.1em] uppercase text-text-muted mb-1 opacity-60">Starts</div>
+                      <div className="font-dm-mono text-[9px] tracking-[0.15em] uppercase text-text-muted leading-none">{c.m}</div>
+                      <div className="font-syne font-extrabold text-[26px] text-brand leading-none mt-1">{c.d}</div>
+                    </div>
+                    <div className="flex-1">
+                      <div className="font-syne font-semibold text-[13px]">{c.n}</div>
+                      <div className="font-dm-mono text-[9px] text-text-muted tracking-[0.08em] mt-0.75">{c.det}</div>
+                      <div className="mt-2.5 flex items-center gap-2">
+                         <div className="w-1.5 h-1.5 rounded-full bg-coral animate-pulse"></div>
+                         <div className="font-dm-mono text-[8px] text-coral/80 uppercase tracking-widest">
+                           Deadline: {monthNames[c.deadline.getMonth()]} {c.deadline.getDate().toString().padStart(2, '0')}
+                         </div>
+                      </div>
+                    </div>
+                    <div className="font-dm-mono text-[8px] tracking-[0.1em] uppercase px-2.25 py-0.75 rounded-full shrink-0 bg-emerald-dim text-emerald border border-emerald/20">
+                      {c.b}
+                    </div>
                   </div>
-                  <div className="flex-1">
-                    <div className="font-syne font-semibold text-[13px]">{c.n}</div>
-                    <div className="font-dm-mono text-[9px] text-text-muted tracking-[0.08em] mt-0.75">{c.det}</div>
-                  </div>
-                  <div className={`font-dm-mono text-[8px] tracking-[0.1em] uppercase px-2.25 py-0.75 rounded-full shrink-0 ${c.bt === 'open' ? 'bg-emerald-dim text-emerald border border-emerald/20' : 'bg-brand/10 text-brand border border-brand/20'}`}>
-                    {c.b}
-                  </div>
-                </div>
-              ))}
+                ));
+              })()}
             </div>
           </div>
 

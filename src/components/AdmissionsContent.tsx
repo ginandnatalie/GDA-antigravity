@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CheckCircle2, Info, Landmark, CreditCard, Clock } from 'lucide-react';
 
-export function Requirements({ onOpenModal }: { onOpenModal: (id: string) => void }) {
+export function Requirements({ onOpenModal }: { onOpenModal: (id: string, metadata?: any) => void }) {
   const navigate = useNavigate();
   const criteria = [
     { title: 'Academic Qualification', desc: 'Grade 12 (Matric) certificate or equivalent industry-standard prerequisite.', mandatory: true },
@@ -96,67 +96,99 @@ export function Requirements({ onOpenModal }: { onOpenModal: (id: string) => voi
   );
 }
 
-export function TuitionFees() {
+export function TuitionFees({ onOpenModal }: { onOpenModal: (id: string, metadata?: any) => void }) {
   const navigate = useNavigate();
-  const [activeTrack, setActiveTrack] = useState('Associate Track');
+  const [activeLevel, setActiveLevel] = useState('Associate');
+  const [activeTrack, setActiveTrack] = useState('Cloud Practitioner Pro');
 
-  const tracks = [
-    { 
-      name: 'Cloud Launchpad', 
-      upfront: 'R 12,500', 
-      installment: 'R 2,250 /mo', 
-      install_desc: '6 Month Term',
-      isa: 'Available'
+  const levelData: Record<string, { price: string, install: string, desc: string, tracks: string[] }> = {
+    'Foundational': {
+      price: 'R 12,500',
+      install: 'R 2,250 /mo',
+      desc: '6 Month Term',
+      tracks: ['Cloud Launchpad', 'AI Fundamentals', 'Cyber Essentials', 'Data Literacy', 'Digital Literacy for Work', 'Code Launchpad', 'Digital Entrepreneurship 101']
     },
-    { 
-      name: 'Associate Track', 
-      upfront: 'R 36,000', 
-      installment: 'R 6,500 /mo', 
-      install_desc: '6 Month Term',
-      isa: 'Standard'
+    'Associate': {
+      price: 'R 36,000',
+      install: 'R 6,500 /mo',
+      desc: '6 Month Term',
+      tracks: ['Cloud Practitioner Pro', 'ML Essentials', 'Ethical Hacking', 'Data Analysis & BI', 'Process Digitisation', 'Full-Stack Development', 'E-Commerce & Marketing']
     },
-    { 
-      name: 'Professional Track', 
-      upfront: 'R 58,000', 
-      installment: 'R 10,500 /mo', 
-      install_desc: '6 Month Term',
-      isa: 'Elite'
+    'Professional': {
+      price: 'R 58,000',
+      install: 'R 10,500 /mo',
+      desc: '6 Month Term',
+      tracks: ['Cloud Architect', 'Applied AI Engineering', 'Security Operations', 'Data Engineering', 'Digital Transformation Lead', 'DevOps & Cloud-Native', 'Digital Business Strategy']
     },
-    { 
-      name: 'Dual Specialisation', 
-      upfront: 'R 85,000', 
-      installment: 'R 15,500 /mo', 
-      install_desc: '6 Month Term',
-      isa: 'Premium'
+    'Enterprise': {
+      price: 'R 85,000',
+      install: 'R 15,500 /mo',
+      desc: '6 Month Term',
+      tracks: ['Multi-Cloud Enterprise', 'AI Strategy & Enterprise', 'CISO Programme', 'AI-Driven Analytics', 'CDO Programme', 'Platform Engineering', 'Innovation & Ventures', 'Dual Specialisation']
     }
-  ];
+  };
 
-  const currentTrack = tracks.find(t => t.name === activeTrack) || tracks[1];
+  const currentLevel = levelData[activeLevel];
+
+  useEffect(() => {
+    // Reset track when level changes
+    if (!currentLevel.tracks.includes(activeTrack)) {
+      setActiveTrack(currentLevel.tracks[0]);
+    }
+  }, [activeLevel]);
 
   const plans = [
-    { title: 'Upfront Investment', price: currentTrack.upfront, benefit: '15% Discount included', popular: false },
-    { title: 'Standard Installment', price: currentTrack.installment, benefit: currentTrack.install_desc, popular: true },
-    { title: 'Income Share (ISA)', price: '0 Upfront', benefit: 'Pay only once employed', popular: false }
+    { title: 'Upfront Investment', price: currentLevel.price, benefit: '15% Discount included', popular: false, mode: 'Upfront Investment' },
+    { title: 'Standard Installment', price: currentLevel.install, benefit: currentLevel.desc, popular: true, mode: 'Standard Installment' },
+    { title: 'Income Share (ISA)', price: '0 Upfront', benefit: 'Pay only once employed', popular: false, mode: 'Income Share (ISA)' }
   ];
+
+  const handleEnroll = (planMode: string) => {
+    onOpenModal('apply_direct', {
+      program: activeTrack,
+      paymentMode: planMode
+    });
+  };
 
   return (
     <section id="tuition" className="bg-navy py-24 border-t border-border-custom px-6 sm:px-14 relative overflow-hidden">
       <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-brand/5 rounded-full blur-[120px] pointer-events-none" />
       <div className="max-w-6xl mx-auto text-center relative z-10">
         <h2 className="font-syne font-extrabold text-4xl mb-4 text-white">Tuition & Investment</h2>
-        <p className="text-text-muted mb-10 max-w-2xl mx-auto">Select your specialized engineering track to view specific investment models.</p>
+        <p className="text-text-muted mb-12 max-w-2xl mx-auto">Explore our high-fidelity investment models tailored to your career trajectory.</p>
         
-        {/* Track Selector */}
-        <div className="flex flex-wrap justify-center gap-3 mb-16">
-          {tracks.map((track) => (
-            <button
-              key={track.name}
-              onClick={() => setActiveTrack(track.name)}
-              className={`px-6 py-3 rounded-full font-dm-mono text-[10px] uppercase tracking-widest border transition-all ${activeTrack === track.name ? 'bg-brand border-brand text-navy' : 'bg-white/5 border-border-custom text-text-muted hover:border-brand/30'}`}
-            >
-              {track.name}
-            </button>
-          ))}
+        <div className="max-w-4xl mx-auto bg-card border border-border-custom rounded-3xl p-6 md:p-10 mb-16 shadow-2xl">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
+            <div className="text-left">
+              <label className="block font-dm-mono text-[9px] uppercase tracking-[0.2em] text-brand mb-4">01. Select proficiency Level</label>
+              <div className="grid grid-cols-2 gap-3">
+                {Object.keys(levelData).map((level) => (
+                  <button
+                    key={level}
+                    onClick={() => setActiveLevel(level)}
+                    className={`px-4 py-3 rounded-xl font-syne font-bold text-[11px] transition-all border ${activeLevel === level ? 'bg-brand border-brand text-navy' : 'bg-white/5 border-border-custom text-text-muted hover:border-brand/30'}`}
+                  >
+                    {level}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="text-left h-full flex flex-col justify-end">
+              <label className="block font-dm-mono text-[9px] uppercase tracking-[0.2em] text-brand mb-4">02. Choose specific track</label>
+              <div className="relative">
+                <select 
+                  value={activeTrack}
+                  onChange={(e) => setActiveTrack(e.target.value)}
+                  className="w-full bg-surface border border-border-custom rounded-xl p-4 px-6 font-syne font-bold text-[13px] text-white outline-none focus:border-brand/40 transition-all appearance-none cursor-pointer"
+                >
+                  {currentLevel.tracks.map((track) => (
+                    <option key={track} value={track}>{track}</option>
+                  ))}
+                </select>
+                <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-text-dim text-[10px]">▼</div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -167,10 +199,10 @@ export function TuitionFees() {
               <p className={`text-[11px] mb-8 uppercase tracking-widest ${plan.popular ? 'text-navy/70' : 'text-text-dim'}`}>{plan.benefit}</p>
               <div className="flex-1" />
               <button 
-                onClick={() => navigate('/apply')}
+                onClick={() => handleEnroll(plan.mode)}
                 className={`w-full py-3 rounded-xl font-bold text-sm transition-all ${plan.popular ? 'bg-navy text-white hover:bg-navy/80' : 'bg-brand text-navy hover:bg-brand-dim'}`}
               >
-                Apply for {activeTrack}
+                Enroll in {activeTrack}
               </button>
             </div>
           ))}

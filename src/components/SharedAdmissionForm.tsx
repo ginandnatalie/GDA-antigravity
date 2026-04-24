@@ -10,7 +10,8 @@ import {
   COUNTRIES, 
   NATIONALITIES, 
   PROVINCES_SA,
-  LEVELS
+  LEVELS,
+  INTAKE_SCHEDULE
 } from '../lib/constants';
 
 const PORTAL_URL = 'https://gda-student-portal.pages.dev/';
@@ -24,10 +25,11 @@ interface SharedAdmissionFormProps {
   onOpenModal?: (id: string) => void;
   onSuccess?: () => void;
   initialProgram?: string;
+  initialPaymentMode?: string;
   isModal?: boolean;
 }
 
-export default function SharedAdmissionForm({ onOpenModal, onSuccess, initialProgram = '', isModal = false }: SharedAdmissionFormProps) {
+export default function SharedAdmissionForm({ onOpenModal, onSuccess, initialProgram = '', initialPaymentMode = '', isModal = false }: SharedAdmissionFormProps) {
   const navigate = useNavigate();
   // ─── STEP STATE ──────────────────
   const [step, setStep] = useState<'check' | 'form' | 'existing'>('check');
@@ -36,14 +38,53 @@ export default function SharedAdmissionForm({ onOpenModal, onSuccess, initialPro
   const [checkingAccount, setCheckingAccount] = useState(false);
   const [duplicateMessage, setDuplicateMessage] = useState('');
 
+  // ─── DATE-AWARE ADMISSION LOGIC ───
+  const now = new Date();
+  const currentYear = now.getFullYear();
+  const currentMonth = now.getMonth(); // 0-11
+
+  const isIntakePast = (year: string, intakeName: string) => {
+    const y = parseInt(year);
+    if (y < currentYear) return true;
+    if (y > currentYear) return false;
+    const intake = INTAKE_SCHEDULE.find(i => i.name === intakeName);
+    if (!intake) return false; // Enterprise/Rolling is always available
+    
+    // Calculate closing date
+    const startDate = new Date(y, intake.monthIdx, intake.day);
+    const closingDate = new Date(startDate);
+    closingDate.setDate(startDate.getDate() - intake.closingDaysBefore);
+    
+    // If today is past the closing date, the intake is closed
+    return now >= closingDate;
+  };
+
+  // Determine initial intake
+  const getInitialIntake = (year: string) => {
+    for (const window of INTAKE_SCHEDULE) {
+      if (!isIntakePast(year, window.name)) return window.name;
+    }
+    return 'Enterprise/Rolling';
+  };
+
   // ─── FORM STATE ──────────────────
-  const [selectionType, setSelectionType] = useState<'level' | 'program' | null>(initialProgram ? 'program' : null);
+  const [selectionType, setSelectionType] = useState<'level' | 'program'>(initialProgram ? 'program' : 'level');
   const [form, setForm] = useState({
     first: '', last: '', email: '', phone: '', prog: initialProgram, level: '', msg: '',
     dob: '', idNumber: '', gender: '', nationality: 'South African',
-    country: 'South Africa', address_line1: '', city: '', province: '', postal_code: ''
+    country: 'South Africa', address_line1: '', city: '', province: '', postal_code: '',
+    payment_mode: initialPaymentMode || '',
+    study_year: currentYear.toString(),
+    study_intake: getInitialIntake(currentYear.toString())
   });
+  
+  // File States
+  const [idFile, setIdFile] = useState<File | null>(null);
+  const [matricFile, setMatricFile] = useState<File | null>(null);
+  const [residenceFile, setResidenceFile] = useState<File | null>(null);
+  const [motivationFile, setMotivationFile] = useState<File | null>(null);
   const [cvFile, setCvFile] = useState<File | null>(null);
+  
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [duplicateCheckDone, setDuplicateCheckDone] = useState(false);
 
@@ -108,7 +149,7 @@ export default function SharedAdmissionForm({ onOpenModal, onSuccess, initialPro
           .limit(1)
           .maybeSingle();
 
-        if (idMatch) {
+      if (idMatch) {
           setDuplicateMessage(`A record with this ID/Passport number already exists (${idMatch.email}). Please sign in to your Student Portal.`);
           setStep('existing');
           return true;
@@ -149,8 +190,14 @@ export default function SharedAdmissionForm({ onOpenModal, onSuccess, initialPro
       // Generate institutional ID
       const studentNumber = await getNextStudentNumber();
 
-      let cvUrl = '';
-      if (cvFile) cvUrl = await uploadFile(cvFile);
+      // Parallel file uploads for institutional record-keeping
+      const [idUrl, matricUrl, residenceUrl, motivationUrl, cvUrl] = await Promise.all([
+        idFile ? uploadFile(idFile, 'documents', 'id_docs') : Promise.resolve(''),
+        matricFile ? uploadFile(matricFile, 'documents', 'matric_docs') : Promise.resolve(''),
+        residenceFile ? uploadFile(residenceFile, 'documents', 'residence_docs') : Promise.resolve(''),
+        motivationFile ? uploadFile(motivationFile, 'documents', 'motivation_docs') : Promise.resolve(''),
+        cvFile ? uploadFile(cvFile, 'documents', 'cvs') : Promise.resolve('')
+      ]);
 
       const { error } = await supabase
         .from('applications')
@@ -170,14 +217,23 @@ export default function SharedAdmissionForm({ onOpenModal, onSuccess, initialPro
           postal_code: form.postal_code,
           program: selectionType === 'level' ? form.level : form.prog,
           qualification: form.qual,
+          payment_mode: form.payment_mode,
           message: form.msg,
+          // Individual Document URLs
+          id_url: idUrl,
+          matric_url: matricUrl,
+          residence_url: residenceUrl,
+          motivation_url: motivationUrl,
           cv_url: cvUrl,
+          // Academic Period
+          study_year: form.study_year,
+          study_intake: form.study_intake,
           student_number: studentNumber,
           type: 'individual',
           history: JSON.stringify([{
             event: 'Application Submitted',
             timestamp: new Date().toISOString(),
-            details: `Initial application submitted for ${selectionType === 'level' ? form.level : form.prog}.`
+            details: `Initial application submitted for ${selectionType === 'level' ? form.level : form.prog}. Intake: ${form.study_intake} ${form.study_year}. Payment Mode: ${form.payment_mode}`
           }])
         }]);
 
@@ -376,80 +432,179 @@ export default function SharedAdmissionForm({ onOpenModal, onSuccess, initialPro
             {/* DUAL SELECTION INTERFACE */}
             <div className="mb-5">
               <label className={LABEL_CLASS}>Define Your Admission Path <span className="text-coral">*</span></label>
+              <div className="text-[10px] text-coral/90 font-dm-sans mb-3.5 italic tracking-tight">Institutional Protocol: Please select only one primary academic pathway for this application cycle.</div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 
-                {/* LEVEL SELECTION CARD */}
+                {/* CAREER TRACK SELECTION CARD (LEFT - DEFAULT) */}
                 <div 
                   onClick={() => setSelectionType('level')}
                   className={`relative p-4 rounded-xl border transition-all duration-300 cursor-pointer overflow-hidden group ${
                     selectionType === 'level' 
                       ? 'bg-brand/5 border-brand shadow-[0_0_20px_rgba(0,242,255,0.05)]' 
-                      : selectionType === 'program' ? 'bg-surface/20 border-border-custom opacity-50 grayscale scale-[0.98]' : 'bg-surface border-border-custom hover:border-brand/30'
+                      : 'bg-surface/20 border-border-custom opacity-50 grayscale scale-[0.98]'
                   }`}
                 >
                   <div className="flex items-center gap-3 mb-3">
                     <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-sm transition-colors ${selectionType === 'level' ? 'bg-brand text-[#080b12]' : 'bg-surface/50 text-brand'}`}>🏛️</div>
-                    <div className="font-syne font-bold text-[13px]">Full Level Pathway</div>
+                    <div className="font-syne font-bold text-[13px]">Career Track Selection</div>
                   </div>
                   <select 
                     className={`${SELECT_CLASS} !bg-none px-2`} 
                     value={form.level} 
                     onChange={e => {
+                      const level = e.target.value;
                       setSelectionType('level');
-                      setForm({...form, level: e.target.value, prog: ''});
+                      setForm({
+                        ...form, 
+                        level: level, 
+                        prog: '',
+                        // Intelligent Nudge: Enterprise levels often default to rolling
+                        study_intake: level.includes('Level 4') ? 'Enterprise/Rolling' : form.study_intake
+                      });
                     }}
                     required={selectionType === 'level'}
                     disabled={selectionType === 'program'}
                   >
-                    <option value="">Select Level...</option>
+                    <option value="">Select Track...</option>
                     {LEVELS.map(l => <option key={l} value={l}>{l}</option>)}
                   </select>
-                  <div className="mt-2 text-[9px] text-text-muted leading-tight opacity-70">Enroll in all modules for the entire academic NQF level.</div>
+                  <div className="mt-2 text-[9px] text-text-muted leading-tight opacity-70">Enroll in a full practitioner-led career track (e.g. Associate, Professional).</div>
                 </div>
 
-                {/* PROGRAM SELECTION CARD */}
+                {/* INDIVIDUAL / CUSTOM SELECTION CARD (RIGHT) */}
                 <div 
                   onClick={() => setSelectionType('program')}
                   className={`relative p-4 rounded-xl border transition-all duration-300 cursor-pointer overflow-hidden group ${
                     selectionType === 'program' 
                       ? 'bg-sky/5 border-sky shadow-[0_0_20px_rgba(0,242,255,0.05)]' 
-                      : selectionType === 'level' ? 'bg-surface/20 border-border-custom opacity-50 grayscale scale-[0.98]' : 'bg-surface border-border-custom hover:border-brand/30'
+                      : 'bg-surface/20 border-border-custom opacity-50 grayscale scale-[0.98]'
                   }`}
                 >
                   <div className="flex items-center gap-3 mb-3">
                     <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-sm transition-colors ${selectionType === 'program' ? 'bg-sky text-[#080b12]' : 'bg-surface/50 text-sky'}`}>💻</div>
-                    <div className="font-syne font-bold text-[13px]">Individual Programme</div>
+                    <div className="font-syne font-bold text-[13px]">Individual / Custom Path</div>
                   </div>
                   <select 
                     className={`${SELECT_CLASS} !bg-none px-2`} 
                     value={form.prog} 
                     onChange={e => {
                       setSelectionType('program');
-                      setForm({...form, prog: e.target.value, level: ''});
+                      setForm({
+                        ...form, 
+                        prog: e.target.value, 
+                        level: '',
+                        // Methodological Rule: Custom paths are almost always rolling
+                        study_intake: 'Enterprise/Rolling'
+                      });
                     }}
                     required={selectionType === 'program'}
                     disabled={selectionType === 'level'}
                   >
-                    <option value="">Select Programme...</option>
+                    <option value="">Select Path...</option>
                     {PROGRAMMES.map(p => <option key={p} value={p}>{p}</option>)}
+                    <option value="Custom Enterprise Solution">Custom Enterprise Solution</option>
                   </select>
-                  <div className="mt-2 text-[9px] text-text-muted leading-tight opacity-70">Focus on a specific industry-aligned technical programme.</div>
+                  <div className="mt-2 text-[9px] text-text-muted leading-tight opacity-70">Single module enrolment or bespoke institutional training solutions.</div>
                 </div>
 
               </div>
             </div>
 
-            <div className="mb-4">
-              <label className={LABEL_CLASS}>Highest Qualification</label>
-              <select className={SELECT_CLASS} value={form.qual} onChange={e => setForm({...form, qual: e.target.value})}>
-                <option value="">Select…</option>
-                {QUALIFICATIONS.map(q => <option key={q} value={q}>{q}</option>)}
-              </select>
+            {/* STUDY PERIOD (YEAR & COHORT) */}
+            <div className="grid grid-cols-2 gap-3 mb-6 pb-5 border-b border-border-custom">
+              <div>
+                <label className={LABEL_CLASS}>Intended Study Year <span className="text-coral">*</span></label>
+                <select 
+                  className={SELECT_CLASS} 
+                  value={form.study_year} 
+                  onChange={e => {
+                    const newYear = e.target.value;
+                    setForm({
+                      ...form, 
+                      study_year: newYear,
+                      study_intake: getInitialIntake(newYear)
+                    });
+                  }} 
+                  required
+                >
+                  <option value={currentYear.toString()}>{currentYear} Academic Year</option>
+                  <option value={(currentYear + 1).toString()}>{currentYear + 1} Academic Year</option>
+                  <option value={(currentYear + 2).toString()}>{currentYear + 2} Academic Year</option>
+                </select>
+              </div>
+              <div>
+                <label className={LABEL_CLASS}>Preferred Intake <span className="text-coral">*</span></label>
+                <select 
+                  className={SELECT_CLASS} 
+                  value={form.study_intake} 
+                  onChange={e => setForm({...form, study_intake: e.target.value})} 
+                  required
+                >
+                  {INTAKE_SCHEDULE.map(window => {
+                    const isPast = isIntakePast(form.study_year, window.name);
+                    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                    const startDate = new Date(parseInt(form.study_year), window.monthIdx, window.day);
+                    const deadlineDate = new Date(startDate);
+                    deadlineDate.setDate(startDate.getDate() - window.closingDaysBefore);
+
+                    return (
+                      <option key={window.name} value={window.name} disabled={isPast}>
+                        {window.name} Intake {isPast ? '(Closed)' : `— Starts ${monthNames[window.monthIdx]} ${window.day} (Deadline: ${monthNames[deadlineDate.getMonth()]} ${deadlineDate.getDate()})`}
+                      </option>
+                    );
+                  })}
+                  <option value="Enterprise/Rolling">Enterprise (Rolling Enrollment)</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3 mb-4">
+              <div>
+                <label className={LABEL_CLASS}>Highest Qualification</label>
+                <select className={SELECT_CLASS} value={form.qual} onChange={e => setForm({...form, qual: e.target.value})}>
+                  <option value="">Select…</option>
+                  {QUALIFICATIONS.map(q => <option key={q} value={q}>{q}</option>)}
+                </select>
+              </div>
+              <div>
+                <label className={LABEL_CLASS}>Proposed Payment Model <span className="text-coral">*</span></label>
+                <select className={SELECT_CLASS} value={form.payment_mode} onChange={e => setForm({...form, payment_mode: e.target.value})} required>
+                  <option value="">Select Model…</option>
+                  <option value="Upfront Investment">Upfront Investment (15% Discount)</option>
+                  <option value="Standard Installment">Standard Installment (Monthly)</option>
+                  <option value="Income Share (ISA)">Income Share Agreement (ISA)</option>
+                  <option value="Organisation Funded">Organisation Funded (Corporate)</option>
+                  <option value="Bursary/Scholarship">Bursary / Scholarship</option>
+                  <option value="Other/Mix">Other / Hybrid Model</option>
+                </select>
+              </div>
             </div>
             
-            <div className="mb-5">
-              <label className={LABEL_CLASS}>Upload CV (PDF)</label>
-              <input type="file" accept=".pdf" className={INPUT_CLASS} onChange={e => setCvFile(e.target.files?.[0] || null)} />
+            {/* INSTITUTIONAL DOCUMENT SYSTEM */}
+            <div className="mb-6">
+              <label className={LABEL_CLASS}>Institutional Document Portfolio (PDF Only) <span className="text-coral">*</span></label>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2">
+                <div className="p-3 rounded-lg border border-border-custom bg-surface/50">
+                  <label className="block text-[8px] font-dm-mono uppercase text-text-muted mb-1.5">1. Certified ID / Passport</label>
+                  <input type="file" accept=".pdf" className="w-full text-[11px] text-text-soft file:mr-3 file:py-1 file:px-3 file:rounded-sm file:border-0 file:text-[10px] file:font-dm-mono file:uppercase file:bg-brand/10 file:text-brand hover:file:bg-brand/20 cursor-pointer" onChange={e => setIdFile(e.target.files?.[0] || null)} required />
+                </div>
+                <div className="p-3 rounded-lg border border-border-custom bg-surface/50">
+                  <label className="block text-[8px] font-dm-mono uppercase text-text-muted mb-1.5">2. Matric / Highest Qualification</label>
+                  <input type="file" accept=".pdf" className="w-full text-[11px] text-text-soft file:mr-3 file:py-1 file:px-3 file:rounded-sm file:border-0 file:text-[10px] file:font-dm-mono file:uppercase file:bg-brand/10 file:text-brand hover:file:bg-brand/20 cursor-pointer" onChange={e => setMatricFile(e.target.files?.[0] || null)} required />
+                </div>
+                <div className="p-3 rounded-lg border border-border-custom bg-surface/50">
+                  <label className="block text-[8px] font-dm-mono uppercase text-text-muted mb-1.5">3. Proof of Residence</label>
+                  <input type="file" accept=".pdf" className="w-full text-[11px] text-text-soft file:mr-3 file:py-1 file:px-3 file:rounded-sm file:border-0 file:text-[10px] file:font-dm-mono file:uppercase file:bg-brand/10 file:text-brand hover:file:bg-brand/20 cursor-pointer" onChange={e => setResidenceFile(e.target.files?.[0] || null)} required />
+                </div>
+                <div className="p-3 rounded-lg border border-border-custom bg-surface/50">
+                  <label className="block text-[8px] font-dm-mono uppercase text-text-muted mb-1.5">4. Motivation Letter</label>
+                  <input type="file" accept=".pdf" className="w-full text-[11px] text-text-soft file:mr-3 file:py-1 file:px-3 file:rounded-sm file:border-0 file:text-[10px] file:font-dm-mono file:uppercase file:bg-brand/10 file:text-brand hover:file:bg-brand/20 cursor-pointer" onChange={e => setMotivationFile(e.target.files?.[0] || null)} required />
+                </div>
+              </div>
+              <div className="mt-3 p-3 rounded-lg border border-border-custom bg-surface/20">
+                <label className="block text-[8px] font-dm-mono uppercase text-text-muted mb-1.5">Optional: Professional CV / Resume</label>
+                <input type="file" accept=".pdf" className="w-full text-[11px] text-text-soft file:mr-3 file:py-1 file:px-3 file:rounded-sm file:border-0 file:text-[10px] file:font-dm-mono file:uppercase file:bg-surface/50 file:text-text-muted hover:file:bg-surface cursor-pointer" onChange={e => setCvFile(e.target.files?.[0] || null)} />
+              </div>
             </div>
 
             <div>

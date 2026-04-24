@@ -58,6 +58,7 @@ function ScrollManager() {
 function AppContent() {
   const { user, profile, loading } = useAuth();
   const [activeModal, setActiveModal] = useState<string | null>(null);
+  const [modalMetadata, setModalMetadata] = useState<any>(null);
   const [editMode, setEditMode] = useState(false);
   const [siteSettings, setSiteSettings] = useState<any>(null);
   const navigate = useNavigate();
@@ -100,8 +101,14 @@ function AppContent() {
     return () => subscription.unsubscribe();
   }, []);
 
-  const openModal = (id: string) => setActiveModal(id);
-  const closeModal = () => setActiveModal(null);
+  const openModal = (id: string, metadata?: any) => {
+    setModalMetadata(metadata);
+    setActiveModal(id);
+  };
+  const closeModal = () => {
+    setActiveModal(null);
+    setModalMetadata(null);
+  };
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -152,6 +159,7 @@ function AppContent() {
       <Modals 
         activeModal={activeModal} 
         onClose={closeModal} 
+        metadata={modalMetadata}
         onSwitchModal={(id) => setActiveModal(id)}
         onLoginSuccess={(role) => {
           navigate(role === 'admin' ? '/admin' : '/portal');

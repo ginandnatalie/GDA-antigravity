@@ -58,7 +58,7 @@ export default function TrackDetailPage({ onOpenModal, editMode }: TrackDetailPa
               </p>
               <div className="flex gap-4 pt-4">
                 <button 
-                  onClick={() => onOpenModal('apply_direct')}
+                  onClick={() => onOpenModal('apply_direct', { program: data.title })}
                   className="btn btn-brand"
                 >
                   Apply for this Pathway
@@ -158,7 +158,7 @@ export default function TrackDetailPage({ onOpenModal, editMode }: TrackDetailPa
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button 
-              onClick={() => onOpenModal('apply_direct')}
+              onClick={() => onOpenModal('apply_direct', { program: data.title })}
               className="px-10 py-5 bg-brand text-navy font-syne font-black uppercase text-xs tracking-[0.3em] rounded-xl hover:bg-white transition-all"
             >
               Start Admission Process
