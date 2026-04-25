@@ -321,7 +321,7 @@ export function Modals({ activeModal, onClose, onSwitchModal, onLoginSuccess, me
       className={`fixed inset-0 z-[2000] bg-bg/88 backdrop-blur-md flex items-center justify-center p-6 transition-opacity duration-250 ${activeModal ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
     >
       <div 
-        className={`bg-card border border-border-custom rounded-3xl w-full ${isCourseId && window.location.pathname.includes('/levels/') ? 'max-w-5xl' : 'max-w-[480px]'} max-h-[90vh] overflow-y-auto transform transition-transform duration-300 relative before:content-[''] before:absolute before:top-0 before:left-0 before:right-0 before:h-px before:bg-[linear-gradient(90deg,transparent,var(--color-brand),transparent)]`}
+        className={`bg-card border border-border-custom rounded-3xl w-full ${((isCourseId && window.location.pathname.includes('/levels/')) || activeModal === 'apply_direct') ? 'max-w-4xl' : 'max-w-[480px]'} max-h-[90vh] overflow-y-auto transform transition-transform duration-300 relative before:content-[''] before:absolute before:top-0 before:left-0 before:right-0 before:h-px before:bg-[linear-gradient(90deg,transparent,var(--color-brand),transparent)]`}
         onClick={stopPropagation}
       >
 

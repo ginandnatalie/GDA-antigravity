@@ -1,39 +1,80 @@
+export const INSTITUTIONAL_TRACKS = [
+  'Cloud Computing',
+  'AI & Machine Learning',
+  'Cybersecurity',
+  'Data & Analytics',
+  'Digital Transformation',
+  'Software & DevOps',
+  'Digital Business'
+];
+
+export const TRACK_PROGRAMMES: Record<string, string[]> = {
+  'Cloud Computing': ['Cloud Launchpad', 'Cloud Practitioner Pro', 'Cloud Architect', 'Multi-Cloud Enterprise'],
+  'AI & Machine Learning': ['AI Fundamentals', 'ML Essentials', 'Applied AI Engineering', 'AI Strategy & Enterprise'],
+  'Cybersecurity': ['Cyber Essentials', 'Ethical Hacking', 'Security Operations', 'CISO Programme'],
+  'Data & Analytics': ['Data Literacy', 'Data Analysis & BI', 'Data Engineering', 'AI-Driven Analytics'],
+  'Digital Transformation': ['Digital Literacy for Work', 'Process Digitisation', 'Digital Transformation Lead', 'CDO Programme'],
+  'Software & DevOps': ['Code Launchpad', 'Full-Stack Development', 'DevOps & Cloud-Native', 'Platform Engineering'],
+  'Digital Business': ['Digital Entrepreneurship 101', 'E-Commerce & Marketing', 'Digital Business Strategy', 'Innovation & Ventures']
+};
+
+export const ENTERPRISE_SOLUTIONS = [
+  { name: 'Executive Digital Literacy', desc: 'Strategic upskilling for leadership teams and board members.' },
+  { name: 'Workforce Digital Transformation', desc: 'Large-scale digital hardening and process adoption for employees.' },
+  { name: 'Specialist Team Hardening', desc: 'Bespoke technical training for DevOps, AI, or Cloud departments.' },
+  { name: 'CDO Strategy Advisory', desc: 'Governance, risk management, and digital maturity assessments.' },
+  { name: 'Custom Skill-Bridge', desc: 'Tailored recruitment and training solutions for new technical hires.' }
+];
+
+export const INSTITUTIONAL_CODES: Record<string, string> = {
+  'GDA-EXEC-2026': 'Executive Digital Literacy',
+  'GDA-TRANSFORM-26': 'Workforce Digital Transformation',
+  'GDA-HARDEN-TECH': 'Specialist Team Hardening',
+  'GDA-STRAT-ADVISOR': 'CDO Strategy Advisory',
+  'GDA-BRIDGE-CUSTOM': 'Custom Skill-Bridge',
+  'ENTERPRISE-DEMO': 'Executive Digital Literacy' // For testing
+};
+
+export const COURSE_MODULES: Record<string, string[]> = {
+  // Cloud Computing
+  'Cloud Launchpad': ['Cloud Foundations', 'AWS Core Services', 'Compute & Storage', 'Networking Essentials'],
+  'Cloud Practitioner Pro': ['Advanced Security', 'Cost Management', 'Database Systems', 'Deployment Strategies'],
+  'Cloud Architect': ['Well-Architected Framework', 'Serverless Design', 'High Availability', 'Migration Hub'],
+  'Multi-Cloud Enterprise': ['Azure for AWS Pros', 'GCP Fundamentals', 'Hybrid Cloud Strategy', 'Enterprise Governance'],
+  
+  // AI & ML
+  'AI Fundamentals': ['Intro to Generative AI', 'Prompt Engineering', 'AI Ethics', 'Practical Automation'],
+  'ML Essentials': ['Data Preprocessing', 'Regression Models', 'Neural Networks', 'Model Evaluation'],
+  'Applied AI Engineering': ['Natural Language Processing', 'Computer Vision', 'MLOps', 'Vector Databases'],
+  'AI Strategy & Enterprise': ['AI Readiness Audit', 'ROI for AI Projects', 'Scaling AI', 'AI Risk Management'],
+  
+  // Cybersecurity
+  'Cyber Essentials': ['Threat Landscape', 'Identity Management', 'Endpoint Security', 'Incident Response 101'],
+  'Ethical Hacking': ['Penetration Testing', 'Network Sniffing', 'Web App Vulnerabilities', 'Metasploit Pro'],
+  'Security Operations': ['SOC Analytics', 'SIEM Management', 'Digital Forensics', 'Threat Hunting'],
+  'CISO Programme': ['Security Governance', 'Compliance (POPIA/GDPR)', 'Crisis Leadership', 'Strategic Risk'],
+  
+  // Data & Analytics
+  'Data Literacy': ['Data-Driven Mindset', 'Spreadsheet Mastery', 'Visual Storytelling', 'Statistical Logic'],
+  'Data Analysis & BI': ['Power BI Fundamentals', 'SQL for Analytics', 'Tableau advanced', 'DAX Expressions'],
+  'Data Engineering': ['ETL Pipelines', 'Big Data Architecture', 'Data Warehousing', 'Airflow Orchestration'],
+  'AI-Driven Analytics': ['Predictive Modeling', 'Clustering Techniques', 'Anomaly Detection', 'AutoML'],
+
+  // Software & DevOps
+  'Code Launchpad': ['Web Fundamentals (HTML/CSS)', 'JS Essentials', 'Version Control (Git)', 'Logic & Algorithms'],
+  'Full-Stack Development': ['React & Modern UI', 'Node.js Backend', 'API Development', 'Full-Stack Deployment'],
+  'DevOps & Cloud-Native': ['Docker & Containers', 'CI/CD Pipelines', 'Kubernetes Orchestration', 'Infrastructure as Code'],
+  'Platform Engineering': ['Internal Developer Portals', 'Observability', 'Platform UX', 'Site Reliability Engineering'],
+
+  // Digital Business
+  'Digital Entrepreneurship 101': ['Ideation & Validation', 'Digital MVP Building', 'Launch Strategy', 'Growth Hacking'],
+  'E-Commerce & Marketing': ['Shopify Essentials', 'SEO/SEM Strategy', 'Social Commerce', 'Payment Integrations'],
+  'Digital Business Strategy': ['Digital Pivot Logic', 'Platform Business Models', 'Customer Acquisition', 'Financial Modeling'],
+  'Innovation & Ventures': ['Corporate Innovation', 'Venture Capital', 'Pitching & Funding', 'Exits & Scaling']
+};
+
 export const PROGRAMMES = [
-  // Cloud Track
-  'Cloud Launchpad',
-  'Cloud Practitioner Pro',
-  'Cloud Architect',
-  'Multi-Cloud Enterprise',
-  // AI & ML Track
-  'AI Fundamentals',
-  'ML Essentials',
-  'Applied AI Engineering',
-  'AI Strategy & Enterprise',
-  // Cybersecurity Track
-  'Cyber Essentials',
-  'Ethical Hacking',
-  'Security Operations',
-  'CISO Programme',
-  // Data & Analytics Track
-  'Data Literacy',
-  'Data Analysis & BI',
-  'Data Engineering',
-  'AI-Driven Analytics',
-  // Digital Transformation Track
-  'Digital Literacy for Work',
-  'Process Digitisation',
-  'Digital Transformation Lead',
-  'CDO Programme',
-  // Software & DevOps Track
-  'Code Launchpad',
-  'Full-Stack Development',
-  'DevOps & Cloud-Native',
-  'Platform Engineering',
-  // Digital Business Track
-  'Digital Entrepreneurship 101',
-  'E-Commerce & Marketing',
-  'Digital Business Strategy',
-  'Innovation & Ventures',
+  ...Object.values(TRACK_PROGRAMMES).flat(),
   "I'm not sure — I want guidance",
 ];
 

@@ -11,7 +11,12 @@ import {
   NATIONALITIES, 
   PROVINCES_SA,
   LEVELS,
-  INTAKE_SCHEDULE
+  INTAKE_SCHEDULE,
+  INSTITUTIONAL_TRACKS,
+  TRACK_PROGRAMMES,
+  COURSE_MODULES,
+  ENTERPRISE_SOLUTIONS,
+  INSTITUTIONAL_CODES
 } from '../lib/constants';
 
 const PORTAL_URL = 'https://gda-student-portal.pages.dev/';
@@ -37,6 +42,14 @@ export default function SharedAdmissionForm({ onOpenModal, onSuccess, initialPro
   const [studentNumberInput, setStudentNumberInput] = useState('');
   const [checkingAccount, setCheckingAccount] = useState(false);
   const [duplicateMessage, setDuplicateMessage] = useState('');
+  const [selectedTrack, setSelectedTrack] = useState<string>('');
+  const [showCourseSelector, setShowCourseSelector] = useState(false);
+  const [showModuleSelector, setShowModuleSelector] = useState(false);
+  const [showEnterpriseSelector, setShowEnterpriseSelector] = useState(false);
+  const [selectedCourseForModule, setSelectedCourseForModule] = useState<string>('');
+  const [accessCode, setAccessCode] = useState('');
+  const [isCodeVerified, setIsCodeVerified] = useState(false);
+  const [codeError, setCodeError] = useState('');
 
   // ─── DATE-AWARE ADMISSION LOGIC ───
   const now = new Date();
@@ -432,7 +445,13 @@ export default function SharedAdmissionForm({ onOpenModal, onSuccess, initialPro
             {/* DUAL SELECTION INTERFACE */}
             <div className="mb-5">
               <label className={LABEL_CLASS}>Define Your Admission Path <span className="text-coral">*</span></label>
-              <div className="text-[10px] text-coral/90 font-dm-sans mb-3.5 italic tracking-tight">Institutional Protocol: Please select only one primary academic pathway for this application cycle.</div>
+              <div className="text-[11.5px] leading-relaxed text-coral font-dm-sans mb-4 italic tracking-tight bg-coral/5 p-3 rounded-lg border border-coral/10">
+                <span className="font-bold uppercase tracking-[0.05em] not-italic mr-2">Institutional Protocol:</span>
+                Please select only one primary academic pathway. 
+                <div className="mt-1 font-bold opacity-100 text-[10.5px]">
+                  Note: The &apos;Bespoke&apos; option is strictly for students whose organizations have pre-authorized a custom institutional learning framework.
+                </div>
+              </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 
                 {/* CAREER TRACK SELECTION CARD (LEFT - DEFAULT) */}
@@ -448,30 +467,98 @@ export default function SharedAdmissionForm({ onOpenModal, onSuccess, initialPro
                     <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-sm transition-colors ${selectionType === 'level' ? 'bg-brand text-[#080b12]' : 'bg-surface/50 text-brand'}`}>🏛️</div>
                     <div className="font-syne font-bold text-[13px]">Career Track Selection</div>
                   </div>
+                  
+                  {/* TRACK SELECTOR */}
                   <select 
-                    className={`${SELECT_CLASS} !bg-none px-2`} 
-                    value={form.level} 
+                    className={`${SELECT_CLASS} !bg-none px-2 mb-2`} 
+                    value={selectedTrack} 
                     onChange={e => {
-                      const level = e.target.value;
+                      const track = e.target.value;
+                      setSelectedTrack(track);
                       setSelectionType('level');
-                      setForm({
-                        ...form, 
-                        level: level, 
-                        prog: '',
-                        // Intelligent Nudge: Enterprise levels often default to rolling
-                        study_intake: level.includes('Level 4') ? 'Enterprise/Rolling' : form.study_intake
-                      });
+                      if (track) setShowCourseSelector(true);
+                      setForm({...form, level: '', prog: ''});
                     }}
                     required={selectionType === 'level'}
-                    disabled={selectionType === 'program'}
                   >
                     <option value="">Select Track...</option>
-                    {LEVELS.map(l => <option key={l} value={l}>{l}</option>)}
+                    {INSTITUTIONAL_TRACKS.map(t => <option key={t} value={t}>{t}</option>)}
                   </select>
-                  <div className="mt-2 text-[9px] text-text-muted leading-tight opacity-70">Enroll in a full practitioner-led career track (e.g. Associate, Professional).</div>
+
+                  {/* SELECTED COURSE DISPLAY */}
+                  {form.level && (
+                    <div className="flex items-center gap-2 p-2 px-2.5 bg-brand/10 border border-brand/20 rounded-md mb-2 animate-fadeUp">
+                      <div className="w-1.5 h-1.5 rounded-full bg-brand"></div>
+                      <div className="font-dm-mono text-[10px] text-brand uppercase tracking-wider">{form.level}</div>
+                      <button 
+                        type="button" 
+                        onClick={(e) => { e.stopPropagation(); setShowCourseSelector(true); }}
+                        className="ml-auto text-[9px] text-text-muted hover:text-brand underline decoration-dotted"
+                      >
+                        Change
+                      </button>
+                    </div>
+                  )}
+
+                  <div className="text-[9px] text-text-muted leading-tight opacity-70">Enroll in a full practitioner-led career track (e.g. Associate, Professional).</div>
+
+                  {/* POP-UP COURSE SELECTOR */}
+                  {showCourseSelector && selectedTrack && (
+                    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#080b12]/90 backdrop-blur-md animate-fadeIn">
+                      <div className="bg-bg2 border border-border-custom rounded-2xl w-full max-w-[440px] p-8 shadow-2xl relative overflow-hidden">
+                        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand to-sky"></div>
+                        
+                        <div className="flex justify-between items-start mb-6">
+                          <div>
+                            <div className="text-[10px] font-dm-mono text-brand uppercase tracking-widest mb-1">{selectedTrack}</div>
+                            <h3 className="font-syne font-extrabold text-[18px]">Select Your Level</h3>
+                          </div>
+                          <button 
+                            type="button" 
+                            onClick={() => setShowCourseSelector(false)}
+                            className="p-1.5 hover:bg-surface rounded-lg transition-colors text-text-muted"
+                          >
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                          </button>
+                        </div>
+
+                        <div className="grid gap-2.5">
+                          {TRACK_PROGRAMMES[selectedTrack]?.map(course => (
+                            <button
+                              key={course}
+                              type="button"
+                              onClick={() => {
+                                setForm({
+                                  ...form, 
+                                  level: course,
+                                  // Auto-nudge for Level 4 / Enterprise
+                                  study_intake: course.includes('Enterprise') ? 'Enterprise/Rolling' : form.study_intake
+                                });
+                                setShowCourseSelector(false);
+                              }}
+                              className={`p-4 rounded-xl border text-left transition-all group ${
+                                form.level === course 
+                                  ? 'bg-brand/5 border-brand ring-1 ring-brand/30' 
+                                  : 'bg-surface/30 border-border-custom hover:border-brand/40'
+                              }`}
+                            >
+                              <div className="flex items-center gap-3">
+                                <div className={`w-2 h-2 rounded-full transition-colors ${form.level === course ? 'bg-brand' : 'bg-border-custom group-hover:bg-brand/40'}`}></div>
+                                <div className="font-dm-sans text-[13px] font-medium">{course}</div>
+                              </div>
+                            </button>
+                          ))}
+                        </div>
+
+                        <div className="mt-8 pt-6 border-t border-border-custom flex justify-center">
+                           <div className="font-dm-mono text-[9px] text-text-muted uppercase tracking-[0.2em] opacity-40">Ginashe Institutional Matrix</div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
-                {/* INDIVIDUAL / CUSTOM SELECTION CARD (RIGHT) */}
+                {/* BESPOKE ENTERPRISE SELECTION CARD (RIGHT) */}
                 <div 
                   onClick={() => setSelectionType('program')}
                   className={`relative p-4 rounded-xl border transition-all duration-300 cursor-pointer overflow-hidden group ${
@@ -481,30 +568,129 @@ export default function SharedAdmissionForm({ onOpenModal, onSuccess, initialPro
                   }`}
                 >
                   <div className="flex items-center gap-3 mb-3">
-                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-sm transition-colors ${selectionType === 'program' ? 'bg-sky text-[#080b12]' : 'bg-surface/50 text-sky'}`}>💻</div>
-                    <div className="font-syne font-bold text-[13px]">Individual / Custom Path</div>
+                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-sm transition-colors ${selectionType === 'program' ? 'bg-sky text-[#080b12]' : 'bg-surface/50 text-sky'}`}>🏢</div>
+                    <div className="font-syne font-bold text-[13px]">Bespoke Enterprise Selection</div>
                   </div>
-                  <select 
-                    className={`${SELECT_CLASS} !bg-none px-2`} 
-                    value={form.prog} 
-                    onChange={e => {
-                      setSelectionType('program');
-                      setForm({
-                        ...form, 
-                        prog: e.target.value, 
-                        level: '',
-                        // Methodological Rule: Custom paths are almost always rolling
-                        study_intake: 'Enterprise/Rolling'
-                      });
-                    }}
-                    required={selectionType === 'program'}
-                    disabled={selectionType === 'level'}
-                  >
-                    <option value="">Select Path...</option>
-                    {PROGRAMMES.map(p => <option key={p} value={p}>{p}</option>)}
-                    <option value="Custom Enterprise Solution">Custom Enterprise Solution</option>
-                  </select>
-                  <div className="mt-2 text-[9px] text-text-muted leading-tight opacity-70">Single module enrolment or bespoke institutional training solutions.</div>
+
+                  {/* ACCESS CODE GATEWAY */}
+                  {!isCodeVerified ? (
+                    <div className="space-y-2 animate-fadeIn">
+                      <div className="relative">
+                        <input 
+                          type="text" 
+                          placeholder="ENTER ACCESS CODE..." 
+                          className={`${INPUT_CLASS} !bg-sky/10 border-sky/40 focus:border-sky text-center tracking-[0.25em] uppercase font-dm-mono text-[13px] font-bold !text-white placeholder:text-sky/40 placeholder:font-normal placeholder:tracking-normal`}
+                          value={accessCode}
+                          onChange={e => {
+                            setAccessCode(e.target.value.toUpperCase());
+                            setCodeError('');
+                          }}
+                        />
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const solution = INSTITUTIONAL_CODES[accessCode];
+                          if (solution) {
+                            setIsCodeVerified(true);
+                            setSelectionType('program');
+                            setForm({...form, prog: solution, level: '', study_intake: 'Enterprise/Rolling'});
+                            setCodeError('');
+                          } else {
+                            setCodeError('Invalid Access Code');
+                          }
+                        }}
+                        className="w-full py-2 bg-sky/20 hover:bg-sky/30 text-sky font-syne font-bold text-[10px] uppercase tracking-widest rounded-lg transition-all border border-sky/30"
+                      >
+                        Verify Institutional Access
+                      </button>
+                      {codeError && <div className="text-[9px] text-coral font-medium text-center animate-pulse">{codeError}</div>}
+                    </div>
+                  ) : (
+                    <div className="animate-fadeUp">
+                      <div className="flex items-center gap-2 p-2.5 bg-emerald/10 border border-emerald/20 rounded-xl mb-3">
+                         <div className="w-5 h-5 rounded-full bg-emerald flex items-center justify-center text-[#080b12] text-[10px]">✓</div>
+                         <div className="font-dm-mono text-[9px] text-emerald uppercase tracking-wider font-bold">Access Authorized</div>
+                         <button 
+                           type="button" 
+                           onClick={() => { setIsCodeVerified(false); setAccessCode(''); setForm({...form, prog: ''}); }}
+                           className="ml-auto text-[9px] text-text-muted hover:text-emerald underline decoration-dotted"
+                         >
+                           Reset
+                         </button>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setShowEnterpriseSelector(true)}
+                        className={`${SELECT_CLASS} !text-left flex items-center justify-between !bg-sky/5 border-sky/40`}
+                      >
+                        <span className="text-text-main font-bold">
+                          {form.prog}
+                        </span>
+                        <svg className="w-4 h-4 text-sky" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" /></svg>
+                      </button>
+                    </div>
+                  )}
+
+                  <div className="mt-3 text-[9px] text-text-muted leading-tight opacity-70">Bespoke institutional training solutions or corporate digital transformation advisory.</div>
+
+                  {/* POP-UP ENTERPRISE SELECTOR */}
+                  {showEnterpriseSelector && (
+                    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#080b12]/95 backdrop-blur-xl animate-fadeIn">
+                      <div className="bg-bg2 border border-border-custom rounded-3xl w-full max-w-[600px] p-10 shadow-2xl relative overflow-hidden">
+                        <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-sky via-brand to-sky"></div>
+                        
+                        <div className="flex justify-between items-start mb-8">
+                          <div>
+                            <div className="text-[11px] font-dm-mono text-sky uppercase tracking-[0.3em] mb-2">Institutional Advisory</div>
+                            <h3 className="font-syne font-extrabold text-[24px] leading-tight">Bespoke Enterprise Framework</h3>
+                          </div>
+                          <button 
+                            type="button" 
+                            onClick={() => setShowEnterpriseSelector(false)}
+                            className="p-2 hover:bg-surface rounded-full transition-colors text-text-muted"
+                          >
+                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                          </button>
+                        </div>
+
+                        <div className="grid gap-3.5">
+                          {ENTERPRISE_SOLUTIONS.map(sol => (
+                            <button
+                              key={sol.name}
+                              type="button"
+                              onClick={() => {
+                                setForm({
+                                  ...form, 
+                                  prog: sol.name,
+                                  study_intake: 'Enterprise/Rolling'
+                                });
+                                setShowEnterpriseSelector(false);
+                              }}
+                              className={`p-5 rounded-2xl border text-left transition-all group relative overflow-hidden ${
+                                form.prog === sol.name 
+                                  ? 'bg-sky/5 border-sky ring-1 ring-sky/30' 
+                                  : 'bg-surface/30 border-border-custom hover:border-sky/40'
+                              }`}
+                            >
+                              <div className="flex items-start gap-4">
+                                <div className={`mt-1.5 w-2 h-2 rounded-full shrink-0 transition-colors ${form.prog === sol.name ? 'bg-sky' : 'bg-border-custom group-hover:bg-sky/40'}`}></div>
+                                <div>
+                                  <div className="font-syne text-[15px] font-bold mb-1">{sol.name}</div>
+                                  <div className="font-dm-sans text-[11px] text-text-muted leading-relaxed">{sol.desc}</div>
+                                </div>
+                              </div>
+                            </button>
+                          ))}
+                        </div>
+
+                        <div className="mt-10 pt-6 border-t border-border-custom flex justify-between items-center">
+                           <div className="font-dm-mono text-[9px] text-text-muted uppercase tracking-[0.2em] opacity-40">Ginashe Corporate Strategy</div>
+                           <div className="text-[10px] text-sky font-medium italic opacity-60">* Custom solutions require initial institutional audit</div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
               </div>
@@ -553,7 +739,9 @@ export default function SharedAdmissionForm({ onOpenModal, onSuccess, initialPro
                       </option>
                     );
                   })}
-                  <option value="Enterprise/Rolling">Enterprise (Rolling Enrollment)</option>
+                  {selectionType === 'program' && (
+                    <option value="Enterprise/Rolling">Enterprise (Rolling Enrollment)</option>
+                  )}
                 </select>
               </div>
             </div>
