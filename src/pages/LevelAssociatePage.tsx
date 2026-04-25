@@ -15,8 +15,8 @@ export default function LevelAssociatePage({ onOpenModal, editMode }: LevelPageP
     <>
       <PageHero
         label="Level: Associate"
-        title={<>Specialize Your Skills.<br />Bridge the Gap to Production.</>}
-        subtitle="The Associate Level is for learners with basic technical backgrounds looking to specialize. Move from foundational theory to deploying intermediate workloads."
+        title={<>Specialise Your Skills.<br />Bridge the Gap to Production.</>}
+        subtitle="The Associate Level is for learners with basic technical backgrounds looking to specialise. Move from foundational theory to deploying intermediate workloads."
         image="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=2070"
         imageAlt="Associate learners coding"
       />

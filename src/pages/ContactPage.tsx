@@ -82,7 +82,7 @@ export default function ContactPage({ onOpenModal, editMode }: ContactPageProps)
                   </div>
                   <div>
                     <h3 className="font-syne font-bold text-[14px] mb-1">WhatsApp</h3>
-                    <a href="https://wa.me/27000000000" className="text-[13px] text-emerald no-underline hover:underline">+27 (0) 00 000 0000</a>
+                    <a href="https://wa.me/27688526155" className="text-[13px] text-emerald no-underline hover:underline">+27 68 852 6155</a>
                     <p className="text-[12px] text-text-muted mt-0.5">Quick enquiries & support</p>
                   </div>
                 </div>

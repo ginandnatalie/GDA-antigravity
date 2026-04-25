@@ -105,7 +105,7 @@ export function Funding({ onOpenModal, editMode }: { onOpenModal: (id: string) =
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-0 relative">
             <div className="hidden lg:block absolute top-[22px] left-[22px] right-[22px] h-0.5 bg-[linear-gradient(90deg,var(--color-emerald),var(--color-sky),var(--color-brand))] opacity-30 z-0"></div>
             {[
-              { n: 1, t: 'Submit your standard application', d: 'Apply to your program of choice first. Once accepted into the academy, you\'ll be eligible to apply for institutional funding.' },
+              { n: 1, t: 'Submit your standard application', d: 'Apply to your programme of choice first. Once accepted into the academy, you\'ll be eligible to apply for institutional funding.' },
               { n: 2, t: 'Complete the Technical Assessment', d: 'Demonstrate your logic and problem-solving skills through our practitioner-led assessment. High scores are critical for funding.' },
               { n: 3, t: 'Submit Financial Motivation', d: 'Provide a motivation explaining how this scholarship will impact your career and community. We look for disruptors.' },
               { n: 4, t: 'Wait for the Awards Committee', d: 'Our faculty reviews all applications monthly. If awarded, your tuition fees are adjusted automatically on your student portal.' }

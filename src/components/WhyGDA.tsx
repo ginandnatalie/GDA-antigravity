@@ -160,7 +160,7 @@ export function Alumni({ editMode }: { editMode?: boolean }) {
     <section id="alumni" className="bg-bg border-t border-border-custom">
       <div className="section-inner">
         <div className="max-w-[540px] mb-14">
-          <div className="section-label">Institutional Impact</div>
+          <div className="section-label">Founder & Freelance Empowerment</div>
           <h2 className="section-title animate-fadeUp text-white">The Foundation of<br /><span className="text-brand">African Foundership.</span></h2>
           <p className="section-sub animate-fadeUp delay-100">We don't just build employees; we forge the technical architects and entrepreneurs building Africa's new digital infrastructure. Our alumni are currently delivering high-impact systems at the continent's most significant institutional players.</p>
         </div>
@@ -193,6 +193,14 @@ export function Alumni({ editMode }: { editMode?: boolean }) {
                 </div>
               </div>
             ))}
+          </div>
+          <div className="mt-10 flex justify-center">
+            <button 
+              onClick={() => window.location.href = '/foundership'}
+              className="btn btn-brand btn-sm px-10 font-syne font-black uppercase text-[10px] tracking-widest shadow-[0_10px_30px_rgba(0,242,255,0.15)]"
+            >
+              Explore Empowerment Matrix →
+            </button>
           </div>
         </div>
 

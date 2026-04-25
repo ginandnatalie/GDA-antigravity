@@ -23,7 +23,7 @@ export default function EnterprisePage({ onOpenModal, editMode }: EnterprisePage
     {
       icon: <Shield className="w-6 h-6 text-brand" />,
       title: "Enterprise-Grade Security Training",
-      description: "Live fire labs configured to mirror your exact infrastructure, allowing your staff to train on defense strategies without risking production environments."
+      description: "Live fire labs configured to mirror your exact infrastructure, allowing your staff to train on defence strategies without risking production environments."
     },
     {
       icon: <Rocket className="w-6 h-6 text-brand" />,
@@ -37,17 +37,17 @@ export default function EnterprisePage({ onOpenModal, editMode }: EnterprisePage
       <PageHero
         label="Institutional Strategic Design"
         title={<>Custom Enterprise<br />Training Pathways.</>}
-        subtitle="Empower your workforce with high-fidelity, practitioner-led technical training perfectly aligned to your organization's architectural goals."
+        subtitle="Empower your workforce with high-fidelity, practitioner-led technical training perfectly aligned to your organisation's architectural goals."
         visual={<InstitutionalHeroVisual />}
       />
       
-      <section className="bg-bg py-24 relative overflow-hidden border-b border-white/5">
+      <section className="bg-bg py-16 md:py-24 relative overflow-hidden border-b border-white/5">
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-1/4 left-0 w-[500px] h-[500px] bg-brand/5 rounded-full blur-[150px]" />
           <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-emerald/5 rounded-full blur-[150px]" />
         </div>
         
-        <div className="max-w-7xl mx-auto px-4 relative z-10">
+        <div className="max-w-7xl mx-auto px-6 relative z-10">
           <div className="text-center max-w-3xl mx-auto mb-20">
             <h2 className="font-syne font-bold text-3xl md:text-5xl text-white mb-6">Built for the Global Enterprise</h2>
             <p className="text-text-soft text-lg leading-relaxed">
@@ -55,7 +55,7 @@ export default function EnterprisePage({ onOpenModal, editMode }: EnterprisePage
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mb-20">
             {benefits.map((benefit, i) => (
               <div key={i} className="bg-black/40 border border-white/5 p-8 rounded-3xl hover:border-brand/30 hover:bg-white/[0.02] transition-all duration-500 group">
                 <div className="w-12 h-12 rounded-xl bg-brand/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
@@ -67,16 +67,16 @@ export default function EnterprisePage({ onOpenModal, editMode }: EnterprisePage
             ))}
           </div>
 
-          <div className="bg-gradient-to-br from-brand/10 to-transparent border border-brand/20 p-12 rounded-[2rem] text-center max-w-4xl mx-auto relative overflow-hidden">
+          <div className="bg-gradient-to-br from-brand/10 to-transparent border border-brand/20 p-8 md:p-12 rounded-[2rem] text-center max-w-4xl mx-auto relative overflow-hidden">
             <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10" />
             <div className="relative z-10">
-              <h2 className="font-syne font-bold text-3xl text-white mb-6">Initialize a Strategic Consultation</h2>
-              <p className="text-text-soft mb-8 max-w-2xl mx-auto">
-                Speak directly with our Lead Faculty and Enterprise Architects to design a training matrix that fits your organization's exact technical requirements.
+              <h2 className="font-syne font-bold text-2xl md:text-3xl text-white mb-6">Initialise a Strategic Consultation</h2>
+              <p className="text-text-soft text-sm md:text-base mb-8 max-w-2xl mx-auto">
+                Speak directly with our Lead Faculty and Enterprise Architects to design a training matrix that fits your organisation's exact technical requirements.
               </p>
               <button 
                 onClick={() => onOpenModal('organisation')}
-                className="btn btn-brand btn-lg"
+                className="btn btn-brand btn-lg w-full sm:w-auto justify-center text-center !whitespace-normal"
               >
                 Contact Enterprise Solutions
               </button>

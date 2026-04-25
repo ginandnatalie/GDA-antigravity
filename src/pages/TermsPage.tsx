@@ -10,9 +10,9 @@ export default function TermsPage() {
       content: "Ginashe Digital Academy (GDA) is a premier digital institution dedicated to technical excellence. By enrolling, students agree to adhere to our high-performance culture and institutional standards. GDA reserves the right to modify curriculum pathways to ensure alignment with global tech industry shifts."
     },
     {
-      title: "2. Enrollment & Eligibility",
+      title: "2. Enrolment & Eligibility",
       icon: <CheckCircle className="w-6 h-6 text-emerald" />,
-      content: "Admission is based on merit and technical potential. Students must provide accurate documentation during the application process. Any falsification of records will result in immediate termination of enrollment without refund."
+      content: "Admission is based on merit and technical potential. Students must provide accurate documentation during the application process. Any falsification of records will result in immediate termination of enrolment without refund."
     },
     {
       title: "3. Academic Integrity",
@@ -22,7 +22,7 @@ export default function TermsPage() {
     {
       title: "4. Financial Obligations",
       icon: <CreditCard className="w-6 h-6 text-violet" />,
-      content: "Tuition fees are due as per the agreed instalment plan. Access to the GDA Student Hub and proprietary course materials is contingent upon maintaining a good financial standing with the Academy."
+      content: "Tuition fees are due as per the agreed instalment plan. Access to the GDA Student Portal and proprietary course materials is contingent upon maintaining a good financial standing with the Academy."
     },
     {
       title: "5. Intellectual Property",
@@ -40,7 +40,7 @@ export default function TermsPage() {
     <div className="bg-bg min-h-screen">
       <PageHero
         label="Institutional Governance"
-        title={<>Terms of<br /><span className="text-brand">Enrollment</span>.</>}
+        title={<>Terms of<br /><span className="text-brand">Enrolment</span>.</>}
         subtitle="The formal framework governing your residency and academic journey at Ginashe Digital Academy."
         image="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&q=80&w=2070"
         imageAlt="Formal institutional documentation"

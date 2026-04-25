@@ -172,7 +172,8 @@ export function Footer({ onOpenModal, editMode }: { onOpenModal: (id: string) =>
               { label: 'News', href: '/news' },
               { label: 'Events', href: '/events' },
               { label: 'Intake Calendar', href: '/#cohorts' },
-              { label: 'Institutional Impact', href: '/#alumni' }
+              { label: 'Foundership & Freelance', href: '/foundership' }
+
             ].map((l) => (
               <li key={l.label}>
                 <a 

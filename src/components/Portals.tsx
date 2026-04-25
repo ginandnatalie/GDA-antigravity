@@ -1,13 +1,13 @@
-import React, { useEffect, useState, useMemo } from 'react';
+3589import React, { useEffect, useState, useMemo } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../lib/auth';
 import { toast } from 'sonner';
 import AcademyDashboard from './AcademyDashboard';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { 
-  BarChart3, BookOpen, CreditCard, User, Settings, Layout, 
-  ChevronRight, LogOut, CheckCircle2, Clock, MapPin, Phone, 
+import {
+  BarChart3, BookOpen, CreditCard, User, Settings, Layout,
+  ChevronRight, LogOut, CheckCircle2, Clock, MapPin, Phone,
   Briefcase, GraduationCap, ArrowRight, ShieldCheck, Mail, Globe,
   Calendar, Zap, Star, AlertCircle, FileText, Lock, AlertTriangle,
   LayoutGrid, List, UserRound, Verified, History, XCircle, Shield
@@ -108,8 +108,8 @@ function ApplicationTable({ apps, onUpdate, onSelect, isLoading, filters }: any)
             {!apps.length ? (
               <tr><td colSpan={5} className="p-20 text-center text-text-muted italic">No records found in the current queue.</td></tr>
             ) : apps.map((app: any) => (
-              <tr 
-                key={app.id} 
+              <tr
+                key={app.id}
                 className="border-b border-border-custom/50 hover:bg-brand/[0.03] transition-colors group cursor-pointer"
                 onClick={() => onSelect(app)}
               >
@@ -133,11 +133,10 @@ function ApplicationTable({ apps, onUpdate, onSelect, isLoading, filters }: any)
                   <div className="text-[9px] text-text-dim uppercase">{new Date(app.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
                 </td>
                 <td className="p-3.5">
-                  <span className={`px-3 py-1 rounded-full text-[9px] font-dm-mono uppercase border tracking-widest ${
-                    app.status === 'approved' ? 'bg-emerald-dim text-emerald border-emerald/20' :
-                    app.status === 'rejected' ? 'bg-coral-dim text-coral border-coral/20' :
-                    'bg-brand-dim text-brand border-brand/20'
-                  }`}>
+                  <span className={`px-3 py-1 rounded-full text-[9px] font-dm-mono uppercase border tracking-widest ${app.status === 'approved' ? 'bg-emerald-dim text-emerald border-emerald/20' :
+                      app.status === 'rejected' ? 'bg-coral-dim text-coral border-coral/20' :
+                        'bg-brand-dim text-brand border-brand/20'
+                    }`}>
                     {app.status || 'pending'}
                   </span>
                 </td>
@@ -173,7 +172,7 @@ export function AdminDashboard() {
   const [pendingApprovals, setPendingApprovals] = useState<any[]>([]);
   const [selectedApp, setSelectedApp] = useState<any>(null);
   const [academicSchedule, setAcademicSchedule] = useState<any[]>([]);
-  
+
   // Dashboard application list state
   const [statusFilter, setStatusFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -182,14 +181,14 @@ export function AdminDashboard() {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [filter, setFilter] = useState('all');
   const [updatingId, setUpdatingId] = useState<string | null>(null);
-  
+
   // ─── GOVERNANCE MOTIVATION STATE ───
   const [showGovModal, setShowGovModal] = useState(false);
   const [govAction, setGovAction] = useState<{ name: string; targetId?: string; callback: (data: any) => void } | null>(null);
 
-  const isSuperAdmin = profile?.role === 'super_admin' || 
-    user?.email === 'academy@ginashe.co.za' || 
-    user?.email === 'ginashetraining@gmail.com' || 
+  const isSuperAdmin = profile?.role === 'super_admin' ||
+    user?.email === 'academy@ginashe.co.za' ||
+    user?.email === 'ginashetraining@gmail.com' ||
     user?.email === 'george@ginashe.co.za';
 
   // ─── CMD+K Shortcut ──────────────
@@ -232,8 +231,8 @@ export function AdminDashboard() {
       .on('postgres_changes', { event: '*', schema: 'public', table: 'academic_schedule' }, () => fetchAcademicSchedule())
       .subscribe();
 
-    return () => { 
-      supabase.removeChannel(channel); 
+    return () => {
+      supabase.removeChannel(channel);
       window.removeEventListener('beforeunload', handleLeave);
     };
   }, []);
@@ -283,7 +282,7 @@ export function AdminDashboard() {
           .from('alumni_records')
           .update({ is_approved: true })
           .eq('id', record.id);
-        
+
         if (error) {
           alert(error.message);
         } else {
@@ -383,7 +382,7 @@ export function AdminDashboard() {
             .eq('id', id);
 
           if (error) throw error;
-          
+
           // Send email notification
           try {
             await fetch('/api/send-status-email', {
@@ -401,7 +400,7 @@ export function AdminDashboard() {
             console.error('Failed to send email notification:', emailErr);
           }
 
-          setApplications(applications.map(a => 
+          setApplications(applications.map(a =>
             a.id === id ? { ...a, ...updateData } : a
           ));
         } catch (err: any) {
@@ -418,7 +417,7 @@ export function AdminDashboard() {
   async function bulkUpdateStatus(newStatus: string) {
     if (selectedIds.size === 0) return;
     if (!confirm(`Are you sure you want to ${newStatus} ${selectedIds.size} applications?`)) return;
-    
+
     for (const id of selectedIds) {
       await updateStatus(id, newStatus);
     }
@@ -428,7 +427,7 @@ export function AdminDashboard() {
   // ─── FILTERED + SORTED DATA ─────
   const filteredApps = useMemo(() => {
     let result = applications;
-    
+
     // Type filter
     if (filter !== 'all') result = result.filter(a => a.type === filter);
     // Status filter
@@ -531,406 +530,405 @@ export function AdminDashboard() {
       )}
 
       {editingCourse ? (
-        <CourseContentEditor 
-          course={editingCourse} 
+        <CourseContentEditor
+          course={editingCourse}
           onBack={() => {
             setEditingCourse(null);
             fetchCourses();
-          }} 
+          }}
         />
       ) : (
         <>
           <div className="flex flex-col lg:flex-row min-h-screen bg-bg relative isolate">
-      {/* ─── ADMIN SIDEBAR ─── */}
-      <aside className={`fixed lg:h-screen lg:border-r border-border-custom bg-surface/80 backdrop-blur-2xl z-50 transition-all duration-300 ease-[0.25,0.1,0.25,1] ${isSidebarCollapsed ? 'lg:w-20' : 'lg:w-64'} ${isMobileMenuOpen ? 'translate-x-0 w-64' : '-translate-x-full lg:translate-x-0'}`}>
-        <div className="flex flex-col h-full relative">
-          {/* Collapse Toggle Button (Desktop Only) */}
-          <button 
-            onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
-            className="absolute -right-3 top-20 w-6 h-6 bg-brand text-bg rounded-full hidden lg:flex items-center justify-center shadow-lg z-30 hover:scale-110 transition-transform"
-          >
-            {isSidebarCollapsed ? <ChevronRight size={14} /> : <ChevronRight size={14} className="rotate-180" />}
-          </button>
-
-          <div className="p-4 h-full flex flex-col">
-            {/* Institutional Navigation */}
-            <div className="mb-8">
-              <button 
-                onClick={async () => {
-                   await supabase.auth.signOut();
-                   window.location.href = '/';
-                }}
-                className={`w-full flex items-center rounded-xl bg-brand/10 border border-brand/30 text-brand hover:bg-brand hover:text-bg transition-all font-bold text-[10px] uppercase tracking-tighter ${isSidebarCollapsed ? 'justify-center p-3' : 'px-4 py-3 gap-2.5'}`}
-              >
-                <Globe className="w-4 h-4 shrink-0" />
-                {!isSidebarCollapsed && <span className="whitespace-nowrap">Main Website →</span>}
-              </button>
-            </div>
-
-            <div className={`mb-8 flex items-center overflow-hidden transition-all duration-200 ${isSidebarCollapsed ? 'lg:justify-center' : 'px-2 justify-start gap-2.5'}`}>
-              <div className="w-9 h-9 rounded-xl bg-brand text-bg flex items-center justify-center font-black shadow-lg shadow-brand/20 shrink-0">G</div>
-              {(!isSidebarCollapsed || isMobileMenuOpen) && (
-                <div className="flex flex-col animate-fade">
-                  <h2 className="font-syne font-extrabold text-lg tracking-tighter whitespace-nowrap leading-none">ADMIN HUB</h2>
-                  <span className="text-[7px] font-dm-mono text-brand tracking-widest uppercase opacity-70">Institutional Control</span>
-                </div>
-              )}
-            </div>
-
-            <nav className="flex-1 space-y-1 overflow-y-auto custom-scrollbar pr-2">
-              {[
-                { id: 'overview', label: 'Command Hub', icon: Zap },
-                { id: 'applications', label: 'Admissions', icon: FileText },
-                { id: 'courses', label: 'Curriculum', icon: BookOpen },
-                { id: 'academic', label: 'Academic Assets', icon: Star },
-                { id: 'broadcasts', label: 'Broadcast Hub', icon: Zap },
-                { id: 'registry', label: 'Global Registry', icon: User },
-                { id: 'timetable', label: 'Campus Timetable', icon: Calendar },
-                { id: 'attendance', label: 'Attendance Registry', icon: CheckCircle2 },
-                { id: 'vault', label: 'Resource Vault', icon: Lock },
-                { id: 'progress', label: 'Student Success', icon: Zap },
-                { id: 'finances', label: 'Financials', icon: CreditCard },
-                { id: 'news', label: 'Content CMS', icon: Layout },
-                { id: 'events', label: 'Events Hub', icon: Calendar },
-                { id: 'governance', label: 'Campus Governance', icon: ShieldCheck, super: true },
-                { id: 'compliance', label: 'Compliance Hub', icon: ShieldCheck, super: true },
-                { id: 'graduation', label: 'Graduation', icon: GraduationCap, super: true },
-                { id: 'audit', label: 'Audit Trail', icon: Lock, super: true },
-                { id: 'settings', label: 'Portal Config', icon: Settings, super: true },
-              ].filter(t => t.super ? isSuperAdmin : true).map((item) => (
+            {/* ─── ADMIN SIDEBAR ─── */}
+            <aside className={`fixed lg:h-screen lg:border-r border-border-custom bg-surface/80 backdrop-blur-2xl z-50 transition-all duration-300 ease-[0.25,0.1,0.25,1] ${isSidebarCollapsed ? 'lg:w-20' : 'lg:w-64'} ${isMobileMenuOpen ? 'translate-x-0 w-64' : '-translate-x-full lg:translate-x-0'}`}>
+              <div className="flex flex-col h-full relative">
+                {/* Collapse Toggle Button (Desktop Only) */}
                 <button
-                  key={item.id}
-                  onClick={() => { setActiveTab(item.id as any); setIsMobileMenuOpen(false); }}
-                  title={(isSidebarCollapsed && !isMobileMenuOpen) ? item.label : ''}
-                  className={`w-full flex items-center rounded-xl font-dm-mono text-[11px] uppercase tracking-widest transition-all duration-200 group ${
-                    activeTab === item.id 
-                      ? 'bg-brand text-bg font-bold shadow-lg shadow-brand/20' 
-                      : 'text-text-muted hover:text-text-custom hover:bg-white/5'
-                  } ${(isSidebarCollapsed && !isMobileMenuOpen) ? 'lg:justify-center p-3' : 'px-4 py-3 gap-3'}`}
+                  onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+                  className="absolute -right-3 top-20 w-6 h-6 bg-brand text-bg rounded-full hidden lg:flex items-center justify-center shadow-lg z-30 hover:scale-110 transition-transform"
                 >
-                  <item.icon className="w-4 h-4 shrink-0" />
-                  {(!isSidebarCollapsed || isMobileMenuOpen) && <span className="whitespace-nowrap animate-fade">{item.label}</span>}
+                  {isSidebarCollapsed ? <ChevronRight size={14} /> : <ChevronRight size={14} className="rotate-180" />}
                 </button>
-              ))}
-            </nav>
 
-            <div className="mt-auto pt-6 border-t border-border-custom space-y-1">
-              <button 
-                onClick={() => setShowCommandPalette(true)} 
-                title={(isSidebarCollapsed && !isMobileMenuOpen) ? 'Quick Search' : ''}
-                className={`w-full flex items-center rounded-xl bg-surface border border-border-custom text-text-muted hover:text-brand transition-all font-dm-mono text-[10px] uppercase tracking-widest ${(isSidebarCollapsed && !isMobileMenuOpen) ? 'lg:justify-center p-3' : 'px-4 py-3 gap-3'}`}
-              >
-                <span className="text-sm shrink-0 text-center">🔍</span>
-                {(!isSidebarCollapsed || isMobileMenuOpen) && <span className="whitespace-nowrap animate-fade">Quick Search [K]</span>}
-              </button>
-              <button 
-                onClick={handlePasswordReset} 
-                title={(isSidebarCollapsed && !isMobileMenuOpen) ? 'Security' : ''}
-                className={`w-full flex items-center rounded-xl text-text-muted hover:text-brand hover:bg-brand/5 transition-all font-dm-mono text-[11px] uppercase tracking-widest ${(isSidebarCollapsed && !isMobileMenuOpen) ? 'lg:justify-center p-3' : 'px-4 py-3 gap-3'}`}
-              >
-                <Lock className="w-4 h-4 shrink-0" /> 
-                {(!isSidebarCollapsed || isMobileMenuOpen) && <span className="whitespace-nowrap animate-fade">Secure Reset</span>}
-              </button>
-              <button 
-                onClick={() => signOut()} 
-                title={(isSidebarCollapsed && !isMobileMenuOpen) ? 'Sign Out' : ''}
-                className={`w-full flex items-center rounded-xl text-coral hover:bg-coral/5 transition-all font-dm-mono text-[11px] uppercase tracking-widest ${(isSidebarCollapsed && !isMobileMenuOpen) ? 'lg:justify-center p-3' : 'px-4 py-3 gap-3'}`}
-              >
-                <LogOut className="w-4 h-4 shrink-0" /> 
-                {(!isSidebarCollapsed || isMobileMenuOpen) && <span className="whitespace-nowrap animate-fade">Sign Out</span>}
-              </button>
-            </div>
-          </div>
-        </div>
-      </aside>
+                <div className="p-4 h-full flex flex-col">
+                  {/* Institutional Navigation */}
+                  <div className="mb-8">
+                    <button
+                      onClick={async () => {
+                        await supabase.auth.signOut();
+                        window.location.href = '/';
+                      }}
+                      className={`w-full flex items-center rounded-xl bg-brand/10 border border-brand/30 text-brand hover:bg-brand hover:text-bg transition-all font-bold text-[10px] uppercase tracking-tighter ${isSidebarCollapsed ? 'justify-center p-3' : 'px-4 py-3 gap-2.5'}`}
+                    >
+                      <Globe className="w-4 h-4 shrink-0" />
+                      {!isSidebarCollapsed && <span className="whitespace-nowrap">Main Website →</span>}
+                    </button>
+                  </div>
 
-      {/* Mobile Overlay */}
-      {isMobileMenuOpen && (
-        <div 
-          className="fixed inset-0 bg-bg/80 backdrop-blur-sm z-40 lg:hidden animate-fade"
-          onClick={() => setIsMobileMenuOpen(false)}
-        />
-      )}
+                  <div className={`mb-8 flex items-center overflow-hidden transition-all duration-200 ${isSidebarCollapsed ? 'lg:justify-center' : 'px-2 justify-start gap-2.5'}`}>
+                    <div className="w-9 h-9 rounded-xl bg-brand text-bg flex items-center justify-center font-black shadow-lg shadow-brand/20 shrink-0">G</div>
+                    {(!isSidebarCollapsed || isMobileMenuOpen) && (
+                      <div className="flex flex-col animate-fade">
+                        <h2 className="font-syne font-extrabold text-lg tracking-tighter whitespace-nowrap leading-none">ADMIN HUB</h2>
+                        <span className="text-[7px] font-dm-mono text-brand tracking-widest uppercase opacity-70">Institutional Control</span>
+                      </div>
+                    )}
+                  </div>
 
-      {/* ─── ADMIN MAIN CONTENT ─── */}
-      <main className={`flex-1 p-4 md:p-6 lg:p-8 animate-fade transition-all duration-300 ease-[0.25,0.1,0.25,1] ${isSidebarCollapsed ? 'lg:ml-20' : 'lg:ml-64'}`}>
-        {/* TOP BAR */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-6">
-          <div className="flex items-center gap-4 animate-fadeRight">
-            {/* Mobile Menu Toggle */}
-            <button 
-              onClick={() => setIsMobileMenuOpen(true)}
-              className="lg:hidden p-3 bg-surface border border-border-custom rounded-2xl text-brand"
-            >
-              <Layout className="w-5 h-5" />
-            </button>
-            <div>
-               <h1 className="font-syne font-extrabold text-4xl md:text-5xl tracking-tighter mb-2">
-                 {activeTab === 'overview' ? 'Command Center' : activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}
-               </h1>
-               <p className="text-text-muted font-dm-mono text-[10px] uppercase tracking-[0.2em]">
-                 Ginashe Admin System &bull; Active Session: {user?.email}
-               </p>
-            </div>
-          </div>
+                  <nav className="flex-1 space-y-1 overflow-y-auto custom-scrollbar pr-2">
+                    {[
+                      { id: 'overview', label: 'Command Hub', icon: Zap },
+                      { id: 'applications', label: 'Admissions', icon: FileText },
+                      { id: 'courses', label: 'Curriculum', icon: BookOpen },
+                      { id: 'academic', label: 'Academic Assets', icon: Star },
+                      { id: 'broadcasts', label: 'Broadcast Hub', icon: Zap },
+                      { id: 'registry', label: 'Global Registry', icon: User },
+                      { id: 'timetable', label: 'Campus Timetable', icon: Calendar },
+                      { id: 'attendance', label: 'Attendance Registry', icon: CheckCircle2 },
+                      { id: 'vault', label: 'Resource Vault', icon: Lock },
+                      { id: 'progress', label: 'Student Success', icon: Zap },
+                      { id: 'finances', label: 'Financials', icon: CreditCard },
+                      { id: 'news', label: 'Content CMS', icon: Layout },
+                      { id: 'events', label: 'Events Hub', icon: Calendar },
+                      { id: 'governance', label: 'Campus Governance', icon: ShieldCheck, super: true },
+                      { id: 'compliance', label: 'Compliance Hub', icon: ShieldCheck, super: true },
+                      { id: 'graduation', label: 'Graduation', icon: GraduationCap, super: true },
+                      { id: 'audit', label: 'Audit Trail', icon: Lock, super: true },
+                      { id: 'settings', label: 'Portal Config', icon: Settings, super: true },
+                    ].filter(t => t.super ? isSuperAdmin : true).map((item) => (
+                      <button
+                        key={item.id}
+                        onClick={() => { setActiveTab(item.id as any); setIsMobileMenuOpen(false); }}
+                        title={(isSidebarCollapsed && !isMobileMenuOpen) ? item.label : ''}
+                        className={`w-full flex items-center rounded-xl font-dm-mono text-[11px] uppercase tracking-widest transition-all duration-200 group ${activeTab === item.id
+                            ? 'bg-brand text-bg font-bold shadow-lg shadow-brand/20'
+                            : 'text-text-muted hover:text-text-custom hover:bg-white/5'
+                          } ${(isSidebarCollapsed && !isMobileMenuOpen) ? 'lg:justify-center p-3' : 'px-4 py-3 gap-3'}`}
+                      >
+                        <item.icon className="w-4 h-4 shrink-0" />
+                        {(!isSidebarCollapsed || isMobileMenuOpen) && <span className="whitespace-nowrap animate-fade">{item.label}</span>}
+                      </button>
+                    ))}
+                  </nav>
 
-          <div className="flex items-center gap-4 animate-fadeLeft">
-            {/* Notifications Bell */}
-            <div className="relative">
-              <button 
-                onClick={() => setShowNotifications(!showNotifications)}
-                className={`p-3 rounded-2xl border transition-all ${notifications.length > 0 ? 'bg-brand/10 border-brand/30 text-brand animate-pulse' : 'bg-surface/50 border-border-custom text-text-muted hover:text-brand'}`}
-              >
-                <Zap className="w-4 h-4" />
-                {notifications.length > 0 && (
-                  <span className="absolute -top-1 -right-1 w-4 h-4 bg-coral text-white text-[8px] font-bold rounded-full flex items-center justify-center border-2 border-bg">
-                    {notifications.length}
-                  </span>
-                )}
-              </button>
-
-              {showNotifications && (
-                <div className="absolute right-0 mt-4 w-80 bg-card border border-border-custom rounded-2xl shadow-2xl z-[100] overflow-hidden">
-                   <div className="p-4 border-b border-border-custom flex justify-between items-center bg-surface">
-                      <span className="text-[10px] font-dm-mono uppercase tracking-widest font-bold">Priority Notices</span>
-                      <button onClick={() => setShowNotifications(false)} className="text-[10px] text-text-dim">CLOSE</button>
-                   </div>
-                   <div className="max-h-96 overflow-y-auto">
-                      {notifications.map(n => (
-                        <div key={n.id} className="p-4 border-b border-border-custom/50 hover:bg-white/5 transition-colors cursor-pointer" onClick={async () => {
-                           await supabase.from('system_notifications').update({ is_read: true }).eq('id', n.id);
-                           fetchNotifications();
-                           if (n.link) setActiveTab('courses'); // Redirect to courses for inquiries
-                        }}>
-                           <div className="flex items-center gap-2 mb-1">
-                              <span className="w-1.5 h-1.5 rounded-full bg-brand" />
-                              <span className="text-[11px] font-bold">{n.title}</span>
-                           </div>
-                           <p className="text-[10px] text-text-soft leading-relaxed">{n.message}</p>
-                           <div className="text-[8px] text-text-dim font-dm-mono uppercase mt-2">{new Date(n.created_at).toLocaleString()}</div>
-                        </div>
-                      ))}
-                      {notifications.length === 0 && (
-                        <div className="p-10 text-center">
-                           <p className="text-[10px] text-text-dim italic">System clear. No pending interactions.</p>
-                        </div>
-                      )}
-                   </div>
+                  <div className="mt-auto pt-6 border-t border-border-custom space-y-1">
+                    <button
+                      onClick={() => setShowCommandPalette(true)}
+                      title={(isSidebarCollapsed && !isMobileMenuOpen) ? 'Quick Search' : ''}
+                      className={`w-full flex items-center rounded-xl bg-surface border border-border-custom text-text-muted hover:text-brand transition-all font-dm-mono text-[10px] uppercase tracking-widest ${(isSidebarCollapsed && !isMobileMenuOpen) ? 'lg:justify-center p-3' : 'px-4 py-3 gap-3'}`}
+                    >
+                      <span className="text-sm shrink-0 text-center">🔍</span>
+                      {(!isSidebarCollapsed || isMobileMenuOpen) && <span className="whitespace-nowrap animate-fade">Quick Search [K]</span>}
+                    </button>
+                    <button
+                      onClick={handlePasswordReset}
+                      title={(isSidebarCollapsed && !isMobileMenuOpen) ? 'Security' : ''}
+                      className={`w-full flex items-center rounded-xl text-text-muted hover:text-brand hover:bg-brand/5 transition-all font-dm-mono text-[11px] uppercase tracking-widest ${(isSidebarCollapsed && !isMobileMenuOpen) ? 'lg:justify-center p-3' : 'px-4 py-3 gap-3'}`}
+                    >
+                      <Lock className="w-4 h-4 shrink-0" />
+                      {(!isSidebarCollapsed || isMobileMenuOpen) && <span className="whitespace-nowrap animate-fade">Secure Reset</span>}
+                    </button>
+                    <button
+                      onClick={() => signOut()}
+                      title={(isSidebarCollapsed && !isMobileMenuOpen) ? 'Sign Out' : ''}
+                      className={`w-full flex items-center rounded-xl text-coral hover:bg-coral/5 transition-all font-dm-mono text-[11px] uppercase tracking-widest ${(isSidebarCollapsed && !isMobileMenuOpen) ? 'lg:justify-center p-3' : 'px-4 py-3 gap-3'}`}
+                    >
+                      <LogOut className="w-4 h-4 shrink-0" />
+                      {(!isSidebarCollapsed || isMobileMenuOpen) && <span className="whitespace-nowrap animate-fade">Sign Out</span>}
+                    </button>
+                  </div>
                 </div>
-              )}
-            </div>
-
-            <div className="flex items-center gap-4 bg-surface/50 border border-border-custom p-2 rounded-2xl backdrop-blur-md">
-              <select 
-                value={selectedCampus} 
-                onChange={(e) => setSelectedCampus(e.target.value)}
-                className="bg-transparent border-none text-[10px] font-dm-mono uppercase focus:ring-0 cursor-pointer text-brand pr-8"
-              >
-                <option value="all">All Campuses</option>
-                {campuses.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
-              </select>
-              <div className="w-px h-8 bg-border-custom" />
-              <div className="text-right px-2">
-                <p className="text-[10px] text-text-dim font-dm-mono uppercase">Database</p>
-                <p className="text-xs font-bold text-emerald flex items-center justify-end gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald animate-pulse" /> Connected
-                </p>
               </div>
-            </div>
-          </div>
-        </div>
+            </aside>
 
-        {/* CONTENT RENDERER */}
-        <div className="relative">
-          {loading && activeTab !== 'overview' && (
-            <div className="absolute inset-0 z-50 flex items-center justify-center bg-bg/50 backdrop-blur-sm rounded-3xl min-h-[400px]">
-               <div className="text-center">
-                 <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-brand mx-auto mb-4"></div>
-                 <p className="font-dm-mono text-[10px] uppercase text-brand">Synchronizing Database...</p>
-               </div>
-            </div>
-          )}
-
-          <div className={`transition-all duration-300 ${loading && activeTab !== 'overview' ? 'opacity-20 pointer-events-none' : 'opacity-100'}`}>
-            {activeTab === 'overview' ? (
-              <OverviewStats applications={applications} courses={courses} />
-            ) : activeTab === 'applications' ? (
-              <ApplicationTable 
-                apps={applications} 
-                onUpdate={fetchApplications} 
-                onSelect={setSelectedApp} 
-                isLoading={loading} 
-                filters={{status: statusFilter, search: searchQuery}} 
+            {/* Mobile Overlay */}
+            {isMobileMenuOpen && (
+              <div
+                className="fixed inset-0 bg-bg/80 backdrop-blur-sm z-40 lg:hidden animate-fade"
+                onClick={() => setIsMobileMenuOpen(false)}
               />
-            ) : activeTab === 'courses' ? (
-              <CourseManager courses={courses} onRefresh={fetchCourses} onEditContent={setEditingCourse} />
-            ) : activeTab === 'compliance' ? (
-              <ComplianceDashboard />
-            ) : activeTab === 'broadcasts' ? (
-              <BroadcastHub />
-            ) : activeTab === 'academic' ? (
-              <div className="space-y-8 animate-fade">
-                 <div className="bg-card border border-border-custom rounded-3xl p-10">
-                    <h3 className="font-syne font-bold text-2xl mb-6">Create Academic Item</h3>
-                    <div className="space-y-6">
-                       <div className="grid grid-cols-2 gap-6">
-                          <div className="space-y-2">
-                             <label className="text-[10px] font-dm-mono uppercase text-text-muted tracking-widest">Linked Course</label>
-                             <select id="ac-course" className="w-full bg-bg border border-border-custom rounded-xl p-4 text-sm">
+            )}
+
+            {/* ─── ADMIN MAIN CONTENT ─── */}
+            <main className={`flex-1 p-4 md:p-6 lg:p-8 animate-fade transition-all duration-300 ease-[0.25,0.1,0.25,1] ${isSidebarCollapsed ? 'lg:ml-20' : 'lg:ml-64'}`}>
+              {/* TOP BAR */}
+              <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-6">
+                <div className="flex items-center gap-4 animate-fadeRight">
+                  {/* Mobile Menu Toggle */}
+                  <button
+                    onClick={() => setIsMobileMenuOpen(true)}
+                    className="lg:hidden p-3 bg-surface border border-border-custom rounded-2xl text-brand"
+                  >
+                    <Layout className="w-5 h-5" />
+                  </button>
+                  <div>
+                    <h1 className="font-syne font-extrabold text-4xl md:text-5xl tracking-tighter mb-2">
+                      {activeTab === 'overview' ? 'Command Centre' : activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}
+                    </h1>
+                    <p className="text-text-muted font-dm-mono text-[10px] uppercase tracking-[0.2em]">
+                      Ginashe Admin System &bull; Active Session: {user?.email}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-4 animate-fadeLeft">
+                  {/* Notifications Bell */}
+                  <div className="relative">
+                    <button
+                      onClick={() => setShowNotifications(!showNotifications)}
+                      className={`p-3 rounded-2xl border transition-all ${notifications.length > 0 ? 'bg-brand/10 border-brand/30 text-brand animate-pulse' : 'bg-surface/50 border-border-custom text-text-muted hover:text-brand'}`}
+                    >
+                      <Zap className="w-4 h-4" />
+                      {notifications.length > 0 && (
+                        <span className="absolute -top-1 -right-1 w-4 h-4 bg-coral text-white text-[8px] font-bold rounded-full flex items-center justify-center border-2 border-bg">
+                          {notifications.length}
+                        </span>
+                      )}
+                    </button>
+
+                    {showNotifications && (
+                      <div className="absolute right-0 mt-4 w-80 bg-card border border-border-custom rounded-2xl shadow-2xl z-[100] overflow-hidden">
+                        <div className="p-4 border-b border-border-custom flex justify-between items-center bg-surface">
+                          <span className="text-[10px] font-dm-mono uppercase tracking-widest font-bold">Priority Notices</span>
+                          <button onClick={() => setShowNotifications(false)} className="text-[10px] text-text-dim">CLOSE</button>
+                        </div>
+                        <div className="max-h-96 overflow-y-auto">
+                          {notifications.map(n => (
+                            <div key={n.id} className="p-4 border-b border-border-custom/50 hover:bg-white/5 transition-colors cursor-pointer" onClick={async () => {
+                              await supabase.from('system_notifications').update({ is_read: true }).eq('id', n.id);
+                              fetchNotifications();
+                              if (n.link) setActiveTab('courses'); // Redirect to courses for inquiries
+                            }}>
+                              <div className="flex items-center gap-2 mb-1">
+                                <span className="w-1.5 h-1.5 rounded-full bg-brand" />
+                                <span className="text-[11px] font-bold">{n.title}</span>
+                              </div>
+                              <p className="text-[10px] text-text-soft leading-relaxed">{n.message}</p>
+                              <div className="text-[8px] text-text-dim font-dm-mono uppercase mt-2">{new Date(n.created_at).toLocaleString()}</div>
+                            </div>
+                          ))}
+                          {notifications.length === 0 && (
+                            <div className="p-10 text-center">
+                              <p className="text-[10px] text-text-dim italic">System clear. No pending interactions.</p>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="flex items-center gap-4 bg-surface/50 border border-border-custom p-2 rounded-2xl backdrop-blur-md">
+                    <select
+                      value={selectedCampus}
+                      onChange={(e) => setSelectedCampus(e.target.value)}
+                      className="bg-transparent border-none text-[10px] font-dm-mono uppercase focus:ring-0 cursor-pointer text-brand pr-8"
+                    >
+                      <option value="all">All Campuses</option>
+                      {campuses.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+                    </select>
+                    <div className="w-px h-8 bg-border-custom" />
+                    <div className="text-right px-2">
+                      <p className="text-[10px] text-text-dim font-dm-mono uppercase">Database</p>
+                      <p className="text-xs font-bold text-emerald flex items-center justify-end gap-1.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald animate-pulse" /> Connected
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* CONTENT RENDERER */}
+              <div className="relative">
+                {loading && activeTab !== 'overview' && (
+                  <div className="absolute inset-0 z-50 flex items-center justify-center bg-bg/50 backdrop-blur-sm rounded-3xl min-h-[400px]">
+                    <div className="text-center">
+                      <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-brand mx-auto mb-4"></div>
+                      <p className="font-dm-mono text-[10px] uppercase text-brand">Synchronizing Database...</p>
+                    </div>
+                  </div>
+                )}
+
+                <div className={`transition-all duration-300 ${loading && activeTab !== 'overview' ? 'opacity-20 pointer-events-none' : 'opacity-100'}`}>
+                  {activeTab === 'overview' ? (
+                    <OverviewStats applications={applications} courses={courses} />
+                  ) : activeTab === 'applications' ? (
+                    <ApplicationTable
+                      apps={applications}
+                      onUpdate={fetchApplications}
+                      onSelect={setSelectedApp}
+                      isLoading={loading}
+                      filters={{ status: statusFilter, search: searchQuery }}
+                    />
+                  ) : activeTab === 'courses' ? (
+                    <CourseManager courses={courses} onRefresh={fetchCourses} onEditContent={setEditingCourse} />
+                  ) : activeTab === 'compliance' ? (
+                    <ComplianceDashboard />
+                  ) : activeTab === 'broadcasts' ? (
+                    <BroadcastHub />
+                  ) : activeTab === 'academic' ? (
+                    <div className="space-y-8 animate-fade">
+                      <div className="bg-card border border-border-custom rounded-3xl p-10">
+                        <h3 className="font-syne font-bold text-2xl mb-6">Create Academic Item</h3>
+                        <div className="space-y-6">
+                          <div className="grid grid-cols-2 gap-6">
+                            <div className="space-y-2">
+                              <label className="text-[10px] font-dm-mono uppercase text-text-muted tracking-widest">Linked Course</label>
+                              <select id="ac-course" className="w-full bg-bg border border-border-custom rounded-xl p-4 text-sm">
                                 <option value="">Select Course...</option>
                                 {courses.map((c: any) => <option key={c.id} value={c.id}>{c.title}</option>)}
-                             </select>
-                          </div>
-                          <div className="space-y-2">
-                             <label className="text-[10px] font-dm-mono uppercase text-text-muted tracking-widest">Item Type</label>
-                             <select id="ac-type" className="w-full bg-bg border border-border-custom rounded-xl p-4 text-sm">
+                              </select>
+                            </div>
+                            <div className="space-y-2">
+                              <label className="text-[10px] font-dm-mono uppercase text-text-muted tracking-widest">Item Type</label>
+                              <select id="ac-type" className="w-full bg-bg border border-border-custom rounded-xl p-4 text-sm">
                                 <option value="assignment">Assignment</option>
                                 <option value="assessment">Assessment</option>
                                 <option value="exam">Official Exam</option>
                                 <option value="capstone">Capstone Project</option>
-                             </select>
+                              </select>
+                            </div>
                           </div>
-                       </div>
-                       <div className="grid grid-cols-3 gap-6">
-                          <div className="space-y-2">
-                             <label className="text-[10px] font-dm-mono uppercase text-text-muted tracking-widest">Weighting (%)</label>
-                             <input id="ac-weight" type="number" className="w-full bg-bg border border-border-custom rounded-xl p-4 text-sm" defaultValue="20" title="Proportion of the final module grade" />
-                          </div>
-                          <div className="space-y-2">
-                             <label className="text-[10px] font-dm-mono uppercase text-text-muted tracking-widest">Passing Score (%)</label>
-                             <input id="ac-pass" type="number" className="w-full bg-bg border border-border-custom rounded-xl p-4 text-sm" defaultValue="50" />
-                          </div>
-                          <div className="space-y-2">
-                             <label className="text-[10px] font-dm-mono uppercase text-text-muted tracking-widest">Integrity Logic</label>
-                             <select id="ac-proctor" className="w-full bg-bg border border-border-custom rounded-xl p-4 text-sm">
+                          <div className="grid grid-cols-3 gap-6">
+                            <div className="space-y-2">
+                              <label className="text-[10px] font-dm-mono uppercase text-text-muted tracking-widest">Weighting (%)</label>
+                              <input id="ac-weight" type="number" className="w-full bg-bg border border-border-custom rounded-xl p-4 text-sm" defaultValue="20" title="Proportion of the final module grade" />
+                            </div>
+                            <div className="space-y-2">
+                              <label className="text-[10px] font-dm-mono uppercase text-text-muted tracking-widest">Passing Score (%)</label>
+                              <input id="ac-pass" type="number" className="w-full bg-bg border border-border-custom rounded-xl p-4 text-sm" defaultValue="50" />
+                            </div>
+                            <div className="space-y-2">
+                              <label className="text-[10px] font-dm-mono uppercase text-text-muted tracking-widest">Integrity Logic</label>
+                              <select id="ac-proctor" className="w-full bg-bg border border-border-custom rounded-xl p-4 text-sm">
                                 <option value="false">Standard Mode</option>
                                 <option value="true">Active Proctoring (Focus Tracking)</option>
-                             </select>
+                              </select>
+                            </div>
                           </div>
-                       </div>
-                       <div className="space-y-2">
-                          <label className="text-[10px] font-dm-mono uppercase text-text-muted tracking-widest">Instructions / Reference Material</label>
-                          <textarea id="ac-desc" className="w-full bg-bg border border-border-custom rounded-xl p-4 text-sm h-32" placeholder="Submission guidelines, required files, etc..." />
-                       </div>
-                       <div className="flex justify-end">
-                          <button 
-                            onClick={async () => {
-                               const course_id = (document.getElementById('ac-course') as HTMLSelectElement).value;
-                               const type = (document.getElementById('ac-type') as HTMLSelectElement).value;
-                               const title = (document.getElementById('ac-title') as HTMLInputElement).value;
-                               const total_marks = parseInt((document.getElementById('ac-marks') as HTMLInputElement).value);
-                               const weight = parseInt((document.getElementById('ac-weight') as HTMLInputElement).value);
-                               const passing_score = parseInt((document.getElementById('ac-pass') as HTMLInputElement).value);
-                               const is_proctored = (document.getElementById('ac-proctor') as HTMLSelectElement).value === 'true';
-                               const due_date = (document.getElementById('ac-due') as HTMLInputElement).value;
-                               const description = (document.getElementById('ac-desc') as HTMLTextAreaElement).value;
+                          <div className="space-y-2">
+                            <label className="text-[10px] font-dm-mono uppercase text-text-muted tracking-widest">Instructions / Reference Material</label>
+                            <textarea id="ac-desc" className="w-full bg-bg border border-border-custom rounded-xl p-4 text-sm h-32" placeholder="Submission guidelines, required files, etc..." />
+                          </div>
+                          <div className="flex justify-end">
+                            <button
+                              onClick={async () => {
+                                const course_id = (document.getElementById('ac-course') as HTMLSelectElement).value;
+                                const type = (document.getElementById('ac-type') as HTMLSelectElement).value;
+                                const title = (document.getElementById('ac-title') as HTMLInputElement).value;
+                                const total_marks = parseInt((document.getElementById('ac-marks') as HTMLInputElement).value);
+                                const weight = parseInt((document.getElementById('ac-weight') as HTMLInputElement).value);
+                                const passing_score = parseInt((document.getElementById('ac-pass') as HTMLInputElement).value);
+                                const is_proctored = (document.getElementById('ac-proctor') as HTMLSelectElement).value === 'true';
+                                const due_date = (document.getElementById('ac-due') as HTMLInputElement).value;
+                                const description = (document.getElementById('ac-desc') as HTMLTextAreaElement).value;
 
-                               const { error } = await supabase.from('assessments').insert({
-                                 course_id, type, title, total_marks, weight, passing_score, is_proctored, due_date: due_date || null, description
-                               });
-                               if (error) alert(error.message);
-                               else {
-                                 alert('Academic item created with integrity controls!');
-                                 (document.getElementById('ac-title') as HTMLInputElement).value = '';
-                               }
-                            }}
-                            className="btn btn-brand px-12 py-4"
-                          >💾 Save Academic Item</button>
-                       </div>
+                                const { error } = await supabase.from('assessments').insert({
+                                  course_id, type, title, total_marks, weight, passing_score, is_proctored, due_date: due_date || null, description
+                                });
+                                if (error) alert(error.message);
+                                else {
+                                  alert('Academic item created with integrity controls!');
+                                  (document.getElementById('ac-title') as HTMLInputElement).value = '';
+                                }
+                              }}
+                              className="btn btn-brand px-12 py-4"
+                            >💾 Save Academic Item</button>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                 </div>
-              </div>
-            ) : activeTab === 'news' ? (
-              <NewsManager />
-            ) : activeTab === 'events' ? (
-              <EventsManager />
-            ) : activeTab === 'finances' ? (
-              <FinanceManager />
-            ) : activeTab === 'progress' ? (
-              <StudentProgressTracker />
-            ) : activeTab === 'governance' ? (
-              <div className="space-y-8 animate-fade">
-                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div className="bg-card border border-border-custom rounded-3xl p-10">
-                       <h3 className="font-syne font-bold text-2xl mb-2">Institutional Overrides</h3>
-                       <p className="text-text-muted text-xs mb-8">Master controls for Academy-wide features. Overrides per-course settings.</p>
-                       <div className="space-y-6">
-                          {[
-                            { key: 'global_discussions_enabled', label: 'Peer-to-Peer Discussions', desc: 'Activates student forums and social hubs.' },
-                            { key: 'global_ai_tutor_enabled', label: 'Intelligent AI Tutor', desc: 'Allows students to query curriculum via GDA_Brain.' },
-                            { key: 'campus_overlap_allowed', label: 'Cross-Campus Enrollment', desc: 'Allows students to hold active seats in multiple branches.' },
-                            { key: 'transcripts_enabled', label: 'Institutional Transcripts (Beta)', desc: 'Must be manually activated for SuperAdmin verification.' },
-                          ].map(opt => (
-                            <div key={opt.key} className="flex items-center justify-between p-4 bg-bg border border-border-custom rounded-2xl">
-                               <div>
+                  ) : activeTab === 'news' ? (
+                    <NewsManager />
+                  ) : activeTab === 'events' ? (
+                    <EventsManager />
+                  ) : activeTab === 'finances' ? (
+                    <FinanceManager />
+                  ) : activeTab === 'progress' ? (
+                    <StudentProgressTracker />
+                  ) : activeTab === 'governance' ? (
+                    <div className="space-y-8 animate-fade">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div className="bg-card border border-border-custom rounded-3xl p-10">
+                          <h3 className="font-syne font-bold text-2xl mb-2">Institutional Overrides</h3>
+                          <p className="text-text-muted text-xs mb-8">Master controls for Academy-wide features. Overrides per-course settings.</p>
+                          <div className="space-y-6">
+                            {[
+                              { key: 'global_discussions_enabled', label: 'Peer-to-Peer Discussions', desc: 'Activates student forums and social hubs.' },
+                              { key: 'global_ai_tutor_enabled', label: 'Intelligent AI Tutor', desc: 'Allows students to query curriculum via GDA_Brain.' },
+                              { key: 'campus_overlap_allowed', label: 'Cross-Campus Enrolment', desc: 'Allows students to hold active seats in multiple branches.' },
+                              { key: 'transcripts_enabled', label: 'Institutional Transcripts (Beta)', desc: 'Must be manually activated for SuperAdmin verification.' },
+                            ].map(opt => (
+                              <div key={opt.key} className="flex items-center justify-between p-4 bg-bg border border-border-custom rounded-2xl">
+                                <div>
                                   <div className="text-sm font-bold">{opt.label}</div>
                                   <div className="text-[10px] text-text-dim uppercase tracking-tighter">{opt.desc}</div>
-                               </div>
-                               <button 
-                                 onClick={async () => {
+                                </div>
+                                <button
+                                  onClick={async () => {
                                     const newVal = governanceSettings[opt.key] === 'true' ? 'false' : 'true';
                                     const { error } = await supabase.from('school_settings').update({ value: JSON.stringify(newVal) }).eq('key', opt.key);
                                     if (error) alert(error.message);
                                     else fetchGovernance();
-                                 }}
-                                 className={`w-12 h-6 rounded-full relative transition-colors ${governanceSettings[opt.key] === 'true' ? 'bg-brand' : 'bg-surface border border-border-custom'}`}
-                               >
+                                  }}
+                                  className={`w-12 h-6 rounded-full relative transition-colors ${governanceSettings[opt.key] === 'true' ? 'bg-brand' : 'bg-surface border border-border-custom'}`}
+                                >
                                   <div className={`absolute top-1 w-4 h-4 rounded-full bg-white transition-all ${governanceSettings[opt.key] === 'true' ? 'left-7' : 'left-1'}`} />
-                               </button>
-                            </div>
-                          ))}
-                       </div>
+                                </button>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                        <div className="bg-navy border border-brand/10 rounded-3xl p-10 flex flex-col justify-between">
+                          <div>
+                            <h3 className="font-syne font-bold text-2xl mb-2 text-brand">DHET Compliance Hub</h3>
+                            <p className="text-sm text-text-soft leading-relaxed mb-6">Access immutable records required for SACE, SAQA, and Department audits. No records can be deleted from this portal.</p>
+                          </div>
+                          <div className="space-y-4">
+                            <button onClick={() => setActiveTab('communications')} className="w-full btn btn-outline py-4 flex items-center justify-between px-6">
+                              <span className="text-xs uppercase tracking-widest font-dm-mono">View Audit Trails</span>
+                              <ShieldCheck className="w-4 h-4" />
+                            </button>
+                            <button className="w-full btn btn-brand py-4 flex items-center justify-between px-6">
+                              <span className="text-xs text-bg uppercase tracking-widest font-bold">Generate Annual Report</span>
+                              <BarChart3 className="w-4 h-4 text-bg" />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                    <div className="bg-navy border border-brand/10 rounded-3xl p-10 flex flex-col justify-between">
-                       <div>
-                          <h3 className="font-syne font-bold text-2xl mb-2 text-brand">DHET Compliance Hub</h3>
-                          <p className="text-sm text-text-soft leading-relaxed mb-6">Access immutable records required for SACE, SAQA, and Department audits. No records can be deleted from this portal.</p>
-                       </div>
-                       <div className="space-y-4">
-                          <button onClick={() => setActiveTab('communications')} className="w-full btn btn-outline py-4 flex items-center justify-between px-6">
-                             <span className="text-xs uppercase tracking-widest font-dm-mono">View Audit Trails</span>
-                             <ShieldCheck className="w-4 h-4" />
-                          </button>
-                          <button className="w-full btn btn-brand py-4 flex items-center justify-between px-6">
-                             <span className="text-xs text-bg uppercase tracking-widest font-bold">Generate Annual Report</span>
-                             <BarChart3 className="w-4 h-4 text-bg" />
-                          </button>
-                       </div>
-                    </div>
-                 </div>
+                  ) : activeTab === 'registry' ? (
+                    <InstitutionalUserRegistry />
+                  ) : activeTab === 'timetable' ? (
+                    <TimetableManager courses={courses} />
+                  ) : activeTab === 'attendance' ? (
+                    <AttendanceHub courses={courses} />
+                  ) : activeTab === 'vault' ? (
+                    <InstitutionalResourceVault />
+                  ) : activeTab === 'staff' ? (
+                    <StaffManagement />
+                  ) : activeTab === 'graduation' ? (
+                    <GraduationPipeline pendingApprovals={pendingApprovals} onApprove={handleApproveAlumni} />
+                  ) : activeTab === 'audit' ? (
+                    <InstitutionalAuditHub pendingApprovals={pendingApprovals} onApprove={handleApproveAlumni} />
+                  ) : activeTab === 'communications' ? (
+                    <CommunicationLogs />
+                  ) : (
+                    <SiteSettings />
+                  )}
+                </div>
               </div>
-            ) : activeTab === 'registry' ? (
-              <InstitutionalUserRegistry />
-            ) : activeTab === 'timetable' ? (
-              <TimetableManager courses={courses} />
-            ) : activeTab === 'attendance' ? (
-              <AttendanceHub courses={courses} />
-            ) : activeTab === 'vault' ? (
-              <InstitutionalResourceVault />
-            ) : activeTab === 'staff' ? (
-              <StaffManagement />
-            ) : activeTab === 'graduation' ? (
-              <GraduationPipeline pendingApprovals={pendingApprovals} onApprove={handleApproveAlumni} />
-            ) : activeTab === 'audit' ? (
-              <InstitutionalAuditHub pendingApprovals={pendingApprovals} onApprove={handleApproveAlumni} />
-            ) : activeTab === 'communications' ? (
-              <CommunicationLogs />
-            ) : (
-              <SiteSettings />
-            )}
-            </div>
+            </main>
           </div>
-        </main>
-      </div>
-    </>
-  )}
+        </>
+      )}
 
       {/* ─── APPLICATION DETAIL MODAL ─── */}
       {selectedApp && (
         <div className="fixed inset-0 z-[3000] bg-bg/90 backdrop-blur-sm flex items-center justify-center p-6" onClick={() => setSelectedApp(null)}>
           <div className="bg-card border border-border-custom rounded-2xl w-full max-w-lg max-h-[80vh] overflow-y-auto p-8 relative" onClick={e => e.stopPropagation()}>
             <button className="absolute top-4 right-4 text-text-muted hover:text-text-custom" onClick={() => setSelectedApp(null)}>✕</button>
-            
+
             <div className="mb-6">
               <div className="flex items-center justify-between mb-2">
                 <span className="font-dm-mono text-[10px] uppercase tracking-widest text-brand">{selectedApp.type} Application</span>
@@ -1109,67 +1107,67 @@ function CommunicationLogs() {
 
       {activeSubTab === 'comms' ? (
         <div className="bg-card border border-border-custom rounded-3xl overflow-hidden shadow-xl">
-           <table className="w-full text-left border-collapse">
-             <thead>
-               <tr className="bg-surface/50 border-b border-border-custom">
-                 <th className="p-6 text-[10px] uppercase tracking-widest text-text-muted font-dm-mono">Timestamp</th>
-                 <th className="p-6 text-[10px] uppercase tracking-widest text-text-muted font-dm-mono">Recipient</th>
-                 <th className="p-6 text-[10px] uppercase tracking-widest text-text-muted font-dm-mono">Subject</th>
-                 <th className="p-6 text-[10px] uppercase tracking-widest text-text-muted font-dm-mono">Status</th>
-               </tr>
-             </thead>
-             <tbody className="divide-y divide-border-custom">
-               {logs.map(log => (
-                 <tr key={log.id} className="hover:bg-white/2 transition-colors text-xs">
-                   <td className="p-6 font-dm-mono text-text-dim">{new Date(log.created_at).toLocaleString()}</td>
-                   <td className="p-6 font-bold text-text-custom">{log.recipient_email}</td>
-                   <td className="p-6 text-text-soft">{log.subject}</td>
-                   <td className="p-6 text-center">
-                     <span className="px-2 py-1 rounded-[4px] text-[9px] font-bold uppercase bg-emerald/10 text-emerald border border-emerald/20">SENT</span>
-                   </td>
-                 </tr>
-               ))}
-             </tbody>
-           </table>
-           {logs.length === 0 && <div className="p-20 text-center text-text-dim text-sm italic">No communication records found.</div>}
+          <table className="w-full text-left border-collapse">
+            <thead>
+              <tr className="bg-surface/50 border-b border-border-custom">
+                <th className="p-6 text-[10px] uppercase tracking-widest text-text-muted font-dm-mono">Timestamp</th>
+                <th className="p-6 text-[10px] uppercase tracking-widest text-text-muted font-dm-mono">Recipient</th>
+                <th className="p-6 text-[10px] uppercase tracking-widest text-text-muted font-dm-mono">Subject</th>
+                <th className="p-6 text-[10px] uppercase tracking-widest text-text-muted font-dm-mono">Status</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-border-custom">
+              {logs.map(log => (
+                <tr key={log.id} className="hover:bg-white/2 transition-colors text-xs">
+                  <td className="p-6 font-dm-mono text-text-dim">{new Date(log.created_at).toLocaleString()}</td>
+                  <td className="p-6 font-bold text-text-custom">{log.recipient_email}</td>
+                  <td className="p-6 text-text-soft">{log.subject}</td>
+                  <td className="p-6 text-center">
+                    <span className="px-2 py-1 rounded-[4px] text-[9px] font-bold uppercase bg-emerald/10 text-emerald border border-emerald/20">SENT</span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          {logs.length === 0 && <div className="p-20 text-center text-text-dim text-sm italic">No communication records found.</div>}
         </div>
       ) : (
         <div className="bg-card border border-border-custom rounded-3xl overflow-hidden shadow-2xl">
-           <div className="overflow-x-auto">
-             <table className="w-full text-left border-collapse min-w-[800px]">
-               <thead>
-                 <tr className="bg-surface/50 border-b border-border-custom">
-                   <th className="p-6 text-[10px] uppercase tracking-widest text-text-muted font-dm-mono">Timestamp</th>
-                   <th className="p-6 text-[10px] uppercase tracking-widest text-text-muted font-dm-mono">Directive</th>
-                   <th className="p-6 text-[10px] uppercase tracking-widest text-text-muted font-dm-mono">Category</th>
-                   <th className="p-6 text-[10px] uppercase tracking-widest text-text-muted font-dm-mono">Evidence</th>
-                   <th className="p-6 text-[10px] uppercase tracking-widest text-text-muted font-dm-mono">Motivation</th>
-                 </tr>
-               </thead>
-               <tbody className="divide-y divide-border-custom">
-                 {auditLogs.map(log => (
-                   <tr key={log.id} className="hover:bg-white/2 transition-colors">
-                     <td className="p-6 text-xs text-text-dim font-dm-mono">{new Date(log.created_at).toLocaleString()}</td>
-                     <td className="p-6">
-                        <span className="px-2 py-1 rounded text-[9px] font-bold uppercase bg-brand/10 text-brand border border-brand/20">{log.action_type || 'ADMIN_OVERRIDE'}</span>
-                     </td>
-                     <td className="p-6 text-xs font-dm-mono text-text-custom">{log.category}</td>
-                     <td className="p-6">
-                       {log.evidence_url ? (
-                         <a href={log.evidence_url} target="_blank" rel="noreferrer" className="text-sky hover:underline text-[9px] font-dm-mono flex items-center gap-1">
-                           📎 VIEW FILING
-                         </a>
-                       ) : (
-                         <span className="text-text-dim text-[9px] italic">No physical filing</span>
-                       )}
-                     </td>
-                     <td className="p-6 text-xs text-text-muted leading-relaxed max-w-xs">{log.admin_notes}</td>
-                   </tr>
-                 ))}
-               </tbody>
-             </table>
-           </div>
-           {auditLogs.length === 0 && <div className="p-20 text-center text-text-dim text-sm italic">No institutional governance records found.</div>}
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse min-w-[800px]">
+              <thead>
+                <tr className="bg-surface/50 border-b border-border-custom">
+                  <th className="p-6 text-[10px] uppercase tracking-widest text-text-muted font-dm-mono">Timestamp</th>
+                  <th className="p-6 text-[10px] uppercase tracking-widest text-text-muted font-dm-mono">Directive</th>
+                  <th className="p-6 text-[10px] uppercase tracking-widest text-text-muted font-dm-mono">Category</th>
+                  <th className="p-6 text-[10px] uppercase tracking-widest text-text-muted font-dm-mono">Evidence</th>
+                  <th className="p-6 text-[10px] uppercase tracking-widest text-text-muted font-dm-mono">Motivation</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-border-custom">
+                {auditLogs.map(log => (
+                  <tr key={log.id} className="hover:bg-white/2 transition-colors">
+                    <td className="p-6 text-xs text-text-dim font-dm-mono">{new Date(log.created_at).toLocaleString()}</td>
+                    <td className="p-6">
+                      <span className="px-2 py-1 rounded text-[9px] font-bold uppercase bg-brand/10 text-brand border border-brand/20">{log.action_type || 'ADMIN_OVERRIDE'}</span>
+                    </td>
+                    <td className="p-6 text-xs font-dm-mono text-text-custom">{log.category}</td>
+                    <td className="p-6">
+                      {log.evidence_url ? (
+                        <a href={log.evidence_url} target="_blank" rel="noreferrer" className="text-sky hover:underline text-[9px] font-dm-mono flex items-center gap-1">
+                          📎 VIEW FILING
+                        </a>
+                      ) : (
+                        <span className="text-text-dim text-[9px] italic">No physical filing</span>
+                      )}
+                    </td>
+                    <td className="p-6 text-xs text-text-muted leading-relaxed max-w-xs">{log.admin_notes}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          {auditLogs.length === 0 && <div className="p-20 text-center text-text-dim text-sm italic">No institutional governance records found.</div>}
         </div>
       )}
     </div>
@@ -1195,9 +1193,9 @@ function InstitutionalUserRegistry() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [alumniAcademicRecord, setAlumniAcademicRecord] = useState<any>(null);
 
-  const isSuperAdmin = profile?.role === 'super_admin' || 
-    user?.email === 'academy@ginashe.co.za' || 
-    user?.email === 'ginashetraining@gmail.com' || 
+  const isSuperAdmin = profile?.role === 'super_admin' ||
+    user?.email === 'academy@ginashe.co.za' ||
+    user?.email === 'ginashetraining@gmail.com' ||
     user?.email === 'george@ginashe.co.za';
 
   const INSTITUTIONAL_ROLES = [
@@ -1269,7 +1267,7 @@ function InstitutionalUserRegistry() {
       // Handle Physical Evidence Upload if file selected
       const fileInput = document.getElementById('governance-evidence-upload') as HTMLInputElement;
       const file = fileInput?.files?.[0];
-      
+
       if (file) {
         const fileExt = file.name.split('.').pop();
         const fileName = `${governanceUser.id}_${Date.now()}.${fileExt}`;
@@ -1284,13 +1282,13 @@ function InstitutionalUserRegistry() {
         const { data: { publicUrl } } = supabase.storage
           .from('governance_evidence')
           .getPublicUrl(filePath);
-        
+
         finalEvidenceUrl = publicUrl;
       } else if ((motivation === 'Institutional Override' || governanceAction.newStatus === 'alumni' || motivation.includes('Evidence Required')) && !evidenceUrl) {
-         // Check if URL was provided manually or if it was required
-         alert('Protocol Violation: This action requires physical evidence (File or URL).');
-         setIsProcessing(false);
-         return;
+        // Check if URL was provided manually or if it was required
+        alert('Protocol Violation: This action requires physical evidence (File or URL).');
+        setIsProcessing(false);
+        return;
       }
 
       // 1. Update Target Profile
@@ -1322,7 +1320,7 @@ function InstitutionalUserRegistry() {
         const { error: alumniErr } = await supabase.from('alumni_records').insert({
           user_id: governanceUser.id,
           graduation_year: new Date().getFullYear(),
-          program: alumniAcademicRecord?.program || 'Verified GDA Program',
+          program: alumniAcademicRecord?.program || 'Verified GDA Programme',
           achievements: 'Institutional Graduation via SuperAdmin Override',
           governance_reference: finalEvidenceUrl
         });
@@ -1335,7 +1333,7 @@ function InstitutionalUserRegistry() {
       setComments('');
       setEvidenceUrl('');
       fetchUsers();
-    } catch (err: any) { 
+    } catch (err: any) {
       toast.error('Governance Breach Detected', { description: err.message });
     }
     finally { setIsProcessing(false); }
@@ -1345,11 +1343,11 @@ function InstitutionalUserRegistry() {
   async function triggerAlumniProcess(targetUser: any) {
     setGovernanceUser(targetUser);
     setGovernanceAction({ type: 'STATUS_CHANGE', newStatus: 'alumni' });
-    
+
     // Fetch academic record for popup
     const { data: enrollments } = await supabase.from('enrollments').select('*, courses(title)').eq('user_id', targetUser.id);
     const { data: submissions } = await supabase.from('submissions').select('*').eq('user_id', targetUser.id);
-    
+
     setAlumniAcademicRecord({
       enrollments: enrollments || [],
       avgGrade: submissions?.length ? (submissions.reduce((acc, curr) => acc + (curr.marks_obtained || 0), 0) / submissions.length).toFixed(1) : 0
@@ -1358,8 +1356,8 @@ function InstitutionalUserRegistry() {
 
   const filteredUsers = users.filter(u => {
     const matchesSearch = `${u.first_name} ${u.last_name}`.toLowerCase().includes(search.toLowerCase()) ||
-                          u.email?.toLowerCase().includes(search.toLowerCase()) ||
-                          u.student_number?.toLowerCase().includes(search.toLowerCase());
+      u.email?.toLowerCase().includes(search.toLowerCase()) ||
+      u.student_number?.toLowerCase().includes(search.toLowerCase());
 
     if (activeMainTab === 'students') {
       return matchesSearch && u.role === 'student' && (u.account_status || 'active') === activeSubTab;
@@ -1367,7 +1365,7 @@ function InstitutionalUserRegistry() {
       // Staff logic: roles other than student
       const isStaff = u.role !== 'student';
       if (!isStaff) return false;
-      
+
       // Filter by department (Support multi-dept per your request)
       if (activeSubTab === 'executive') return matchesSearch && (u.role === 'super_admin' || u.role === 'campus_manager' || (u.departments || []).includes('Executive'));
       if (activeSubTab === 'academic') return matchesSearch && (u.role === 'head_of_department' || u.role?.includes('lecturer') || (u.departments || []).includes('Academic'));
@@ -1377,7 +1375,7 @@ function InstitutionalUserRegistry() {
       if (activeSubTab === 'registrar_office') return matchesSearch && (u.departments || []).includes('Registrar Office');
       if (activeSubTab === 'it_support') return matchesSearch && (u.departments || []).includes('IT Support');
       if (activeSubTab === 'admissions') return matchesSearch && (u.departments || []).includes('Admissions');
-      
+
       return matchesSearch;
     }
   });
@@ -1386,14 +1384,14 @@ function InstitutionalUserRegistry() {
     <div className="space-y-6 animate-fade">
       {/* ─── PRIMARY REGISTRY NAVIGATION ─── */}
       <div className="flex items-center justify-between p-1.5 bg-card/50 border border-border-custom rounded-2xl w-fit mb-8">
-        <button 
+        <button
           onClick={() => { setActiveMainTab('students'); setActiveSubTab('active'); }}
           className={`px-8 py-3 rounded-xl text-xs font-dm-mono uppercase transition-all flex items-center gap-3 ${activeMainTab === 'students' ? 'bg-brand text-bg shadow-lg shadow-brand/20 font-bold' : 'text-text-muted hover:text-text-custom'}`}
         >
           <UserRound className="w-4 h-4" />
           STUDENT REGISTRY
         </button>
-        <button 
+        <button
           onClick={() => { setActiveMainTab('staff'); setActiveSubTab('executive'); }}
           className={`px-8 py-3 rounded-xl text-xs font-dm-mono uppercase transition-all flex items-center gap-3 ${activeMainTab === 'staff' ? 'bg-brand text-bg shadow-lg shadow-brand/20 font-bold' : 'text-text-muted hover:text-text-custom'}`}
         >
@@ -1406,7 +1404,7 @@ function InstitutionalUserRegistry() {
         {/* Secondary Lifecycle/Dept Navigation */}
         <div className="flex items-center gap-1.5 p-1 bg-surface border border-border-custom rounded-xl overflow-x-auto custom-scrollbar max-w-full">
           {(activeMainTab === 'students' ? STUDENT_LIFECYCLE_TABS : STAFF_DEPT_TABS).map(tab => (
-            <button 
+            <button
               key={tab.id}
               onClick={() => setActiveSubTab(tab.id)}
               className={`px-4 py-2 rounded-lg text-[9px] font-dm-mono uppercase whitespace-nowrap transition-all ${activeSubTab === tab.id ? 'bg-white/5 text-brand border border-brand/20' : 'text-text-dim hover:text-white'}`}
@@ -1432,7 +1430,7 @@ function InstitutionalUserRegistry() {
 
           <div className="relative">
             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-text-dim text-xs">🔍</span>
-            <input 
+            <input
               placeholder={`Search ${activeMainTab === 'students' ? 'Student Base' : 'Staff Ledger'}...`}
               className="bg-surface border border-border-custom rounded-xl py-2 pl-9 pr-4 text-xs font-dm-mono w-48 lg:w-64 focus:border-brand/50 transition-all outline-none"
               value={search}
@@ -1473,23 +1471,22 @@ function InstitutionalUserRegistry() {
                         )}
                         <div>
                           <div className="font-bold text-sm text-text-soft flex items-center gap-2">
-                             {u.first_name} {u.last_name}
-                             {u.account_status === 'suspended' && <XCircle className="w-3 h-3 text-coral" />}
+                            {u.first_name} {u.last_name}
+                            {u.account_status === 'suspended' && <XCircle className="w-3 h-3 text-coral" />}
                           </div>
                           <div className="text-[10px] text-text-dim font-dm-mono lowercase">{u.email}</div>
-                          <div className="text-[9px] font-dm-mono text-brand mt-0.5">{u.student_number || 'STAFF-ID: '+u.id.slice(0,6).toUpperCase()}</div>
+                          <div className="text-[9px] font-dm-mono text-brand mt-0.5">{u.student_number || 'STAFF-ID: ' + u.id.slice(0, 6).toUpperCase()}</div>
                         </div>
                       </div>
                     </td>
                     <td className="p-4">
                       <div className="flex flex-wrap gap-1">
-                        <span className={`px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-tighter border ${
-                          INSTITUTIONAL_ROLES.find(r => r.id === (u.role || 'student'))?.bg || 'bg-surface'
-                        } ${INSTITUTIONAL_ROLES.find(r => r.id === (u.role || 'student'))?.color || 'text-text-dim'}`}>
+                        <span className={`px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-tighter border ${INSTITUTIONAL_ROLES.find(r => r.id === (u.role || 'student'))?.bg || 'bg-surface'
+                          } ${INSTITUTIONAL_ROLES.find(r => r.id === (u.role || 'student'))?.color || 'text-text-dim'}`}>
                           {u.role || 'student'}
                         </span>
                         {(u.departments || []).map((d: string) => (
-                           <span key={d} className="px-2 py-0.5 rounded-full text-[8px] font-bold uppercase bg-white/5 border border-white/10 text-white/50">{d}</span>
+                          <span key={d} className="px-2 py-0.5 rounded-full text-[8px] font-bold uppercase bg-white/5 border border-white/10 text-white/50">{d}</span>
                         ))}
                       </div>
                     </td>
@@ -1501,36 +1498,36 @@ function InstitutionalUserRegistry() {
                     </td>
                     <td className="p-4 text-right">
                       <div className="flex items-center justify-end gap-2">
-                         {isSuperAdmin && (
-                           <>
-                             {activeMainTab === 'students' && (u.account_status || 'active') === 'active' && (
-                               <button 
-                                 onClick={() => triggerAlumniProcess(u)}
-                                 className="p-2 bg-emerald/10 text-emerald border border-emerald/20 rounded-lg hover:bg-emerald hover:text-bg transition-all"
-                                 title="Process Graduation"
-                               >
-                                 <Verified size={14} />
-                               </button>
-                             )}
-                             <button 
-                               onClick={() => { setGovernanceUser(u); setGovernanceAction({ type: 'STATUS_CHANGE', newStatus: u.account_status === 'suspended' ? 'active' : 'suspended' }); }}
-                               className={`p-2 border rounded-lg transition-all ${u.account_status === 'suspended' ? 'bg-brand/10 text-brand border-brand/20' : 'bg-coral/10 text-coral border-coral/20 hover:bg-coral hover:text-white'}`}
-                               title={u.account_status === 'suspended' ? 'Reactivate Hub' : 'Suspend Access'}
-                             >
-                               <History size={14} />
-                             </button>
-                             <select 
-                               className="bg-surface border border-brand/10 rounded-lg py-1.5 px-2 text-[10px] font-dm-mono focus:border-brand transition-all outline-none"
-                               value={u.role || 'student'}
-                               onChange={(e) => {
-                                 setGovernanceUser(u);
-                                 setGovernanceAction({ type: 'ROLE_UPDATE', newRole: e.target.value });
-                               }}
-                             >
-                               {INSTITUTIONAL_ROLES.map(r => <option key={r.id} value={r.id}>{r.label}</option>)}
-                             </select>
-                           </>
-                         )}
+                        {isSuperAdmin && (
+                          <>
+                            {activeMainTab === 'students' && (u.account_status || 'active') === 'active' && (
+                              <button
+                                onClick={() => triggerAlumniProcess(u)}
+                                className="p-2 bg-emerald/10 text-emerald border border-emerald/20 rounded-lg hover:bg-emerald hover:text-bg transition-all"
+                                title="Process Graduation"
+                              >
+                                <Verified size={14} />
+                              </button>
+                            )}
+                            <button
+                              onClick={() => { setGovernanceUser(u); setGovernanceAction({ type: 'STATUS_CHANGE', newStatus: u.account_status === 'suspended' ? 'active' : 'suspended' }); }}
+                              className={`p-2 border rounded-lg transition-all ${u.account_status === 'suspended' ? 'bg-brand/10 text-brand border-brand/20' : 'bg-coral/10 text-coral border-coral/20 hover:bg-coral hover:text-white'}`}
+                              title={u.account_status === 'suspended' ? 'Reactivate Hub' : 'Suspend Access'}
+                            >
+                              <History size={14} />
+                            </button>
+                            <select
+                              className="bg-surface border border-brand/10 rounded-lg py-1.5 px-2 text-[10px] font-dm-mono focus:border-brand transition-all outline-none"
+                              value={u.role || 'student'}
+                              onChange={(e) => {
+                                setGovernanceUser(u);
+                                setGovernanceAction({ type: 'ROLE_UPDATE', newRole: e.target.value });
+                              }}
+                            >
+                              {INSTITUTIONAL_ROLES.map(r => <option key={r.id} value={r.id}>{r.label}</option>)}
+                            </select>
+                          </>
+                        )}
                       </div>
                     </td>
                   </tr>
@@ -1543,48 +1540,47 @@ function InstitutionalUserRegistry() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {filteredUsers.map(u => (
             <div key={u.id} className={`bg-card border border-border-custom rounded-3xl p-6 relative overflow-hidden group hover:border-brand/30 transition-all ${u.account_status === 'suspended' ? 'opacity-60 grayscale' : ''}`}>
-               {u.account_status === 'suspended' && <div className="absolute top-4 right-4 text-coral text-[8px] font-black uppercase tracking-widest bg-coral/10 px-2 py-0.5 rounded border border-coral/20">Access Locked</div>}
-               <div className="flex items-center gap-4 mb-6">
-                 {u.avatar_url ? (
-                   <img src={u.avatar_url} className="w-14 h-14 rounded-2xl object-cover border border-brand/10 shadow-xl" alt="" />
-                 ) : (
-                   <div className="w-14 h-14 rounded-2xl bg-surface border border-brand/10 flex items-center justify-center font-black text-lg text-brand shadow-inner">
-                     {u.first_name?.[0]}{u.last_name?.[0]}
-                   </div>
-                 )}
-                 <div className="overflow-hidden">
-                   <h3 className="font-syne font-black text-base text-text-soft truncate leading-tight uppercase">{u.first_name} <br/> {u.last_name}</h3>
-                   <p className="text-[10px] font-dm-mono text-brand mt-1 truncate">{u.student_number || 'GDA-ADMIN-'+u.id.slice(0,4).toUpperCase()}</p>
-                 </div>
-               </div>
+              {u.account_status === 'suspended' && <div className="absolute top-4 right-4 text-coral text-[8px] font-black uppercase tracking-widest bg-coral/10 px-2 py-0.5 rounded border border-coral/20">Access Locked</div>}
+              <div className="flex items-center gap-4 mb-6">
+                {u.avatar_url ? (
+                  <img src={u.avatar_url} className="w-14 h-14 rounded-2xl object-cover border border-brand/10 shadow-xl" alt="" />
+                ) : (
+                  <div className="w-14 h-14 rounded-2xl bg-surface border border-brand/10 flex items-center justify-center font-black text-lg text-brand shadow-inner">
+                    {u.first_name?.[0]}{u.last_name?.[0]}
+                  </div>
+                )}
+                <div className="overflow-hidden">
+                  <h3 className="font-syne font-black text-base text-text-soft truncate leading-tight uppercase">{u.first_name} <br /> {u.last_name}</h3>
+                  <p className="text-[10px] font-dm-mono text-brand mt-1 truncate">{u.student_number || 'GDA-ADMIN-' + u.id.slice(0, 4).toUpperCase()}</p>
+                </div>
+              </div>
 
-               <div className="space-y-4">
-                 <div className="flex flex-wrap gap-1.5 min-h-[44px]">
-                    <span className={`px-2 py-1 rounded-md text-[8px] font-black uppercase tracking-tighter border shadow-sm ${
-                      INSTITUTIONAL_ROLES.find(r => r.id === (u.role || 'student'))?.bg || 'bg-surface'
+              <div className="space-y-4">
+                <div className="flex flex-wrap gap-1.5 min-h-[44px]">
+                  <span className={`px-2 py-1 rounded-md text-[8px] font-black uppercase tracking-tighter border shadow-sm ${INSTITUTIONAL_ROLES.find(r => r.id === (u.role || 'student'))?.bg || 'bg-surface'
                     } ${INSTITUTIONAL_ROLES.find(r => r.id === (u.role || 'student'))?.color || 'text-text-dim'}`}>
-                      {u.role || 'student'}
-                    </span>
-                    {(u.departments || []).map((d: string) => (
-                       <span key={d} className="px-2 py-1 rounded-md text-[8px] font-bold uppercase bg-white/5 border border-white/10 text-white/50">{d}</span>
-                    ))}
-                 </div>
+                    {u.role || 'student'}
+                  </span>
+                  {(u.departments || []).map((d: string) => (
+                    <span key={d} className="px-2 py-1 rounded-md text-[8px] font-bold uppercase bg-white/5 border border-white/10 text-white/50">{d}</span>
+                  ))}
+                </div>
 
-                 <div className="pt-4 border-t border-brand/5 flex items-center justify-between">
-                    <div className="flex flex-col">
-                       <span className="text-[8px] font-dm-mono uppercase text-text-dim">Branch Presence</span>
-                       <span className="text-[10px] text-text-soft font-bold uppercase tracking-widest">{u.campus_id ? 'Authenticated' : 'Remote'}</span>
-                    </div>
-                    {isSuperAdmin && (
-                      <button 
-                        onClick={() => { setGovernanceUser(u); setGovernanceAction({ type: 'STATUS_CHANGE', newStatus: u.account_status === 'suspended' ? 'active' : 'suspended' }); }}
-                        className="text-[9px] font-dm-mono text-coral hover:text-brand transition-colors underline underline-offset-4"
-                      >
-                        LOCK ACCOUNT
-                      </button>
-                    )}
-                 </div>
-               </div>
+                <div className="pt-4 border-t border-brand/5 flex items-center justify-between">
+                  <div className="flex flex-col">
+                    <span className="text-[8px] font-dm-mono uppercase text-text-dim">Branch Presence</span>
+                    <span className="text-[10px] text-text-soft font-bold uppercase tracking-widest">{u.campus_id ? 'Authenticated' : 'Remote'}</span>
+                  </div>
+                  {isSuperAdmin && (
+                    <button
+                      onClick={() => { setGovernanceUser(u); setGovernanceAction({ type: 'STATUS_CHANGE', newStatus: u.account_status === 'suspended' ? 'active' : 'suspended' }); }}
+                      className="text-[9px] font-dm-mono text-coral hover:text-brand transition-colors underline underline-offset-4"
+                    >
+                      LOCK ACCOUNT
+                    </button>
+                  )}
+                </div>
+              </div>
             </div>
           ))}
         </div>
@@ -1597,7 +1593,7 @@ function InstitutionalUserRegistry() {
             <button onClick={() => { setGovernanceUser(null); setAlumniAcademicRecord(null); }} className="absolute top-8 right-8 text-text-dim hover:text-white transition-colors">✕</button>
 
             <div className="w-20 h-20 bg-brand/10 rounded-3xl flex items-center justify-center mb-8 shadow-inner border border-brand/20">
-               <ShieldCheck className="w-10 h-10 text-brand" />
+              <ShieldCheck className="w-10 h-10 text-brand" />
             </div>
 
             <h2 className="font-syne font-black text-3xl mb-2 tracking-tighter text-center uppercase">Institutional Directive</h2>
@@ -1628,7 +1624,7 @@ function InstitutionalUserRegistry() {
             <div className="w-full space-y-6">
               <div className="space-y-2">
                 <label className="text-[10px] font-dm-mono uppercase text-text-dim tracking-widest pl-1">Protocol Motivation</label>
-                <select 
+                <select
                   className="w-full bg-bg border border-border-custom rounded-xl p-4 text-xs font-dm-mono uppercase focus:border-brand transition-all outline-none cursor-pointer"
                   value={motivation}
                   onChange={e => setMotivation(e.target.value)}
@@ -1640,8 +1636,8 @@ function InstitutionalUserRegistry() {
 
               <div className="space-y-2">
                 <label className="text-[10px] font-dm-mono uppercase text-text-dim tracking-widest pl-1">Executive Commentary</label>
-                <textarea 
-                  className="w-full bg-bg border border-border-custom rounded-xl p-4 text-xs h-32 focus:border-brand transition-all outline-none resize-none" 
+                <textarea
+                  className="w-full bg-bg border border-border-custom rounded-xl p-4 text-xs h-32 focus:border-brand transition-all outline-none resize-none"
                   placeholder="Elaborate on the institutional necessity of this decision..."
                   value={comments}
                   onChange={e => setComments(e.target.value)}
@@ -1653,7 +1649,7 @@ function InstitutionalUserRegistry() {
                   <label className="text-[10px] font-dm-mono uppercase text-text-dim tracking-widest pl-1">
                     Physical Evidence (Direct Upload)
                   </label>
-                  <input 
+                  <input
                     id="governance-evidence-upload"
                     type="file"
                     className="w-full bg-bg border border-border-custom rounded-xl p-4 text-[10px] font-dm-mono"
@@ -1667,10 +1663,10 @@ function InstitutionalUserRegistry() {
                 </div>
 
                 <div className="space-y-2">
-                  <input 
+                  <input
                     type="url"
-                    className="w-full bg-bg border border-border-custom rounded-xl p-4 text-xs font-dm-mono focus:border-brand transition-all outline-none" 
-                    placeholder="External Evidence URL..." 
+                    className="w-full bg-bg border border-border-custom rounded-xl p-4 text-xs font-dm-mono focus:border-brand transition-all outline-none"
+                    placeholder="External Evidence URL..."
                     value={evidenceUrl}
                     onChange={e => setEvidenceUrl(e.target.value)}
                   />
@@ -1682,7 +1678,7 @@ function InstitutionalUserRegistry() {
                 )}
               </div>
 
-              <button 
+              <button
                 onClick={commitGovernanceAction}
                 disabled={isProcessing}
                 className={`w-full btn btn-brand py-5 font-black text-sm uppercase tracking-widest flex items-center justify-center gap-3 ${isProcessing ? 'opacity-50 cursor-not-allowed' : ''}`}
@@ -1739,24 +1735,24 @@ function BroadcastHub() {
     <div className="space-y-8 animate-fade">
       <div className="bg-card border border-border-custom rounded-3xl p-10 relative overflow-hidden isolate">
         <div className="absolute top-0 right-0 w-64 h-64 bg-brand/5 rounded-full -mr-32 -mt-32 blur-[100px]" />
-        
-        <h3 className="font-syne font-black text-3xl mb-2 tracking-tighter">Broadcast Command Center</h3>
+
+        <h3 className="font-syne font-black text-3xl mb-2 tracking-tighter">Broadcast Command Centre</h3>
         <p className="text-xs text-text-muted mb-8 max-w-xl">Dispatch institutional directives, emergency alerts, and curriculum updates across the academy ecosystem.</p>
-        
+
         <div className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
               <label className="text-[10px] font-dm-mono uppercase text-text-dim tracking-widest">Protocol Title</label>
-              <input 
-                className="w-full bg-bg border border-border-custom rounded-xl p-4 text-sm focus:border-brand transition-all outline-none" 
-                placeholder="Institutional Directive #772..." 
+              <input
+                className="w-full bg-bg border border-border-custom rounded-xl p-4 text-sm focus:border-brand transition-all outline-none"
+                placeholder="Institutional Directive #772..."
                 value={title}
                 onChange={e => setTitle(e.target.value)}
               />
             </div>
             <div className="space-y-2">
               <label className="text-[10px] font-dm-mono uppercase text-text-dim tracking-widest">Dispatch Priority</label>
-              <select 
+              <select
                 className="w-full bg-bg border border-border-custom rounded-xl p-4 text-sm appearance-none focus:border-brand transition-all outline-none cursor-pointer"
                 value={type}
                 onChange={e => setType(e.target.value as any)}
@@ -1767,19 +1763,19 @@ function BroadcastHub() {
               </select>
             </div>
           </div>
-          
+
           <div className="space-y-2">
             <label className="text-[10px] font-dm-mono uppercase text-text-dim tracking-widest">Bulletin Content</label>
-            <textarea 
-              className="w-full bg-bg border border-border-custom rounded-xl p-4 text-sm h-48 focus:border-brand transition-all outline-none resize-none custom-scrollbar" 
+            <textarea
+              className="w-full bg-bg border border-border-custom rounded-xl p-4 text-sm h-48 focus:border-brand transition-all outline-none resize-none custom-scrollbar"
               placeholder="Explicit details regarding the institutional update..."
               value={content}
               onChange={e => setContent(e.target.value)}
             />
           </div>
-          
+
           <div className="flex justify-end gap-3 pt-4">
-            <button 
+            <button
               onClick={handleBroadcast}
               disabled={isSending}
               className={`btn btn-brand px-12 py-4 flex items-center gap-3 group ${isSending ? 'opacity-50 cursor-not-allowed' : ''}`}
@@ -1836,8 +1832,8 @@ function StaffManagement() {
         <div className="bg-card border border-border-custom rounded-xl p-6 mb-6">
           <p className="text-sm text-text-muted mb-4">Note: Staff members must first create an account. You can then upgrade their role here.</p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <input placeholder="Email Address" className="bg-surface border border-border-custom rounded p-2 text-sm" value={newStaff.email} onChange={e => setNewStaff({...newStaff, email: e.target.value})} />
-            <select className="bg-surface border border-border-custom rounded p-2 text-sm" value={newStaff.role} onChange={e => setNewStaff({...newStaff, role: e.target.value})}>
+            <input placeholder="Email Address" className="bg-surface border border-border-custom rounded p-2 text-sm" value={newStaff.email} onChange={e => setNewStaff({ ...newStaff, email: e.target.value })} />
+            <select className="bg-surface border border-border-custom rounded p-2 text-sm" value={newStaff.role} onChange={e => setNewStaff({ ...newStaff, role: e.target.value })}>
               <option value="admin">Administrator</option>
               <option value="instructor">Instructor</option>
               <option value="super_admin">Super Admin</option>
@@ -1941,7 +1937,7 @@ function SiteSettings() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label className="block font-dm-mono text-[10px] uppercase text-text-muted mb-1">Intake Status</label>
-              <select className="w-full bg-surface border border-border-custom rounded p-2 text-sm" value={settings.intakeStatus} onChange={e => setSettings({...settings, intakeStatus: e.target.value})}>
+              <select className="w-full bg-surface border border-border-custom rounded p-2 text-sm" value={settings.intakeStatus} onChange={e => setSettings({ ...settings, intakeStatus: e.target.value })}>
                 <option value="OPEN">OPEN</option>
                 <option value="CLOSED">CLOSED</option>
                 <option value="WAITLIST">WAITLIST ONLY</option>
@@ -1949,16 +1945,16 @@ function SiteSettings() {
             </div>
             <div>
               <label className="block font-dm-mono text-[10px] uppercase text-text-muted mb-1">Contact Email</label>
-              <input className="w-full bg-surface border border-border-custom rounded p-2 text-sm" value={settings.contactEmail} onChange={e => setSettings({...settings, contactEmail: e.target.value})} />
+              <input className="w-full bg-surface border border-border-custom rounded p-2 text-sm" value={settings.contactEmail} onChange={e => setSettings({ ...settings, contactEmail: e.target.value })} />
             </div>
           </div>
           <div>
             <label className="block font-dm-mono text-[10px] uppercase text-text-muted mb-1">Hero Main Title</label>
-            <input className="w-full bg-surface border border-border-custom rounded p-2 text-sm" value={settings.heroTitle} onChange={e => setSettings({...settings, heroTitle: e.target.value})} />
+            <input className="w-full bg-surface border border-border-custom rounded p-2 text-sm" value={settings.heroTitle} onChange={e => setSettings({ ...settings, heroTitle: e.target.value })} />
           </div>
           <div>
             <label className="block font-dm-mono text-[10px] uppercase text-text-muted mb-1">Hero Subtitle</label>
-            <textarea className="w-full bg-surface border border-border-custom rounded p-2 text-sm h-24" value={settings.heroSubtitle} onChange={e => setSettings({...settings, heroSubtitle: e.target.value})} />
+            <textarea className="w-full bg-surface border border-border-custom rounded p-2 text-sm h-24" value={settings.heroSubtitle} onChange={e => setSettings({ ...settings, heroSubtitle: e.target.value })} />
           </div>
 
           <div className="pt-6 border-t border-border-custom">
@@ -1973,7 +1969,7 @@ function SiteSettings() {
                 <label key={page.id} className="flex items-center justify-between p-3 bg-surface border border-border-custom rounded-md cursor-pointer hover:border-brand/30 transition-all">
                   <span className="text-xs font-medium">{page.label}</span>
                   <div className="relative inline-flex items-center cursor-pointer">
-                    <input type="checkbox" className="sr-only peer" checked={(settings as any)[page.id]} onChange={e => setSettings({...settings, [page.id]: e.target.checked})} />
+                    <input type="checkbox" className="sr-only peer" checked={(settings as any)[page.id]} onChange={e => setSettings({ ...settings, [page.id]: e.target.checked })} />
                     <div className="w-9 h-5 bg-bg/50 border border-border-custom peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-text-muted after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-brand peer-checked:after:bg-bg"></div>
                   </div>
                 </label>
@@ -2022,7 +2018,7 @@ function TimetableManager({ courses }: { courses: any[] }) {
   async function handleSave() {
     try {
       if (!form.title || !form.start_time) throw new Error('Title and Start Time are required');
-      
+
       const { error } = await supabase.from('academic_schedule').upsert({
         ...form,
         course_id: form.category === 'subject' || form.category === 'exam' ? form.course_id || null : null
@@ -2046,12 +2042,11 @@ function TimetableManager({ courses }: { courses: any[] }) {
           <h2 className="font-syne font-black text-2xl tracking-tighter uppercase">Institutional Command: Scheduling</h2>
           <div className="flex gap-4 mt-2">
             {['subject', 'institutional', 'exam', 'term'].map(cat => (
-              <button 
+              <button
                 key={cat}
                 onClick={() => setActiveCategory(cat as any)}
-                className={`text-[9px] font-dm-mono uppercase tracking-widest px-3 py-1 rounded-full border transition-all ${
-                  activeCategory === cat ? 'bg-brand text-bg border-brand font-bold' : 'border-white/10 text-text-muted hover:border-brand/30'
-                }`}
+                className={`text-[9px] font-dm-mono uppercase tracking-widest px-3 py-1 rounded-full border transition-all ${activeCategory === cat ? 'bg-brand text-bg border-brand font-bold' : 'border-white/10 text-text-muted hover:border-brand/30'
+                  }`}
               >
                 {cat.replace('_', ' ')}s
               </button>
@@ -2069,20 +2064,20 @@ function TimetableManager({ courses }: { courses: any[] }) {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative z-10">
             <div className="space-y-2">
               <label className="text-[9px] font-dm-mono text-brand uppercase tracking-[0.2em] px-2">Directive Title</label>
-              <input 
-                className="w-full bg-bg border border-border-custom rounded-xl p-3 text-sm focus:border-brand outline-none" 
-                value={form.title} 
-                onChange={e => setForm({...form, title: e.target.value})} 
+              <input
+                className="w-full bg-bg border border-border-custom rounded-xl p-3 text-sm focus:border-brand outline-none"
+                value={form.title}
+                onChange={e => setForm({ ...form, title: e.target.value })}
                 placeholder="e.g. Module 4 Sync Session"
               />
             </div>
             {(activeCategory === 'subject' || activeCategory === 'exam') && (
               <div className="space-y-2">
                 <label className="text-[9px] font-dm-mono text-brand uppercase tracking-[0.2em] px-2">Target Academic Stream</label>
-                <select 
-                  className="w-full bg-bg border border-border-custom rounded-xl p-3 text-sm outline-none" 
-                  value={form.course_id} 
-                  onChange={e => setForm({...form, course_id: e.target.value})}
+                <select
+                  className="w-full bg-bg border border-border-custom rounded-xl p-3 text-sm outline-none"
+                  value={form.course_id}
+                  onChange={e => setForm({ ...form, course_id: e.target.value })}
                 >
                   <option value="">Select Modular Course</option>
                   {courses.map(c => <option key={c.id} value={c.id}>{c.title}</option>)}
@@ -2091,28 +2086,28 @@ function TimetableManager({ courses }: { courses: any[] }) {
             )}
             <div className="space-y-2">
               <label className="text-[9px] font-dm-mono text-brand uppercase tracking-[0.2em] px-2">Temporal Point (Start)</label>
-              <input 
+              <input
                 type="datetime-local"
-                className="w-full bg-bg border border-border-custom rounded-xl p-3 text-sm" 
-                value={form.start_time} 
-                onChange={e => setForm({...form, start_time: e.target.value})} 
+                className="w-full bg-bg border border-border-custom rounded-xl p-3 text-sm"
+                value={form.start_time}
+                onChange={e => setForm({ ...form, start_time: e.target.value })}
               />
             </div>
             <div className="space-y-2">
               <label className="text-[9px] font-dm-mono text-brand uppercase tracking-[0.2em] px-2">Closure Point (End)</label>
-              <input 
+              <input
                 type="datetime-local"
-                className="w-full bg-bg border border-border-custom rounded-xl p-3 text-sm" 
-                value={form.end_time} 
-                onChange={e => setForm({...form, end_time: e.target.value})} 
+                className="w-full bg-bg border border-border-custom rounded-xl p-3 text-sm"
+                value={form.end_time}
+                onChange={e => setForm({ ...form, end_time: e.target.value })}
               />
             </div>
             <div className="space-y-2">
               <label className="text-[9px] font-dm-mono text-brand uppercase tracking-[0.2em] px-2">Geographical / Digital Node</label>
-              <input 
-                className="w-full bg-bg border border-border-custom rounded-xl p-3 text-sm" 
-                value={form.location} 
-                onChange={e => setForm({...form, location: e.target.value})} 
+              <input
+                className="w-full bg-bg border border-border-custom rounded-xl p-3 text-sm"
+                value={form.location}
+                onChange={e => setForm({ ...form, location: e.target.value })}
                 placeholder="Room 402 / MS Teams / Global"
               />
             </div>
@@ -2128,9 +2123,8 @@ function TimetableManager({ courses }: { courses: any[] }) {
           {filteredSchedule.map(session => (
             <div key={session.id} className="p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 hover:bg-brand/[0.02] transition-colors group">
               <div className="flex items-center gap-6">
-                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-xl shadow-lg ${
-                  session.category === 'exam' ? 'bg-coral/20 text-coral' : 'bg-brand/20 text-brand'
-                }`}>
+                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-xl shadow-lg ${session.category === 'exam' ? 'bg-coral/20 text-coral' : 'bg-brand/20 text-brand'
+                  }`}>
                   {session.category === 'exam' ? '📋' : '📅'}
                 </div>
                 <div>
@@ -2143,7 +2137,7 @@ function TimetableManager({ courses }: { courses: any[] }) {
                 </div>
               </div>
               <div className="flex items-center gap-4">
-                 <button 
+                <button
                   onClick={async () => {
                     if (confirm('Decommission this record?')) {
                       await supabase.from('academic_schedule').delete().eq('id', session.id);
@@ -2169,7 +2163,7 @@ function TimetableManager({ courses }: { courses: any[] }) {
 // ─── ATTENDANCE HUB ─────────────────────────
 function AttendanceHub({ courses }: { courses: any[] }) {
   const [selectedCourse, setSelectedCourse] = useState('');
-  
+
   return (
     <div className="space-y-6 animate-fade">
       <div className="flex justify-between items-center">
@@ -2177,7 +2171,7 @@ function AttendanceHub({ courses }: { courses: any[] }) {
           <h2 className="font-syne font-black text-2xl tracking-tighter">Attendance Registry</h2>
           <p className="text-[10px] font-dm-mono text-brand uppercase tracking-widest">Institutional Presence Tracking</p>
         </div>
-        <select 
+        <select
           className="bg-surface border border-border-custom rounded-xl py-2 px-4 text-xs font-dm-mono uppercase outline-none focus:border-brand"
           value={selectedCourse}
           onChange={(e) => setSelectedCourse(e.target.value)}
@@ -2254,7 +2248,7 @@ function ComplianceDashboard() {
         <div>
           <h4 className="font-syne font-black text-coral uppercase text-sm tracking-tight">Regulatory Silence Protocol Active</h4>
           <p className="text-[11px] text-text-soft leading-relaxed mt-1">
-            Data within this hub is strictly for institutional governance and audit readiness. 
+            Data within this hub is strictly for institutional governance and audit readiness.
             <span className="font-black text-white ml-1">NEVER EXPOSE THESE DETAILS ON PUBLIC INTERFACES</span> until official SAQA/MICT validation is concluded.
           </p>
         </div>
@@ -2264,35 +2258,35 @@ function ComplianceDashboard() {
         <div className="bg-card border border-border-custom rounded-[2.5rem] p-10 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-32 h-32 bg-brand/5 rounded-full -mr-16 -mt-16 blur-2xl" />
           <h3 className="font-syne font-bold text-xl mb-8 flex items-center gap-3">
-             <ShieldCheck className="w-5 h-5 text-brand" />
-             Accreditation Registry
+            <ShieldCheck className="w-5 h-5 text-brand" />
+            Accreditation Registry
           </h3>
 
           <div className="space-y-6">
             <div className="space-y-2">
               <label className="text-[10px] font-dm-mono uppercase text-text-dim tracking-widest pl-1">Academic Registry ID</label>
-              <input 
-                className="w-full bg-bg border border-border-custom rounded-xl p-4 text-xs font-dm-mono focus:border-brand outline-none transition-all" 
+              <input
+                className="w-full bg-bg border border-border-custom rounded-xl p-4 text-xs font-dm-mono focus:border-brand outline-none transition-all"
                 value={settings.seta_accreditation_no}
-                onChange={e => setSettings({...settings, seta_accreditation_no: e.target.value})}
+                onChange={e => setSettings({ ...settings, seta_accreditation_no: e.target.value })}
                 placeholder="Institutional ID..."
               />
             </div>
             <div className="space-y-2">
               <label className="text-[10px] font-dm-mono uppercase text-text-dim tracking-widest pl-1">Provincial Reference Number</label>
-              <input 
-                className="w-full bg-bg border border-border-custom rounded-xl p-4 text-xs font-dm-mono focus:border-brand outline-none transition-all" 
+              <input
+                className="w-full bg-bg border border-border-custom rounded-xl p-4 text-xs font-dm-mono focus:border-brand outline-none transition-all"
                 value={settings.qcto_reference_no}
-                onChange={e => setSettings({...settings, qcto_reference_no: e.target.value})}
+                onChange={e => setSettings({ ...settings, qcto_reference_no: e.target.value })}
                 placeholder="Provincial Ref..."
               />
             </div>
             <div className="space-y-2">
               <label className="text-[10px] font-dm-mono uppercase text-text-dim tracking-widest pl-1">DHET Registration Status</label>
-              <select 
+              <select
                 className="w-full bg-bg border border-border-custom rounded-xl p-4 text-xs font-dm-mono uppercase focus:border-brand outline-none cursor-pointer"
                 value={settings.dhet_registration_status}
-                onChange={e => setSettings({...settings, dhet_registration_status: e.target.value})}
+                onChange={e => setSettings({ ...settings, dhet_registration_status: e.target.value })}
               >
                 <option value="PROVISIONAL">Provisional Approval</option>
                 <option value="ACTIVE">Fully Registered</option>
@@ -2305,29 +2299,29 @@ function ComplianceDashboard() {
 
         <div className="bg-card border border-border-custom rounded-[2.5rem] p-10">
           <h3 className="font-syne font-bold text-xl mb-8 flex items-center gap-3">
-             <Clock className="w-5 h-5 text-brand" />
-             Governance Calendar
+            <Clock className="w-5 h-5 text-brand" />
+            Governance Calendar
           </h3>
           <div className="space-y-6">
-             <div className="space-y-2">
+            <div className="space-y-2">
               <label className="text-[10px] font-dm-mono uppercase text-text-dim tracking-widest pl-1">Audit Renewal Date</label>
-              <input 
+              <input
                 type="date"
-                className="w-full bg-bg border border-border-custom rounded-xl p-4 text-xs font-dm-mono focus:border-brand outline-none" 
+                className="w-full bg-bg border border-border-custom rounded-xl p-4 text-xs font-dm-mono focus:border-brand outline-none"
                 value={settings.compliance_expiry_date}
-                onChange={e => setSettings({...settings, compliance_expiry_date: e.target.value})}
+                onChange={e => setSettings({ ...settings, compliance_expiry_date: e.target.value })}
               />
             </div>
             <div className="space-y-2">
               <label className="text-[10px] font-dm-mono uppercase text-text-dim tracking-widest pl-1">Executive Compliance Notes</label>
-              <textarea 
-                className="w-full bg-bg border border-border-custom rounded-xl p-4 text-xs h-32 focus:border-brand outline-none resize-none" 
+              <textarea
+                className="w-full bg-bg border border-border-custom rounded-xl p-4 text-xs h-32 focus:border-brand outline-none resize-none"
                 placeholder="Internal commentary regarding accreditation milestones..."
                 value={settings.governance_notes}
-                onChange={e => setSettings({...settings, governance_notes: e.target.value})}
+                onChange={e => setSettings({ ...settings, governance_notes: e.target.value })}
               />
             </div>
-            <button 
+            <button
               onClick={handleSave}
               disabled={saving}
               className={`w-full btn btn-brand py-4 font-black uppercase tracking-widest text-[10px] ${saving ? 'opacity-50' : ''}`}
@@ -2431,8 +2425,8 @@ function AcademicCalendarView({ schedule, enrollments }: { schedule: any[], enro
     }
     // Filter subject and exam events by student's active course IDs
     const enrolledCourseIds = enrollments.map(e => e.course_id);
-    return schedule.filter(s => 
-      (s.category === 'subject' || s.category === 'exam') && 
+    return schedule.filter(s =>
+      (s.category === 'subject' || s.category === 'exam') &&
       enrolledCourseIds.includes(s.course_id)
     );
   }, [schedule, enrollments, activeTab]);
@@ -2443,26 +2437,25 @@ function AcademicCalendarView({ schedule, enrollments }: { schedule: any[], enro
         <div>
           <h2 className="font-syne font-black text-3xl tracking-tighter uppercase mb-2">Academic Ledger</h2>
           <div className="flex gap-4">
-             {[
-               { id: 'subject', label: 'Academic Subjects', icon: BookOpen },
-               { id: 'institutional', label: 'Institutional', icon: Globe },
-               { id: 'term', label: 'Full Term', icon: GraduationCap }
-             ].map(tab => (
-               <button 
+            {[
+              { id: 'subject', label: 'Academic Subjects', icon: BookOpen },
+              { id: 'institutional', label: 'Institutional', icon: Globe },
+              { id: 'term', label: 'Full Term', icon: GraduationCap }
+            ].map(tab => (
+              <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
-                className={`flex items-center gap-2 text-[9px] font-dm-mono uppercase tracking-[0.2em] px-4 py-2 border rounded-xl transition-all ${
-                  activeTab === tab.id ? 'bg-brand text-bg border-brand font-bold shadow-lg shadow-brand/20' : 'border-white/10 text-text-dim hover:border-brand/30'
-                }`}
-               >
-                 <tab.icon className="w-3 h-3" />
-                 {tab.label}
-               </button>
-             ))}
+                className={`flex items-center gap-2 text-[9px] font-dm-mono uppercase tracking-[0.2em] px-4 py-2 border rounded-xl transition-all ${activeTab === tab.id ? 'bg-brand text-bg border-brand font-bold shadow-lg shadow-brand/20' : 'border-white/10 text-text-dim hover:border-brand/30'
+                  }`}
+              >
+                <tab.icon className="w-3 h-3" />
+                {tab.label}
+              </button>
+            ))}
           </div>
         </div>
         <div className="text-right">
-           <p className="text-[10px] text-text-dim font-dm-mono uppercase">Reference Protocol: 2026_LETS_GO</p>
+          <p className="text-[10px] text-text-dim font-dm-mono uppercase">Reference Protocol: 2026_LETS_GO</p>
         </div>
       </div>
 
@@ -2470,27 +2463,26 @@ function AcademicCalendarView({ schedule, enrollments }: { schedule: any[], enro
         <div className="relative py-10 pl-10">
           {/* Vertical Timeline Track */}
           <div className="absolute left-6 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-brand/30 to-transparent" />
-          
+
           <div className="space-y-12">
             {filteredEvents.map((ev, i) => (
               <div key={i} className="relative group animate-fadeRight" style={{ animationDelay: `${i * 100}ms` }}>
                 {/* Timeline Node */}
-                <div className={`absolute -left-[35px] w-4 h-4 rounded-full border-2 border-bg shadow-xl transition-all group-hover:scale-150 ${
-                  ev.category === 'exam' ? 'bg-coral shadow-coral/50' : 'bg-brand shadow-brand/50'
-                }`} />
-                
+                <div className={`absolute -left-[35px] w-4 h-4 rounded-full border-2 border-bg shadow-xl transition-all group-hover:scale-150 ${ev.category === 'exam' ? 'bg-coral shadow-coral/50' : 'bg-brand shadow-brand/50'
+                  }`} />
+
                 <div className="bg-card border border-border-custom p-6 rounded-[2rem] hover:border-brand/30 transition-all flex flex-col md:flex-row md:items-center gap-10">
-                   <div className="md:w-32 shrink-0">
-                      <div className="text-lg font-black font-syne text-brand leading-none">{new Date(ev.start_time).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</div>
-                      <div className="text-[10px] font-dm-mono text-text-dim uppercase tracking-widest mt-1">{new Date(ev.start_time).getFullYear()}</div>
-                   </div>
-                   <div className="flex-1">
-                      <h4 className="font-syne font-bold text-xl mb-1 group-hover:text-brand transition-colors">{ev.title}</h4>
-                      <p className="text-xs text-text-soft leading-relaxed max-w-xl">{ev.description}</p>
-                   </div>
-                   <div className="text-right">
-                      {ev.location && <div className="text-[10px] font-dm-mono uppercase text-brand bg-brand/10 px-3 py-1 rounded-full border border-brand/20 inline-flex items-center gap-2"><MapPin className="w-3.5 h-3.5" /> {ev.location}</div>}
-                   </div>
+                  <div className="md:w-32 shrink-0">
+                    <div className="text-lg font-black font-syne text-brand leading-none">{new Date(ev.start_time).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</div>
+                    <div className="text-[10px] font-dm-mono text-text-dim uppercase tracking-widest mt-1">{new Date(ev.start_time).getFullYear()}</div>
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="font-syne font-bold text-xl mb-1 group-hover:text-brand transition-colors">{ev.title}</h4>
+                    <p className="text-xs text-text-soft leading-relaxed max-w-xl">{ev.description}</p>
+                  </div>
+                  <div className="text-right">
+                    {ev.location && <div className="text-[10px] font-dm-mono uppercase text-brand bg-brand/10 px-3 py-1 rounded-full border border-brand/20 inline-flex items-center gap-2"><MapPin className="w-3.5 h-3.5" /> {ev.location}</div>}
+                  </div>
                 </div>
               </div>
             ))}
@@ -2502,13 +2494,11 @@ function AcademicCalendarView({ schedule, enrollments }: { schedule: any[], enro
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredEvents.map((ev, i) => (
-            <div key={i} className={`bg-card border border-border-custom rounded-3xl p-8 relative overflow-hidden group hover:border-brand/50 transition-all animate-fade ${
-              ev.category === 'exam' ? 'ring-1 ring-coral/20' : ''
-            }`}>
-              <div className={`absolute top-0 right-0 p-3 rounded-bl-2xl text-[8px] font-black uppercase tracking-widest shadow-inner ${
-                ev.category === 'exam' ? 'bg-coral/20 text-coral border-b border-l border-coral/30' : 'bg-brand/20 text-brand border-b border-l border-brand/30'
-              }`}>{ev.category === 'exam' ? 'IMMUTABLE EXAM' : ev.category.replace('_', ' ')}</div>
-              
+            <div key={i} className={`bg-card border border-border-custom rounded-3xl p-8 relative overflow-hidden group hover:border-brand/50 transition-all animate-fade ${ev.category === 'exam' ? 'ring-1 ring-coral/20' : ''
+              }`}>
+              <div className={`absolute top-0 right-0 p-3 rounded-bl-2xl text-[8px] font-black uppercase tracking-widest shadow-inner ${ev.category === 'exam' ? 'bg-coral/20 text-coral border-b border-l border-coral/30' : 'bg-brand/20 text-brand border-b border-l border-brand/30'
+                }`}>{ev.category === 'exam' ? 'IMMUTABLE EXAM' : ev.category.replace('_', ' ')}</div>
+
               <div className="mb-6 flex items-center justify-between">
                 <div className="w-12 h-12 rounded-2xl bg-surface border border-white/5 flex items-center justify-center text-2xl shadow-xl">
                   {ev.category === 'exam' ? <ShieldCheck className="w-6 h-6 text-coral" /> : <Calendar className="w-6 h-6 text-brand" />}
@@ -2521,7 +2511,7 @@ function AcademicCalendarView({ schedule, enrollments }: { schedule: any[], enro
 
               <h4 className="font-syne font-extrabold text-xl mb-3 group-hover:text-brand transition-colors">{ev.title}</h4>
               <p className="text-xs text-text-muted leading-relaxed mb-6 line-clamp-3">{ev.description || 'Institutional mandate details available upon request.'}</p>
-              
+
               <div className="pt-6 border-t border-white/5 flex items-center justify-between">
                 <span className="text-[9px] font-dm-mono uppercase tracking-[0.2em] text-text-dim">{ev.location || 'GDA_GLOBAL_NODE'}</span>
                 <button className="text-brand hover:underline text-[9px] font-black uppercase tracking-widest">Details →</button>
@@ -2530,20 +2520,20 @@ function AcademicCalendarView({ schedule, enrollments }: { schedule: any[], enro
           ))}
           {filteredEvents.length === 0 && (
             <div className="col-span-full p-24 text-center bg-surface/10 rounded-[3rem] border border-dashed border-white/10">
-               <div className="text-5xl mb-6 opacity-30">📭</div>
-               <h3 className="font-syne font-bold text-xl mb-2 text-text-soft">Query Response Null</h3>
-               <p className="text-xs text-text-dim italic">No events matching the current category/enrollment criteria found in the academic ledger.</p>
+              <div className="text-5xl mb-6 opacity-30">📭</div>
+              <h3 className="font-syne font-bold text-xl mb-2 text-text-soft">Query Response Null</h3>
+              <p className="text-xs text-text-dim italic">No events matching the current category/enrolment criteria found in the academic ledger.</p>
             </div>
           )}
         </div>
       )}
 
       <div className="bg-gradient-to-r from-navy to-bg border border-brand/10 rounded-[2.5rem] p-10 flex flex-col lg:flex-row items-center justify-between gap-10">
-         <div className="max-w-xl text-center lg:text-left">
-            <h3 className="font-syne font-bold text-2xl mb-2 text-brand">Institutional Schedule Sync</h3>
-            <p className="text-xs text-text-muted leading-relaxed uppercase tracking-tighter">Integrate the official Ginashe academic schedule with your personal terminal. Supports Google Calendar, Apple iCal, and MS Outlook via secure iCal Protocol.</p>
-         </div>
-         <button className="btn btn-brand px-12 py-4 text-[11px] font-black uppercase tracking-[0.2em] shadow-2xl shadow-brand/20 whitespace-nowrap">DEPLOY ICAL FEED</button>
+        <div className="max-w-xl text-center lg:text-left">
+          <h3 className="font-syne font-bold text-2xl mb-2 text-brand">Institutional Schedule Sync</h3>
+          <p className="text-xs text-text-muted leading-relaxed uppercase tracking-tighter">Integrate the official Ginashe academic schedule with your personal terminal. Supports Google Calendar, Apple iCal, and MS Outlook via secure iCal Protocol.</p>
+        </div>
+        <button className="btn btn-brand px-12 py-4 text-[11px] font-black uppercase tracking-[0.2em] shadow-2xl shadow-brand/20 whitespace-nowrap">DEPLOY ICAL FEED</button>
       </div>
     </div>
   );
@@ -2588,9 +2578,9 @@ function CourseManager({ courses, onRefresh, onEditContent }: { courses: any[], 
   // Grouping logic
   const groupedCourses = courses.reduce((acc: any, course) => {
     const trackName = course.curriculum_tracks?.name || 'Unassigned Track';
-    if (!acc[trackName]) acc[trackName] = { 
+    if (!acc[trackName]) acc[trackName] = {
       theme: course.curriculum_tracks?.color_theme || 'blue',
-      courses: [] 
+      courses: []
     };
     acc[trackName].courses.push(course);
     return acc;
@@ -2626,31 +2616,31 @@ function CourseManager({ courses, onRefresh, onEditContent }: { courses: any[], 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="md:col-span-2">
               <label className="block font-dm-mono text-[9px] uppercase text-text-muted mb-2 font-bold tracking-widest pl-1">Educational Track</label>
-              <select required className="w-full bg-surface border border-border-custom rounded-xl p-4 text-xs font-bold focus:border-brand transition-all outline-none" 
+              <select required className="w-full bg-surface border border-border-custom rounded-xl p-4 text-xs font-bold focus:border-brand transition-all outline-none"
                 value={newCourse.track_id} onChange={e => setNewCourse({ ...newCourse, track_id: e.target.value })}>
                 <option value="">Select Institutional Track...</option>
                 {tracks.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
               </select>
             </div>
             <div>
-              <label className="block font-dm-mono text-[9px] uppercase text-text-muted mb-2 font-bold tracking-widest pl-1">Enrollment Icon</label>
-              <input maxLength={2} className="w-full bg-surface border border-border-custom rounded-xl p-4 text-center text-xl focus:border-brand transition-all outline-none" 
+              <label className="block font-dm-mono text-[9px] uppercase text-text-muted mb-2 font-bold tracking-widest pl-1">Enrolment Icon</label>
+              <input maxLength={2} className="w-full bg-surface border border-border-custom rounded-xl p-4 text-center text-xl focus:border-brand transition-all outline-none"
                 value={newCourse.thumbnail_url} onChange={e => setNewCourse({ ...newCourse, thumbnail_url: e.target.value })} />
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-             <div>
-                <label className="block font-dm-mono text-[9px] uppercase text-text-muted mb-2 font-bold tracking-widest pl-1">Course Title</label>
-                <input required className="w-full bg-surface border border-border-custom rounded-xl p-4 text-xs font-bold focus:border-brand transition-all outline-none" 
-                  value={newCourse.title} onChange={e => setNewCourse({ ...newCourse, title: e.target.value, slug: e.target.value.toLowerCase().replace(/ /g, '-') })} />
-             </div>
-             <div>
-                <label className="block font-dm-mono text-[9px] uppercase text-text-muted mb-2 font-bold tracking-widest pl-1">NQF Level Verification</label>
-                <select className="w-full bg-surface border border-border-custom rounded-xl p-4 text-xs font-bold focus:border-brand transition-all outline-none"
-                  value={newCourse.nqf_level} onChange={e => setNewCourse({ ...newCourse, nqf_level: parseInt(e.target.value) })}>
-                  {[3,4,5,6,7,8].map(l => <option key={l} value={l}>NQF Level {l}</option>)}
-                </select>
-             </div>
+            <div>
+              <label className="block font-dm-mono text-[9px] uppercase text-text-muted mb-2 font-bold tracking-widest pl-1">Course Title</label>
+              <input required className="w-full bg-surface border border-border-custom rounded-xl p-4 text-xs font-bold focus:border-brand transition-all outline-none"
+                value={newCourse.title} onChange={e => setNewCourse({ ...newCourse, title: e.target.value, slug: e.target.value.toLowerCase().replace(/ /g, '-') })} />
+            </div>
+            <div>
+              <label className="block font-dm-mono text-[9px] uppercase text-text-muted mb-2 font-bold tracking-widest pl-1">NQF Level Verification</label>
+              <select className="w-full bg-surface border border-border-custom rounded-xl p-4 text-xs font-bold focus:border-brand transition-all outline-none"
+                value={newCourse.nqf_level} onChange={e => setNewCourse({ ...newCourse, nqf_level: parseInt(e.target.value) })}>
+                {[3, 4, 5, 6, 7, 8].map(l => <option key={l} value={l}>NQF Level {l}</option>)}
+              </select>
+            </div>
           </div>
           <button type="submit" className="btn btn-brand w-full py-5 font-black text-sm tracking-[0.2em] uppercase">Commit to Academy Map</button>
         </form>
@@ -2658,54 +2648,54 @@ function CourseManager({ courses, onRefresh, onEditContent }: { courses: any[], 
 
       {Object.entries(groupedCourses).map(([trackName, data]: [string, any]) => (
         <div key={trackName} className="space-y-6">
-           <div className={`flex items-center gap-4 py-2 px-6 rounded-2xl border w-fit ${THEME_MAP[data.theme] || THEME_MAP.blue}`}>
-              <ShieldCheck className="w-4 h-4" />
-              <h3 className="font-syne font-black text-xs uppercase tracking-[0.3em]">{trackName}</h3>
-           </div>
-           
-           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-             {data.courses.sort((a:any, b:any) => a.nqf_level - b.nqf_level).map((course: any) => (
-               <div key={course.id} className="bg-card border border-border-custom rounded-3xl p-6 hover:border-brand/30 transition-all group flex flex-col h-full relative overflow-hidden isolate">
-                  <div className={`absolute top-0 right-0 w-32 h-32 opacity-5 rounded-full -mr-16 -mt-16 blur-3xl pointer-events-none bg-current ${THEME_MAP[data.theme]?.split(' ')[2]}`} />
-                  
-                  <div className="flex justify-between items-start mb-6">
-                    <div className="w-12 h-12 bg-surface border border-brand/10 rounded-2xl flex items-center justify-center text-2xl shadow-inner">{course.thumbnail_url}</div>
-                    <span className="text-[8px] font-dm-mono font-black border border-brand/20 text-brand px-2 py-0.5 rounded uppercase tracking-tighter">NQF L{course.nqf_level}</span>
-                  </div>
+          <div className={`flex items-center gap-4 py-2 px-6 rounded-2xl border w-fit ${THEME_MAP[data.theme] || THEME_MAP.blue}`}>
+            <ShieldCheck className="w-4 h-4" />
+            <h3 className="font-syne font-black text-xs uppercase tracking-[0.3em]">{trackName}</h3>
+          </div>
 
-                  <div className="flex-1">
-                    <h4 className="font-syne font-black text-base mb-1 text-text-soft leading-tight uppercase line-clamp-2">{course.title}</h4>
-                    <span className="text-[9px] font-dm-mono text-brand/60 uppercase tracking-widest block mb-4">{course.progression_level}</span>
-                    <p className="text-[11px] text-text-muted line-clamp-3 leading-relaxed">{course.description}</p>
-                  </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {data.courses.sort((a: any, b: any) => a.nqf_level - b.nqf_level).map((course: any) => (
+              <div key={course.id} className="bg-card border border-border-custom rounded-3xl p-6 hover:border-brand/30 transition-all group flex flex-col h-full relative overflow-hidden isolate">
+                <div className={`absolute top-0 right-0 w-32 h-32 opacity-5 rounded-full -mr-16 -mt-16 blur-3xl pointer-events-none bg-current ${THEME_MAP[data.theme]?.split(' ')[2]}`} />
 
-                  <div className="mt-8 pt-6 border-t border-brand/5 flex items-center justify-between">
-                    <div className="flex gap-1.5">
-                       {isSuperAdmin && (
-                         <button 
-                           onClick={() => {
-                             const saqa = prompt('Administrative Override: Enter SAQA/MICT ID Mapping', course.accreditation_meta?.saqa_id || '');
-                             if (saqa !== null) {
-                               supabase.from('courses').update({ 
-                                 accreditation_meta: { ...course.accreditation_meta, saqa_id: saqa } 
-                               }).eq('id', course.id).then(() => onRefresh());
-                             }
-                           }}
-                           className="w-8 h-8 rounded-lg bg-surface border border-border-custom flex items-center justify-center text-text-dim hover:text-brand transition-all"
-                           title="Regulatory Compliance Settings"
-                         >
-                           <ShieldCheck size={12} />
-                         </button>
-                       )}
-                    </div>
-                    <button onClick={() => onEditContent(course)} className="text-brand text-[10px] font-black uppercase tracking-tighter hover:underline flex items-center gap-1 group/btn">
-                      ARCHITECT 
-                      <ChevronRight size={12} className="group-hover/btn:translate-x-1 transition-transform" />
-                    </button>
+                <div className="flex justify-between items-start mb-6">
+                  <div className="w-12 h-12 bg-surface border border-brand/10 rounded-2xl flex items-center justify-center text-2xl shadow-inner">{course.thumbnail_url}</div>
+                  <span className="text-[8px] font-dm-mono font-black border border-brand/20 text-brand px-2 py-0.5 rounded uppercase tracking-tighter">NQF L{course.nqf_level}</span>
+                </div>
+
+                <div className="flex-1">
+                  <h4 className="font-syne font-black text-base mb-1 text-text-soft leading-tight uppercase line-clamp-2">{course.title}</h4>
+                  <span className="text-[9px] font-dm-mono text-brand/60 uppercase tracking-widest block mb-4">{course.progression_level}</span>
+                  <p className="text-[11px] text-text-muted line-clamp-3 leading-relaxed">{course.description}</p>
+                </div>
+
+                <div className="mt-8 pt-6 border-t border-brand/5 flex items-center justify-between">
+                  <div className="flex gap-1.5">
+                    {isSuperAdmin && (
+                      <button
+                        onClick={() => {
+                          const saqa = prompt('Administrative Override: Enter SAQA/MICT ID Mapping', course.accreditation_meta?.saqa_id || '');
+                          if (saqa !== null) {
+                            supabase.from('courses').update({
+                              accreditation_meta: { ...course.accreditation_meta, saqa_id: saqa }
+                            }).eq('id', course.id).then(() => onRefresh());
+                          }
+                        }}
+                        className="w-8 h-8 rounded-lg bg-surface border border-border-custom flex items-center justify-center text-text-dim hover:text-brand transition-all"
+                        title="Regulatory Compliance Settings"
+                      >
+                        <ShieldCheck size={12} />
+                      </button>
+                    )}
                   </div>
-               </div>
-             ))}
-           </div>
+                  <button onClick={() => onEditContent(course)} className="text-brand text-[10px] font-black uppercase tracking-tighter hover:underline flex items-center gap-1 group/btn">
+                    ARCHITECT
+                    <ChevronRight size={12} className="group-hover/btn:translate-x-1 transition-transform" />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       ))}
     </div>
@@ -2822,7 +2812,7 @@ function CourseContentEditor({ course, onBack }: { course: any, onBack: () => vo
                   {mod.lessons?.sort((a: any, b: any) => a.order_index - b.order_index).map((lesson: any) => (
                     <button key={lesson.id} onClick={() => { setEditingLesson(lesson); setEditingQuiz(null); }}
                       className={`w-full text-left p-2 rounded-lg text-[11px] font-bold transition-all flex items-center gap-2 ${editingLesson?.id === lesson.id ? 'bg-brand/10 text-brand border border-brand/20' : 'hover:bg-white/5 text-text-soft border border-transparent'}`}>
-                      <FileText size={12} className={editingLesson?.id === lesson.id ? 'text-brand' : 'text-text-dim'} /> 
+                      <FileText size={12} className={editingLesson?.id === lesson.id ? 'text-brand' : 'text-text-dim'} />
                       <span className="truncate">{lesson.title}</span>
                     </button>
                   ))}
@@ -2845,7 +2835,7 @@ function CourseContentEditor({ course, onBack }: { course: any, onBack: () => vo
         <div className="lg:col-span-2">
           {editingLesson ? (
             <form onSubmit={handleSaveLesson} className="bg-[#0a0d14] border border-brand/20 rounded-3xl p-6 md:p-8 space-y-6 shadow-2xl relative animate-fadeLeft">
-               <div className="absolute top-0 right-0 w-32 h-32 bg-brand/5 rounded-full -mr-16 -mt-16 blur-2xl" />
+              <div className="absolute top-0 right-0 w-32 h-32 bg-brand/5 rounded-full -mr-16 -mt-16 blur-2xl" />
               <div className="flex justify-between items-center relative z-10">
                 <h3 className="font-syne font-black text-xl uppercase tracking-tighter text-brand">Edit Academic Module</h3>
                 <div className="flex gap-2">
@@ -2874,7 +2864,7 @@ function CourseContentEditor({ course, onBack }: { course: any, onBack: () => vo
             </form>
           ) : editingQuiz ? (
             <form onSubmit={handleSaveQuiz} className="bg-[#0a0d14] border border-brand/20 rounded-3xl p-6 md:p-8 space-y-6 shadow-2xl relative animate-fadeLeft">
-               <div className="absolute top-0 right-0 w-32 h-32 bg-sky/5 rounded-full -mr-16 -mt-16 blur-2xl" />
+              <div className="absolute top-0 right-0 w-32 h-32 bg-sky/5 rounded-full -mr-16 -mt-16 blur-2xl" />
               <div className="flex justify-between items-center relative z-10">
                 <h3 className="font-syne font-black text-xl uppercase tracking-tighter text-sky">Refine Assessment</h3>
                 <div className="flex gap-2">
@@ -2983,19 +2973,19 @@ function NewsManager() {
       {isEditing ? (
         <div className="bg-card border border-border-custom rounded-xl p-6 space-y-4">
           <div className="grid grid-cols-2 gap-4">
-            <input placeholder="Title" className="bg-surface border border-border-custom p-2 rounded text-sm" value={currentPost.title} onChange={e => setCurrentPost({...currentPost, title: e.target.value})} />
-            <input placeholder="Slug (optional)" className="bg-surface border border-border-custom p-2 rounded text-sm" value={currentPost.slug} onChange={e => setCurrentPost({...currentPost, slug: e.target.value})} />
-            <input placeholder="Image URL" className="bg-surface border border-border-custom p-2 rounded text-sm" value={currentPost.image_url} onChange={e => setCurrentPost({...currentPost, image_url: e.target.value})} />
-            <select className="bg-surface border border-border-custom p-2 rounded text-sm" value={currentPost.category} onChange={e => setCurrentPost({...currentPost, category: e.target.value})}>
+            <input placeholder="Title" className="bg-surface border border-border-custom p-2 rounded text-sm" value={currentPost.title} onChange={e => setCurrentPost({ ...currentPost, title: e.target.value })} />
+            <input placeholder="Slug (optional)" className="bg-surface border border-border-custom p-2 rounded text-sm" value={currentPost.slug} onChange={e => setCurrentPost({ ...currentPost, slug: e.target.value })} />
+            <input placeholder="Image URL" className="bg-surface border border-border-custom p-2 rounded text-sm" value={currentPost.image_url} onChange={e => setCurrentPost({ ...currentPost, image_url: e.target.value })} />
+            <select className="bg-surface border border-border-custom p-2 rounded text-sm" value={currentPost.category} onChange={e => setCurrentPost({ ...currentPost, category: e.target.value })}>
               <option>General</option>
               <option>Technology</option>
               <option>Career</option>
               <option>Academy Update</option>
             </select>
           </div>
-          <textarea placeholder="Excerpt" className="w-full bg-surface border border-border-custom p-2 rounded text-sm h-20" value={currentPost.excerpt} onChange={e => setCurrentPost({...currentPost, excerpt: e.target.value})} />
+          <textarea placeholder="Excerpt" className="w-full bg-surface border border-border-custom p-2 rounded text-sm h-20" value={currentPost.excerpt} onChange={e => setCurrentPost({ ...currentPost, excerpt: e.target.value })} />
           <div className="bg-white text-black rounded-lg overflow-hidden">
-            <ReactQuill theme="snow" value={currentPost.content} onChange={val => setCurrentPost({...currentPost, content: val})} style={{ height: '300px', marginBottom: '40px' }} />
+            <ReactQuill theme="snow" value={currentPost.content} onChange={val => setCurrentPost({ ...currentPost, content: val })} style={{ height: '300px', marginBottom: '40px' }} />
           </div>
           <div className="flex justify-end gap-2 pt-4">
             <button onClick={() => setIsEditing(false)} className="btn btn-outline btn-sm">Cancel</button>
@@ -3063,13 +3053,13 @@ function EventsManager() {
 
       {isEditing ? (
         <div className="bg-card border border-border-custom rounded-xl p-6 space-y-4">
-          <input placeholder="Title" className="w-full bg-surface border border-border-custom p-2 rounded text-sm font-bold" value={currentEvent.title} onChange={e => setCurrentEvent({...currentEvent, title: e.target.value})} />
+          <input placeholder="Title" className="w-full bg-surface border border-border-custom p-2 rounded text-sm font-bold" value={currentEvent.title} onChange={e => setCurrentEvent({ ...currentEvent, title: e.target.value })} />
           <div className="grid grid-cols-2 gap-4">
-            <input type="date" className="bg-surface border border-border-custom p-2 rounded text-sm" value={currentEvent.event_date} onChange={e => setCurrentEvent({...currentEvent, event_date: e.target.value})} />
-            <input type="time" className="bg-surface border border-border-custom p-2 rounded text-sm" value={currentEvent.event_time} onChange={e => setCurrentEvent({...currentEvent, event_time: e.target.value})} />
+            <input type="date" className="bg-surface border border-border-custom p-2 rounded text-sm" value={currentEvent.event_date} onChange={e => setCurrentEvent({ ...currentEvent, event_date: e.target.value })} />
+            <input type="time" className="bg-surface border border-border-custom p-2 rounded text-sm" value={currentEvent.event_time} onChange={e => setCurrentEvent({ ...currentEvent, event_time: e.target.value })} />
           </div>
-          <input placeholder="Location (or Link)" className="w-full bg-surface border border-border-custom p-2 rounded text-sm" value={currentEvent.location} onChange={e => setCurrentEvent({...currentEvent, location: e.target.value})} />
-          <textarea placeholder="Description" className="w-full bg-surface border border-border-custom p-2 rounded text-sm h-32" value={currentEvent.description} onChange={e => setCurrentEvent({...currentEvent, description: e.target.value})} />
+          <input placeholder="Location (or Link)" className="w-full bg-surface border border-border-custom p-2 rounded text-sm" value={currentEvent.location} onChange={e => setCurrentEvent({ ...currentEvent, location: e.target.value })} />
+          <textarea placeholder="Description" className="w-full bg-surface border border-border-custom p-2 rounded text-sm h-32" value={currentEvent.description} onChange={e => setCurrentEvent({ ...currentEvent, description: e.target.value })} />
           <div className="flex justify-end gap-2">
             <button onClick={() => setIsEditing(false)} className="btn btn-outline btn-sm">Cancel</button>
             <button onClick={handleSaveEvent} className="btn btn-brand btn-sm">Save Event</button>
@@ -3205,9 +3195,8 @@ function FinanceManager() {
                     <div className="font-syne font-black text-sm text-white">R {inv.amount?.toLocaleString()}</div>
                   </td>
                   <td className="p-4">
-                    <span className={`px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest border ${
-                      inv.status === 'paid' ? 'bg-emerald/10 text-emerald border-emerald/20' : 'bg-brand/10 text-brand border-brand/20'
-                    }`}>
+                    <span className={`px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest border ${inv.status === 'paid' ? 'bg-emerald/10 text-emerald border-emerald/20' : 'bg-brand/10 text-brand border-brand/20'
+                      }`}>
                       {inv.status}
                     </span>
                   </td>
@@ -3281,26 +3270,26 @@ function MyFinance() {
             <button onClick={() => exportToCSV(invoices, 'my-statement')} className="btn btn-outline px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-white/5 transition-all">Download Audit</button>
           </div>
         </div>
-        
+
         <div className="grid grid-rows-2 gap-3">
-           <div className="bg-[#0a0d14] border border-brand/10 p-4 rounded-xl flex justify-between items-center group hover:border-brand/20 transition-all">
-              <div>
-                <span className="text-[9px] text-text-muted font-dm-mono uppercase tracking-widest block mb-0.5">Last Transaction</span>
-                <span className="text-lg font-syne font-black text-emerald tracking-tighter">{txs[0] ? `R ${txs[0].amount.toLocaleString()}` : 'N/A'}</span>
-              </div>
-              <div className="w-10 h-10 rounded-xl bg-emerald/5 border border-emerald/10 flex items-center justify-center">
-                <ArrowRight className="w-4 h-4 text-emerald" />
-              </div>
-           </div>
-           <div className="bg-[#0a0d14] border border-brand/10 p-4 rounded-xl flex justify-between items-center group hover:border-brand/20 transition-all">
-              <div>
-                <span className="text-[9px] text-text-muted font-dm-mono uppercase tracking-widest block mb-0.5">Next Commitment</span>
-                <span className="text-lg font-syne font-black text-brand tracking-tighter">{invoices.find(i => i.status !== 'paid')?.due_date || 'N/A'}</span>
-              </div>
-              <div className="w-10 h-10 rounded-xl bg-brand/5 border border-brand/10 flex items-center justify-center">
-                <Calendar className="w-4 h-4 text-brand" />
-              </div>
-           </div>
+          <div className="bg-[#0a0d14] border border-brand/10 p-4 rounded-xl flex justify-between items-center group hover:border-brand/20 transition-all">
+            <div>
+              <span className="text-[9px] text-text-muted font-dm-mono uppercase tracking-widest block mb-0.5">Last Transaction</span>
+              <span className="text-lg font-syne font-black text-emerald tracking-tighter">{txs[0] ? `R ${txs[0].amount.toLocaleString()}` : 'N/A'}</span>
+            </div>
+            <div className="w-10 h-10 rounded-xl bg-emerald/5 border border-emerald/10 flex items-center justify-center">
+              <ArrowRight className="w-4 h-4 text-emerald" />
+            </div>
+          </div>
+          <div className="bg-[#0a0d14] border border-brand/10 p-4 rounded-xl flex justify-between items-center group hover:border-brand/20 transition-all">
+            <div>
+              <span className="text-[9px] text-text-muted font-dm-mono uppercase tracking-widest block mb-0.5">Next Commitment</span>
+              <span className="text-lg font-syne font-black text-brand tracking-tighter">{invoices.find(i => i.status !== 'paid')?.due_date || 'N/A'}</span>
+            </div>
+            <div className="w-10 h-10 rounded-xl bg-brand/5 border border-brand/10 flex items-center justify-center">
+              <Calendar className="w-4 h-4 text-brand" />
+            </div>
+          </div>
         </div>
       </div>
 
@@ -3364,7 +3353,7 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
   const [profileForm, setProfileForm] = useState<any>({});
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  
+
   // New State for LMS Features
   const [courses, setCourses] = useState<any[]>([]);
   const [announcements, setAnnouncements] = useState<any[]>([]);
@@ -3382,40 +3371,40 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
 
   useEffect(() => {
     if (!user) return;
-    
+
     fetchStudentData();
 
     // ─── UNIFIED REAL-TIME HUB ───
     const channel = supabase
       .channel(`student-portal-${user.id}`)
-      .on('postgres_changes', { 
-        event: '*', 
-        schema: 'public', 
-        table: 'profiles', 
-        filter: `id=eq.${user.id}` 
+      .on('postgres_changes', {
+        event: '*',
+        schema: 'public',
+        table: 'profiles',
+        filter: `id=eq.${user.id}`
       }, (payload) => {
         setProfile(payload.new);
         setProfileForm(payload.new);
       })
-      .on('postgres_changes', { 
-        event: '*', 
-        schema: 'public', 
-        table: 'applications', 
-        filter: `email=eq.${user.email?.toLowerCase()}` 
+      .on('postgres_changes', {
+        event: '*',
+        schema: 'public',
+        table: 'applications',
+        filter: `email=eq.${user.email?.toLowerCase()}`
       }, () => {
         fetchStudentData(); // Re-fetch applications
       })
-      .on('postgres_changes', { 
-        event: '*', 
-        schema: 'public', 
-        table: 'posts' 
+      .on('postgres_changes', {
+        event: '*',
+        schema: 'public',
+        table: 'posts'
       }, () => {
         fetchStudentData(); // Re-fetch if news changes
       })
-      .on('postgres_changes', { 
-        event: '*', 
-        schema: 'public', 
-        table: 'academic_schedule' 
+      .on('postgres_changes', {
+        event: '*',
+        schema: 'public',
+        table: 'academic_schedule'
       }, () => {
         fetchStudentData(); // Re-fetch if academic schedule changes
       })
@@ -3492,7 +3481,7 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
       setDocuments(allDocs || []);
       setNotifications(allNotifs || []);
       setAcademicSchedule(schedule || []);
-      
+
       const setMap: any = {};
       settings?.forEach(s => setMap[s.key] = s.value);
       setSchoolSettings(setMap);
@@ -3554,14 +3543,14 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
   async function handleUpload(type: string) {
     const url = prompt('Enter the document URL (Simulation: normally you would choose a file):', 'https://example.com/doc.pdf');
     if (!url) return;
-    
+
     const { error } = await supabase.from('student_documents').insert({
       student_id: user?.id,
       type,
       file_url: url,
       status: 'pending'
     });
-    
+
     if (error) alert(error.message);
     else {
       alert('Artifact uploaded for verification!');
@@ -3589,7 +3578,7 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
       <aside className={`fixed lg:h-screen lg:border-r border-border-custom bg-[#0a0d14]/95 backdrop-blur-3xl z-50 transition-all duration-300 ease-[0.25,0.1,0.25,1] ${isSidebarCollapsed ? 'lg:w-20' : 'lg:w-64'} ${isMobileMenuOpen ? 'translate-x-0 w-64' : '-translate-x-full lg:translate-x-0'}`}>
         <div className="flex flex-col h-full relative">
           {/* Collapse Toggle Button (Desktop Only) */}
-          <button 
+          <button
             onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
             className="absolute -right-3 top-20 w-6 h-6 bg-brand text-bg rounded-full hidden lg:flex items-center justify-center shadow-lg z-30 hover:scale-110 transition-transform"
           >
@@ -3599,10 +3588,10 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
           <div className="p-4 h-full flex flex-col">
             {/* Institutional Navigation */}
             <div className="mb-8">
-              <button 
+              <button
                 onClick={async () => {
-                   await supabase.auth.signOut();
-                   window.location.href = '/';
+                  await supabase.auth.signOut();
+                  window.location.href = '/';
                 }}
                 className={`w-full flex items-center rounded-xl bg-brand/10 border border-brand/30 text-brand hover:bg-brand hover:text-bg transition-all font-bold text-[10px] uppercase tracking-tighter ${isSidebarCollapsed ? 'justify-center p-3' : 'px-4 py-3 gap-2.5'}`}
               >
@@ -3639,11 +3628,10 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
                   key={item.id}
                   onClick={() => setActiveSection(item.id as any)}
                   title={isSidebarCollapsed ? item.label : ''}
-                  className={`w-full flex items-center rounded-xl font-dm-mono text-[11px] uppercase tracking-widest transition-all duration-200 group ${
-                    activeSection === item.id 
-                      ? 'bg-brand text-bg font-bold shadow-lg shadow-brand/20' 
+                  className={`w-full flex items-center rounded-xl font-dm-mono text-[11px] uppercase tracking-widest transition-all duration-200 group ${activeSection === item.id
+                      ? 'bg-brand text-bg font-bold shadow-lg shadow-brand/20'
                       : 'text-text-muted hover:text-text-custom hover:bg-white/5 border border-transparent'
-                  } ${(isSidebarCollapsed && !isMobileMenuOpen) ? 'lg:justify-center p-3' : 'px-4 py-3 gap-3'}`}
+                    } ${(isSidebarCollapsed && !isMobileMenuOpen) ? 'lg:justify-center p-3' : 'px-4 py-3 gap-3'}`}
                 >
                   <item.icon className={`w-4 h-4 shrink-0 ${activeSection === item.id ? 'text-brand' : 'group-hover:text-brand'} transition-colors`} />
                   {(!isSidebarCollapsed || isMobileMenuOpen) && <span className="whitespace-nowrap animate-fade">{item.label}</span>}
@@ -3671,8 +3659,8 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
                   </div>
                 </div>
               )}
-              <button 
-                onClick={() => signOut()} 
+              <button
+                onClick={() => signOut()}
                 title={isSidebarCollapsed ? 'Sign Out' : ''}
                 className={`w-full flex items-center rounded-xl text-coral hover:bg-coral/5 transition-all font-dm-mono text-[11px] uppercase tracking-widest ${isSidebarCollapsed ? 'justify-center p-3' : 'px-4 py-3 gap-3'}`}
               >
@@ -3697,12 +3685,12 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
             </p>
           </div>
           {proctoringAlert && (
-             <div className="fixed top-10 left-1/2 -translate-x-1/2 z-[9999] px-6 py-3 bg-coral text-bg rounded-full flex items-center gap-3 shadow-2xl animate-bounce">
-               <AlertTriangle className="w-5 h-5" />
-               <span className="text-xs font-bold uppercase tracking-widest">{proctoringAlert}</span>
-             </div>
+            <div className="fixed top-10 left-1/2 -translate-x-1/2 z-[9999] px-6 py-3 bg-coral text-bg rounded-full flex items-center gap-3 shadow-2xl animate-bounce">
+              <AlertTriangle className="w-5 h-5" />
+              <span className="text-xs font-bold uppercase tracking-widest">{proctoringAlert}</span>
+            </div>
           )}
-    <div className="flex items-center gap-4 bg-surface/50 border border-border-custom p-2 rounded-2xl backdrop-blur-md animate-fadeLeft">
+          <div className="flex items-center gap-4 bg-surface/50 border border-border-custom p-2 rounded-2xl backdrop-blur-md animate-fadeLeft">
             <div className="text-right px-2">
               <p className="text-[10px] text-text-dim font-dm-mono uppercase">System Status</p>
               <p className="text-xs font-bold text-emerald flex items-center justify-end gap-1.5">
@@ -3797,16 +3785,15 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
                     { title: 'Application Submitted', date: applications[0]?.created_at ? new Date(applications[0].created_at).toLocaleDateString() : 'Pending', completed: applications.length > 0 },
                     { title: 'Document Review', date: 'Processing', completed: applications.some(a => ['reviewing', 'approved', 'interviewing'].includes(a.status || '')) },
                     { title: 'Interview Invitation', date: '-', completed: applications.some(a => ['approved', 'interviewing'].includes(a.status || '')) },
-                    { title: 'Enrollment Offer', date: '-', completed: applications.some(a => a.status === 'approved') },
+                    { title: 'Enrolment Offer', date: '-', completed: applications.some(a => a.status === 'approved') },
                     { title: 'Official Welcome', date: '-', completed: enrollments.length > 0 },
                   ].map((step, i, arr) => (
                     <div key={i} className="relative pl-8 pb-10 last:pb-0">
                       {i !== arr.length - 1 && (
                         <div className={`absolute left-[11px] top-[24px] bottom-0 w-0.5 ${step.completed ? 'bg-brand' : 'bg-border-custom border-dashed border-l'}`} />
                       )}
-                      <div className={`absolute left-0 top-0 w-6 h-6 rounded-full flex items-center justify-center z-10 ${
-                        step.completed ? 'bg-brand text-bg' : 'bg-surface border border-border-custom text-text-muted'
-                      }`}>
+                      <div className={`absolute left-0 top-0 w-6 h-6 rounded-full flex items-center justify-center z-10 ${step.completed ? 'bg-brand text-bg' : 'bg-surface border border-border-custom text-text-muted'
+                        }`}>
                         {step.completed ? <CheckCircle2 className="w-3.5 h-3.5" /> : <div className="w-1.5 h-1.5 rounded-full bg-text-dim/30" />}
                       </div>
                       <div>
@@ -3862,11 +3849,10 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
                 <button
                   key={tab.id}
                   onClick={() => setAcademicTab(tab.id as any)}
-                  className={`flex items-center gap-2 px-6 py-3 rounded-xl font-dm-mono text-[10px] uppercase tracking-widest transition-all ${
-                    academicTab === tab.id 
-                      ? 'bg-brand/10 text-brand border border-brand/20' 
+                  className={`flex items-center gap-2 px-6 py-3 rounded-xl font-dm-mono text-[10px] uppercase tracking-widest transition-all ${academicTab === tab.id
+                      ? 'bg-brand/10 text-brand border border-brand/20'
                       : 'text-text-muted hover:text-text-custom hover:bg-white/5 border border-transparent'
-                  }`}
+                    }`}
                 >
                   <tab.icon className="w-3.5 h-3.5" />
                   {tab.label}
@@ -3894,7 +3880,7 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
                               <div className="p-2 bg-emerald/10 text-emerald rounded-lg"><ShieldCheck className="w-5 h-5" /></div>
                             )}
                           </div>
-                          
+
                           <div className="space-y-6">
                             <div className="space-y-3">
                               <div className="flex justify-between text-[10px] font-dm-mono uppercase text-text-muted">
@@ -3905,7 +3891,7 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
                                 <div className="h-full bg-gradient-to-r from-brand to-brand-light rounded-full transition-all duration-1000" style={{ width: `${progress[enroll.course_id] || 0}%` }} />
                               </div>
                             </div>
-                            
+
                             <div className="flex gap-3">
                               <button onClick={() => onStartCourse(enroll.course_id)} className="flex-1 btn btn-brand py-4">
                                 {progress[enroll.course_id] > 0 ? 'Resume Lesson' : 'Launch Course'}
@@ -3931,7 +3917,7 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
               </div>
             )}
 
-            { academicTab !== 'modules' && (
+            {academicTab !== 'modules' && (
               <div className="space-y-6">
                 {assessments.filter(a => a.type === academicTab.slice(0, -1) || a.type === academicTab).length > 0 ? (
                   <div className="grid grid-cols-1 gap-4">
@@ -3940,34 +3926,31 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
                       .map(assessment => {
                         const sub = submissions.find(s => s.assessment_id === assessment.id);
                         return (
-                          <div key={assessment.id} className={`bg-card border rounded-2xl p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 transition-all ${
-                            academicTab === 'exams' ? 'border-coral/50 bg-coral/5 shadow-lg shadow-coral/10' : 'border-border-custom hover:border-brand/20'
-                          }`}>
-                             <div>
-                               <div className="flex items-center gap-2 mb-1">
-                                 <span className={`text-[9px] font-dm-mono uppercase px-2 py-0.5 rounded border ${
-                                   academicTab === 'exams' ? 'text-coral bg-coral/10 border-coral/20' : 'text-brand bg-brand/10 border-brand/10'
-                                 }`}>{academicTab === 'exams' ? 'Final Examination' : 'Required'}</span>
-                                 <h4 className="font-bold text-lg">{assessment.title}</h4>
-                               </div>
-                               <p className="text-xs text-text-muted max-w-lg mb-2">{assessment.description}</p>
-                               <div className="flex items-center gap-4 text-[10px] text-text-dim uppercase font-dm-mono">
-                                 <span>Due: {assessment.due_date ? new Date(assessment.due_date).toLocaleDateString() : 'N/A'}</span>
-                                 <span>Weight: {assessment.weight || 0}%</span>
-                                 {assessment.is_proctored && <span className="text-brand font-bold flex items-center gap-1"><ShieldCheck className="w-3 h-3" /> Integrity Tracking</span>}
-                               </div>
-                             </div>
-                             <div className="flex flex-col items-end gap-2 shrink-0">
-                               {sub ? (
-                                 <div className={`px-4 py-1.5 rounded-full text-[10px] font-dm-mono uppercase border tracking-widest shadow-sm ${
-                                   sub.status === 'graded' ? 'border-emerald/20 text-emerald bg-emerald/5' : 'border-brand/20 text-brand bg-brand/5'
-                                 }`}>
-                                   {sub.status === 'graded' ? `Graded: ${sub.marks_obtained}/${assessment.total_marks}` : 'Submitted'}
-                                 </div>
-                               ) : (
-                                 <button className="btn btn-brand py-2 px-6 text-xs">+ Submit Work</button>
-                               )}
-                             </div>
+                          <div key={assessment.id} className={`bg-card border rounded-2xl p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 transition-all ${academicTab === 'exams' ? 'border-coral/50 bg-coral/5 shadow-lg shadow-coral/10' : 'border-border-custom hover:border-brand/20'
+                            }`}>
+                            <div>
+                              <div className="flex items-center gap-2 mb-1">
+                                <span className={`text-[9px] font-dm-mono uppercase px-2 py-0.5 rounded border ${academicTab === 'exams' ? 'text-coral bg-coral/10 border-coral/20' : 'text-brand bg-brand/10 border-brand/10'
+                                  }`}>{academicTab === 'exams' ? 'Final Examination' : 'Required'}</span>
+                                <h4 className="font-bold text-lg">{assessment.title}</h4>
+                              </div>
+                              <p className="text-xs text-text-muted max-w-lg mb-2">{assessment.description}</p>
+                              <div className="flex items-center gap-4 text-[10px] text-text-dim uppercase font-dm-mono">
+                                <span>Due: {assessment.due_date ? new Date(assessment.due_date).toLocaleDateString() : 'N/A'}</span>
+                                <span>Weight: {assessment.weight || 0}%</span>
+                                {assessment.is_proctored && <span className="text-brand font-bold flex items-center gap-1"><ShieldCheck className="w-3 h-3" /> Integrity Tracking</span>}
+                              </div>
+                            </div>
+                            <div className="flex flex-col items-end gap-2 shrink-0">
+                              {sub ? (
+                                <div className={`px-4 py-1.5 rounded-full text-[10px] font-dm-mono uppercase border tracking-widest shadow-sm ${sub.status === 'graded' ? 'border-emerald/20 text-emerald bg-emerald/5' : 'border-brand/20 text-brand bg-brand/5'
+                                  }`}>
+                                  {sub.status === 'graded' ? `Graded: ${sub.marks_obtained}/${assessment.total_marks}` : 'Submitted'}
+                                </div>
+                              ) : (
+                                <button className="btn btn-brand py-2 px-6 text-xs">+ Submit Work</button>
+                              )}
+                            </div>
                           </div>
                         );
                       })
@@ -3976,7 +3959,7 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
                 ) : (
                   <div className="p-20 text-center bg-surface/10 rounded-3xl border border-white/5">
                     <div className="text-4xl mb-4">📂</div>
-                    <p className="text-text-dim italic text-sm">No {academicTab} items published for your current enrollment yet.</p>
+                    <p className="text-text-dim italic text-sm">No {academicTab} items published for your current enrolment yet.</p>
                   </div>
                 )}
               </div>
@@ -3991,60 +3974,59 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
         {activeSection === 'applications' && (
           <div className="space-y-6">
             <div className="bg-card border border-border-custom rounded-3xl overflow-hidden shadow-xl">
-               <div className="bg-surface/30 p-8 border-b border-border-custom flex justify-between items-center">
-                  <div>
-                    <h3 className="font-syne font-bold text-2xl">Academic Admissions</h3>
-                    <p className="text-[10px] text-text-muted font-dm-mono uppercase mt-1">Intake Management & History</p>
-                  </div>
-                  
-                  {/* SMART DROPDOWN FOR SUBMIT NEW */}
-                  <div className="relative">
-                    <button 
-                      onClick={() => setIsApplyDropdownOpen(!isApplyDropdownOpen)}
-                      className="btn btn-brand px-6 py-3 flex items-center gap-2 group"
-                    >
-                      <Zap className={`w-4 h-4 transition-transform ${isApplyDropdownOpen ? 'rotate-12' : ''}`} />
-                      + Apply for New Course
-                    </button>
-                    
-                    {isApplyDropdownOpen && (
-                      <div className="absolute right-0 mt-3 w-72 bg-navy border border-brand/20 rounded-2xl shadow-2xl p-4 z-[60] animate-fadeUp">
-                        <div className="text-[10px] font-dm-mono text-brand uppercase tracking-[0.2em] mb-4 px-2">Available Certificates</div>
-                        <div className="space-y-1 max-h-64 overflow-y-auto custom-scrollbar">
-                          {courses
-                            .filter(course => !enrollments.some(e => e.course_id === course.id))
-                            .filter(course => !applications.some(a => a.program === course.title))
-                            .map(course => (
-                              <button
-                                key={course.id}
-                                onClick={() => {
-                                  setApplyingCourse(course);
-                                  setIsApplyDropdownOpen(false);
-                                }}
-                                className="w-full text-left p-3 hover:bg-brand/10 rounded-xl transition-all group/item"
-                              >
-                                <div className="font-bold text-sm group-hover/item:text-brand transition-colors">{course.title}</div>
-                                <div className="text-[9px] text-text-muted uppercase font-dm-mono mt-1">{course.category || 'Professional Certification'}</div>
-                              </button>
-                            ))
-                          }
-                          {courses.filter(course => !enrollments.some(e => e.course_id === course.id) && !applications.some(a => a.program === course.title)).length === 0 && (
-                            <div className="p-4 text-center text-text-muted text-xs italic">No new courses available to apply for at this time.</div>
-                          )}
-                        </div>
+              <div className="bg-surface/30 p-8 border-b border-border-custom flex justify-between items-center">
+                <div>
+                  <h3 className="font-syne font-bold text-2xl">Academic Admissions</h3>
+                  <p className="text-[10px] text-text-muted font-dm-mono uppercase mt-1">Intake Management & History</p>
+                </div>
+
+                {/* SMART DROPDOWN FOR SUBMIT NEW */}
+                <div className="relative">
+                  <button
+                    onClick={() => setIsApplyDropdownOpen(!isApplyDropdownOpen)}
+                    className="btn btn-brand px-6 py-3 flex items-center gap-2 group"
+                  >
+                    <Zap className={`w-4 h-4 transition-transform ${isApplyDropdownOpen ? 'rotate-12' : ''}`} />
+                    + Apply for New Course
+                  </button>
+
+                  {isApplyDropdownOpen && (
+                    <div className="absolute right-0 mt-3 w-72 bg-navy border border-brand/20 rounded-2xl shadow-2xl p-4 z-[60] animate-fadeUp">
+                      <div className="text-[10px] font-dm-mono text-brand uppercase tracking-[0.2em] mb-4 px-2">Available Certificates</div>
+                      <div className="space-y-1 max-h-64 overflow-y-auto custom-scrollbar">
+                        {courses
+                          .filter(course => !enrollments.some(e => e.course_id === course.id))
+                          .filter(course => !applications.some(a => a.program === course.title))
+                          .map(course => (
+                            <button
+                              key={course.id}
+                              onClick={() => {
+                                setApplyingCourse(course);
+                                setIsApplyDropdownOpen(false);
+                              }}
+                              className="w-full text-left p-3 hover:bg-brand/10 rounded-xl transition-all group/item"
+                            >
+                              <div className="font-bold text-sm group-hover/item:text-brand transition-colors">{course.title}</div>
+                              <div className="text-[9px] text-text-muted uppercase font-dm-mono mt-1">{course.category || 'Professional Certification'}</div>
+                            </button>
+                          ))
+                        }
+                        {courses.filter(course => !enrollments.some(e => e.course_id === course.id) && !applications.some(a => a.program === course.title)).length === 0 && (
+                          <div className="p-4 text-center text-text-muted text-xs italic">No new courses available to apply for at this time.</div>
+                        )}
                       </div>
-                    )}
-                  </div>
-               </div>
-               <div className="divide-y divide-border-custom bg-surface/10">
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="divide-y divide-border-custom bg-surface/10">
                 {applications.map(app => (
                   <div key={app.id} className="p-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 group hover:bg-white/2 transition-all">
                     <div className="flex items-center gap-6">
-                      <div className={`w-16 h-16 rounded-[1.25rem] flex items-center justify-center text-3xl shadow-lg ${
-                        app.status === 'approved' ? 'bg-emerald/10 border border-emerald/20 text-emerald' : 
-                        app.status === 'rejected' ? 'bg-coral/10 border border-coral/20 text-coral' :
-                        'bg-brand/10 border border-brand/20 text-brand'
-                      }`}>
+                      <div className={`w-16 h-16 rounded-[1.25rem] flex items-center justify-center text-3xl shadow-lg ${app.status === 'approved' ? 'bg-emerald/10 border border-emerald/20 text-emerald' :
+                          app.status === 'rejected' ? 'bg-coral/10 border border-coral/20 text-coral' :
+                            'bg-brand/10 border border-brand/20 text-brand'
+                        }`}>
                         {app.type === 'individual' ? '👤' : '🏢'}
                       </div>
                       <div>
@@ -4057,11 +4039,10 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
                       </div>
                     </div>
                     <div className="flex flex-col items-end gap-3 text-right">
-                       <span className={`px-5 py-2 rounded-full text-[10px] font-dm-mono uppercase border tracking-widest shadow-sm ${
-                        app.status === 'approved' ? 'border-emerald/20 text-emerald bg-emerald/5' :
-                        app.status === 'rejected' ? 'border-coral/20 text-coral bg-coral/5' :
-                        'border-brand/20 text-brand bg-brand/5'
-                      }`}>
+                      <span className={`px-5 py-2 rounded-full text-[10px] font-dm-mono uppercase border tracking-widest shadow-sm ${app.status === 'approved' ? 'border-emerald/20 text-emerald bg-emerald/5' :
+                          app.status === 'rejected' ? 'border-coral/20 text-coral bg-coral/5' :
+                            'border-brand/20 text-brand bg-brand/5'
+                        }`}>
                         {app.status || 'Admissions Review'}
                       </span>
                       {app.student_number && (
@@ -4077,7 +4058,7 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
                     <p className="text-text-muted text-sm max-w-sm mx-auto">You haven't submitted any applications for the 2026 intake yet. Select a course from the dropdown above to begin.</p>
                   </div>
                 )}
-               </div>
+              </div>
             </div>
           </div>
         )}
@@ -4094,52 +4075,50 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
         {/* ─── ANNOUNCEMENTS CONTENT ─── */}
         {activeSection === 'announcements' && (
           <div className="space-y-8 animate-fade">
-             <div className="bg-gradient-to-r from-navy to-surface border border-brand/20 rounded-[2.5rem] p-10 relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-64 h-64 bg-brand/5 rounded-full blur-[80px]" />
-                <div className="relative z-10">
-                  <h3 className="font-syne font-extrabold text-3xl mb-2">Academy Broadcasts</h3>
-                  <p className="text-text-muted font-dm-mono text-xs uppercase tracking-widest">Global messages from institution staff</p>
-                </div>
-             </div>
+            <div className="bg-gradient-to-r from-navy to-surface border border-brand/20 rounded-[2.5rem] p-10 relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-brand/5 rounded-full blur-[80px]" />
+              <div className="relative z-10">
+                <h3 className="font-syne font-extrabold text-3xl mb-2">Academy Broadcasts</h3>
+                <p className="text-text-muted font-dm-mono text-xs uppercase tracking-widest">Global messages from institution staff</p>
+              </div>
+            </div>
 
-             <div className="grid grid-cols-1 gap-6">
-                {announcements.map(item => (
-                  <div key={item.id} className="bg-card border border-border-custom rounded-3xl p-8 hover:border-brand/30 transition-all group flex gap-8">
-                    <div className={`w-16 h-16 rounded-2xl flex items-center justify-center text-2xl shrink-0 shadow-inner ${
-                      item.type === 'urgent' ? 'bg-coral/10 text-coral border border-coral/20' :
+            <div className="grid grid-cols-1 gap-6">
+              {announcements.map(item => (
+                <div key={item.id} className="bg-card border border-border-custom rounded-3xl p-8 hover:border-brand/30 transition-all group flex gap-8">
+                  <div className={`w-16 h-16 rounded-2xl flex items-center justify-center text-2xl shrink-0 shadow-inner ${item.type === 'urgent' ? 'bg-coral/10 text-coral border border-coral/20' :
                       item.type === 'warning' ? 'bg-brand/10 text-brand border border-brand/20' :
-                      'bg-sky/10 text-sky border border-sky/20'
+                        'bg-sky/10 text-sky border border-sky/20'
                     }`}>
-                      {item.type === 'urgent' ? <Zap className="w-8 h-8" /> : <AlertCircle className="w-8 h-8" />}
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex justify-between items-start mb-4">
-                        <div>
-                          <div className="flex items-center gap-3 mb-2">
-                            <span className={`text-[9px] font-dm-mono uppercase px-2 py-0.5 rounded-md border ${
-                              item.type === 'urgent' ? 'border-coral/20 text-coral bg-coral/5' :
+                    {item.type === 'urgent' ? <Zap className="w-8 h-8" /> : <AlertCircle className="w-8 h-8" />}
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex justify-between items-start mb-4">
+                      <div>
+                        <div className="flex items-center gap-3 mb-2">
+                          <span className={`text-[9px] font-dm-mono uppercase px-2 py-0.5 rounded-md border ${item.type === 'urgent' ? 'border-coral/20 text-coral bg-coral/5' :
                               'border-brand/20 text-brand bg-brand/5'
                             }`}>{item.type} broadcast</span>
-                            <span className="text-[10px] text-text-dim flex items-center gap-1.5"><Clock className="w-3 h-3" /> {new Date(item.created_at).toLocaleString()}</span>
-                          </div>
-                          <h4 className="font-syne font-bold text-2xl mb-1 group-hover:text-brand transition-colors">{item.title}</h4>
+                          <span className="text-[10px] text-text-dim flex items-center gap-1.5"><Clock className="w-3 h-3" /> {new Date(item.created_at).toLocaleString()}</span>
                         </div>
-                        {item.priority === 'high' && (
-                          <div className="px-3 py-1 bg-coral/10 text-coral text-[9px] font-dm-mono uppercase rounded-full border border-coral/20 animate-pulse">Priority High</div>
-                        )}
+                        <h4 className="font-syne font-bold text-2xl mb-1 group-hover:text-brand transition-colors">{item.title}</h4>
                       </div>
-                      <div className="text-text-soft text-sm leading-relaxed prose prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: item.content }} />
+                      {item.priority === 'high' && (
+                        <div className="px-3 py-1 bg-coral/10 text-coral text-[9px] font-dm-mono uppercase rounded-full border border-coral/20 animate-pulse">Priority High</div>
+                      )}
                     </div>
+                    <div className="text-text-soft text-sm leading-relaxed prose prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: item.content }} />
                   </div>
-                ))}
-                {announcements.length === 0 && (
-                  <div className="bg-surface/20 border border-border-custom border-dashed rounded-[3rem] p-24 text-center">
-                    <div className="text-6xl mb-6">🔕</div>
-                    <h3 className="font-syne font-extrabold text-2xl mb-4 text-text-muted">No New Broadcasts</h3>
-                    <p className="text-text-dim max-w-xs mx-auto text-sm italic">All communications from the institution will appear here in real-time.</p>
-                  </div>
-                )}
-             </div>
+                </div>
+              ))}
+              {announcements.length === 0 && (
+                <div className="bg-surface/20 border border-border-custom border-dashed rounded-[3rem] p-24 text-center">
+                  <div className="text-6xl mb-6">🔕</div>
+                  <h3 className="font-syne font-extrabold text-2xl mb-4 text-text-muted">No New Broadcasts</h3>
+                  <p className="text-text-dim max-w-xs mx-auto text-sm italic">All communications from the institution will appear here in real-time.</p>
+                </div>
+              )}
+            </div>
           </div>
         )}
 
@@ -4161,16 +4140,16 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
                   </div>
                   <h3 className="font-syne font-extrabold text-2xl mb-1">{profile?.first_name} {profile?.last_name}</h3>
                   <p className="text-[10px] text-text-dim font-dm-mono uppercase tracking-[0.3em] mb-8">Cloud Resident</p>
-                  
+
                   <div className="space-y-6 pt-6 border-t border-white/5">
                     <div className="flex justify-between items-end mb-2">
-                       <span className="text-[10px] font-dm-mono uppercase text-text-soft">Profile Strength</span>
-                       <span className="text-sm font-bold text-brand">
-                         {Math.round((Object.values(profileForm || {}).filter(v => !!v).length / Object.keys(profileForm || {}).length) * 100)}%
-                       </span>
+                      <span className="text-[10px] font-dm-mono uppercase text-text-soft">Profile Strength</span>
+                      <span className="text-sm font-bold text-brand">
+                        {Math.round((Object.values(profileForm || {}).filter(v => !!v).length / Object.keys(profileForm || {}).length) * 100)}%
+                      </span>
                     </div>
                     <div className="h-1.5 bg-surface rounded-full overflow-hidden border border-white/5">
-                       <div className="h-full bg-brand transition-all duration-1000" style={{ width: `${(Object.values(profileForm || {}).filter(v => !!v).length / Object.keys(profileForm || {}).length) * 100}%` }} />
+                      <div className="h-full bg-brand transition-all duration-1000" style={{ width: `${(Object.values(profileForm || {}).filter(v => !!v).length / Object.keys(profileForm || {}).length) * 100}%` }} />
                     </div>
                     <p className="text-[11px] text-text-muted leading-relaxed">Complete your profile details to unlock all academy features.</p>
                   </div>
@@ -4218,7 +4197,7 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
                     <button onClick={() => setEditingProfile(true)} className="btn btn-brand btn-sm px-6">Modify Details</button>
                   )}
                 </div>
-                
+
                 <div className="p-10 space-y-10">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8 text-left">
                     {[
@@ -4235,11 +4214,11 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
                           {field.label}
                         </label>
                         {editingProfile ? (
-                          <input 
-                            type={field.type || 'text'} 
-                            className="w-full bg-bg border border-border-custom rounded-xl p-3 text-sm focus:border-brand/50 transition-all outline-none" 
-                            value={profileForm[field.key] || ''} 
-                            onChange={e => setProfileForm({...profileForm, [field.key]: e.target.value})} 
+                          <input
+                            type={field.type || 'text'}
+                            className="w-full bg-bg border border-border-custom rounded-xl p-3 text-sm focus:border-brand/50 transition-all outline-none"
+                            value={profileForm[field.key] || ''}
+                            onChange={e => setProfileForm({ ...profileForm, [field.key]: e.target.value })}
                           />
                         ) : (
                           <div className="p-3 bg-surface/30 border border-transparent rounded-xl text-sm font-bold">
@@ -4249,73 +4228,73 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
                       </div>
                     ))}
                     <div className="col-span-1 md:col-span-2 space-y-2">
-                       <label className="flex items-center gap-2 text-[10px] font-dm-mono uppercase text-text-dim tracking-widest">
-                          <MapPin className="w-3 h-3" />
-                          Residential Address
-                        </label>
-                        {editingProfile ? (
-                          <input 
-                            className="w-full bg-bg border border-border-custom rounded-xl p-3 text-sm" 
-                            value={profileForm.address_line1 || ''} 
-                            onChange={e => setProfileForm({...profileForm, address_line1: e.target.value})} 
-                          />
-                        ) : (
-                          <div className="p-3 bg-surface/30 border border-transparent rounded-xl text-sm font-bold">
-                            {profile?.address_line1 || <span className="text-text-muted font-normal italic">Address not set</span>}
-                          </div>
-                        )}
+                      <label className="flex items-center gap-2 text-[10px] font-dm-mono uppercase text-text-dim tracking-widest">
+                        <MapPin className="w-3 h-3" />
+                        Residential Address
+                      </label>
+                      {editingProfile ? (
+                        <input
+                          className="w-full bg-bg border border-border-custom rounded-xl p-3 text-sm"
+                          value={profileForm.address_line1 || ''}
+                          onChange={e => setProfileForm({ ...profileForm, address_line1: e.target.value })}
+                        />
+                      ) : (
+                        <div className="p-3 bg-surface/30 border border-transparent rounded-xl text-sm font-bold">
+                          {profile?.address_line1 || <span className="text-text-muted font-normal italic">Address not set</span>}
+                        </div>
+                      )}
                     </div>
                   </div>
 
                   {/* EMERGENCY CONTACT SECTION */}
                   <div className="pt-10 border-t border-border-custom">
-                     <div className="flex items-center gap-4 mb-8">
-                       <ShieldCheck className="w-5 h-5 text-brand" />
-                       <h4 className="font-syne font-bold text-lg">Next of Kin / Emergency Contact</h4>
-                     </div>
-                     <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8 text-left">
-                        {[
-                          { label: 'Name / Relationship', key: 'emergency_contact_name', icon: User },
-                          { label: 'Emergency Contact Phone', key: 'emergency_contact_phone', icon: Phone },
-                        ].map(field => (
-                          <div key={field.key} className="space-y-2 group">
-                            <label className="flex items-center gap-2 text-[10px] font-dm-mono uppercase text-text-dim tracking-widest group-hover:text-brand transition-colors">
-                              <field.icon className="w-3 h-3" />
-                              {field.label}
-                            </label>
-                            {editingProfile ? (
-                              <input 
-                                className="w-full bg-bg border border-border-custom rounded-xl p-3 text-sm focus:border-brand/50 transition-all outline-none" 
-                                value={profileForm[field.key] || ''} 
-                                onChange={e => setProfileForm({...profileForm, [field.key]: e.target.value})} 
-                              />
-                            ) : (
-                              <div className="p-3 bg-surface/30 border border-transparent rounded-xl text-sm font-bold">
-                                {profile?.[field.key] || <span className="text-text-muted font-normal italic">Requires completion</span>}
-                              </div>
-                            )}
-                          </div>
-                        ))}
-                     </div>
+                    <div className="flex items-center gap-4 mb-8">
+                      <ShieldCheck className="w-5 h-5 text-brand" />
+                      <h4 className="font-syne font-bold text-lg">Next of Kin / Emergency Contact</h4>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8 text-left">
+                      {[
+                        { label: 'Name / Relationship', key: 'emergency_contact_name', icon: User },
+                        { label: 'Emergency Contact Phone', key: 'emergency_contact_phone', icon: Phone },
+                      ].map(field => (
+                        <div key={field.key} className="space-y-2 group">
+                          <label className="flex items-center gap-2 text-[10px] font-dm-mono uppercase text-text-dim tracking-widest group-hover:text-brand transition-colors">
+                            <field.icon className="w-3 h-3" />
+                            {field.label}
+                          </label>
+                          {editingProfile ? (
+                            <input
+                              className="w-full bg-bg border border-border-custom rounded-xl p-3 text-sm focus:border-brand/50 transition-all outline-none"
+                              value={profileForm[field.key] || ''}
+                              onChange={e => setProfileForm({ ...profileForm, [field.key]: e.target.value })}
+                            />
+                          ) : (
+                            <div className="p-3 bg-surface/30 border border-transparent rounded-xl text-sm font-bold">
+                              {profile?.[field.key] || <span className="text-text-muted font-normal italic">Requires completion</span>}
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
                   </div>
 
                   <div className="pt-10 border-t border-border-custom">
-                     <div className="flex items-center gap-4 mb-8">
-                       <Briefcase className="w-5 h-5 text-brand" />
-                       <h4 className="font-syne font-bold text-lg">Biographical Statement</h4>
-                     </div>
-                     {editingProfile ? (
-                       <textarea 
-                        className="w-full bg-bg border border-border-custom rounded-xl p-5 text-sm h-40 focus:border-brand/50 transition-all outline-none" 
-                        placeholder="Tell us about your technical background and career goals..." 
-                        value={profileForm.bio || ''} 
-                        onChange={e => setProfileForm({...profileForm, bio: e.target.value})} 
-                       />
-                     ) : (
-                       <div className="p-6 bg-surface/20 border border-border-custom rounded-2xl italic text-text-soft text-sm leading-relaxed">
-                         "{profile?.bio || 'No biographical information provided. Editing your profile allows you to introduce yourself to instructors.'}"
-                       </div>
-                     )}
+                    <div className="flex items-center gap-4 mb-8">
+                      <Briefcase className="w-5 h-5 text-brand" />
+                      <h4 className="font-syne font-bold text-lg">Biographical Statement</h4>
+                    </div>
+                    {editingProfile ? (
+                      <textarea
+                        className="w-full bg-bg border border-border-custom rounded-xl p-5 text-sm h-40 focus:border-brand/50 transition-all outline-none"
+                        placeholder="Tell us about your technical background and career goals..."
+                        value={profileForm.bio || ''}
+                        onChange={e => setProfileForm({ ...profileForm, bio: e.target.value })}
+                      />
+                    ) : (
+                      <div className="p-6 bg-surface/20 border border-border-custom rounded-2xl italic text-text-soft text-sm leading-relaxed">
+                        "{profile?.bio || 'No biographical information provided. Editing your profile allows you to introduce yourself to instructors.'}"
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -4328,46 +4307,46 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
           <div className="max-w-4xl space-y-10">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="bg-card border border-border-custom rounded-3xl p-8 space-y-6">
-                 <div className="flex items-center gap-3 mb-2">
-                   <div className="p-3 bg-brand/10 text-brand rounded-2xl"><Settings className="w-6 h-6" /></div>
-                   <h3 className="font-syne font-bold text-xl">Account Configuration</h3>
-                 </div>
-                 <div className="space-y-6">
-                    <div>
-                      <label className="text-[10px] font-dm-mono uppercase text-text-dim mb-1 block">Primary Identity</label>
-                      <div className="p-4 bg-surface rounded-xl border border-border-custom font-mono text-sm">{user?.email}</div>
-                    </div>
-                    <button onClick={handlePasswordReset} className="w-full btn btn-outline flex items-center justify-center gap-2 py-4">
-                      <ShieldCheck className="w-4 h-4" /> Reset Access Credentials
-                    </button>
-                    <p className="text-[11px] text-text-muted leading-relaxed">
-                      Passwords must reside in our secure cloud identity vault. Resetting will send a secure link to your verified email.
-                    </p>
-                 </div>
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="p-3 bg-brand/10 text-brand rounded-2xl"><Settings className="w-6 h-6" /></div>
+                  <h3 className="font-syne font-bold text-xl">Account Configuration</h3>
+                </div>
+                <div className="space-y-6">
+                  <div>
+                    <label className="text-[10px] font-dm-mono uppercase text-text-dim mb-1 block">Primary Identity</label>
+                    <div className="p-4 bg-surface rounded-xl border border-border-custom font-mono text-sm">{user?.email}</div>
+                  </div>
+                  <button onClick={handlePasswordReset} className="w-full btn btn-outline flex items-center justify-center gap-2 py-4">
+                    <ShieldCheck className="w-4 h-4" /> Reset Access Credentials
+                  </button>
+                  <p className="text-[11px] text-text-muted leading-relaxed">
+                    Passwords must reside in our secure cloud identity vault. Resetting will send a secure link to your verified email.
+                  </p>
+                </div>
               </div>
 
               <div className="bg-navy border border-white/5 rounded-3xl p-8 flex flex-col justify-between">
-                 <div>
-                   <h3 className="font-syne font-bold font-xl mb-4">GDA Data Privacy</h3>
-                   <p className="text-sm text-text-soft leading-relaxed mb-6">
-                     You have full sovereignty over your educational data. Download your complete record in standard JSON format for transferability.
-                   </p>
-                 </div>
-                 <div className="space-y-4">
-                    <button onClick={() => exportToJSON([profile || {}], 'gda-archive')} className="w-full btn btn-outline border-white/10 hover:border-brand/50 py-4 flex items-center gap-3 justify-center">
-                       <Globe className="w-4 h-4" /> Download Records Archive
-                    </button>
-                 </div>
+                <div>
+                  <h3 className="font-syne font-bold font-xl mb-4">GDA Data Privacy</h3>
+                  <p className="text-sm text-text-soft leading-relaxed mb-6">
+                    You have full sovereignty over your educational data. Download your complete record in standard JSON format for transferability.
+                  </p>
+                </div>
+                <div className="space-y-4">
+                  <button onClick={() => exportToJSON([profile || {}], 'gda-archive')} className="w-full btn btn-outline border-white/10 hover:border-brand/50 py-4 flex items-center gap-3 justify-center">
+                    <Globe className="w-4 h-4" /> Download Records Archive
+                  </button>
+                </div>
               </div>
             </div>
 
             <div className="bg-coral/5 border border-coral/20 rounded-3xl p-10 flex flex-col md:flex-row items-center gap-10">
-               <div className="p-5 bg-coral/10 text-coral rounded-3xl border border-coral/20"><AlertCircle className="w-8 h-8" /></div>
-               <div className="flex-1 text-center md:text-left">
-                  <h4 className="font-syne font-bold text-xl text-coral mb-2">Institutional Sign Out</h4>
-                  <p className="text-sm text-text-muted">Sign out of your secure academic session. Your progress and data are encrypted and persisted.</p>
-               </div>
-               <button onClick={() => signOut()} className="btn bg-coral/10 text-coral border border-coral/20 hover:bg-coral px-8 py-3 transition-colors">Terminate Session</button>
+              <div className="p-5 bg-coral/10 text-coral rounded-3xl border border-coral/20"><AlertCircle className="w-8 h-8" /></div>
+              <div className="flex-1 text-center md:text-left">
+                <h4 className="font-syne font-bold text-xl text-coral mb-2">Institutional Sign Out</h4>
+                <p className="text-sm text-text-muted">Sign out of your secure academic session. Your progress and data are encrypted and persisted.</p>
+              </div>
+              <button onClick={() => signOut()} className="btn bg-coral/10 text-coral border border-coral/20 hover:bg-coral px-8 py-3 transition-colors">Terminate Session</button>
             </div>
           </div>
         )}
@@ -4383,21 +4362,21 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
               <div className="absolute top-0 right-0 w-32 h-32 border-r border-t border-brand opacity-50" />
               <div className="absolute bottom-0 left-0 w-32 h-32 border-l border-b border-brand opacity-50" />
               <div className="absolute bottom-0 right-0 w-32 h-32 border-r border-b border-brand opacity-50" />
-              
+
               <div className="text-brand text-6xl mb-10 opacity-30 select-none">🎓</div>
               <h1 className="font-syne font-extrabold text-4xl md:text-5xl mb-6 uppercase tracking-tighter">Certificate of Excellence</h1>
               <p className="text-gray-400 font-dm-mono text-[12px] uppercase tracking-[0.4em] mb-14">Presented by Ginashe Digital Academy</p>
-              
+
               <div className="relative mb-6">
                 <div className="h-px bg-black/10 absolute top-1/2 left-0 right-0" />
                 <span className="relative z-10 bg-white px-6 text-gray-500 font-dm-mono text-[10px] uppercase tracking-widest">This is to certify that</span>
               </div>
-              
+
               <h2 className="font-syne font-bold text-5xl md:text-6xl text-black mb-10 tracking-tight">{showCertificate.profile?.first_name} {showCertificate.profile?.last_name}</h2>
-              
+
               <p className="text-gray-500 font-dm-mono text-[11px] uppercase tracking-widest mb-14">Has demonstrated professional mastery in the curriculum of</p>
               <h3 className="font-syne font-bold text-3xl md:text-4xl text-brand mb-20 italic">"{showCertificate.course.title}"</h3>
-              
+
               <div className="flex justify-between items-end pt-12 border-t border-black/5">
                 <div className="text-left">
                   <div className="font-dm-mono text-[9px] uppercase text-gray-400 mb-2">Digital Stamp</div>
@@ -4415,9 +4394,9 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
             </div>
           </div>
           <div className="fixed bottom-10 left-1/2 -translate-x-1/2">
-             <button onClick={() => window.print()} className="btn bg-white text-black font-bold px-10 py-4 shadow-2xl hover:bg-brand transition-all flex items-center gap-3">
-               <Zap className="w-5 h-5" /> Export to Digital PDF
-             </button>
+            <button onClick={() => window.print()} className="btn bg-white text-black font-bold px-10 py-4 shadow-2xl hover:bg-brand transition-all flex items-center gap-3">
+              <Zap className="w-5 h-5" /> Export to Digital PDF
+            </button>
           </div>
         </div>
       )}
@@ -4427,7 +4406,7 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-navy/80 backdrop-blur-md animate-fade">
           <div className="bg-bg border border-brand/20 rounded-[2.5rem] shadow-2xl max-w-2xl w-full p-8 md:p-12 relative overflow-hidden">
             <div className="absolute top-0 right-0 w-64 h-64 bg-brand/5 rounded-full -mr-32 -mt-32 blur-[100px]" />
-            
+
             <button onClick={() => setApplyingCourse(null)} className="absolute top-8 right-8 text-text-muted hover:text-white transition-colors">✕</button>
 
             <div className="relative z-10 text-left">
@@ -4459,7 +4438,7 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
 
                 <div>
                   <label className="text-[10px] font-dm-mono uppercase text-text-dim tracking-widest block mb-2">Motivation (Optional)</label>
-                  <textarea 
+                  <textarea
                     id="app-motivation"
                     className="w-full bg-surface border border-border-custom rounded-xl p-4 text-sm h-32 focus:border-brand/50 transition-all outline-none"
                     placeholder="Briefly tell us why you want to join this programme..."
@@ -4469,7 +4448,7 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
 
               <div className="flex gap-4">
                 <button onClick={() => setApplyingCourse(null)} className="flex-1 btn btn-outline py-4">Cancel</button>
-                <button 
+                <button
                   onClick={async () => {
                     try {
                       const motivation = (document.getElementById('app-motivation') as HTMLTextAreaElement)?.value;
@@ -4484,7 +4463,7 @@ export function StudentPortal({ onStartCourse }: { onStartCourse: (courseId: str
                         status: 'pending'
                       });
                       if (error) throw error;
-                      
+
                       await fetch('https://ffgypwmrmdosaihgpkuw.supabase.co/functions/v1/process-application', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -4755,7 +4734,7 @@ function InstitutionalApprovalQueue({ pendingApprovals, onApprove }: { pendingAp
         <h3 className="font-syne font-black text-xl uppercase tracking-tighter text-brand">Institutional Approval Queue</h3>
         <span className="text-[9px] font-dm-mono bg-brand/10 text-brand px-3 py-1 rounded-full border border-brand/20 tracking-widest">{pendingApprovals.length} PENDING</span>
       </div>
-      
+
       <div className="bg-[#0a0d14] border border-brand/10 rounded-3xl overflow-hidden shadow-2xl relative isolate">
         <div className="absolute inset-0 bg-brand/[0.01] pointer-events-none" />
         <div className="overflow-x-auto custom-scrollbar">
@@ -4851,9 +4830,9 @@ function InstitutionalAuditHub({ pendingApprovals, onApprove }: { pendingApprova
                     {log.reason || 'No executive rationale provided.'}
                   </td>
                   <td className="p-4 text-[10px] font-dm-mono text-text-dim text-right">
-                    {new Date(log.created_at).toLocaleString('en-GB', { 
-                      day: '2-digit', 
-                      month: 'short', 
+                    {new Date(log.created_at).toLocaleString('en-GB', {
+                      day: '2-digit',
+                      month: 'short',
                       year: 'numeric',
                       hour: '2-digit',
                       minute: '2-digit',
@@ -4890,93 +4869,93 @@ function AlumniHub({ profile }: { profile: any }) {
       {/* Decorative Background Elements */}
       <div className="absolute inset-0 bg-brand/5 blur-[150px] rounded-full -mr-[50%] -mt-[50%]" />
       <div className="absolute inset-0 bg-white/2 blur-[100px] rounded-full -ml-[40%] -mb-[40%]" />
-      
+
       <div className="max-w-4xl w-full relative z-10">
         <div className="bg-[#0a0d14]/80 backdrop-blur-2xl border border-brand/10 rounded-[3rem] p-10 md:p-16 shadow-[0_0_50px_rgba(0,0,0,0.5)] relative overflow-hidden group">
           <div className="absolute top-0 right-0 w-64 h-64 bg-brand/5 rounded-full -mr-32 -mt-32 blur-[100px] animate-pulse" />
-          
+
           <div className="flex flex-col items-center text-center space-y-8">
             <div className="w-20 h-20 bg-brand rounded-2xl flex items-center justify-center shadow-[0_0_40px_rgba(212,175,55,0.3)] mb-2 transform group-hover:rotate-6 transition-all duration-700">
-               <span className="text-navy font-syne font-black text-3xl">G</span>
+              <span className="text-navy font-syne font-black text-3xl">G</span>
             </div>
-            
+
             <div className="space-y-4">
-               <span className="text-[9px] font-dm-mono uppercase tracking-[0.5em] text-brand bg-brand/5 px-6 py-2 rounded-full border border-brand/20">Institutional Alumni Governance</span>
-               <h1 className="font-syne font-black text-5xl md:text-6xl tracking-tighter leading-none text-white">
-                 Honorably Sealed, <br/><span className="text-brand">{profile?.first_name}.</span>
-               </h1>
+              <span className="text-[9px] font-dm-mono uppercase tracking-[0.5em] text-brand bg-brand/5 px-6 py-2 rounded-full border border-brand/20">Institutional Alumni Governance</span>
+              <h1 className="font-syne font-black text-5xl md:text-6xl tracking-tighter leading-none text-white">
+                Honourably Sealed, <br /><span className="text-brand">{profile?.first_name}.</span>
+              </h1>
             </div>
 
             {record ? (
-               <div className="w-full mt-12 grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
-                  <div className="space-y-6 text-left relative z-10">
-                     <div className="p-6 bg-white/[0.02] border border-brand/10 rounded-3xl space-y-5">
-                        <div className="space-y-1">
-                           <p className="text-[9px] font-dm-mono uppercase text-text-dim tracking-widest">Master Credential Lock</p>
-                           <p className="text-base font-bold text-brand/90 font-dm-mono">{record.credential_id}</p>
-                        </div>
-                        <div className="grid grid-cols-2 gap-4">
-                           <div className="space-y-1">
-                              <p className="text-[9px] font-dm-mono uppercase text-text-dim tracking-widest">Aggregate GPA</p>
-                              <p className="text-4xl font-syne font-black text-emerald tracking-tighter">{record.gpa_final}%</p>
-                           </div>
-                           <div className="space-y-1">
-                              <p className="text-[9px] font-dm-mono uppercase text-text-dim tracking-widest">Sealing Date</p>
-                              <p className="text-lg font-bold text-text-soft">{new Date(record.graduation_date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}</p>
-                           </div>
-                        </div>
-                        <div className="pt-4 border-t border-brand/5">
-                           <p className={`text-[9px] font-black uppercase tracking-[0.2em] px-4 py-2 rounded-lg inline-block ${record.is_approved ? 'bg-emerald/5 text-emerald border border-emerald/20' : 'bg-brand/5 text-brand border border-brand/20 animate-pulse'}`}>
-                             {record.is_approved ? '✓ INSTITUTIONALLY RECOGNIZED' : '⏳ PENDING FINAL AUDIT'}
-                           </p>
-                        </div>
-                     </div>
-                     
-                     <div className="px-2">
-                        <p className="text-[11px] text-text-dim italic leading-relaxed">
-                          "This academic record is cryptographically verified and permanently inscribed in the Ginashe Institutional Audit Hub. Your excellence is now part of our legacy."
-                        </p>
-                     </div>
-
-                     <div className="flex flex-col sm:flex-row gap-3 pt-2">
-                        <button className="flex-1 btn btn-brand py-4 text-[10px] font-black tracking-widest shadow-[0_0_25px_rgba(0,242,255,0.15)] hover:scale-[1.02] transition-all">GENERATE CERTIFICATE</button>
-                        <button className="flex-1 btn btn-outline py-4 text-[10px] font-black tracking-widest border-brand/10 hover:border-brand/30 transition-all">SHARE EXCELLENCE</button>
-                     </div>
+              <div className="w-full mt-12 grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+                <div className="space-y-6 text-left relative z-10">
+                  <div className="p-6 bg-white/[0.02] border border-brand/10 rounded-3xl space-y-5">
+                    <div className="space-y-1">
+                      <p className="text-[9px] font-dm-mono uppercase text-text-dim tracking-widest">Master Credential Lock</p>
+                      <p className="text-base font-bold text-brand/90 font-dm-mono">{record.credential_id}</p>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-1">
+                        <p className="text-[9px] font-dm-mono uppercase text-text-dim tracking-widest">Aggregate GPA</p>
+                        <p className="text-4xl font-syne font-black text-emerald tracking-tighter">{record.gpa_final}%</p>
+                      </div>
+                      <div className="space-y-1">
+                        <p className="text-[9px] font-dm-mono uppercase text-text-dim tracking-widest">Sealing Date</p>
+                        <p className="text-lg font-bold text-text-soft">{new Date(record.graduation_date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}</p>
+                      </div>
+                    </div>
+                    <div className="pt-4 border-t border-brand/5">
+                      <p className={`text-[9px] font-black uppercase tracking-[0.2em] px-4 py-2 rounded-lg inline-block ${record.is_approved ? 'bg-emerald/5 text-emerald border border-emerald/20' : 'bg-brand/5 text-brand border border-brand/20 animate-pulse'}`}>
+                        {record.is_approved ? '✓ INSTITUTIONALLY RECOGNIZED' : '⏳ PENDING FINAL AUDIT'}
+                      </p>
+                    </div>
                   </div>
 
-                  {/* Right: The Seal */}
-                  <div className="flex justify-center flex-col items-center space-y-6">
-                     <div className="relative">
-                        <div className="absolute inset-0 bg-brand/20 blur-[60px] rounded-full animate-pulse" />
-                        <img 
-                          src="/gda_institutional_seal_cyan.png" 
-                          alt="GDA Institutional Seal" 
-                          className={`w-64 h-64 object-contain relative z-10 ${record.is_approved ? 'grayscale-0' : 'grayscale transition-all duration-1000'}`}
-                        />
-                        {record.is_approved && (
-                          <div className="absolute -top-4 -right-4 bg-emerald text-navy p-3 rounded-full shadow-2xl z-20 animate-bounce">
-                             <CheckCircle2 size={24} />
-                          </div>
-                        )}
-                     </div>
-                     <p className="text-[10px] font-dm-mono uppercase text-text-dim tracking-widest">
-                        {record.is_approved ? 'Official Digital Seal Active' : 'Seal Pending Activation'}
-                     </p>
+                  <div className="px-2">
+                    <p className="text-[11px] text-text-dim italic leading-relaxed">
+                      "This academic record is cryptographically verified and permanently inscribed in the Ginashe Institutional Audit Hub. Your excellence is now part of our legacy."
+                    </p>
                   </div>
-               </div>
+
+                  <div className="flex flex-col sm:flex-row gap-3 pt-2">
+                    <button className="flex-1 btn btn-brand py-4 text-[10px] font-black tracking-widest shadow-[0_0_25px_rgba(0,242,255,0.15)] hover:scale-[1.02] transition-all">GENERATE CERTIFICATE</button>
+                    <button className="flex-1 btn btn-outline py-4 text-[10px] font-black tracking-widest border-brand/10 hover:border-brand/30 transition-all">SHARE EXCELLENCE</button>
+                  </div>
+                </div>
+
+                {/* Right: The Seal */}
+                <div className="flex justify-center flex-col items-center space-y-6">
+                  <div className="relative">
+                    <div className="absolute inset-0 bg-brand/20 blur-[60px] rounded-full animate-pulse" />
+                    <img
+                      src="/gda_institutional_seal_cyan.png"
+                      alt="GDA Institutional Seal"
+                      className={`w-64 h-64 object-contain relative z-10 ${record.is_approved ? 'grayscale-0' : 'grayscale transition-all duration-1000'}`}
+                    />
+                    {record.is_approved && (
+                      <div className="absolute -top-4 -right-4 bg-emerald text-navy p-3 rounded-full shadow-2xl z-20 animate-bounce">
+                        <CheckCircle2 size={24} />
+                      </div>
+                    )}
+                  </div>
+                  <p className="text-[10px] font-dm-mono uppercase text-text-dim tracking-widest">
+                    {record.is_approved ? 'Official Digital Seal Active' : 'Seal Pending Activation'}
+                  </p>
+                </div>
+              </div>
             ) : (
-               <div className="py-20 flex flex-col items-center space-y-4">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand" />
-                  <p className="text-[10px] font-dm-mono uppercase text-brand tracking-widest">Recalling Sealed Record...</p>
-               </div>
+              <div className="py-20 flex flex-col items-center space-y-4">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand" />
+                <p className="text-[10px] font-dm-mono uppercase text-brand tracking-widest">Recalling Sealed Record...</p>
+              </div>
             )}
           </div>
         </div>
 
         {/* Footer Brand */}
         <div className="mt-12 flex flex-col items-center space-y-4 opacity-50">
-           <div className="h-px w-20 bg-white/10" />
-           <p className="text-[10px] font-dm-mono uppercase text-text-dim tracking-[0.2em]">GINASHE DIGITAL ACADEMY | ALUMNI GOVERNANCE</p>
+          <div className="h-px w-20 bg-white/10" />
+          <p className="text-[10px] font-dm-mono uppercase text-text-dim tracking-[0.2em]">GINASHE DIGITAL ACADEMY | ALUMNI GOVERNANCE</p>
         </div>
       </div>
     </div>
@@ -5015,9 +4994,9 @@ export function StaffActivationView() {
   }
 
   async function handleActivate() {
-    if (password.length < 8) { 
+    if (password.length < 8) {
       toast.error('Security Breach', { description: 'Password must be at least 8 characters.' });
-      return; 
+      return;
     }
     setLoading(true);
     try {
@@ -5056,11 +5035,11 @@ export function StaffActivationView() {
       <div className="w-20 h-20 bg-coral/10 text-coral rounded-3xl flex items-center justify-center text-3xl mb-8">⚠️</div>
       <h2 className="font-syne font-extrabold text-3xl mb-4">Activation Failed</h2>
       <p className="text-text-soft text-sm max-w-md mb-8">{error}</p>
-      <button 
+      <button
         onClick={async () => {
           await supabase.auth.signOut();
           window.location.href = '/';
-        }} 
+        }}
         className="btn btn-brand px-12 py-4 shadow-xl"
       >
         Return to Academy Home
@@ -5088,7 +5067,7 @@ export function StaffActivationView() {
           </div>
           <div className="space-y-6">
             <span className="text-[9px] font-dm-mono uppercase text-brand tracking-widest bg-brand/5 px-4 py-1.5 rounded-full border border-brand/20">Legacy Validation Active</span>
-            <h2 className="font-syne font-black text-5xl md:text-6xl leading-[0.9] tracking-tighter text-white">Activate <br/><span className="text-brand">Staff Hub.</span></h2>
+            <h2 className="font-syne font-black text-5xl md:text-6xl leading-[0.9] tracking-tighter text-white">Activate <br /><span className="text-brand">Staff Hub.</span></h2>
             <p className="text-text-dim max-w-sm text-[13px] leading-relaxed">
               Complete your cryptographic onboarding by setting your institutional credentials. This will grant you governance access allocated to your professional role.
             </p>

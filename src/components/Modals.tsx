@@ -3,7 +3,7 @@ import { supabase, uploadFile } from '../lib/supabase';
 import { useAuth } from '../lib/auth';
 import { toast } from 'sonner';
 import SharedAdmissionForm from './SharedAdmissionForm';
-import { Eye, EyeOff, FileText, CheckCircle2, Target, Info, ShieldCheck, HelpCircle, Send, Briefcase, CreditCard, GraduationCap, Building2, Users, ArrowRight } from 'lucide-react';
+import { Eye, EyeOff, FileText, CheckCircle2, Target, Info, Shield, ShieldCheck, HelpCircle, Send, Briefcase, CreditCard, GraduationCap, Building2, Users, ArrowRight } from 'lucide-react';
 
 interface ModalsProps {
   activeModal: string | null;
@@ -27,6 +27,7 @@ export function Modals({ activeModal, onClose, onSwitchModal, onLoginSuccess, me
   const [scholarshipForm, setScholarshipForm] = useState({ name: '', email: '', track: '', background: '', motivation: '' });
   const [corporateForm, setCorporateForm] = useState({ name: '', company: '', email: '', learners: '', msg: '' });
   const [paymentForm, setPaymentForm] = useState({ name: '', email: '', plan: '', msg: '' });
+  const [foundershipForm, setFoundershipForm] = useState({ name: '', email: '', venture: '', objective: '' });
 
   const [loginForm, setLoginForm] = useState({ email: '', password: '' });
   const [resetForm, setResetForm] = useState({ password: '', confirm: '' });
@@ -248,13 +249,40 @@ export function Modals({ activeModal, onClose, onSwitchModal, onLoginSuccess, me
 
       if (error) throw error;
       toast.success('Guidance Request Received', {
-        description: `Request for ${guidanceForm.name} is now in the academic queue.`
+        description: 'An Academy Practitioner will contact you to schedule your session.'
       });
       setGuidanceForm({ name: '', email: '', track: '', background: '' });
       onClose();
     } catch (err: any) {
-      console.error('Guidance submission error:', err);
-      toast.error('Request Denied', { description: 'Please verify your details and try again.' });
+      toast.error('Transmission Error', { description: err.message });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleFoundershipSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!foundershipForm.name || !foundershipForm.email || !foundershipForm.objective) return;
+    setIsSubmitting(true);
+    try {
+      const { error } = await supabase.from('applications').insert([{
+        first_name: foundershipForm.name.split(' ')[0] || foundershipForm.name,
+        last_name: foundershipForm.name.split(' ').slice(1).join(' ') || 'N/A',
+        email: foundershipForm.email,
+        organization_name: foundershipForm.venture,
+        message: foundershipForm.objective,
+        type: 'foundership_advisory',
+        status: 'pending'
+      }]);
+
+      if (error) throw error;
+      toast.success('Strategic Request Logged', {
+        description: 'Founder advisory protocol initiated. Expect a technical briefing soon.'
+      });
+      setFoundershipForm({ name: '', email: '', venture: '', objective: '' });
+      onClose();
+    } catch (err: any) {
+      toast.error('System Breach', { description: err.message });
     } finally {
       setIsSubmitting(false);
     }
@@ -348,9 +376,28 @@ export function Modals({ activeModal, onClose, onSwitchModal, onLoginSuccess, me
             </div>
             <div className="p-6 md:p-8">
               {user ? (
-                <div className="text-center">
-                  <p className="mb-4">You are logged in as {user.email}</p>
-                  <button className="btn btn-outline w-full" onClick={() => signOut()}>Sign Out</button>
+                <div className="text-center py-4">
+                  <div className="w-16 h-16 rounded-full bg-brand/10 border border-brand/20 flex items-center justify-center text-brand mx-auto mb-4 animate-float1">
+                    <CheckCircle2 size={32} />
+                  </div>
+                  <h3 className="font-syne font-bold text-[18px] text-white mb-2">Institutional Session Detected</h3>
+                  <p className="text-[13px] text-text-soft leading-relaxed mb-8">
+                    You are currently authenticated as <span className="text-brand font-bold">{user.email}</span>. Access to curriculum modules, assessments, and certifications is managed exclusively within the Student Portal.
+                  </p>
+                  <div className="flex flex-col gap-3">
+                    <a 
+                      href="https://gda-student-portal.pages.dev/"
+                      className="btn btn-brand w-full py-4 justify-center text-[13px]"
+                    >
+                      Return to My Portal →
+                    </a>
+                    <button 
+                      className="btn btn-outline w-full py-3.5 justify-center text-[11px] opacity-60 hover:opacity-100" 
+                      onClick={() => signOut()}
+                    >
+                      Sign Out from this Device
+                    </button>
+                  </div>
                 </div>
               ) : studentTab === 'login' ? (
                 <form className="flex flex-col gap-4" onSubmit={handleLogin}>
@@ -388,7 +435,7 @@ export function Modals({ activeModal, onClose, onSwitchModal, onLoginSuccess, me
                   <button type="submit" disabled={isSubmitting} className="btn btn-sky w-full py-3.5 justify-center mt-2">
                     {isSubmitting ? 'Signing In...' : 'Access My Portal →'}
                   </button>
-                  <div className="text-center mt-3.5 text-[11px] text-text-muted">New student? <a className="text-brand no-underline cursor-pointer hover:underline" onClick={() => onSwitchModal?.('apply')}>Apply for a course</a></div>
+                  <div className="text-center mt-3.5 text-[11px] text-text-muted">New student? <a className="text-brand no-underline cursor-pointer hover:underline" onClick={() => onSwitchModal?.('apply_direct')}>Apply for a course</a></div>
                 </form>
               ) : (
                 <form className="flex flex-col gap-4" onSubmit={handleForgotPassword}>
@@ -436,9 +483,28 @@ export function Modals({ activeModal, onClose, onSwitchModal, onLoginSuccess, me
             </div>
             <div className="p-6 md:p-8">
               {user ? (
-                <div className="text-center">
-                  <p className="mb-4">You are logged in as {user.email}</p>
-                  <button className="btn btn-outline w-full" onClick={() => signOut()}>Sign Out</button>
+                <div className="text-center py-4">
+                  <div className="w-16 h-16 rounded-full bg-brand/10 border border-brand/20 flex items-center justify-center text-brand mx-auto mb-4 animate-float1">
+                    <Shield size={32} />
+                  </div>
+                  <h3 className="font-syne font-bold text-[18px] text-white mb-2">Administrative Session Active</h3>
+                  <p className="text-[13px] text-text-soft leading-relaxed mb-8">
+                    Authenticated session confirmed for <span className="text-brand font-bold">{user.email}</span>. Governance tools and faculty resources are restricted to the Staff Academy domain.
+                  </p>
+                  <div className="flex flex-col gap-3">
+                    <a 
+                      href="https://staff.ginashe.academy"
+                      className="btn btn-brand w-full py-4 justify-center text-[13px]"
+                    >
+                      Return to Staff Hub →
+                    </a>
+                    <button 
+                      className="btn btn-outline w-full py-3.5 justify-center text-[11px] opacity-60 hover:opacity-100" 
+                      onClick={() => signOut()}
+                    >
+                      Terminate Session
+                    </button>
+                  </div>
                 </div>
               ) : adminTab === 'login' ? (
                 <form className="flex flex-col gap-4" onSubmit={handleLogin}>
@@ -763,6 +829,78 @@ export function Modals({ activeModal, onClose, onSwitchModal, onLoginSuccess, me
           </>
         )}
 
+        {activeModal === 'foundership_advice' && (
+          <>
+            <div className="p-7 md:p-8 pb-5 border-b border-border-custom relative overflow-hidden bg-bg/50">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-brand/10 blur-3xl rounded-full" />
+              <div className="relative z-10">
+                <div className="w-12 h-12 rounded-md bg-brand-dim border border-brand/20 flex items-center justify-center text-[22px] mb-3.5"><Rocket className="w-6 h-6 text-brand" /></div>
+                <h2 className="font-syne font-black text-2xl text-white mb-1.5 tracking-tighter uppercase">Founder Advisory Matrix</h2>
+                <p className="text-text-muted text-[12px] leading-relaxed max-w-sm">Strategic Technical Consultation for High-Growth Disruptors.</p>
+              </div>
+              <button className="w-8 h-8 rounded-full border border-border-custom flex items-center justify-center text-text-muted hover:text-text-custom transition-all absolute top-8 right-8 z-20" onClick={onClose}>✕</button>
+            </div>
+            <div className="p-6 md:p-8">
+              <form className="flex flex-col gap-5" onSubmit={handleFoundershipSubmit}>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="form-group">
+                    <label className="block font-dm-mono text-[9px] tracking-[0.15em] uppercase text-text-muted mb-2">Lead Disruptor</label>
+                    <input 
+                      className="w-full bg-surface border border-border-custom rounded-sm p-3 px-4 font-dm-sans text-[13px] text-white outline-none focus:border-brand/40 transition-all" 
+                      placeholder="Full Name" 
+                      value={foundershipForm.name}
+                      onChange={e => setFoundershipForm({...foundershipForm, name: e.target.value})}
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="block font-dm-mono text-[9px] tracking-[0.15em] uppercase text-text-muted mb-2">Secure Email</label>
+                    <input 
+                      type="email"
+                      className="w-full bg-surface border border-border-custom rounded-sm p-3 px-4 font-dm-sans text-[13px] text-white outline-none focus:border-brand/40 transition-all" 
+                      placeholder="name@founder.com" 
+                      value={foundershipForm.email}
+                      onChange={e => setFoundershipForm({...foundershipForm, email: e.target.value})}
+                      required
+                    />
+                  </div>
+                </div>
+                <div className="form-group">
+                  <label className="block font-dm-mono text-[9px] tracking-[0.15em] uppercase text-text-muted mb-2">Venture / Project Name (Optional)</label>
+                  <input 
+                    className="w-full bg-surface border border-border-custom rounded-sm p-3 px-4 font-dm-sans text-[13px] text-white outline-none focus:border-brand/40 transition-all" 
+                    placeholder="Stealth Project X" 
+                    value={foundershipForm.venture}
+                    onChange={e => setFoundershipForm({...foundershipForm, venture: e.target.value})}
+                  />
+                </div>
+                <div className="form-group">
+                  <label className="block font-dm-mono text-[9px] tracking-[0.15em] uppercase text-text-muted mb-2">Primary Technical Objective</label>
+                  <textarea 
+                    className="w-full bg-surface border border-border-custom rounded-sm p-3 px-4 font-dm-sans text-[13px] text-white outline-none focus:border-brand/40 transition-all min-h-[100px]" 
+                    placeholder="Describe your roadmap or the technical barrier you need to overcome..." 
+                    value={foundershipForm.objective}
+                    onChange={e => setFoundershipForm({...foundershipForm, objective: e.target.value})}
+                    required
+                  />
+                </div>
+                <div className="bg-brand/5 border border-brand/20 p-4 rounded-xl">
+                   <div className="flex gap-3">
+                      <Shield className="w-4 h-4 text-brand mt-0.5 shrink-0" />
+                      <div>
+                        <p className="text-[10px] text-brand font-bold uppercase tracking-widest mb-1">Confidentiality Protocol</p>
+                        <p className="text-[10px] text-text-soft leading-relaxed">All strategic discussions are bound by institutional non-disclosure. Your IP and roadmap are strictly secured.</p>
+                      </div>
+                   </div>
+                </div>
+                <button type="submit" disabled={isSubmitting} className="btn btn-brand w-full py-4 justify-center mt-2 shadow-[0_20px_50px_rgba(0,242,255,0.2)]">
+                  {isSubmitting ? 'Transmitting Data...' : 'Initiate Strategic Briefing →'}
+                </button>
+              </form>
+            </div>
+          </>
+        )}
+
         {activeModal === 'scholarship' && (
           <>
             <div className="p-7 md:p-8 pb-5 border-b border-border-custom flex items-start justify-between bg-surface/50">
@@ -1056,7 +1194,7 @@ export function Modals({ activeModal, onClose, onSwitchModal, onLoginSuccess, me
               <div>
                 <div className="w-12 h-12 rounded-md bg-brand-dim border border-brand/20 flex items-center justify-center text-[22px] mb-3.5"><ArrowRight className="w-6 h-6 text-brand" /></div>
                 <div className="font-syne font-extrabold text-[20px]">Admission Portal</div>
-                <div className="text-[12px] text-text-muted mt-1">Official Enrollment Gateway — Academic Cohort 2026</div>
+                <div className="text-[12px] text-text-muted mt-1">Official Enrolment Gateway — Academic Cohort 2026</div>
               </div>
               <button className="w-8 h-8 rounded-full border border-border-custom flex items-center justify-center text-text-muted hover:text-text-custom transition-all" onClick={onClose}>✕</button>
             </div>

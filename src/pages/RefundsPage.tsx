@@ -7,12 +7,12 @@ export default function RefundsPage() {
     {
       title: "1. Cooling-Off Period",
       icon: <Calendar className="w-6 h-6 text-brand" />,
-      content: "Students are entitled to a 14-day institutional cooling-off period from the date of initial enrollment. During this window, a full refund of tuition fees (excluding non-refundable registration fees) can be requested if no course materials have been accessed."
+      content: "Students are entitled to a 14-day institutional cooling-off period from the date of initial enrolment. During this window, a full refund of tuition fees (excluding non-refundable registration fees) can be requested if no course materials have been accessed."
     },
     {
       title: "2. Withdrawal Protocol",
       icon: <AlertCircle className="w-6 h-6 text-coral" />,
-      content: "Official withdrawal requests must be submitted through the GDA Student Hub. Refunds are calculated based on the date of the formal request and the extent of curriculum engagement recorded on the LMS."
+      content: "Official withdrawal requests must be submitted through the GDA Student Portal. Refunds are calculated based on the date of the formal request and the extent of curriculum engagement recorded on the LMS."
     },
     {
       title: "3. Pro-Rata Modular Credits",

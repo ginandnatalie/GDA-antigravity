@@ -10,6 +10,18 @@ import WhatsAppOrb from './components/WhatsAppOrb';
 import { ArrowRight } from 'lucide-react';
 import { Toaster, toast } from 'sonner';
 
+function ExternalRedirect({ url }: { url: string }) {
+  useEffect(() => {
+    window.location.replace(url);
+  }, [url]);
+  return (
+    <div className="min-h-screen bg-bg flex flex-col items-center justify-center">
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand mb-4"></div>
+      <p className="text-brand font-dm-mono text-[10px] tracking-widest uppercase animate-pulse">Redirecting to Secure Portal...</p>
+    </div>
+  );
+}
+
 // Pages
 import Home from './pages/Home';
 import CurriculumPage from './pages/CurriculumPage';
@@ -32,6 +44,7 @@ import PopiaPage from './pages/PopiaPage';
 import ApplyPage from './pages/ApplyPage';
 import TrackDetailPage from './pages/TrackDetailPage';
 import EnterprisePage from './pages/EnterprisePage';
+import FoundershipPage from './pages/FoundershipPage';
 
 function ScrollManager() {
   const { pathname, hash } = useLocation();
@@ -209,20 +222,22 @@ function AppContent() {
               <Route path="/apply" element={<ApplyPage />} />
               <Route path="/tracks/:trackId" element={<TrackDetailPage onOpenModal={openModal} editMode={editMode} />} />
               <Route path="/enterprise" element={<EnterprisePage onOpenModal={openModal} editMode={editMode} />} />
+              <Route path="/foundership" element={<FoundershipPage onOpenModal={openModal} />} />
+
               
-              <Route 
+               <Route 
                 path="/admin" 
-                element={<Navigate to="https://staff.ginashe.academy" replace />} 
+                element={<ExternalRedirect url="https://staff.ginashe.academy" />} 
               />
               <Route 
                 path="/portal" 
-                element={<Navigate to="https://gda-student-portal.pages.dev/" replace />} 
+                element={<ExternalRedirect url="https://gda-student-portal.pages.dev/" />} 
               />
               <Route 
                 path="/course/*" 
-                element={<Navigate to="https://gda-student-portal.pages.dev/" replace />} 
+                element={<ExternalRedirect url="https://gda-student-portal.pages.dev/" />} 
               />
-              <Route path="/activate" element={<Navigate to="https://staff.ginashe.academy" replace />} />
+              <Route path="/activate" element={<ExternalRedirect url="https://staff.ginashe.academy" />} />
             </Routes>
           </main>
           

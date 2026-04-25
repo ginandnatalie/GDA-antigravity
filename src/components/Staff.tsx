@@ -39,7 +39,7 @@ export const AcademyStaff = () => {
       name: 'Tumelo M', 
       role: 'Cloud Engineer/Developer', 
       programme: 'DevOps & Scalability', 
-      quote: 'Automate everything. We bridge the gap between simple deployment and resilient, cost-optimized cloud operations using industry-standard principles.' 
+      quote: 'Automate everything. We bridge the gap between simple deployment and resilient, cost-optimised cloud operations using industry-standard principles.' 
     }
   ];
 

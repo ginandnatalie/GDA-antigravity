@@ -318,7 +318,7 @@ export default function VerifyPage() {
                       Activating Account...
                     </span>
                   ) : (
-                    "Authorize & Finish →"
+                    "Authorise & Finish →"
                   )}
                 </button>
               </div>

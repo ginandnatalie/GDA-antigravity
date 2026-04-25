@@ -31,7 +31,7 @@ export default function ApplyPage() {
 
         <div className="mt-12 text-center animate-fadeUp delay-200">
            <p className="text-[12px] text-text-muted">
-            By submitting this application, you agree to our <a href="#" className="text-brand hover:underline">Institutional Terms of Enrollment</a> and <a href="#" className="text-brand hover:underline">Data Privacy Protocol</a>.
+            By submitting this application, you agree to our <a href="#" className="text-brand hover:underline">Institutional Terms of Enrolment</a> and <a href="#" className="text-brand hover:underline">Data Privacy Protocol</a>.
           </p>
         </div>
       </div>

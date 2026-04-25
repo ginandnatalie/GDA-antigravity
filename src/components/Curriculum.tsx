@@ -53,7 +53,7 @@ export function Curriculum({ editMode }: { editMode?: boolean }) {
             </div>
             <ul className="space-y-4">
               {[
-                { t: 'Full Course Catalog', d: '2026 Academic Year' },
+                { t: 'Full Course Catalogue', d: '2026 Academic Year' },
                 { t: 'Syllabus PDF', d: 'Detailed breakdown' },
                 { t: 'Learning Outcomes', d: 'Industry alignment' }
               ].map((res, i) => (

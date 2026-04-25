@@ -59,7 +59,8 @@ export default function Navbar({ onOpenModal, editMode, setEditMode, siteSetting
     { label: 'The Faculty', path: '/faculty', icon: <Users className="w-4 h-4" />, desc: 'World-class practitioner lead' },
     { label: 'News & Insights', path: '/news', icon: <Newspaper className="w-4 h-4" />, desc: 'Weekly tech trends & articles' },
     { label: 'Upcoming Events', path: '/events', icon: <Calendar className="w-4 h-4" />, desc: 'Join our next masterclass' },
-    { label: 'Support Center', path: '/contact', icon: <MessageSquare className="w-4 h-4" />, desc: 'Get in touch with GDA' },
+    { label: 'Founder Empowerment', path: '/foundership', icon: <Rocket className="w-4 h-4" />, desc: 'Architect your own digital destiny' },
+    { label: 'Support Centre', path: '/contact', icon: <MessageSquare className="w-4 h-4" />, desc: 'Get in touch with GDA' },
   ];
 
   return (
@@ -507,7 +508,7 @@ export default function Navbar({ onOpenModal, editMode, setEditMode, siteSetting
               </div>
               <div className="flex flex-col">
                 <span className="font-outfit font-black text-[10px] text-white uppercase tracking-tight leading-none group-hover:text-brand transition-colors">
-                  {user ? (isAdmin ? 'Admin Console' : 'Student Hub') : 'Student Portal'}
+                  {user ? (isAdmin ? 'Admin Console' : 'Student Portal') : 'Student Portal'}
                 </span>
                 <span className="text-[7px] font-jetbrains text-text-muted uppercase tracking-widest mt-0.5">Secure_Access</span>
               </div>
@@ -576,7 +577,7 @@ export default function Navbar({ onOpenModal, editMode, setEditMode, siteSetting
                                   {item.label === 'Career Tracks' && [
                                     { title: 'Cloud Computing', desc: 'Architecture', icon: <Cpu className="w-4 h-4" />, path: '/tracks/cloud-computing' },
                                     { title: 'AI & Machine Learning', desc: 'Intelligence', icon: <Zap className="w-4 h-4" />, path: '/tracks/ai-machine-learning' },
-                                    { title: 'Cybersecurity', desc: 'Active Defense', icon: <Shield className="w-4 h-4" />, path: '/tracks/cybersecurity' },
+                                    { title: 'Cybersecurity', desc: 'Active Defence', icon: <Shield className="w-4 h-4" />, path: '/tracks/cybersecurity' },
                                     { title: 'Data & Analytics', desc: 'Engineering', icon: <Layout className="w-4 h-4" />, path: '/tracks/data-analytics' },
                                     { title: 'Software & DevOps', desc: 'Cloud Native', icon: <Code className="w-4 h-4" />, path: '/tracks/software-devops' },
                                     { title: 'Digital Business', desc: 'Ventures', icon: <Rocket className="w-4 h-4" />, path: '/tracks/digital-business' },

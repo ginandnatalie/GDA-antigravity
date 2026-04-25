@@ -37,7 +37,7 @@ interface SharedAdmissionFormProps {
 export default function SharedAdmissionForm({ onOpenModal, onSuccess, initialProgram = '', initialPaymentMode = '', isModal = false }: SharedAdmissionFormProps) {
   const navigate = useNavigate();
   // ─── STEP STATE ──────────────────
-  const [step, setStep] = useState<'check' | 'form' | 'existing'>('check');
+  const [step, setStep] = useState<'check' | 'form' | 'existing' | 'success'>('check');
   const [hasAccount, setHasAccount] = useState<string>('');
   const [studentNumberInput, setStudentNumberInput] = useState('');
   const [checkingAccount, setCheckingAccount] = useState(false);
@@ -50,6 +50,7 @@ export default function SharedAdmissionForm({ onOpenModal, onSuccess, initialPro
   const [accessCode, setAccessCode] = useState('');
   const [isCodeVerified, setIsCodeVerified] = useState(false);
   const [codeError, setCodeError] = useState('');
+  const [isScanning, setIsScanning] = useState(false);
 
   // ─── DATE-AWARE ADMISSION LOGIC ───
   const now = new Date();
@@ -137,40 +138,49 @@ export default function SharedAdmissionForm({ onOpenModal, onSuccess, initialPro
     }
   };
 
-  // ─── PRE-SUBMIT DUPLICATE CHECK ──
+  // ─── PRE-SUBMIT DUPLICATE CHECK (Intelligent Scan) ──
   const checkForDuplicates = async (): Promise<boolean> => {
+    setIsScanning(true);
     try {
       const emailClean = form.email.trim().toLowerCase();
-      const { data: emailMatch } = await supabase
-        .from('applications')
-        .select('id, first_name, status, program')
-        .eq('email', emailClean)
+      const phoneClean = form.phone.trim();
+      const idClean = form.idNumber.trim();
+
+      // 1. Check Profiles (Registered Students)
+      let { data: profileMatch } = await supabase
+        .from('profiles')
+        .select('id, email, first_name, student_number')
+        .or(`email.ilike.${emailClean}${phoneClean ? `,phone.eq.${phoneClean}` : ''}${idClean ? `,id_number.eq.${idClean}` : ''}`)
         .limit(1)
         .maybeSingle();
 
-      if (emailMatch) {
-        setDuplicateMessage(`It looks like you've already applied for ${emailMatch.program || 'a programme'} (Current Status: ${emailMatch.status}). Please sign in to your Student Portal to check your status.`);
+      if (profileMatch) {
+        setDuplicateMessage(`Institutional Record Detected: You are already registered as a student (${profileMatch.student_number}). Please select 'Forgot Password' on the Student Portal to regain access and apply for further programmes from your dashboard.`);
         setStep('existing');
+        setIsScanning(false);
         return true;
       }
 
-      if (form.idNumber.trim()) {
-        const { data: idMatch } = await supabase
-          .from('applications')
-          .select('id, email, status, program')
-          .eq('id_number', form.idNumber.trim())
-          .limit(1)
-          .maybeSingle();
+      // 2. Check Applications (Pending/Historical)
+      let { data: appMatch } = await supabase
+        .from('applications')
+        .select('id, email, first_name, status, program')
+        .or(`email.ilike.${emailClean}${phoneClean ? `,phone.eq.${phoneClean}` : ''}${idClean ? `,id_number.eq.${idClean}` : ''}`)
+        .limit(1)
+        .maybeSingle();
 
-      if (idMatch) {
-          setDuplicateMessage(`A record with this ID/Passport number already exists (${idMatch.email}). Please sign in to your Student Portal.`);
-          setStep('existing');
-          return true;
-        }
+      if (appMatch) {
+        setDuplicateMessage(`Existing Application Found: You have a previous record for ${appMatch.program || 'a programme'} (Status: ${appMatch.status}). To maintain your academic history, please sign in to your Student Portal. If you cannot access your account, use the 'Forgot Password' option.`);
+        setStep('existing');
+        setIsScanning(false);
+        return true;
       }
 
+      setIsScanning(false);
       return false;
     } catch (err) {
+      console.error('Intelligent Scan Error:', err);
+      setIsScanning(false);
       return false;
     }
   };
@@ -270,8 +280,8 @@ export default function SharedAdmissionForm({ onOpenModal, onSuccess, initialPro
 
       if (onSuccess) onSuccess();
       
-      // Navigate to verify page with email
-      navigate(`/verify?email=${encodeURIComponent(form.email)}`, { replace: true });
+      // Set to success step instead of immediate redirect
+      setStep('success');
     } catch (error: any) {
       toast.error('Admission Portal Error', {
         description: error.message || 'The application registry encountered an issue. Please try again.'
@@ -341,12 +351,54 @@ export default function SharedAdmissionForm({ onOpenModal, onSuccess, initialPro
             >
               Sign In to My Portal →
             </button>
+            <button 
+              onClick={() => window.location.href = `${PORTAL_URL}forgot-password`} 
+              className="w-full p-3.5 bg-sky/10 text-sky font-syne font-extrabold text-[13px] tracking-[0.05em] uppercase rounded-sm border border-sky/20 hover:bg-sky/20 transition-all"
+            >
+              Forgot Password / Reset Access
+            </button>
             <button onClick={() => { setStep('form'); setDuplicateCheckDone(false); }} className="w-full p-3 bg-transparent text-text-muted font-dm-mono text-[11px] tracking-wider uppercase border border-border-custom rounded-sm hover:text-brand transition-all">Apply for a different programme</button>
           </div>
         </div>
       )}
 
-      {/* ─── STEP: FULL FORM ─── */}
+      {/* ─── STEP: SUCCESS ─── */}
+      {step === 'success' && (
+        <div className="space-y-6 text-center py-8 animate-fadeUp">
+          <div className="w-20 h-20 mx-auto rounded-3xl bg-brand/10 border border-brand/20 flex items-center justify-center text-4xl shadow-[0_0_30px_rgba(0,242,255,0.15)] animate-pulse">📧</div>
+          <div>
+            <h3 className="font-syne font-black text-[24px] mb-2 text-brand">Check Your Email</h3>
+            <p className="text-[14px] text-text-soft leading-relaxed max-w-sm mx-auto">
+              Institutional application submitted successfully. We have sent a <span className="text-brand font-bold">Confirmation & Activation Link</span> to <span className="text-white font-medium underline decoration-brand/30 underline-offset-4">{form.email}</span>.
+            </p>
+          </div>
+          
+          <div className="bg-surface/50 border border-border-custom rounded-2xl p-5 text-left space-y-3 max-w-[360px] mx-auto">
+            <div className="flex items-start gap-3">
+              <div className="w-5 h-5 rounded-full bg-brand/10 flex items-center justify-center text-[10px] mt-0.5">1</div>
+              <p className="text-[11px] text-text-muted">Open your inbox and find the email from <span className="text-text-custom">Ginashe Digital Academy</span>.</p>
+            </div>
+            <div className="flex items-start gap-3">
+              <div className="w-5 h-5 rounded-full bg-brand/10 flex items-center justify-center text-[10px] mt-0.5">2</div>
+              <p className="text-[11px] text-text-muted">Click the <span className="text-text-custom">Secure My Account</span> button inside the email.</p>
+            </div>
+            <div className="flex items-start gap-3">
+              <div className="w-5 h-5 rounded-full bg-brand/10 flex items-center justify-center text-[10px] mt-0.5">3</div>
+              <p className="text-[11px] text-text-muted">Once verified, you will receive your <span className="text-brand font-bold">Official Student Number</span> and portal access credentials.</p>
+            </div>
+          </div>
+
+          <div className="pt-4 flex flex-col gap-3">
+            <button 
+              onClick={() => navigate(`/verify?email=${encodeURIComponent(form.email)}`)} 
+              className="w-full p-3.5 bg-brand text-[#080b12] font-syne font-extrabold text-[13px] tracking-[0.05em] uppercase rounded-sm hover:bg-brand-light transition-all shadow-[0_10px_20px_rgba(0,242,255,0.1)]"
+            >
+              I have verified my email →
+            </button>
+            <p className="text-[10px] text-text-dim">Didn&apos;t receive the email? Check your spam folder or contact admissions@ginashe.academy</p>
+          </div>
+        </div>
+      )}
       {step === 'form' && (
         <form onSubmit={handleSubmit} className="animate-fadeUp">
           {/* Section 1: Personal */}
@@ -375,17 +427,52 @@ export default function SharedAdmissionForm({ onOpenModal, onSuccess, initialPro
                 </select>
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className={LABEL_CLASS}>Nationality <span className="text-coral">*</span></label>
-                <select className={SELECT_CLASS} value={form.nationality} onChange={e => setForm({...form, nationality: e.target.value})} required>
-                  <option value="">Select…</option>
-                  {NATIONALITIES.map(n => <option key={n} value={n}>{n}</option>)}
-                </select>
-              </div>
+            <div className="mb-4">
+              <label className={LABEL_CLASS}>Nationality <span className="text-coral">*</span></label>
+              <select className={SELECT_CLASS} value={form.nationality} onChange={e => setForm({...form, nationality: e.target.value})} required>
+                <option value="">Select…</option>
+                {NATIONALITIES.map(n => <option key={n} value={n}>{n}</option>)}
+              </select>
+            </div>
+            <div className="grid grid-cols-2 gap-3 mb-4">
               <div>
                 <label className={LABEL_CLASS}>{form.nationality === 'South African' ? 'SA ID Number' : 'Passport Number'} <span className="text-coral">*</span></label>
-                <input type="text" className={INPUT_CLASS} placeholder="ID/Passport Number" value={form.idNumber} onChange={e => setForm({...form, idNumber: e.target.value})} required />
+                <input 
+                  type="text" 
+                  className={INPUT_CLASS} 
+                  placeholder="ID/Passport Number" 
+                  value={form.idNumber} 
+                  onChange={e => setForm({...form, idNumber: e.target.value})} 
+                  onBlur={() => form.idNumber && checkForDuplicates()}
+                  required 
+                />
+              </div>
+              <div>
+                <label className={LABEL_CLASS}>Email Address <span className="text-coral">*</span></label>
+                <input 
+                  type="email" 
+                  className={INPUT_CLASS} 
+                  placeholder="amara@email.com" 
+                  value={form.email} 
+                  onChange={e => setForm({...form, email: e.target.value})} 
+                  onBlur={() => form.email && checkForDuplicates()}
+                  required 
+                />
+              </div>
+            </div>
+            <div className="grid grid-cols-1 gap-3">
+              <div>
+                <label className={LABEL_CLASS}>Mobile Number <span className="text-coral">*</span></label>
+                <input 
+                  type="tel" 
+                  className={INPUT_CLASS} 
+                  placeholder="+27 XX XXX XXXX" 
+                  value={form.phone} 
+                  onChange={e => setForm({...form, phone: e.target.value})} 
+                  onBlur={() => form.phone && checkForDuplicates()}
+                  required
+                />
+                {isScanning && <div className="text-[10px] text-brand mt-1 animate-pulse">Running institutional scan...</div>}
               </div>
             </div>
           </div>
@@ -430,17 +517,6 @@ export default function SharedAdmissionForm({ onOpenModal, onSuccess, initialPro
           {/* Section 3: Contact & Academics */}
           <div className="mb-6 pb-5 border-b border-border-custom">
             <div className="font-dm-mono text-[9px] tracking-[0.15em] uppercase text-emerald mb-5">Step 3 — Path Selection & Quals</div>
-            
-            <div className="grid grid-cols-2 gap-3 mb-4">
-              <div>
-                <label className={LABEL_CLASS}>Email Address <span className="text-coral">*</span></label>
-                <input type="email" className={INPUT_CLASS} placeholder="amara@email.com" value={form.email} onChange={e => setForm({...form, email: e.target.value})} required />
-              </div>
-              <div>
-                <label className={LABEL_CLASS}>Mobile Number</label>
-                <input type="tel" className={INPUT_CLASS} placeholder="+27 XX XXX XXXX" value={form.phone} onChange={e => setForm({...form, phone: e.target.value})} />
-              </div>
-            </div>
 
             {/* DUAL SELECTION INTERFACE */}
             <div className="mb-5">
@@ -449,7 +525,7 @@ export default function SharedAdmissionForm({ onOpenModal, onSuccess, initialPro
                 <span className="font-bold uppercase tracking-[0.05em] not-italic mr-2">Institutional Protocol:</span>
                 Please select only one primary academic pathway. 
                 <div className="mt-1 font-bold opacity-100 text-[10.5px]">
-                  Note: The &apos;Bespoke&apos; option is strictly for students whose organizations have pre-authorized a custom institutional learning framework.
+                  Note: The &apos;Bespoke&apos; option is strictly for students whose organisations have pre-authorised a custom institutional learning framework.
                 </div>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -500,7 +576,7 @@ export default function SharedAdmissionForm({ onOpenModal, onSuccess, initialPro
                     </div>
                   )}
 
-                  <div className="text-[9px] text-text-muted leading-tight opacity-70">Enroll in a full practitioner-led career track (e.g. Associate, Professional).</div>
+                  <div className="text-[9px] text-text-muted leading-tight opacity-70">Enrol in a full practitioner-led career track (e.g. Associate, Professional).</div>
 
                   {/* POP-UP COURSE SELECTOR */}
                   {showCourseSelector && selectedTrack && (
@@ -740,7 +816,7 @@ export default function SharedAdmissionForm({ onOpenModal, onSuccess, initialPro
                     );
                   })}
                   {selectionType === 'program' && (
-                    <option value="Enterprise/Rolling">Enterprise (Rolling Enrollment)</option>
+                    <option value="Enterprise/Rolling">Enterprise (Rolling Enrolment)</option>
                   )}
                 </select>
               </div>

@@ -3,7 +3,7 @@ import { MessageCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
 export default function WhatsAppOrb() {
-  const whatsappNumber = "263688526155";
+  const whatsappNumber = "27688526155";
   const message = encodeURIComponent("Hello Ginashe Digital Academy, I'd like to enquire about your programmes.");
   
   return (
@@ -49,7 +49,7 @@ export default function WhatsAppOrb() {
             </div>
             <div>
               <div className="font-outfit font-black text-[12px] text-white uppercase tracking-tighter">Contact Admissions</div>
-              <div className="font-dm-mono text-[9px] text-[#25D366] uppercase tracking-widest mt-0.5">Secure_Line_263</div>
+              <div className="font-dm-mono text-[9px] text-[#25D366] uppercase tracking-widest mt-0.5">Secure_Line_27</div>
             </div>
             <div className="ml-auto w-1.5 h-8 bg-[#25D366]/20 rounded-full overflow-hidden">
                <motion.div 

@@ -123,7 +123,7 @@ export const TRACKS: Record<string, TrackData> = {
       {
         level: 'Associate',
         title: 'Ethical Hacking',
-        description: 'Thinking like a threat actor to build better defenses.',
+        description: 'Thinking like a threat actor to build better defences.',
         modules: ['Kali Linux Mastery', 'Penetration Testing Core', 'Vulnerability Assessment'],
         vendor_alignment: ['CEH (Certified Ethical Hacker)']
       },

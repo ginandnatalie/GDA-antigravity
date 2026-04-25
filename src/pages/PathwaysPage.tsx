@@ -30,7 +30,7 @@ export default function PathwaysPage({ onOpenModal, editMode }: PathwaysPageProp
           <div className="text-center mb-20 space-y-6">
             <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-brand/5 border border-brand/20">
               <div className="w-2 h-2 rounded-full bg-brand animate-pulse" />
-              <span className="font-dm-mono text-[10px] text-brand uppercase tracking-[0.2em]">Institutional Catalog</span>
+              <span className="font-dm-mono text-[10px] text-brand uppercase tracking-[0.2em]">Institutional Catalogue</span>
             </div>
             <h2 className="font-syne font-black text-4xl md:text-6xl text-white tracking-tighter">Career Tracks</h2>
             <p className="text-text-soft text-lg max-w-2xl mx-auto">

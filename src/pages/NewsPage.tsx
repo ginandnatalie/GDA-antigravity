@@ -27,7 +27,7 @@ const MOCK_POSTS = [
   {
     id: '3',
     title: '5 Tips for Transitioning from Traditional IT to Cloud Engineering',
-    excerpt: 'Our career experts share the essential roadmap for developers looking to specialize in AWS and Azure environments.',
+    excerpt: 'Our career experts share the essential roadmap for developers looking to specialise in AWS and Azure environments.',
     category: 'Career Advice',
     image_url: 'https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format&fit=crop&q=80&w=1200',
     published_at: '2026-03-28T09:15:00Z',

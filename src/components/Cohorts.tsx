@@ -14,7 +14,7 @@ export function Cohorts({ onOpenModal, editMode }: { onOpenModal: (id: string) =
           <div>
             <div className="section-label">Intake Calendar</div>
             <h2 className="section-title mb-3.5 animate-fadeUp">Upcoming cohorts</h2>
-            <p className="text-[14px] text-text-soft mb-8 leading-[1.7] animate-fadeUp delay-100">All Ginashe practitioner-led tracks feature three standardized annual intakes. Select your preferred cohort below to begin your professional journey.</p>
+            <p className="text-[14px] text-text-soft mb-8 leading-[1.7] animate-fadeUp delay-100">All Ginashe practitioner-led tracks feature three standardised annual intakes. Select your preferred cohort below to begin your professional journey.</p>
 
             <div className="flex flex-col gap-2.5">
               {(() => {

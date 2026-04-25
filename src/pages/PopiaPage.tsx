@@ -17,7 +17,7 @@ export default function PopiaPage() {
     {
       title: "3. Direct Consent Protocol",
       icon: <UserCheck className="w-6 h-6 text-sky" />,
-      content: "Personal information is only processed with the explicit consent of the data subject (The Student) or as required for institutional governance and contract fulfillment between the student and the Academy."
+      content: "Personal information is only processed with the explicit consent of the data subject (The Student) or as required for institutional governance and contract fulfilment between the student and the Academy."
     },
     {
       title: "4. Security Mandate",
